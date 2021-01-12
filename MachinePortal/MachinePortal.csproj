@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\resources\Devices\Documents\20201228155207.jpg" />
+    <Content Remove="wwwroot\resources\Devices\Documents\20201228155245.jpg" />
+    <Content Remove="wwwroot\resources\Devices\Documents\20201228155245.png" />
+    <Content Remove="wwwroot\resources\Devices\Documents\20201229182036.jpg" />
+    <Content Remove="wwwroot\resources\Devices\Documents\20201229182037.png" />
+    <Content Remove="wwwroot\resources\Devices\Documents\20201229182147.jpg" />
+    <Content Remove="wwwroot\resources\Devices\Documents\20201229182147.png" />
+    <Content Remove="wwwroot\resources\Devices\Documents\20201229182303.jpg" />
+    <Content Remove="wwwroot\resources\Devices\Documents\20201229182403.png" />
+    <Content Remove="wwwroot\resources\Devices\Documents\20201229182406.png" />
+    <Content Remove="wwwroot\resources\Devices\Documents\20201229183110.png" />
+    <Content Remove="wwwroot\resources\Devices\Documents\20201229183111.jfif" />
+    <Content Remove="wwwroot\resources\Devices\Documents\20210105085730.pdf" />
+    <Content Remove="wwwroot\resources\Devices\Documents\Calendario 2017.pdf_20210105153357.pdf" />
+    <Content Remove="wwwroot\resources\Devices\Documents\Certidão Quitação CREA.pdf_20210105153357.pdf" />
+    <Content Remove="wwwroot\resources\Devices\Documents\Certidão Quitação CREA_20210105154026.pdf" />
+    <Content Remove="wwwroot\resources\Devices\Documents\Comprovante Multa.pdf_20210105153357.pdf" />
+    <Content Remove="wwwroot\resources\Devices\Documents\Comprovante Multa_20210105154026.pdf" />
+    <Content Remove="wwwroot\resources\Devices\Documents\documents20210105152948.pdf" />
+    <Content Remove="wwwroot\resources\Devices\Images\20201228150435.jpg" />
+    <Content Remove="wwwroot\resources\Devices\Images\20201229182036.png" />
+    <Content Remove="wwwroot\resources\Devices\Images\20201229182147.png" />
+    <Content Remove="wwwroot\resources\Devices\Images\20210105085729.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Lines\" />
+    <Folder Include="Views\Areas\" />
+    <Folder Include="Views\Machines\" />
+    <Folder Include="Views\Sectors\" />
+    <Folder Include="wwwroot\resources\Assets\Images\" />
+    <Folder Include="wwwroot\resources\Devices\Images\" />
+    <Folder Include="wwwroot\resources\Devices\Documents\" />
+    <Folder Include="wwwroot\resources\Responsibles\Images\" />
+  </ItemGroup>
+
+</Project>

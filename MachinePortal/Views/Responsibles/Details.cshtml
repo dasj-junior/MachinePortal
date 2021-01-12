@@ -1,0 +1,58 @@
+﻿@model MachinePortal.Models.Responsible
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Responsibles</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dd>
+            <img src="@Html.DisplayFor(model => model.PhotoPath)" height="200"/>
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Department)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Department)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Mobile)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Mobile)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+    </dl>
+</div>
+<div>
+    <input type="hidden" asp-for="ID" />
+    <a class="btn btn-default" asp-action="Index">Back to List</a>
+    <input type="submit" value="Edit" class="btn btn-info" />
+</div>

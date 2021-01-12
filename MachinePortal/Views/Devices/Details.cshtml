@@ -1,0 +1,73 @@
+﻿@model MachinePortal.Models.Device
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Devices</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dd>
+            <img src="@Html.DisplayFor(model => model.ImagePath)" width="200" height="200" />
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Brand)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Brand)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Model)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Model)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PartNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PartNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Supplier)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Supplier)
+        </dd>
+        @foreach (Document document in Model.Documents)
+        {
+        <dt>
+            Document
+        </dt>
+        <dd>
+                @Html.ActionLink(document.Name, "Download", new { filePath = document.Path, fileName = document.Name, extension = document.Extension })
+        </dd>
+        }
+    </dl>
+</div>
+<div>
+    <input type="hidden" asp-for="ID" />
+    <a class="btn btn-default" asp-action="Index">Back to List</a>
+    <input type="submit" value="Edit" class="btn btn-info" />
+</div>
