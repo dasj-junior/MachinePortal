@@ -1,0 +1,48 @@
+﻿@model MachinePortal.Models.Area
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Areas</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dd>
+            <img src="@Html.DisplayFor(model => model.ImagePath)" height="200" />
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <br />
+        <h3>Sectors</h3>
+        <table class="table table-bordered table-responsive">
+
+            @foreach (Sector sector in Model.Sectors)
+            {
+                <tr>
+                    <th>Sector</th>
+                    <td>@Html.DisplayFor(model => sector.Name)</td>
+                    <td>
+                        <a class="btn-group" asp-action="Edit" asp-controller="Sectors" asp-route-id="@sector.ID">Edit</a>
+                        <a class="btn-group" asp-action="Details" asp-controller="Sectors" asp-route-id="@sector.ID">Details</a>
+                        <a class="btn-group" asp-action="Delete" asp-controller="Sectors" asp-route-id="@sector.ID">Delete</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </dl>
+    <p>
+        <a asp-action="Create" asp-controller="Sectors">Create New Sector</a>
+    </p>
+</div>
+<div>
+    <input type="hidden" asp-for="ID" />
+    <input type="button" value="Back" class="btn btn-default" action="action" onclick="history.go(-1);" />
+    <input type="submit" value="Edit" class="btn btn-info" />
+</div>

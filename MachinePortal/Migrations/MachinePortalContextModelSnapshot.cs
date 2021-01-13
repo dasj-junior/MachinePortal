@@ -22,6 +22,8 @@ namespace MachinePortal.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ImagePath");
+
                     b.Property<string>("Name");
 
                     b.HasKey("ID");
@@ -103,6 +105,8 @@ namespace MachinePortal.Migrations
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ImagePath");
 
                     b.Property<string>("Name");
 
@@ -293,6 +297,8 @@ namespace MachinePortal.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AreaID");
+
+                    b.Property<string>("ImagePath");
 
                     b.Property<string>("Name");
 

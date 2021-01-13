@@ -38,14 +38,62 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Lines\" />
-    <Folder Include="Views\Areas\" />
     <Folder Include="Views\Machines\" />
-    <Folder Include="Views\Sectors\" />
+    <Folder Include="wwwroot\resources\Areas\Images\" />
     <Folder Include="wwwroot\resources\Assets\Images\" />
     <Folder Include="wwwroot\resources\Devices\Images\" />
     <Folder Include="wwwroot\resources\Devices\Documents\" />
+    <Folder Include="wwwroot\resources\Lines\Images\" />
     <Folder Include="wwwroot\resources\Responsibles\Images\" />
+    <Folder Include="wwwroot\resources\Sectors\Images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Areas\Create.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Areas\Delete.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Areas\Details.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Areas\Edit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Areas\Index.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Lines\Create.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Lines\Delete.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Lines\Details.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Lines\Edit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Lines\Index.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Sectors\Create.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Sectors\Delete.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Sectors\Details.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Sectors\Edit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Sectors\Index.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>

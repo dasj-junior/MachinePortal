@@ -1,0 +1,40 @@
+﻿@model MachinePortal.Models.Line
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Lines</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dd>
+            <img src="@Html.DisplayFor(model => model.ImagePath)" height="200" />
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            Sector
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Sector.Area.Name)
+        </dd>
+        <dt>
+            Area
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Sector.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <input type="hidden" asp-for="ID" />
+    <input type="button" value="Back" class="btn btn-default" action="action" onclick="history.go(-1);"/>
+    <input type="submit" value="Edit" class="btn btn-info" />
+</div>

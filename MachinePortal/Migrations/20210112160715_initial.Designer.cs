@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MachinePortal.Migrations
 {
     [DbContext(typeof(MachinePortalContext))]
-    [Migration("20210107183558_initial")]
+    [Migration("20210112160715_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,8 @@ namespace MachinePortal.Migrations
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ImagePath");
 
                     b.Property<string>("Name");
 
@@ -105,6 +107,8 @@ namespace MachinePortal.Migrations
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ImagePath");
 
                     b.Property<string>("Name");
 
@@ -295,6 +299,8 @@ namespace MachinePortal.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AreaID");
+
+                    b.Property<string>("ImagePath");
 
                     b.Property<string>("Name");
 
