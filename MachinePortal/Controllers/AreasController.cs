@@ -15,12 +15,10 @@ namespace MachinePortal.Controllers
     public class AreasController : Controller
     {
         private readonly AreaService _AreaService;
-        private readonly SectorService _SectorService;
         IHostingEnvironment _appEnvironment;
 
         public AreasController(IHostingEnvironment enviroment, AreaService AreaService, SectorService SectorService)
         {
-            _SectorService = SectorService;
             _AreaService = AreaService;
             _appEnvironment = enviroment;
         }
@@ -31,23 +29,15 @@ namespace MachinePortal.Controllers
             return View(list);
         }
 
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            var sectors = await _SectorService.FindAllAsync();
-            var viewModel = new AreaFormViewModel { Sectors = sectors };
-            return View(viewModel);
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Area Area, IFormFile image)
         {
-            if (!ModelState.IsValid)
-            {
-                var sectors = await _SectorService.FindAllAsync();
-                var viewModel = new AreaFormViewModel { Area = Area, Sectors = sectors };
-                return View(viewModel);
-            }
 
             if (image != null)
             {

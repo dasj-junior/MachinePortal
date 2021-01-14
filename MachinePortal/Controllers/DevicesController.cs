@@ -186,7 +186,7 @@ namespace MachinePortal.Controllers
                     return View(ViewData);
                 }
 
-                string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                string fileName = DateTime.Now.ToString("yyyyMMddHHmmssfffffff");
                 fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
                 string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Devices\\Images\\" + fileName;
                 device.ImagePath = @"/resources/Devices/Images/" + fileName;

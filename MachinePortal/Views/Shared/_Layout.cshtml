@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using MachinePortal.Areas.Identity.Data
+@inject SignInManager<MachinePortalUser> SignInManager
+@inject UserManager<MachinePortalUser> UserManager
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -35,9 +40,30 @@
                     <li><a asp-area="" asp-controller="Devices" asp-action="Index">Devices</a></li>
                     <li><a asp-area="" asp-controller="Responsibles" asp-action="Index">Responsibles</a></li>
                     <li><a asp-area="" asp-controller="Areas" asp-action="Index">Hierarchies</a></li>
+                    <li><a asp-area="" asp-controller="Permissions" asp-action="Index">Permissions</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+                            </li>
+                            <li>
+                                <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
+                            </li>
+                        </ul>
+                    </form>
+                }
+                else
+                {
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+                        <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+                    </ul>
+                }
             </div>
         </div>
     </nav>
@@ -76,3 +102,4 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+

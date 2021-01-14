@@ -34,11 +34,16 @@ namespace MachinePortal.Controllers
             return View(listSector);
         }
 
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(int? areaID)
         {
-            var listLines = await _LineService.FindAllAsync();
-            var listAreas = await _AreaService.FindAllAsync();
-            var viewModel = new SectorFormViewModel { Lines = listLines, Areas = listAreas };
+            var viewModel = new SectorFormViewModel();
+            viewModel.Sector = new Sector();
+            if (areaID != null)
+            {
+                var area = await _AreaService.FindByIDAsync(areaID.Value);
+                viewModel.Sector.Area = area;
+                viewModel.Sector.AreaID = area.ID;
+            }
             return View(viewModel);
         }
 
@@ -48,8 +53,7 @@ namespace MachinePortal.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var lines = await _LineService.FindAllAsync();
-                var viewModel = new SectorFormViewModel { Sector = Sector, Lines = lines };
+                var viewModel = new SectorFormViewModel { Sector = Sector };
                 return View(viewModel);
             }
 
@@ -77,7 +81,7 @@ namespace MachinePortal.Controllers
 
             await _SectorService.InsertAsync(Sector);
 
-            return RedirectToAction(nameof(Details), "Areas");
+            return RedirectToAction(@"Details/" + Sector.AreaID, "Areas");
         }
 
         public async Task<IActionResult> Delete(int? ID)
@@ -112,7 +116,7 @@ namespace MachinePortal.Controllers
 
             }
             await _SectorService.RemoveAsync(ID);
-            return RedirectToAction(nameof(Details), "Areas");
+            return RedirectToAction(@"Details/" + Sector.AreaID, "Areas");
         }
 
         public async Task<IActionResult> Details(int? ID)
@@ -178,7 +182,7 @@ namespace MachinePortal.Controllers
 
             await _SectorService.UpdateAsync(Sector);
 
-            return RedirectToAction(nameof(Details), "Areas");
+            return RedirectToAction(@"Details/" + Sector.AreaID, "Areas");
         }
     }
 }

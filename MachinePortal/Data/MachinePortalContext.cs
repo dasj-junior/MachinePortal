@@ -26,5 +26,6 @@ namespace MachinePortal.Models
         public DbSet<Line> Line { get; set; }
         public DbSet<Sector> Sector { get; set; }
         public DbSet<Area> Area { get; set; }
+        public DbSet<Permission> Permission { get; set; }
     }
 }

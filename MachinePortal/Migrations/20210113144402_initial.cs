@@ -43,6 +43,19 @@ namespace MachinePortal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Permission",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    PermissionName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Permission", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Responsible",
                 columns: table => new
                 {
@@ -419,6 +432,9 @@ namespace MachinePortal.Migrations
 
             migrationBuilder.DropTable(
                 name: "MachineVideo");
+
+            migrationBuilder.DropTable(
+                name: "Permission");
 
             migrationBuilder.DropTable(
                 name: "Device");

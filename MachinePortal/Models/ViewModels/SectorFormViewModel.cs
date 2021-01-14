@@ -8,7 +8,5 @@ namespace MachinePortal.Models.ViewModels
     public class SectorFormViewModel
     {
         public Sector Sector { get; set; }
-        public ICollection<Line> Lines { get; set; }
-        public ICollection<Area> Areas { get; set; }
     }
 }

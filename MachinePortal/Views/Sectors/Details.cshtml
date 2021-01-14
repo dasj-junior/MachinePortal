@@ -1,6 +1,7 @@
 ﻿@model MachinePortal.Models.Sector
 
 @{
+    var SectorID = Model.ID;
     ViewData["Title"] = "Details";
 }
 
@@ -43,7 +44,7 @@
         </table>      
 </dl>
     <p>
-        <a asp-action="Create" asp-controller="Lines" asp-route-sectorID="@Html.DisplayFor(model => model.ID)">Create New Line</a>
+        <a asp-action="Create" asp-controller="Lines" asp-route-sectorID="@SectorID">Create New Line</a>
     </p>
 </div>
 <div>

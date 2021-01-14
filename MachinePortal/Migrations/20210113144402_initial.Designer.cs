@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MachinePortal.Migrations
 {
     [DbContext(typeof(MachinePortalContext))]
-    [Migration("20210112160715_initial")]
+    [Migration("20210113144402_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -267,6 +267,18 @@ namespace MachinePortal.Migrations
                     b.HasIndex("MachineID");
 
                     b.ToTable("MachineVideo");
+                });
+
+            modelBuilder.Entity("MachinePortal.Models.Permission", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("PermissionName");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Permission");
                 });
 
             modelBuilder.Entity("MachinePortal.Models.Responsible", b =>

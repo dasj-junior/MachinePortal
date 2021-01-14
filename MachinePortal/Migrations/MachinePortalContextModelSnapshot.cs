@@ -267,6 +267,18 @@ namespace MachinePortal.Migrations
                     b.ToTable("MachineVideo");
                 });
 
+            modelBuilder.Entity("MachinePortal.Models.Permission", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("PermissionName");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Permission");
+                });
+
             modelBuilder.Entity("MachinePortal.Models.Responsible", b =>
                 {
                     b.Property<int>("ID")

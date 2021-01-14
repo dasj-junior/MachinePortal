@@ -18,8 +18,7 @@
                 <span asp-validation-for="Sector.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Sector.AreaID" class="control-label"></label>
-                <select asp-for="Sector.AreaID" asp-items="@(new SelectList(Model.Areas,"ID","Name"))" class="form-control"></select>
+                <input type="hidden" asp-for="Sector.AreaID" class="form-control"></input>
             </div>
             <div class="form-group">
                 <label asp-for="Sector.ImagePath" class="control-label"></label>

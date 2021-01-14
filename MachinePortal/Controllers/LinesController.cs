@@ -34,17 +34,13 @@ namespace MachinePortal.Controllers
         public async Task<IActionResult> Create(int? sectorID)
         {
             var viewModel = new LineFormViewModel();
-            if (sectorID == null)
+            viewModel.Line = new Line();
+            if (sectorID != null)
             {
-                var sectors = await _SectorService.FindAllAsync();
-                viewModel.Sectors = sectors;
-            }
-            else
-            {
-                List<Sector> sectors = new List<Sector> { await _SectorService.FindByIDAsync(sectorID.Value) };
-                viewModel.Sectors = sectors;
-            }
-            
+                var sector = await _SectorService.FindByIDAsync(sectorID.Value);
+                viewModel.Line.Sector = sector;
+                viewModel.Line.SectorID = sector.ID;
+            }   
             return View(viewModel);
         }
 
@@ -54,8 +50,7 @@ namespace MachinePortal.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var sectors = await _SectorService.FindAllAsync();
-                var viewModel = new LineFormViewModel { Line = Line, Sectors = sectors };
+                var viewModel = new LineFormViewModel { Line = Line};
                 return View(viewModel);
             }
 
@@ -83,7 +78,7 @@ namespace MachinePortal.Controllers
 
             await _LineService.InsertAsync(Line);
 
-            return RedirectToAction(nameof(Details), "Sectors");
+            return RedirectToAction(@"Details/" + Line.SectorID, "Sectors");
         }
 
         public async Task<IActionResult> Delete(int? ID)
@@ -118,7 +113,7 @@ namespace MachinePortal.Controllers
 
             }
             await _LineService.RemoveAsync(ID);
-            return RedirectToAction(nameof(Details), "Sectors");
+            return RedirectToAction(@"Details/" + Line.SectorID, "Sectors");
         }
 
         public async Task<IActionResult> Details(int? ID)
@@ -184,7 +179,7 @@ namespace MachinePortal.Controllers
 
             await _LineService.UpdateAsync(Line);
 
-            return RedirectToAction(nameof(Details), "Sectors");
+            return RedirectToAction(@"Details/" + Line.SectorID, "Sectors");
         }
     }
 }

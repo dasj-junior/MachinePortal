@@ -1,4 +1,4 @@
-﻿@model MachinePortal.Models.ViewModels.AreaFormViewModel
+﻿@model MachinePortal.Models.Area
 
 @{
     ViewData["Title"] = "Create";
@@ -13,12 +13,12 @@
         <form asp-action="Create" enctype="multipart/form-data" asp-controller="Areas">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Area.Name" class="control-label"></label>
-                <input asp-for="Area.Name" class="form-control" />
-                <span asp-validation-for="Area.Name" class="text-danger"></span>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Area.ImagePath" class="control-label"></label>
+                <label asp-for="ImagePath" class="control-label"></label>
                 <input type="file" name="image" accept="image/*"/>
             </div>
             <div class="form-group">

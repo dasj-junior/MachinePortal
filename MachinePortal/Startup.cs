@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using MachinePortal.Models;
 using MachinePortal.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace MachinePortal
 {
@@ -40,6 +41,25 @@ namespace MachinePortal
             services.AddDbContext<MachinePortalContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("MachinePortalContext"), builder => builder.MigrationsAssembly("MachinePortal")));
 
+            services.Configure<IdentityOptions>(options =>
+            {
+                // User settings.
+                options.User.RequireUniqueEmail = true;
+                options.User.AllowedUserNameCharacters =
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@";
+
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 9;
+
+                // Lockout settings.
+                options.Lockout.MaxFailedAccessAttempts = 3;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+            });
+
             services.AddScoped<AssetService>();
             services.AddScoped<DeviceService>();
             services.AddScoped<DocumentService>();
@@ -47,6 +67,7 @@ namespace MachinePortal
             services.AddScoped<LineService>();
             services.AddScoped<SectorService>();
             services.AddScoped<AreaService>();
+            services.AddScoped<PermissionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,7 +86,7 @@ namespace MachinePortal
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

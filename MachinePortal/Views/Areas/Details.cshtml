@@ -1,6 +1,7 @@
 ﻿@model MachinePortal.Models.Area
 
 @{
+    var AreaID = Model.ID;
     ViewData["Title"] = "Details";
 }
 
@@ -38,7 +39,7 @@
         </table>
     </dl>
     <p>
-        <a asp-action="Create" asp-controller="Sectors">Create New Sector</a>
+        <a asp-action="Create" asp-controller="Sectors" asp-route-areaID="@AreaID">Create New Sector</a>
     </p>
 </div>
 <div>

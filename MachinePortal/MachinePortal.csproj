@@ -31,6 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ScaffoldingReadme.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
@@ -38,7 +42,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Identity\Services\" />
     <Folder Include="Views\Machines\" />
+    <Folder Include="Views\Users\" />
     <Folder Include="wwwroot\resources\Areas\Images\" />
     <Folder Include="wwwroot\resources\Assets\Images\" />
     <Folder Include="wwwroot\resources\Devices\Images\" />
@@ -46,6 +52,7 @@
     <Folder Include="wwwroot\resources\Lines\Images\" />
     <Folder Include="wwwroot\resources\Responsibles\Images\" />
     <Folder Include="wwwroot\resources\Sectors\Images\" />
+    <Folder Include="wwwroot\resources\Users\Photos\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -77,6 +84,18 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Lines\Index.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Permissions\Create.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Permissions\Delete.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Permissions\Edit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Permissions\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Sectors\Create.cshtml">
