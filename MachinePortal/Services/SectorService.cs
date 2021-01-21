@@ -30,6 +30,11 @@ namespace MachinePortal.Services
             return await _context.Sector.Include(a => a.Area).Include(l => l.Lines).FirstOrDefaultAsync(obj => obj.ID == ID);
         }
 
+        public async Task<List<Sector>> FindByAreaIDAsync(int ID)
+        {
+            return await _context.Sector.Where(x => x.AreaID == ID).ToListAsync();
+        }
+
         public async Task<List<Sector>> FindAllAsync()
         {
             return await _context.Sector.OrderBy(x => x.Name).ToListAsync();

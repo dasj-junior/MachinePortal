@@ -1,0 +1,182 @@
+﻿@model MachinePortal.Models.ViewModels.MachineFormViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#button1").click(function () {
+            $("#div1").load("/Machines/UploadDocument");
+        })
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var items = "<option value='0'>Select</option>";
+        $('#SectorID').html(items);
+        $('#LineID').html(items);
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#AreaID').on('change', function() {
+            var url = '@Url.Content("~/")' + "Machines/GetSector";
+            $.getJSON(url, { AreaID: $("#AreaID :selected").val() }, function (data) {
+                var items = '';
+                $("#SectorID").empty();
+                $("#LineID").empty();
+                $.each(data, function (i, sector) {
+                    items += "<option value='" + sector.value + "'>" + sector.text + "</option>";
+                });
+                $('#SectorID').html(items);
+            });
+        });
+
+        $('#SectorID').on('change', function() {
+            var url = '@Url.Content("~/")' + "Machines/GetLine";
+            $.getJSON(url, { SectorID: $("#SectorID :selected").val() }, function (data) {
+                var items = '';
+                $("#LineID").empty();
+                $.each(data, function (i, line) {
+                    items += "<option value='" + line.value + "'>" + line.text + "</option>";
+                });
+                $('#LineID').html(items);
+            });
+        });
+    });
+</script>
+
+<h2>Create</h2>
+
+<h4>Machine</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data" asp-controller="Machines">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Machine.ImagePath" class="control-label"></label>
+                <input type="file" name="image" accept="image/*" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Machine.Name" class="control-label"></label>
+                <input asp-for="Machine.Name" class="form-control" />
+                <span asp-validation-for="Machine.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Machine.AssetNumber" class="control-label"></label>
+                <input asp-for="Machine.AssetNumber" class="form-control" />
+                <span asp-validation-for="Machine.AssetNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Machine.MES_Name" class="control-label"></label>
+                <input asp-for="Machine.MES_Name" class="form-control" />
+                <span asp-validation-for="Machine.MES_Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Machine.SAP_Name" class="control-label"></label>
+                <input asp-for="Machine.SAP_Name" class="form-control" />
+                <span asp-validation-for="Machine.SAP_Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Machine.WorkCenter" class="control-label"></label>
+                <input asp-for="Machine.WorkCenter" class="form-control" />
+                <span asp-validation-for="Machine.WorkCenter" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Machine.CostCenter" class="control-label"></label>
+                <input asp-for="Machine.CostCenter" class="form-control" />
+                <span asp-validation-for="Machine.CostCenter" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Machine.ServerPath" class="control-label"></label>
+                <input asp-for="Machine.ServerPath" class="form-control" />
+                <span asp-validation-for="Machine.ServerPath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Machine.MachineDocuments" class="control-label"></label>
+                <input type="file" class="form-control-file" name="documents" multiple />
+            </div>
+            <div class="form-group">
+                <label asp-for="Machine.MachineImages" class="control-label"></label>
+                <input type="file" class="form-control-file" name="images" multiple />
+            </div>
+            <div class="form-group">
+                <label asp-for="Machine.MachineVideos" class="control-label"></label>
+                <input type="file" class="form-control-file" name="videos" multiple />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Assets" class="control-label"></label>
+                <select asp-for="Assets" asp-items="@(new SelectList(Model.Assets,"ID","Name"))" class="form-control" multiple></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Devices" class="control-label"></label>
+                <select asp-for="Devices" asp-items="@(new SelectList(Model.Devices,"ID","Name"))" class="form-control" multiple></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Responsibles" class="control-label"></label>
+                <select asp-for="Responsibles" asp-items="@(new SelectList(Model.Responsibles,"ID","Name"))" class="form-control" multiple></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="AreaID" class="control-label"></label>
+                <select asp-for="AreaID" id="AreaID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListAreas,"ID","Name"))"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="SectorID" class="control-label"></label>
+                <select asp-for="SectorID" id="SectorID" class="form-control" asp-items="@(new SelectList(string.Empty, "ID","Name"))"></select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LineID" class="control-label"></label>
+                <select asp-for="LineID" id="LineID" class="form-control" asp-items="@(new SelectList(string.Empty, "ID","Name"))"></select>
+            </div>
+
+            <button type="button" id="button1">Load Partial View</button>
+            <div id="div1"></div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Abrir janela Modal</button>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Cabeçalho Modal</h4>
+            </div>
+            <div class="modal-body">
+                <p>Macoratti .net - Quase tudo para .NET</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

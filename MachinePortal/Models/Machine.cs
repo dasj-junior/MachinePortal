@@ -33,7 +33,7 @@ namespace MachinePortal.Models
         public ICollection<MachineImage> MachineImages { get; set; }
         public ICollection<MachineVideo> MachineVideos { get; set; }
 
-        public ICollection<MachineResponsable> MachineResponsables { get; set; }
+        public ICollection<MachineResponsible> MachineResponsibles { get; set; }
         public ICollection<MachineDevice> MachineDevices { get; set; }
 
     }

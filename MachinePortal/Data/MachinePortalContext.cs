@@ -12,8 +12,8 @@ namespace MachinePortal.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MachineResponsable>()
-                .HasKey(x => new { x.MachineID, x.ResponsableID });
+            modelBuilder.Entity<MachineResponsible>()
+                .HasKey(x => new { x.MachineID, x.ResponsibleID });
 
             modelBuilder.Entity<MachineDevice>()
                 .HasKey(x => new { x.MachineID, x.DeviceID });
@@ -27,5 +27,6 @@ namespace MachinePortal.Models
         public DbSet<Sector> Sector { get; set; }
         public DbSet<Area> Area { get; set; }
         public DbSet<Permission> Permission { get; set; }
+        public DbSet<Machine> Machine { get; set; }
     }
 }

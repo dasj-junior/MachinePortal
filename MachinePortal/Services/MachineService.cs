@@ -8,43 +8,37 @@ using System.Threading.Tasks;
 
 namespace MachinePortal.Services
 {
-    public class LineService
+    public class MachineService
     {
-
         private readonly MachinePortalContext _context;
 
-        public LineService(MachinePortalContext context)
+        public MachineService(MachinePortalContext context)
         {
             _context = context;
         }
 
 
-        public async Task InsertAsync(Line obj)
+        public async Task InsertAsync(Machine obj)
         {
             _context.Add(obj);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Line> FindByIDAsync(int ID)
+        public async Task<Machine> FindByIDAsync(int ID)
         {
-            return await _context.Line.Include(s => s.Sector).Include(a => a.Sector.Area).FirstOrDefaultAsync(obj => obj.ID == ID);
+            return await _context.Machine.FirstOrDefaultAsync(obj => obj.ID == ID);
         }
 
-        public async Task<List<Line>> FindBySectorIDAsync(int ID)
+        public async Task<List<Machine>> FindAllAsync()
         {
-            return await _context.Line.Where(x => x.SectorID == ID).ToListAsync();
+            return await _context.Machine.OrderBy(x => x.ID).ToListAsync();
         }
 
-        public async Task<List<Line>> FindAllAsync()
-        {
-            return await _context.Line.OrderBy(x => x.Name).ToListAsync();
-        }
-
-        public async Task UpdateAsync(Line obj)
+        public async Task UpdateAsync(Machine obj)
         {
             try
             {
-                _context.Line.Update(obj);
+                _context.Machine.Update(obj);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException e)
@@ -57,8 +51,8 @@ namespace MachinePortal.Services
         {
             try
             {
-                var obj = await _context.Line.FindAsync(ID);
-                _context.Line.Remove(obj);
+                var obj = await _context.Machine.FindAsync(ID);
+                _context.Machine.Remove(obj);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException e)
