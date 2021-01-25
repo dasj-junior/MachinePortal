@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MachinePortal.Models;
 using MachinePortal.Models.ViewModels;
 using MachinePortal.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -20,7 +21,7 @@ namespace MachinePortal.Controllers
         private readonly AreaService _areaService;
         private readonly SectorService _sectorService;
         private readonly LineService _lineService;
-        
+
         public MachinesController(AssetService assetService, ResponsibleService responsibleService, DeviceService deviceService,
             AreaService areaService, SectorService sectorService, LineService lineService)
         {
@@ -38,6 +39,13 @@ namespace MachinePortal.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create(List<IFormFile> MDocuments)
+        {
+            List<IFormFile> teste = MDocuments;
+            return View();
+        }
+
         public async Task<IActionResult> Create()
         {
             var assets = await _assetService.FindAllAsync();
@@ -45,10 +53,9 @@ namespace MachinePortal.Controllers
             var devices = await _deviceService.FindAllAsync();
 
             List<Area> areas = await _areaService.FindAllAsync();
-            areas.Add(new Area { ID = 0, Name = "Select" });
             ViewBag.ListAreas = areas;
 
-            var viewModel = new MachineFormViewModel { Assets = assets, Responsibles = responsibles, Devices = devices};
+            var viewModel = new MachineFormViewModel { Assets = assets, Responsibles = responsibles, Devices = devices };
             return View(viewModel);
 
         }

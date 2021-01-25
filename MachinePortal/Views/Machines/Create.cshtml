@@ -1,39 +1,81 @@
 ﻿@model MachinePortal.Models.ViewModels.MachineFormViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create new machine";
+    List<Document> documents = new List<Document>();
 }
 
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="~/lib/jquery/dist/jquery.js"></script>
 
+@*<script>
+        $(function () {
+            $(".details").click(function () {
+                var id = $(this).attr("data-id");
+                alert(id);
+                $("#modal").load("Details?id=" + id, function () {
+                    $("#modal").modal();
+                })
+            });
+        })
+    </script>*@
+
 <script>
+    var formdata = new FormData(); //FormData object
     $(document).ready(function () {
+
+        $("#InsertMDocument").click(function ()
+        {
+            var formdata = new FormData();
+            var fileInput = document.getElementById('#MDocuments');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sDocName = document.getElementById("DocumentName").value;
+                var sDocCategory = document.getElementById("DocumentCategory").value;
+                var sfilename = fileInput.files[i].name;
+                let srandomid = Math.random().toString(36).substring(7);
+                formdata.append(sfilename,fileInput.files[i])
+                var markup = "<tr id='" + srandomid + "'><td>" + sDocName + "</td><td>" + sDocCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                    "\")'><span class='glyphicon glyphicon-remove red'></span></a></td></tr>"; // Binding the file name
+                $("#tDocuments").append(markup);
+            }
+            $('#DocumentName').val('');
+            $('#DocumentCategory').val('');
+            $('#DocumentfileInput').val('');
+        })
+    });
+
+    function DeleteFile(Fileid, FileName)
+    {
+        formdata.delete(FileName)
+        $("#" + Fileid).remove();
+    }
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
         $("#button1").click(function () {
             $("#div1").load("/Machines/UploadDocument");
         })
-    });
-</script>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        var items = "<option value='0'>Select</option>";
-        $('#SectorID').html(items);
-        $('#LineID').html(items);
-    });
-</script>
+        $('#AreaID').prepend("<option value='-1'>Select</option>");
+        $('#AreaID option:contains(Select)').prop({ selected: true });
+        $('#SectorID').append("<option value='-1'>Select</option>");
+        $('#LineID').append("<option value='-1'>Select</option>");
 
-<script type="text/javascript">
-    $(document).ready(function () {
         $('#AreaID').on('change', function() {
             var url = '@Url.Content("~/")' + "Machines/GetSector";
             $.getJSON(url, { AreaID: $("#AreaID :selected").val() }, function (data) {
                 var items = '';
-                $("#SectorID").empty();
-                $("#LineID").empty();
+                $('#SectorID').html(items);
                 $.each(data, function (i, sector) {
                     items += "<option value='" + sector.value + "'>" + sector.text + "</option>";
                 });
-                $('#SectorID').html(items);
+                $('#SectorID').append("<option value='-1'>Select</option>");
+                $('#SectorID').append(items);
+                $('#LineID').html("");
+                $('#LineID').append("<option value='-1'>Select</option>");
             });
         });
 
@@ -41,24 +83,27 @@
             var url = '@Url.Content("~/")' + "Machines/GetLine";
             $.getJSON(url, { SectorID: $("#SectorID :selected").val() }, function (data) {
                 var items = '';
-                $("#LineID").empty();
+                $('#LineID').html(items);
                 $.each(data, function (i, line) {
                     items += "<option value='" + line.value + "'>" + line.text + "</option>";
                 });
-                $('#LineID').html(items);
+                $('#LineID').append("<option value='-1'>Select</option>");
+                $('#LineID').append(items);
             });
         });
     });
 </script>
 
-<h2>Create</h2>
-
-<h4>Machine</h4>
+<h2>@ViewData["Title"]</h2>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data" asp-controller="Machines">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <h3>General Data</h3>
+            <hr />
+
             <div class="form-group">
                 <label asp-for="Machine.ImagePath" class="control-label"></label>
                 <input type="file" name="image" accept="image/*" />
@@ -98,18 +143,76 @@
                 <input asp-for="Machine.ServerPath" class="form-control" />
                 <span asp-validation-for="Machine.ServerPath" class="text-danger"></span>
             </div>
+
+            <br />
+            <h3>Machine Documents</h3>
+            <hr />
+
             <div class="form-group">
-                <label asp-for="Machine.MachineDocuments" class="control-label"></label>
-                <input type="file" class="form-control-file" name="documents" multiple />
+                <label asp-for="Machine.MachineDocuments" class="control-label"></label><br />
+                <button type="button" data-toggle="modal" data-target="#DocumentModal">Load Documents</button><br /><br />
+                <input type="file" id="MDocuments" class="form-control-file" name="MDocuments" style="display: none;"/>
+                <table class="table" id="tDocuments">
+                    <tr>
+                        <th>
+                            Names(s)
+                        </th>
+                        <th>
+                            Categories(s)
+                        </th>
+                        <th>
+                            File Name(s)
+                        </th>
+                        <th>
+                            Delete
+                        </th>
+                    </tr>
+                </table>
             </div>
             <div class="form-group">
-                <label asp-for="Machine.MachineImages" class="control-label"></label>
-                <input type="file" class="form-control-file" name="images" multiple />
+                <label asp-for="Machine.MachineImages" class="control-label"></label><br />
+                <button type="button" data-toggle="modal" data-target="#myModal">Load Images</button><br /><br />
+                <table class="table" id="tImages">
+                    <tr>
+                        <th>
+                            Names(s)
+                        </th>
+                        <th>
+                            Categories(s)
+                        </th>
+                        <th>
+                            File Name(s)
+                        </th>
+                        <th>
+                            Delete
+                        </th>
+                    </tr>
+                </table>
             </div>
             <div class="form-group">
-                <label asp-for="Machine.MachineVideos" class="control-label"></label>
-                <input type="file" class="form-control-file" name="videos" multiple />
+                <label asp-for="Machine.MachineVideos" class="control-label"></label><br />
+                <button type="button" data-toggle="modal" data-target="#myModal">Load Videos</button><br /><br />
+                <table class="table" id="tVideos">
+                    <tr>
+                        <th>
+                            Names(s)
+                        </th>
+                        <th>
+                            Categories(s)
+                        </th>
+                        <th>
+                            File Name(s)
+                        </th>
+                        <th>
+                            Delete
+                        </th>
+                    </tr>
+                </table>
             </div>
+
+            <br />
+            <h3>Selection</h3>
+            <hr />
 
             <div class="form-group">
                 <label asp-for="Assets" class="control-label"></label>
@@ -126,6 +229,10 @@
                 <select asp-for="Responsibles" asp-items="@(new SelectList(Model.Responsibles,"ID","Name"))" class="form-control" multiple></select>
             </div>
 
+            <br />
+            <h2>Hierarchies</h2>
+            <hr />
+
             <div class="form-group">
                 <label asp-for="AreaID" class="control-label"></label>
                 <select asp-for="AreaID" id="AreaID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListAreas,"ID","Name"))"></select>
@@ -141,8 +248,7 @@
                 <select asp-for="LineID" id="LineID" class="form-control" asp-items="@(new SelectList(string.Empty, "ID","Name"))"></select>
             </div>
 
-            <button type="button" id="button1">Load Partial View</button>
-            <div id="div1"></div>
+            <br /><br />
 
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
@@ -151,25 +257,35 @@
     </div>
 </div>
 
-<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Abrir janela Modal</button>
 
-<div class="modal fade" id="myModal" role="dialog">
+
+<div class="modal fade" id="DocumentModal" role="dialog">
     <div class="modal-dialog">
-
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Cabeçalho Modal</h4>
+                <h4 class="modal-title">New Document</h4>
             </div>
             <div class="modal-body">
-                <p>Macoratti .net - Quase tudo para .NET</p>
+                <form id="uploader">
+                    <div class="form-group">
+                        <label class="control-label">Name</label>
+                        <input id="DocumentName" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Category</label>
+                        <input id="DocumentCategory" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <input id="DocumentfileInput" type="file">
+                    </div>
+                </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                <button type="button" id="InsertMDocument" class="btn btn-success" data-dismiss="modal">Insert</button>
+                <button type="button" id="CloseMDocument" class="btn btn-primary" data-dismiss="modal">Close</button>
             </div>
         </div>
-
     </div>
 </div>
 
