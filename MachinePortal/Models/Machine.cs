@@ -27,7 +27,6 @@ namespace MachinePortal.Models
         public int LineID { get; set; }
         public Line Line { get; set; }
 
-        public ICollection<Asset> Assets { get; set; }
         public ICollection<MachineDocument> MachineDocuments { get; set; }
         public ICollection<MachineComment> MachineComments { get; set; }
         public ICollection<MachineImage> MachineImages { get; set; }
@@ -35,6 +34,5 @@ namespace MachinePortal.Models
 
         public ICollection<MachineResponsible> MachineResponsibles { get; set; }
         public ICollection<MachineDevice> MachineDevices { get; set; }
-
     }
 }

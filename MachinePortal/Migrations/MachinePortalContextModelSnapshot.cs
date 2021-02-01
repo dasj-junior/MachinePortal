@@ -31,30 +31,6 @@ namespace MachinePortal.Migrations
                     b.ToTable("Area");
                 });
 
-            modelBuilder.Entity("MachinePortal.Models.Asset", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Description");
-
-                    b.Property<string>("ImageURL");
-
-                    b.Property<double>("InitialValue");
-
-                    b.Property<int>("MachineID");
-
-                    b.Property<string>("Name");
-
-                    b.Property<int>("Number");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("MachineID");
-
-                    b.ToTable("Asset");
-                });
-
             modelBuilder.Entity("MachinePortal.Models.Device", b =>
                 {
                     b.Property<int>("ID")
@@ -197,6 +173,8 @@ namespace MachinePortal.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Category");
+
                     b.Property<string>("Extension");
 
                     b.Property<int?>("MachineID");
@@ -234,17 +212,17 @@ namespace MachinePortal.Migrations
                     b.ToTable("MachineImage");
                 });
 
-            modelBuilder.Entity("MachinePortal.Models.MachineResponsable", b =>
+            modelBuilder.Entity("MachinePortal.Models.MachineResponsible", b =>
                 {
                     b.Property<int>("MachineID");
 
-                    b.Property<int>("ResponsableID");
+                    b.Property<int>("ResponsibleID");
 
-                    b.HasKey("MachineID", "ResponsableID");
+                    b.HasKey("MachineID", "ResponsibleID");
 
-                    b.HasIndex("ResponsableID");
+                    b.HasIndex("ResponsibleID");
 
-                    b.ToTable("MachineResponsable");
+                    b.ToTable("MachineResponsible");
                 });
 
             modelBuilder.Entity("MachinePortal.Models.MachineVideo", b =>
@@ -321,14 +299,6 @@ namespace MachinePortal.Migrations
                     b.ToTable("Sector");
                 });
 
-            modelBuilder.Entity("MachinePortal.Models.Asset", b =>
-                {
-                    b.HasOne("MachinePortal.Models.Machine", "Machine")
-                        .WithMany("Assets")
-                        .HasForeignKey("MachineID")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("MachinePortal.Models.Document", b =>
                 {
                     b.HasOne("MachinePortal.Models.Device", "Device")
@@ -397,16 +367,16 @@ namespace MachinePortal.Migrations
                         .HasForeignKey("MachineID");
                 });
 
-            modelBuilder.Entity("MachinePortal.Models.MachineResponsable", b =>
+            modelBuilder.Entity("MachinePortal.Models.MachineResponsible", b =>
                 {
                     b.HasOne("MachinePortal.Models.Machine", "Machine")
-                        .WithMany("MachineResponsables")
+                        .WithMany("MachineResponsibles")
                         .HasForeignKey("MachineID")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("MachinePortal.Models.Responsible", "Responsable")
+                    b.HasOne("MachinePortal.Models.Responsible", "Responsible")
                         .WithMany()
-                        .HasForeignKey("ResponsableID")
+                        .HasForeignKey("ResponsibleID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

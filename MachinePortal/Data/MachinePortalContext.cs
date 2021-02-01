@@ -19,7 +19,6 @@ namespace MachinePortal.Models
                 .HasKey(x => new { x.MachineID, x.DeviceID });
         }
 
-        public DbSet<Asset> Asset { get; set; }
         public DbSet<Device> Device { get; set; }
         public DbSet<Document> Document { get; set; }
         public DbSet<Responsible> Responsible { get; set; }

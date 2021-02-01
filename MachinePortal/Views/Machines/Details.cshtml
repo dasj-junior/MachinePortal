@@ -19,16 +19,6 @@
         <dd>
             @Html.DisplayFor(model => model.Name)
         </dd>
-
-        @foreach (Asset asset in Model.Assets)
-        {
-        <dt>
-            Document
-        </dt>
-        <dd>
-                @Html.ActionLink(asset.Name, "Download", new { })
-        </dd>
-        }
     </dl>
 </div>
 <div>

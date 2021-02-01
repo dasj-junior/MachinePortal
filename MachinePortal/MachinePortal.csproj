@@ -49,6 +49,10 @@
     <Folder Include="wwwroot\resources\Devices\Images\" />
     <Folder Include="wwwroot\resources\Devices\Documents\" />
     <Folder Include="wwwroot\resources\Lines\Images\" />
+    <Folder Include="wwwroot\resources\Machines\Photo\" />
+    <Folder Include="wwwroot\resources\Machines\Images\" />
+    <Folder Include="wwwroot\resources\Machines\Documents\" />
+    <Folder Include="wwwroot\resources\Machines\Videos\" />
     <Folder Include="wwwroot\resources\Responsibles\Images\" />
     <Folder Include="wwwroot\resources\Sectors\Images\" />
     <Folder Include="wwwroot\resources\Users\Photos\" />

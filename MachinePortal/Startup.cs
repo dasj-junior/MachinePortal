@@ -60,7 +60,6 @@ namespace MachinePortal
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
             });
 
-            services.AddScoped<AssetService>();
             services.AddScoped<DeviceService>();
             services.AddScoped<DocumentService>();
             services.AddScoped<ResponsibleService>();
@@ -68,6 +67,7 @@ namespace MachinePortal
             services.AddScoped<SectorService>();
             services.AddScoped<AreaService>();
             services.AddScoped<PermissionService>();
+            services.AddScoped<MachineService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
