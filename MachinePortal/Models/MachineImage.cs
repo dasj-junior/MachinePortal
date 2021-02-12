@@ -12,6 +12,9 @@ namespace MachinePortal.Models
         public string Path { get; set; }
         public string Extension { get; set; }
 
+        public int MachineID { get; set; }
+        public Machine Machine { get; set; }
+
         public MachineImage()
         {
         }

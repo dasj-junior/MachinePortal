@@ -16,20 +16,20 @@ namespace MachinePortal.Services
             _context = context;
         }
 
-        public async Task<List<Document>> FindByDeviceIDAsync(int ID)
+        public async Task<List<DeviceDocument>> FindByDeviceIDAsync(int ID)
         {
-            var result = from obj in _context.Document select obj;
+            var result = from obj in _context.DeviceDocument select obj;
             result = result.Where(x => x.Device.ID == ID);
             return await result.ToListAsync();
         }
 
-        public async Task InsertAsync(Document obj)
+        public async Task InsertAsync(DeviceDocument obj)
         {
             _context.Add(obj);
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveAsync(Document obj)
+        public async Task RemoveAsync(DeviceDocument obj)
         {
             _context.Remove(obj);
             await _context.SaveChangesAsync();

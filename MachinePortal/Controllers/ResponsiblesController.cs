@@ -59,6 +59,8 @@ namespace MachinePortal.Controllers
                 }
             }
 
+            responsible.FullName = responsible.FirstName + " " + responsible.LastName;
+
             await _responsibleService.InsertAsync(responsible);
 
             return RedirectToAction(nameof(Index));
@@ -159,6 +161,8 @@ namespace MachinePortal.Controllers
                     await image.CopyToAsync(stream);
                 }
             }
+
+            responsible.FullName = responsible.FirstName + " " + responsible.LastName;
 
             await _responsibleService.UpdateAsync(responsible);
 

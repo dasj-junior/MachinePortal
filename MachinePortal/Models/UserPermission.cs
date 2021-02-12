@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MachinePortal.Areas.Identity.Data;
 
 namespace MachinePortal.Models
 {
@@ -10,7 +11,7 @@ namespace MachinePortal.Models
         public int UserID { get; set; }
         public int PermissionID { get; set; }
 
-        public User User { get; set; }
+        public MachinePortalUser MachinePortalUser { get; set; }
         public Permission Permission { get; set; }
     }
 }

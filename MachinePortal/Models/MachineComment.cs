@@ -12,6 +12,9 @@ namespace MachinePortal.Models
         public string Comment { get; set; }
         public DateTime Date { get; set; }
 
+        public int MachineID { get; set; }
+        public Machine Machine { get; set; }
+
         public MachineComment()
         {
         }

@@ -17,10 +17,14 @@ namespace MachinePortal.Models
 
             modelBuilder.Entity<MachineDevice>()
                 .HasKey(x => new { x.MachineID, x.DeviceID });
+
+            modelBuilder.Entity<UserPermission>()
+                .HasKey(x => new { x.UserID, x.PermissionID });
         }
 
         public DbSet<Device> Device { get; set; }
-        public DbSet<Document> Document { get; set; }
+        public DbSet<DeviceDocument> DeviceDocument { get; set; }
+        public DbSet<MachineComment> MachineComments { get; set; }
         public DbSet<Responsible> Responsible { get; set; }
         public DbSet<Line> Line { get; set; }
         public DbSet<Sector> Sector { get; set; }

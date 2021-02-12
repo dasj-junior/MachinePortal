@@ -14,6 +14,9 @@ namespace MachinePortal.Models
         public string Extension { get; set; }
         public string Type { get; set; }
 
+        public int MachineID { get; set; }
+        public Machine Machine { get; set; }
+
         public MachineDocument()
         {
         }

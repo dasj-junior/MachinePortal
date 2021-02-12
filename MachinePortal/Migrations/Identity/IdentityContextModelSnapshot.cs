@@ -79,6 +79,35 @@ namespace MachinePortal.Migrations.Identity
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("MachinePortal.Models.Permission", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("PermissionName");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Permission");
+                });
+
+            modelBuilder.Entity("MachinePortal.Models.UserPermission", b =>
+                {
+                    b.Property<int>("UserID");
+
+                    b.Property<int>("PermissionID");
+
+                    b.Property<string>("MachinePortalUserId");
+
+                    b.HasKey("UserID", "PermissionID");
+
+                    b.HasIndex("MachinePortalUserId");
+
+                    b.HasIndex("PermissionID");
+
+                    b.ToTable("UserPermission");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -188,6 +217,18 @@ namespace MachinePortal.Migrations.Identity
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("MachinePortal.Models.UserPermission", b =>
+                {
+                    b.HasOne("MachinePortal.Areas.Identity.Data.MachinePortalUser", "MachinePortalUser")
+                        .WithMany("UserPermissions")
+                        .HasForeignKey("MachinePortalUserId");
+
+                    b.HasOne("MachinePortal.Models.Permission", "Permission")
+                        .WithMany("UserPermissions")
+                        .HasForeignKey("PermissionID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

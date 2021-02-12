@@ -4,20 +4,52 @@
     ViewData["Title"] = "Create new machine";
 }
 
-<!-- CSS only -->
-<link href="~/lib/bootstrap/dist/css/bootstrap.css" />
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+@* Form Data Variable *@
+<script type="text/javascript">
+    var formdata = new FormData();
+</script>
 
 @* Send files through AJAX *@
 <script type="text/javascript">
 
-    var formdata = new FormData();
+    function DeleteFile(Fileid, FileName) {
+        formdata.delete(FileName)
+        $("#" + Fileid).remove();
+        chkatchtbl();
+    }
+
+    function chkatchtbl() {
+        if ($('#tDocuments tr').length > 1) {
+            $("#tDocuments").css("visibility", "visible");
+        } else {
+            $("#tDocuments").css("visibility", "hidden");
+        }
+        if ($('#tImages tr').length > 1) {
+            $("#tImages").css("visibility", "visible");
+        } else {
+            $("#tImages").css("visibility", "hidden");
+        }
+        if ($('#tVideos tr').length > 1) {
+            $("#tVideos").css("visibility", "visible");
+        } else {
+            $("#tVideos").css("visibility", "hidden");
+        }
+    }
 
     $(document).ready(function () {
 
         document.getElementById('openInputDocument').addEventListener('click', () => {
             document.getElementById('iDocuments').click()
+        });
+
+        document.getElementById('openInputImage').addEventListener('click', () => {
+            document.getElementById('iImages').click()
+        });
+
+        document.getElementById('openInputVideo').addEventListener('click', () => {
+            document.getElementById('iVideos').click()
         });
 
         $("#iDocuments").on("change", function () {
@@ -28,6 +60,22 @@
             }
         });
 
+        $("#iImages").on("change", function () {
+            var fileInput = document.getElementById('iImages');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                document.getElementById("imageFilePath").value = sfilename;
+            }
+        });
+
+        $("#iVideos").on("change", function () {
+            var fileInput = document.getElementById('iVideos');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                document.getElementById("videoFilePath").value = sfilename;
+            }
+        });
+
         $("#insertDocument").on("click", function () {
             var fileInput = document.getElementById('iDocuments');
             for (i = 0; i < fileInput.files.length; i++) {
@@ -35,48 +83,68 @@
                 var sName = document.getElementById('documentName').value;
                 var sCategory = document.getElementById('documentCategory').value;
                 let srandomid = Math.random().toString(36).substring(7);
-                formdata.append(sfilename, fileInput.files[i]);
+                formdata.append("document", fileInput.files[i]);
                 var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
-                    "\")'><span class='glyphicon glyphicon-remove red'></span></a></td></tr>"; // Binding the file name
+                    "\")'><span class='glyphicon glyphicon-remove' style='color: red'></span></a></td></tr>"; // Binding the file name
                 $("#tDocuments").append(markup);
             }
             chkatchtbl();
             $('#iDocuments').val('');
         });
 
-        $("#btnupload").click(function () {
+        $("#insertImage").on("click", function () {
+            var fileInput = document.getElementById('iImages');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                var sName = document.getElementById('imageName').value;
+                var sCategory = document.getElementById('imageCategory').value;
+                let srandomid = Math.random().toString(36).substring(7);
+                formdata.append("image", fileInput.files[i]);
+                var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                    "\")'><span class='glyphicon glyphicon-remove' style='color: red'></span></a></td></tr>"; // Binding the file name
+                $("#tImages").append(markup);
+            }
+            chkatchtbl();
+            $('#iImages').val('');
+        });
+
+        $("#insertVideo").on("click", function () {
+            var fileInput = document.getElementById('iVideos');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                var sName = document.getElementById('videoName').value;
+                var sCategory = document.getElementById('videoCategory').value;
+                let srandomid = Math.random().toString(36).substring(7);
+                formdata.append("video", fileInput.files[i]);
+                var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                    "\")'><span class='glyphicon glyphicon-remove' style='color: red'></span></a></td></tr>"; // Binding the file name
+                $("#tVideos").append(markup);
+            }
+            chkatchtbl();
+            $('#iVideos').val('');
+        });
+
+        $("form").submit(function (event) {
+            event.preventDefault();
+            var data = new FormData(this);
+            for (var pair of formdata.entries()) {
+                data.append(pair[0], pair[1]);
+            }
             $.ajax({
                 url: '@Url.Content("~/")' + "Machines/Create",
                 type: "POST",
                 contentType: false, // Not to set any content header
                 processData: false, // Not to process data
-                data: formdata,
+                data: data,
                 async: false,
-                success: function (result) {
-                    if (result != "") {
-                        alert(result);
-                    }
+                success: function () {
+                    window.location.href = "/Machines/Index";
                 },
-                error: function (err) {
-                    alert(err.statusText);
+                error: (error) => {
+                    console.log(JSON.stringify(error));
                 }
             });
         });
-
-        function chkatchtbl() {
-            if ($('#tDocuments tr').length > 1) {
-                $("#tDocuments").css("visibility", "visible");
-            } else {
-                $("#tDocuments").css("visibility", "hidden");
-            }
-        }
-
-        function DeleteFile(Fileid, FileName) {
-            formdata.delete(FileName)
-            $("#" + Fileid).remove();
-            chkatchtbl();
-        }
-
     });
 </script>
 
@@ -114,10 +182,22 @@
     });
 </script>
 
-@* Machine Photo Preview *@
+@* Machine Photo Button and Preview *@
 <script type="text/javascript">
     $(document).ready(function () {
+        //Button triggers the photo file input
+        document.getElementById('openPhoto').addEventListener('click', () => {
+            document.getElementById('photo').click()
+        });
+
         $("#photo").change(function () {
+            //Get file name and put it into input
+            var fileInput = document.getElementById('photo');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                document.getElementById("photoFilePath").value = sfilename;
+            }
+            //Load file and show the preview
             if (typeof (FileReader) != "undefined") {
                 var dvPreview = $("#divImageMediaPreview");
                 dvPreview.html("");
@@ -182,15 +262,22 @@
 
 <div class="row">
     <div class="col-md-8">
-        <form asp-action="Create" enctype="multipart/form-data" asp-controller="Machines">
+        <form asp-action="Create" class="form" enctype="multipart/form-data" asp-controller="Machines">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <h3>General Data</h3>
             <hr />
-
             <div class="form-group">
                 <label class="control-label">Photo</label>
                 <div id="divImageMediaPreview"></div>
-                <input type="file" id="photo" name="photo" accept="image/*" />
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button id="openPhoto" class="btn btn-default" type="button">
+                            Open Photo
+                        </button>
+                    </span>
+                    <input id="photoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+                </div>
+                <input type="file" id="photo" name="photo" accept="image/*" style="display:none" />
             </div>
             <div class="form-group">
                 <label asp-for="Machine.Name" class="control-label"></label>
@@ -243,7 +330,7 @@
                 <input id="iDocuments" type="file" style="display:none" />
                 <button type="button" data-toggle="modal" data-target="#modalDocuments">Add Document</button>
                 <br /><br />
-                <table class="table" id="tDocuments" style="visibility:hidden">
+                <table class="table table-bordered" id="tDocuments" style="visibility:hidden">
                     <tr>
                         <th>
                             Name
@@ -263,14 +350,50 @@
 
             <div class="form-group">
                 <label class="control-label">Images</label>
-                <hr />
-                <br />
+                <hr style="padding:0; margin:5px;" />
+                <input id="iImages" type="file" style="display:none" />
+                <button type="button" data-toggle="modal" data-target="#modalImages">Add Images</button>
+                <br /><br />
+                <table class="table table-bordered" id="tImages" style="visibility:hidden">
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Category
+                        </th>
+                        <th>
+                            File Name
+                        </th>
+                        <th>
+                            Delete
+                        </th>
+                    </tr>
+                </table>
             </div>
 
             <div class="form-group">
                 <label class="control-label">Videos</label>
-                <hr />
-                <br />
+                <hr style="padding:0; margin:5px;" />
+                <input id="iVideos" type="file" style="display:none" />
+                <button type="button" data-toggle="modal" data-target="#modalVideos">Add Videos</button>
+                <br /><br />
+                <table class="table table-bordered" id="tVideos" style="visibility:hidden">
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Category
+                        </th>
+                        <th>
+                            File Name
+                        </th>
+                        <th>
+                            Delete
+                        </th>
+                    </tr>
+                </table>
             </div>
 
             <br />
@@ -284,8 +407,8 @@
                         <select id="DevicesSelect" asp-for="Devices" asp-items="@ViewBag.ListDevices" class="form-control" multiple></select>
                     </div>
                     <div class="col-md-2 col-sm-2">
-                        <button type="button" id="rightDevices" class="btn btn-success btn-block bi-arrow-right"></button>
-                        <button type="button" id="leftDevices" class="btn btn-success btn-block btn-danger bi-arrow-left"></button>
+                        <button type="button" id="rightDevices" class="btn btn-success btn-block glyphicon glyphicon-arrow-right"></button>
+                        <button type="button" id="leftDevices" class="btn btn-success btn-block btn-danger glyphicon glyphicon-arrow-left"></button>
                     </div>
                     <div class="col-md-5 col-sm-5">
                         <select id="DevicesSelected" asp-for="SelectedDevices" class="form-control" multiple></select>
@@ -300,8 +423,8 @@
                         <select id="ResponsiblesSelect" asp-items="@ViewBag.ListResponsibles" class="form-control" multiple></select>
                     </div>
                     <div class="col-md-2 col-sm-2">
-                        <button type="button" id="rightResponsibles" class="btn btn-success btn-block bi-arrow-right"></button>
-                        <button type="button" id="leftResponsibles" class="btn btn-success btn-block btn-danger bi-arrow-left"></button>
+                        <button type="button" id="rightResponsibles" class="btn btn-success btn-block glyphicon glyphicon-arrow-right"></button>
+                        <button type="button" id="leftResponsibles" class="btn btn-success btn-block btn-danger glyphicon glyphicon-arrow-left"></button>
                     </div>
                     <div class="col-md-5 col-sm-5">
                         <select id="ResponsiblesSelected" asp-for="SelectedResponsibles" class="form-control" multiple></select>
@@ -355,27 +478,97 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">File:</label>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <button id="openInputDocument" class="btn btn-outline-secondary" type="button">Open File</button>
-                        </div>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button id="openInputDocument" class="btn btn-default" type="button">
+                                Open File
+                            </button>
+                        </span>
                         <input id="documentFilePath" type="text" class="form-control" placeholder="No file chosen" readonly></input>
                     </div>
                 </div>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <button class="btn btn-outline-primary" type="button">Basic Button</button>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Some text">
-                </div>
             </div>
-                <div class="modal-footer">
-                    <button type="button" id="insertDocument" class="btn btn-success">Insert</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
-                </div>
+            <div class="modal-footer">
+                <button type="button" id="insertDocument" class="btn btn-success">Insert</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
             </div>
+        </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalImages" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add New Image</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Name:</label>
+                    <input id="imageName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Category:</label>
+                    <input id="imageCategory" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">File:</label>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button id="openInputImage" class="btn btn-default" type="button">
+                                Open File
+                            </button>
+                        </span>
+                        <input id="imageFilePath" type="text" class="form-control" placeholder="No file chosen" readonly></input>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="insertImage" class="btn btn-success">Insert</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalVideos" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add New Video</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Name:</label>
+                    <input id="videoName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Category:</label>
+                    <input id="videoCategory" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">File:</label>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button id="openInputVideo" class="btn btn-default" type="button">
+                                Open File
+                            </button>
+                        </span>
+                        <input id="videoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly></input>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="insertVideo" class="btn btn-success">Insert</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <div>
     <a asp-action="Index">Back to List</a>

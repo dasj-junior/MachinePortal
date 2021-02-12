@@ -4,14 +4,56 @@
     ViewData["Title"] = "Details";
 }
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+    function removeComment(ID) {
+        if (confirm("Do you want to remove comment?")) {
+             $.ajax({
+                type: 'POST',
+                url: '@Url.Content("~/")' + "Machines/RemoveComment",
+                data: { CommentID: ID , MachineID: document.getElementById('MachineID').value },
+                success: function (data) {
+                    $('#tComments').html(data)
+                },
+                async: true
+             });
+        }
+    };
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#insertComment").on("click", function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Content("~/")' + "Machines/AddComment",
+                data: { Author: document.getElementById('commentAuthor').value, Comment: document.getElementById('commentComment').value, MachineID: document.getElementById('MachineID').value },
+                success: function (data) {
+                    $('#tComments').html(data)
+                    document.getElementById('commentAuthor').value = "";
+                    document.getElementById('commentComment').value = "";
+                    $('#modalComments').modal('hide');
+                },
+                async: true
+            });
+        });
+    });
+</script>
+
 <h2>Details</h2>
 
 <div>
     <h4>Machine</h4>
     <hr />
     <dl class="dl-horizontal">
+        <h3>General Data</h3>
+        <hr />
+        <dt>
+            Machine Photo
+        </dt>
         <dd>
-            <img src="@Html.DisplayFor(model => model.ImagePath)" width="200" height="200" />
+            <img src="@Html.DisplayFor(model => model.ImagePath)" width="200" />
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Name)
@@ -19,10 +61,209 @@
         <dd>
             @Html.DisplayFor(model => model.Name)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AssetNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AssetNumber)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.MES_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MES_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.SAP_Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SAP_Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkCenter)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.WorkCenter)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CostCenter)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CostCenter)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ServerPath)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ServerPath)
+        </dd>
+        <hr />
+        <h3>Documents</h3>
+        <hr />
+        @foreach (MachineDocument document in Model.MachineDocuments)
+        {
+            <dt>
+                Document
+            </dt>
+            <dd>
+                @Html.ActionLink(document.Name, "Download", new { filePath = document.Path, fileName = document.Name, extension = document.Extension })
+            </dd>
+        }
+        <hr />
+        <h3>Images</h3>
+        <hr />
+        @foreach (var item in Model.MachineImages)
+        {
+            <a href="@Url.Action("Download", "Machines", new { filePath = item.Path, fileName = item.Name, extension = item.Extension })">
+                @{
+                    string imageFullPath = "";
+                    imageFullPath = item.Path + item.Name;
+                }
+                <img class="img-thumbnail" style="margin: 10px;" src="@imageFullPath" width="200" />
+            </a>
+        }
+        <hr />
+        <h3>Videos</h3>
+        <hr />
+        @foreach (MachineVideo video in Model.MachineVideos)
+        {
+            <dt>
+                Video
+            </dt>
+            <dd>
+                @Html.ActionLink(video.Name, "Download", new { filePath = video.Path, fileName = video.Name, extension = video.Extension })
+            </dd>
+        }
+        <hr />
+        <h3>Devices</h3>
+        <hr />
+        <table class="table table-bordered table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.ImagePath)</th>
+                    <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Name)</th>
+                    <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Brand)</th>
+                    <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Model)</th>
+                    <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.PartNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Description)</th>
+                    <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Price)</th>
+                    <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Supplier)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.MachineDevices)
+                {
+                    <tr>
+                        <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.Device.ImagePath)" width="100" /></td>
+                        <td>@Html.DisplayFor(modelItem => item.Device.Name)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Device.Brand)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Device.Model)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Device.PartNumber)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Device.Description)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Device.Price)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Device.Supplier)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <hr />
+        <h3>Responsibles</h3>
+        <hr />
+        <table class="table table-bordered table-responsive">
+            <thead class="thead-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.PhotoPath)</th>
+                    <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.FirstName)</th>
+                    <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.LastName)</th>
+                    <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.Department)</th>
+                    <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.Email)</th>
+                    <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.PhoneNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.Mobile)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.MachineResponsibles)
+                {
+                    <tr>
+                        <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.Responsible.PhotoPath)" height="100" /></td>
+                        <td>@Html.DisplayFor(modelItem => item.Responsible.FirstName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Responsible.LastName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Responsible.Department)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Responsible.Email)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Responsible.PhoneNumber)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Responsible.Mobile)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <hr />
+        <h3>Comments</h3>
+        <hr />
+        <table class="table table-bordered table-responsive">
+            <button class="btn btn-success" style="margin-bottom: 20px" data-toggle="modal" data-target="#modalComments">Add New Comment</button>
+            <thead class="thead-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.MachineComments.First().Comment)</th>
+                    <th>@Html.DisplayNameFor(model => model.MachineComments.First().Author)</th>
+                    <th>@Html.DisplayNameFor(model => model.MachineComments.First().Date)</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody id="tComments">
+                @foreach (var item in Model.MachineComments)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Comment)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Author)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                        <td><button class="btn btn-danger" onclick="removeComment(@item.ID)">Delete</button></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </dl>
 </div>
 <div>
     <input type="hidden" asp-for="ID" />
     <input type="button" value="Back" class="btn btn-default" action="action" onclick="history.go(-1);" />
-    <input type="submit" value="Edit" class="btn btn-info" />
+    <input type="submit" value="Edit" class="btn btn-primary" />
 </div>
+
+<div class="modal fade" id="modalComments" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add New Comment</h4>
+            </div>
+            <div class="modal-body">
+                <dt>
+                    @Html.DisplayNameFor(model => model.MachineComments.First().Author)
+                </dt>
+                <dd>
+                    <input id="commentAuthor" class="form-control" />
+                </dd>
+                <br />
+                <dt>
+                    @Html.DisplayNameFor(model => model.MachineComments.First().Comment)
+                </dt>
+                <dd>
+                    <textarea id="commentComment" class="form-control"></textarea>
+                </dd>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="insertComment" class="btn btn-success">Insert</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<input id="MachineID" style="display: none" value="@Html.DisplayFor(model => model.ID)"/>

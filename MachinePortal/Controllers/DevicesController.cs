@@ -79,7 +79,7 @@ namespace MachinePortal.Controllers
                 string fileName = document.FileName.Substring(0,document.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
                 fileName += document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
                 string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Devices\\Documents\\" + fileName;
-                Document doc = new Document();
+                DeviceDocument doc = new DeviceDocument();
                 doc.Name = fileName;
                 doc.Path = @"/resources/Devices/Documents/";
                 doc.Extension = document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
@@ -122,7 +122,7 @@ namespace MachinePortal.Controllers
                 {
                     System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + device.ImagePath);
                 }
-                foreach (Document document in device.Documents)
+                foreach (DeviceDocument document in device.Documents)
                 {
                     System.IO.File.Delete(_appEnvironment.WebRootPath + document.Path + document.Name);
                     //await _documentService.RemoveAsync(document);
@@ -204,7 +204,7 @@ namespace MachinePortal.Controllers
 
         public FileResult Download(string filePath, string fileName, string extension)
         {
-            IFileProvider provider = new PhysicalFileProvider(@"D:\Curso C#\MachinePortal\MachinePortal\wwwroot\resources\Devices\Documents\");
+            IFileProvider provider = new PhysicalFileProvider(_appEnvironment.WebRootPath +  filePath);
             IFileInfo fileInfo = provider.GetFileInfo(fileName);
             var readStream = fileInfo.CreateReadStream();
             string mimeType = MimeTypes.GetMimeType(extension);

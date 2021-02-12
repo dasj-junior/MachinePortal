@@ -16,7 +16,7 @@ namespace MachinePortal.Models
         public double Price { get; set; }
         public string Supplier { get; set; }
         public string ImagePath { get; set; }
-        public ICollection<Document> Documents { get; set; }
+        public ICollection<DeviceDocument> Documents { get; set; }
 
         public Device()
         {
@@ -35,12 +35,12 @@ namespace MachinePortal.Models
             ImagePath = imagePath;
         }
 
-        public void AddDocument(Document doc)
+        public void AddDocument(DeviceDocument doc)
         {
             Documents.Add(doc);
         }
 
-        public void RemoveDocument(Document doc)
+        public void RemoveDocument(DeviceDocument doc)
         {
             Documents.Remove(doc);
         }

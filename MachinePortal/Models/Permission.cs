@@ -9,6 +9,7 @@ namespace MachinePortal.Models
     {
         public int ID { get; set; }
         public string PermissionName { get; set; }
+        public ICollection<UserPermission> UserPermissions { get; set; }
 
         public Permission()
         {

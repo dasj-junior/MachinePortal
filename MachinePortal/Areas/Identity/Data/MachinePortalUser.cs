@@ -28,5 +28,7 @@ namespace MachinePortal.Areas.Identity.Data
         public string JobRole { get; set; }
 
         public string PhotoPath { get; set; }
+
+        public ICollection<UserPermission> UserPermissions { get; set; }
     }
 }

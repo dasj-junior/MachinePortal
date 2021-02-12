@@ -34,5 +34,21 @@ namespace MachinePortal.Models
 
         public ICollection<MachineResponsible> MachineResponsibles { get; set; }
         public ICollection<MachineDevice> MachineDevices { get; set; }
+
+        public void AddDocument(MachineDocument machineDocument)
+        {
+            MachineDocuments.Add(machineDocument);
+        }
+
+        public void AddImage(MachineImage machineImage)
+        {
+            MachineImages.Add(machineImage);
+        }
+
+        public void AddVideo(MachineVideo machineVideo)
+        {
+            MachineVideos.Add(machineVideo);
+        }
+
     }
 }

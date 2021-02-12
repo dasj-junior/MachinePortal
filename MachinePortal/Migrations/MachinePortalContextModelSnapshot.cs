@@ -17,6 +17,56 @@ namespace MachinePortal.Migrations
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("MachinePortal.Areas.Identity.Data.MachinePortalUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("ConcurrencyStamp");
+
+                    b.Property<string>("Department");
+
+                    b.Property<string>("Email");
+
+                    b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("JobRole");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("Mobile");
+
+                    b.Property<string>("NormalizedEmail");
+
+                    b.Property<string>("NormalizedUserName");
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("PhotoPath");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MachinePortalUser");
+                });
+
             modelBuilder.Entity("MachinePortal.Models.Area", b =>
                 {
                     b.Property<int>("ID")
@@ -57,7 +107,7 @@ namespace MachinePortal.Migrations
                     b.ToTable("Device");
                 });
 
-            modelBuilder.Entity("MachinePortal.Models.Document", b =>
+            modelBuilder.Entity("MachinePortal.Models.DeviceDocument", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
@@ -74,7 +124,7 @@ namespace MachinePortal.Migrations
 
                     b.HasIndex("DeviceID");
 
-                    b.ToTable("Document");
+                    b.ToTable("DeviceDocument");
                 });
 
             modelBuilder.Entity("MachinePortal.Models.Line", b =>
@@ -146,13 +196,13 @@ namespace MachinePortal.Migrations
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<int?>("MachineID");
+                    b.Property<int>("MachineID");
 
                     b.HasKey("ID");
 
                     b.HasIndex("MachineID");
 
-                    b.ToTable("MachineComment");
+                    b.ToTable("MachineComments");
                 });
 
             modelBuilder.Entity("MachinePortal.Models.MachineDevice", b =>
@@ -177,7 +227,7 @@ namespace MachinePortal.Migrations
 
                     b.Property<string>("Extension");
 
-                    b.Property<int?>("MachineID");
+                    b.Property<int>("MachineID");
 
                     b.Property<string>("Name");
 
@@ -199,7 +249,7 @@ namespace MachinePortal.Migrations
 
                     b.Property<string>("Extension");
 
-                    b.Property<int?>("MachineID");
+                    b.Property<int>("MachineID");
 
                     b.Property<string>("Name");
 
@@ -232,7 +282,7 @@ namespace MachinePortal.Migrations
 
                     b.Property<string>("Extension");
 
-                    b.Property<int?>("MachineID");
+                    b.Property<int>("MachineID");
 
                     b.Property<string>("Name");
 
@@ -268,6 +318,8 @@ namespace MachinePortal.Migrations
 
                     b.Property<string>("FirstName");
 
+                    b.Property<string>("FullName");
+
                     b.Property<string>("LastName");
 
                     b.Property<string>("Mobile");
@@ -299,7 +351,24 @@ namespace MachinePortal.Migrations
                     b.ToTable("Sector");
                 });
 
-            modelBuilder.Entity("MachinePortal.Models.Document", b =>
+            modelBuilder.Entity("MachinePortal.Models.UserPermission", b =>
+                {
+                    b.Property<int>("UserID");
+
+                    b.Property<int>("PermissionID");
+
+                    b.Property<string>("MachinePortalUserId");
+
+                    b.HasKey("UserID", "PermissionID");
+
+                    b.HasIndex("MachinePortalUserId");
+
+                    b.HasIndex("PermissionID");
+
+                    b.ToTable("UserPermission");
+                });
+
+            modelBuilder.Entity("MachinePortal.Models.DeviceDocument", b =>
                 {
                     b.HasOne("MachinePortal.Models.Device", "Device")
                         .WithMany("Documents")
@@ -335,9 +404,10 @@ namespace MachinePortal.Migrations
 
             modelBuilder.Entity("MachinePortal.Models.MachineComment", b =>
                 {
-                    b.HasOne("MachinePortal.Models.Machine")
+                    b.HasOne("MachinePortal.Models.Machine", "Machine")
                         .WithMany("MachineComments")
-                        .HasForeignKey("MachineID");
+                        .HasForeignKey("MachineID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MachinePortal.Models.MachineDevice", b =>
@@ -355,16 +425,18 @@ namespace MachinePortal.Migrations
 
             modelBuilder.Entity("MachinePortal.Models.MachineDocument", b =>
                 {
-                    b.HasOne("MachinePortal.Models.Machine")
+                    b.HasOne("MachinePortal.Models.Machine", "Machine")
                         .WithMany("MachineDocuments")
-                        .HasForeignKey("MachineID");
+                        .HasForeignKey("MachineID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MachinePortal.Models.MachineImage", b =>
                 {
-                    b.HasOne("MachinePortal.Models.Machine")
+                    b.HasOne("MachinePortal.Models.Machine", "Machine")
                         .WithMany("MachineImages")
-                        .HasForeignKey("MachineID");
+                        .HasForeignKey("MachineID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MachinePortal.Models.MachineResponsible", b =>
@@ -382,9 +454,10 @@ namespace MachinePortal.Migrations
 
             modelBuilder.Entity("MachinePortal.Models.MachineVideo", b =>
                 {
-                    b.HasOne("MachinePortal.Models.Machine")
+                    b.HasOne("MachinePortal.Models.Machine", "Machine")
                         .WithMany("MachineVideos")
-                        .HasForeignKey("MachineID");
+                        .HasForeignKey("MachineID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MachinePortal.Models.Sector", b =>
@@ -392,6 +465,18 @@ namespace MachinePortal.Migrations
                     b.HasOne("MachinePortal.Models.Area", "Area")
                         .WithMany("Sectors")
                         .HasForeignKey("AreaID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MachinePortal.Models.UserPermission", b =>
+                {
+                    b.HasOne("MachinePortal.Areas.Identity.Data.MachinePortalUser", "MachinePortalUser")
+                        .WithMany("UserPermissions")
+                        .HasForeignKey("MachinePortalUserId");
+
+                    b.HasOne("MachinePortal.Models.Permission", "Permission")
+                        .WithMany("UserPermissions")
+                        .HasForeignKey("PermissionID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
