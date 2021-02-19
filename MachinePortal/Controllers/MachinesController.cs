@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.FileProviders;
 
 namespace MachinePortal.Controllers
+
 {
     public class MachinesController : Controller
     {
@@ -69,6 +70,8 @@ namespace MachinePortal.Controllers
         }
 
         [HttpPost]
+        [DisableRequestSizeLimit]
+        [ValidateAntiForgeryToken]
         public async Task<String> Create(MachineFormViewModel machineFVM, IFormFile photo)
         {
             List<IFormFile> documents = new List<IFormFile>();
@@ -123,7 +126,7 @@ namespace MachinePortal.Controllers
                 string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Documents\\" + fileName;
                 MachineDocument doc = new MachineDocument();
                 doc.Name = fileName;
-                doc.Path = @"/resources/Machines/Documents/" + fileName;
+                doc.Path = @"/resources/Machines/Documents/";
                 doc.Extension = document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
                 doc.Machine = machineFVM.Machine;
                 doc.MachineID = machineFVM.Machine.ID;
@@ -152,7 +155,7 @@ namespace MachinePortal.Controllers
                 string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Images\\" + fileName;
                 MachineImage doc = new MachineImage();
                 doc.Name = fileName;
-                doc.Path = @"/resources/Machines/Images/" + fileName;
+                doc.Path = @"/resources/Machines/Images/";
                 doc.Extension = image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
                 doc.Machine = machineFVM.Machine;
                 doc.MachineID = machineFVM.Machine.ID;
@@ -180,7 +183,7 @@ namespace MachinePortal.Controllers
                 string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Videos\\" + fileName;
                 MachineVideo doc = new MachineVideo();
                 doc.Name = fileName;
-                doc.Path = @"/resources/Machines/Videos/" + fileName;
+                doc.Path = @"/resources/Machines/Videos/";
                 doc.Extension = video.FileName.Substring(video.FileName.LastIndexOf("."), (video.FileName.Length - video.FileName.LastIndexOf(".")));
                 doc.Machine = machineFVM.Machine;
                 doc.MachineID = machineFVM.Machine.ID;

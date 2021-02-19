@@ -133,15 +133,12 @@
             $.ajax({
                 url: '@Url.Content("~/")' + "Machines/Create",
                 type: "POST",
-                contentType: false, // Not to set any content header
-                processData: false, // Not to process data
+                contentType: false,
+                processData: false,
                 data: data,
                 async: false,
                 success: function () {
                     window.location.href = "/Machines/Index";
-                },
-                error: (error) => {
-                    console.log(JSON.stringify(error));
                 }
             });
         });
@@ -262,7 +259,7 @@
 
 <div class="row">
     <div class="col-md-8">
-        <form asp-action="Create" class="form" enctype="multipart/form-data" asp-controller="Machines">
+        <form asp-action="Create" class="form" method="post" enctype="multipart/form-data" asp-controller="Machines">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <h3>General Data</h3>
             <hr />

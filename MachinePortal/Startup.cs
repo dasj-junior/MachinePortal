@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using MachinePortal.Models;
 using MachinePortal.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace MachinePortal
 {
@@ -35,8 +36,23 @@ namespace MachinePortal
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 1073741824;
+            });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .AddRazorPagesOptions(options =>
+                {
+                    options.Conventions
+                        .AddPageApplicationModelConvention("/Create",
+                            model =>
+                            {
+                    model.Filters.Add(
+                                    new RequestSizeLimitAttribute(1073741824));
+                            });
+                })
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<MachinePortalContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("MachinePortalContext"), builder => builder.MigrationsAssembly("MachinePortal")));
@@ -93,6 +109,7 @@ namespace MachinePortal
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            
         }
     }
 }
