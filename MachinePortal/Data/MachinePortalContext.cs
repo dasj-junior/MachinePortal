@@ -18,8 +18,6 @@ namespace MachinePortal.Models
             modelBuilder.Entity<MachineDevice>()
                 .HasKey(x => new { x.MachineID, x.DeviceID });
 
-            modelBuilder.Entity<UserPermission>()
-                .HasKey(x => new { x.UserID, x.PermissionID });
         }
 
         public DbSet<Device> Device { get; set; }
@@ -29,7 +27,6 @@ namespace MachinePortal.Models
         public DbSet<Line> Line { get; set; }
         public DbSet<Sector> Sector { get; set; }
         public DbSet<Area> Area { get; set; }
-        public DbSet<Permission> Permission { get; set; }
         public DbSet<Machine> Machine { get; set; }
     }
 }

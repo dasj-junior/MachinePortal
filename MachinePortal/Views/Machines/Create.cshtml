@@ -9,6 +9,7 @@
 @* Form Data Variable *@
 <script type="text/javascript">
     var formdata = new FormData();
+    var Mfiles = [];
 </script>
 
 @* Send files through AJAX *@
@@ -83,6 +84,8 @@
                 var sName = document.getElementById('documentName').value;
                 var sCategory = document.getElementById('documentCategory').value;
                 let srandomid = Math.random().toString(36).substring(7);
+                var doc = { Name: sName, Category: sCategory, ID: srandomid, Type: "Document", FileName: sfilename };
+                Mfiles.push(doc);
                 formdata.append("document", fileInput.files[i]);
                 var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
                     "\")'><span class='glyphicon glyphicon-remove' style='color: red'></span></a></td></tr>"; // Binding the file name
@@ -99,6 +102,8 @@
                 var sName = document.getElementById('imageName').value;
                 var sCategory = document.getElementById('imageCategory').value;
                 let srandomid = Math.random().toString(36).substring(7);
+                var img = { Name: sName, Category: sCategory, ID: srandomid, Type: "Image", FileName: sfilename };
+                Mfiles.push(img);
                 formdata.append("image", fileInput.files[i]);
                 var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
                     "\")'><span class='glyphicon glyphicon-remove' style='color: red'></span></a></td></tr>"; // Binding the file name
@@ -115,6 +120,8 @@
                 var sName = document.getElementById('videoName').value;
                 var sCategory = document.getElementById('videoCategory').value;
                 let srandomid = Math.random().toString(36).substring(7);
+                var vid = { Name: sName, Category: sCategory, ID: srandomid, Type: "Video", FileName: sfilename };
+                Mfiles.push(vid);
                 formdata.append("video", fileInput.files[i]);
                 var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
                     "\")'><span class='glyphicon glyphicon-remove' style='color: red'></span></a></td></tr>"; // Binding the file name
@@ -126,17 +133,17 @@
 
         $("form").submit(function (event) {
             event.preventDefault();
-            var data = new FormData(this);
+            var data = new FormData($('#form')[0]);
             for (var pair of formdata.entries()) {
                 data.append(pair[0], pair[1]);
             }
+            data.append('files', JSON.stringify(Mfiles));
             $.ajax({
                 url: '@Url.Content("~/")' + "Machines/Create",
                 type: "POST",
-                contentType: false,
                 processData: false,
+                contentType: false,
                 data: data,
-                async: false,
                 success: function () {
                     window.location.href = "/Machines/Index";
                 }
@@ -259,7 +266,7 @@
 
 <div class="row">
     <div class="col-md-8">
-        <form asp-action="Create" class="form" method="post" enctype="multipart/form-data" asp-controller="Machines">
+        <form asp-action="Create" id="form" class="form" method="post" enctype="multipart/form-data" asp-controller="Machines">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <h3>General Data</h3>
             <hr />
@@ -564,8 +571,6 @@
         </div>
     </div>
 </div>
-
-
 
 <div>
     <a asp-action="Index">Back to List</a>

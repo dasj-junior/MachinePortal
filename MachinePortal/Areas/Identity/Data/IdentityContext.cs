@@ -28,5 +28,7 @@ namespace MachinePortal.Models
                 .HasKey(x => new { x.UserID, x.PermissionID });
         }
 
+        public DbSet<Permission> Permission { get; set; }
+        public DbSet<UserPermission> UserPermission { get; set; }
     }
 }

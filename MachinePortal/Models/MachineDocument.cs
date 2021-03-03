@@ -10,6 +10,7 @@ namespace MachinePortal.Models
         public int ID { get; set; }
         public string Name { get; set; }
         public string Category { get; set; }
+        public string FileName { get; set; }
         public string Path { get; set; }
         public string Extension { get; set; }
         public string Type { get; set; }
@@ -21,10 +22,12 @@ namespace MachinePortal.Models
         {
         }
 
-        public MachineDocument(int Id, string name, string path, string extension, string type)
+        public MachineDocument(int Id, string name, string category, string filename, string path, string extension, string type)
         {
             ID = Id;
             Name = name;
+            Category = category;
+            FileName = filename;
             Path = path;
             Extension = extension;
             Type = type;

@@ -12,10 +12,20 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.FileProviders;
+using Newtonsoft.Json;
 
 namespace MachinePortal.Controllers
 
 {
+    public class MachineFile
+    {
+        public string Name { get; set; }
+        public string Category { get; set; }
+        public string ID { get; set; }
+        public string Type { get; set; }
+        public string FileName { get; set; }
+    }
+
     public class MachinesController : Controller
     {
         private readonly MachineService _machineService;
@@ -84,6 +94,8 @@ namespace MachinePortal.Controllers
                 if (file.Name == "video") { videos.Add(file); }
             }
 
+            List<MachineFile> MFiles = JsonConvert.DeserializeObject<List<MachineFile>>(Request.Form["files"]);
+           
             machineFVM.Machine.Area = await _areaService.FindByIDAsync(machineFVM.Machine.AreaID);
             machineFVM.Machine.Sector = await _sectorService.FindByIDAsync(machineFVM.Machine.SectorID);
             machineFVM.Machine.Line = await _lineService.FindByIDAsync(machineFVM.Machine.LineID);
@@ -125,11 +137,20 @@ namespace MachinePortal.Controllers
                 fileName += document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
                 string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Documents\\" + fileName;
                 MachineDocument doc = new MachineDocument();
-                doc.Name = fileName;
+                foreach(MachineFile file in MFiles)
+                {
+                    if(file.FileName == document.FileName && file.Type == "Document")
+                    {
+                        doc.Name = file.Name;
+                        doc.Category = file.Category;
+                    }
+                }
+                doc.FileName = fileName;
                 doc.Path = @"/resources/Machines/Documents/";
                 doc.Extension = document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
                 doc.Machine = machineFVM.Machine;
                 doc.MachineID = machineFVM.Machine.ID;
+
                 await _machineService.InsertMachineDocumentAsync(doc);
 
                 machineFVM.Machine.AddDocument(doc);
@@ -153,14 +174,22 @@ namespace MachinePortal.Controllers
                 string fileName = image.FileName.Substring(0, image.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
                 fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
                 string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Images\\" + fileName;
-                MachineImage doc = new MachineImage();
-                doc.Name = fileName;
-                doc.Path = @"/resources/Machines/Images/";
-                doc.Extension = image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                doc.Machine = machineFVM.Machine;
-                doc.MachineID = machineFVM.Machine.ID;
-                await _machineService.InsertMachineImageAsync(doc);
-                machineFVM.Machine.AddImage(doc);
+                MachineImage img = new MachineImage();
+                foreach (MachineFile file in MFiles)
+                {
+                    if (file.FileName == image.FileName && file.Type == "Image")
+                    {
+                        img.Name = file.Name;
+                        img.Category = file.Category;
+                    }
+                }
+                img.FileName = fileName;
+                img.Path = @"/resources/Machines/Images/";
+                img.Extension = image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
+                img.Machine = machineFVM.Machine;
+                img.MachineID = machineFVM.Machine.ID;
+                await _machineService.InsertMachineImageAsync(img);
+                machineFVM.Machine.AddImage(img);
 
                 using (var stream = new FileStream(destinationPath, FileMode.Create))
                 {
@@ -181,14 +210,22 @@ namespace MachinePortal.Controllers
                 string fileName = video.FileName.Substring(0, video.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
                 fileName += video.FileName.Substring(video.FileName.LastIndexOf("."), (video.FileName.Length - video.FileName.LastIndexOf(".")));
                 string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Videos\\" + fileName;
-                MachineVideo doc = new MachineVideo();
-                doc.Name = fileName;
-                doc.Path = @"/resources/Machines/Videos/";
-                doc.Extension = video.FileName.Substring(video.FileName.LastIndexOf("."), (video.FileName.Length - video.FileName.LastIndexOf(".")));
-                doc.Machine = machineFVM.Machine;
-                doc.MachineID = machineFVM.Machine.ID;
-                await _machineService.InsertMachineVideoAsync(doc);
-                machineFVM.Machine.AddVideo(doc);
+                MachineVideo vid = new MachineVideo();
+                foreach (MachineFile file in MFiles)
+                {
+                    if (file.FileName == video.FileName && file.Type == "Video")
+                    {
+                        vid.Name = file.Name;
+                        vid.Category = file.Category;
+                    }
+                }
+                vid.FileName = fileName;
+                vid.Path = @"/resources/Machines/Videos/";
+                vid.Extension = video.FileName.Substring(video.FileName.LastIndexOf("."), (video.FileName.Length - video.FileName.LastIndexOf(".")));
+                vid.Machine = machineFVM.Machine;
+                vid.MachineID = machineFVM.Machine.ID;
+                await _machineService.InsertMachineVideoAsync(vid);
+                machineFVM.Machine.AddVideo(vid);
 
                 using (var stream = new FileStream(destinationPath, FileMode.Create))
                 {
@@ -370,5 +407,11 @@ namespace MachinePortal.Controllers
             return data;
         }
 
+        [HttpPost]
+        public string Teste([FromBody]List<MachineFile> files)
+        {
+            List<MachineFile> teste = files;
+            return "Dados Recebidos";
+        }
     }
 }

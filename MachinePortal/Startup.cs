@@ -72,7 +72,7 @@ namespace MachinePortal
                 options.Password.RequiredLength = 9;
 
                 // Lockout settings.
-                options.Lockout.MaxFailedAccessAttempts = 3;
+                options.Lockout.MaxFailedAccessAttempts = 999;
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
             });
 
@@ -82,7 +82,6 @@ namespace MachinePortal
             services.AddScoped<LineService>();
             services.AddScoped<SectorService>();
             services.AddScoped<AreaService>();
-            services.AddScoped<PermissionService>();
             services.AddScoped<MachineService>();
         }
 
