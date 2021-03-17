@@ -8,28 +8,42 @@ using MachinePortal.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Security.Claims;
 
 namespace MachinePortal.Controllers
 {
     public class ResponsiblesController : Controller
     {
         private readonly ResponsibleService _responsibleService;
+        private readonly PermissionsService _permissionsService;
         IHostingEnvironment _appEnvironment;
 
-        public ResponsiblesController(IHostingEnvironment enviroment, ResponsibleService responsibleService)
+        public ResponsiblesController(IHostingEnvironment enviroment, ResponsibleService responsibleService, PermissionsService permissionsService)
         {
+            _permissionsService = permissionsService;
             _responsibleService = responsibleService;
             _appEnvironment = enviroment;
         }
 
+        private void Permissions()
+        {
+            string userID = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userID != null)
+            {
+                ViewData["Permissions"] = _permissionsService.GetUserPermissions(userID);
+            }
+        }
+
         public async Task<IActionResult> Index()
         {
+            Permissions();
             var list = await _responsibleService.FindAllAsync();
             return View(list);
         }
 
         public IActionResult Create()
         {
+            Permissions();
             return View();
         }
 
@@ -37,6 +51,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Responsible responsible, IFormFile image)
         {
+            Permissions();
             if (image != null)
             {
                 long filesSize = image.Length;
@@ -68,6 +83,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Delete(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -85,6 +101,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int ID)
         {
+            Permissions();
             var responsible = await _responsibleService.FindByIDAsync(ID);
             try
             {
@@ -103,6 +120,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Details(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -118,6 +136,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Edit(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -135,6 +154,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Responsible responsible, IFormFile image)
         {
+            Permissions();
             if (image != null)
             {
                 if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + responsible.PhotoPath))

@@ -1,7 +1,17 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using MachinePortal.Areas.Identity.Data
+@using MachinePortal.Controllers
 @inject SignInManager<MachinePortalUser> SignInManager
 @inject UserManager<MachinePortalUser> UserManager
+@* Get User Permissions *@
+@{
+    List<string> permissions = new List<string>();
+    if (ViewData["permissions"] != null)
+    {
+        permissions = ViewData["permissions"] as List<string>;
+    }
+    ViewData["permissions"] = permissions;
+}
 
 <!DOCTYPE html>
 <html>
@@ -11,12 +21,6 @@
     <title>@ViewData["Title"] - MachinePortal</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-    </environment>
-    <environment exclude="Development">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
@@ -38,10 +42,22 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Devices" asp-action="Index">Devices</a></li>
-                    <li><a asp-area="" asp-controller="Responsibles" asp-action="Index">Responsibles</a></li>
-                    <li><a asp-area="" asp-controller="Areas" asp-action="Index">Hierarchies</a></li>
-                    <li><a asp-area="" asp-controller="Machines" asp-action="Index">Machines</a></li>
+                    @if (permissions.Contains("PageDevices") && permissions != null)
+                    {
+                        <li><a asp-area="" asp-controller="Devices" asp-action="Index">Devices</a></li>
+                    }
+                    @if (permissions.Contains("PageResponsibles") && permissions != null)
+                    {
+                        <li><a asp-area="" asp-controller="Responsibles" asp-action="Index">Responsibles</a></li>
+                    }
+                    @if (permissions.Contains("PageHierarchies") && permissions != null)
+                    {
+                        <li><a asp-area="" asp-controller="Areas" asp-action="Index">Hierarchies</a></li>
+                    }
+                    @if (permissions.Contains("PageMachines") && permissions != null)
+                    {
+                        <li><a asp-area="" asp-controller="Machines" asp-action="Index">Machines</a></li>
+                    }
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
@@ -54,9 +70,6 @@
                             </li>
                             <li>
                                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
-                            </li>
-                            <li>
-                                <a asp-area="Identity" asp-page="/Account/Manage/ManageUsers">User Manager</a>
                             </li>
                         </ul>
                     </form>

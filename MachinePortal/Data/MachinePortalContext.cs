@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MachinePortal.Models;
+using MachinePortal.Areas.Identity.Data;
 
 namespace MachinePortal.Models
 {
@@ -12,11 +13,18 @@ namespace MachinePortal.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<MachinePortalUser>(entity => {
+                entity.ToTable("AspNetUsers");
+            });
+
             modelBuilder.Entity<MachineResponsible>()
                 .HasKey(x => new { x.MachineID, x.ResponsibleID });
 
             modelBuilder.Entity<MachineDevice>()
                 .HasKey(x => new { x.MachineID, x.DeviceID });
+
+            modelBuilder.Entity<UserPermission>()
+                .HasKey(x => new { x.UserID, x.PermissionID });
 
         }
 

@@ -32,7 +32,7 @@ namespace MachinePortal.Services
 
         public async Task<List<Area>> FindAllAsync()
         {
-            return await _context.Area.OrderBy(x => x.Name).ToListAsync();
+            return await _context.Area.Include(s => s.Sectors).OrderBy(x => x.Name).ToListAsync();
         }
 
         public async Task UpdateAsync(Area obj)

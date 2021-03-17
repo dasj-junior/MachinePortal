@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MachinePortal.Services;
 using MachinePortal.Models.ViewModels;
+using System.Security.Claims;
 
 namespace MachinePortal.Controllers
 {
@@ -16,23 +17,36 @@ namespace MachinePortal.Controllers
     {
         private readonly LineService _LineService;
         private readonly SectorService _SectorService;
+        private readonly PermissionsService _PermissionsService;
         IHostingEnvironment _appEnvironment;
 
-        public LinesController(IHostingEnvironment enviroment, LineService LineService, SectorService SectorService)
+        public LinesController(IHostingEnvironment enviroment, LineService LineService, SectorService SectorService, PermissionsService permissionsService)
         {
             _SectorService = SectorService;
             _LineService = LineService;
+            _PermissionsService = permissionsService;
             _appEnvironment = enviroment;
+        }
+
+        private void Permissions()
+        {
+            string userID = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userID != null)
+            {
+                ViewData["Permissions"] = _PermissionsService.GetUserPermissions(userID);
+            }
         }
 
         public async Task<IActionResult> Index()
         {
+            Permissions();
             var list = await _LineService.FindAllAsync();
             return View(list);
         }
 
         public async Task<IActionResult> Create(int? sectorID)
         {
+            Permissions();
             var viewModel = new LineFormViewModel();
             viewModel.Line = new Line();
             if (sectorID != null)
@@ -48,6 +62,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Line Line, IFormFile image)
         {
+            Permissions();
             if (!ModelState.IsValid)
             {
                 var viewModel = new LineFormViewModel { Line = Line};
@@ -83,6 +98,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Delete(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -100,6 +116,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int ID)
         {
+            Permissions();
             var Line = await _LineService.FindByIDAsync(ID);
             try
             {
@@ -118,6 +135,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Details(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -133,6 +151,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Edit(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -150,6 +169,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Line Line, IFormFile image)
         {
+            Permissions();
             if (image != null)
             {
                 if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + Line.ImagePath))
@@ -180,6 +200,36 @@ namespace MachinePortal.Controllers
             await _LineService.UpdateAsync(Line);
 
             return RedirectToAction(@"Details/" + Line.SectorID, "Sectors");
+        }
+
+        [HttpPost]
+        public async Task<PartialViewResult> AddPartialEdit(string id)
+        {
+            Line line = new Line();
+            int ID = int.Parse(id);
+            line = await _LineService.FindByIDAsync(ID);
+            PartialViewResult partial = PartialView("Edit", line);
+            return partial;
+        }
+
+        [HttpPost]
+        public async Task<PartialViewResult> AddPartialDelete(string id)
+        {
+            Line line = new Line();
+            int ID = int.Parse(id);
+            line = await _LineService.FindByIDAsync(ID);
+            PartialViewResult partial = PartialView("Delete", line);
+            return partial;
+        }
+
+        [HttpPost]
+        public async Task<PartialViewResult> AddPartialDetails(string id)
+        {
+            Line line = new Line();
+            int ID = int.Parse(id);
+            line = await _LineService.FindByIDAsync(ID);
+            PartialViewResult partial = PartialView("Details", line);
+            return partial;
         }
     }
 }

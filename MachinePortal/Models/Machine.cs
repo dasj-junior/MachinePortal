@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,14 +9,24 @@ namespace MachinePortal.Models
     public class Machine
     {
         public int ID { get; set; }
+        [Required]
+        [StringLength(50, MinimumLength = 3)]
         public string Name { get; set; }
+        [StringLength(200, MinimumLength = 3)]
         public string Description { get; set; }
+        [Display(Name = "Image")]
         public string ImagePath { get; set; }
+        [Display(Name = "Asset Number")]
+
         public int AssetNumber { get; set; }
+        [Display(Name = "MES Name")]
         public string MES_Name { get; set; }
+        [Display(Name = "SAP Name")]
         public string SAP_Name { get; set; }
         public string WorkCenter { get; set; }
+        [Display(Name = "Cost Center")]
         public int CostCenter { get; set; }
+        [Display(Name = "Server Path")]
         public string ServerPath { get; set; }
 
         public int AreaID { get; set; }

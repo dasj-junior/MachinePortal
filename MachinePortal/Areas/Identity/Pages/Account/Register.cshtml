@@ -4,14 +4,67 @@
     ViewData["Title"] = "Register";
 }
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+@* Machine Photo Button and Preview *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Button triggers the photo file input
+        document.getElementById('openPhoto').addEventListener('click', () => {
+            document.getElementById('photo').click()
+        });
+
+        $("#photo").change(function () {
+            //Get file name and put it into input
+            var fileInput = document.getElementById('photo');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                document.getElementById("photoFilePath").value = sfilename;
+            }
+            //Load file and show the preview
+            if (typeof (FileReader) != "undefined") {
+                var dvPreview = $("#divImageMediaPreview");
+                dvPreview.html("");
+                $($(this)[0].files).each(function () {
+                    var file = $(this);
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var img = $("<img />");
+                        img.attr("style", "height:200px; margin: 10px;");
+                        img.attr("src", e.target.result);
+                        img.attr("class", "img-thumbnail");
+                        dvPreview.append(img);
+                    }
+                    reader.readAsDataURL(file[0]);
+                });
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        });
+    });
+</script>
+
 <h2>@ViewData["Title"]</h2>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form asp-route-returnUrl="@Model.ReturnUrl" enctype="multipart/form-data" method="post">
             <h4>Create a new account.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Photo</label>
+                <div id="divImageMediaPreview"></div>
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button id="openPhoto" class="btn btn-default" type="button">
+                            Open Photo
+                        </button>
+                    </span>
+                    <input id="photoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+                </div>
+                <input type="file" id="photo" name="image" accept="image/*" style="display:none" />
+            </div>
             <div class="form-group">
                 <label asp-for="Input.FirstName"></label>
                 <input asp-for="Input.FirstName" class="form-control" />
@@ -51,10 +104,6 @@
                 <label asp-for="Input.JobRole"></label>
                 <input asp-for="Input.JobRole" class="form-control" />
                 <span asp-validation-for="Input.JobRole" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.PhotoPath" class="control-label"></label>
-                <input type="file" name="photo"/>
             </div>
             <div class="form-group">
                 <label asp-for="Input.Password"></label>

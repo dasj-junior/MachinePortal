@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,13 +9,22 @@ namespace MachinePortal.Models
     public class Device
     {
         public int ID { get; set; }
+        [Required]
+        [StringLength(50, MinimumLength = 3)]
         public string Name { get; set; }
+        [StringLength(50, MinimumLength = 3)]
         public string Brand { get; set; }
+        [StringLength(50, MinimumLength = 3)]
         public string Model { get; set; }
+        [StringLength(50, MinimumLength = 3)]
         public string PartNumber { get; set; }
+        [StringLength(200, MinimumLength = 3)]
         public string Description { get; set; }
+        [DataType(DataType.Currency)]
         public double Price { get; set; }
+        [StringLength(50, MinimumLength = 3)]
         public string Supplier { get; set; }
+        [Display(Name = "Image")]
         public string ImagePath { get; set; }
         public ICollection<DeviceDocument> Documents { get; set; }
 

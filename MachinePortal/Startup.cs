@@ -41,6 +41,11 @@ namespace MachinePortal
                 options.MultipartBodyLengthLimit = 1073741824;
             });
 
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.IsEssential = true;
+            });
+
             services.AddMvc()
                 .AddRazorPagesOptions(options =>
                 {
@@ -83,6 +88,7 @@ namespace MachinePortal
             services.AddScoped<SectorService>();
             services.AddScoped<AreaService>();
             services.AddScoped<MachineService>();
+            services.AddScoped<PermissionsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -100,6 +106,7 @@ namespace MachinePortal
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSession();
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseMvc(routes =>

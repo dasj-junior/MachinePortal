@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
+using System.Security.Claims;
 
 namespace MachinePortal.Controllers
 {
@@ -17,23 +18,36 @@ namespace MachinePortal.Controllers
     {
         private readonly DeviceService _deviceService;
         private readonly DocumentService _documentService;
+        private readonly PermissionsService _PermissionsService;
         IHostingEnvironment _appEnvironment;
 
-        public DevicesController(IHostingEnvironment enviroment, DeviceService deviceService, DocumentService documentService)
+        public DevicesController(IHostingEnvironment enviroment, DeviceService deviceService, DocumentService documentService, PermissionsService permissionsService)
         {
             _deviceService = deviceService;
             _documentService = documentService;
+            _PermissionsService = permissionsService;
             _appEnvironment = enviroment;
+        }
+
+        private void Permissions()
+        {
+            string userID = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userID != null)
+            {
+                ViewData["Permissions"] = _PermissionsService.GetUserPermissions(userID);
+            }
         }
 
         public async Task<IActionResult> Index()
         {
+            Permissions();
             var list = await _deviceService.FindAllAsync();
             return View(list);
         }
 
         public IActionResult Create()
         {
+            Permissions();
             return View();
         }
 
@@ -41,6 +55,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Device device, IFormFile image, List<IFormFile> documents)
         {
+            Permissions();
             if (image != null)
             {
                 long filesSize = image.Length;
@@ -98,6 +113,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Delete(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -115,6 +131,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int ID)
         {
+            Permissions();
             var device = await _deviceService.FindByIDAsync(ID);
             try
             {
@@ -138,6 +155,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Details(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -153,6 +171,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Edit(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -170,6 +189,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Device device, IFormFile image)
         {
+            Permissions();
             if (image != null)
             {
                 if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + device.ImagePath))

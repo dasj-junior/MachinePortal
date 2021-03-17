@@ -1,54 +1,92 @@
 ﻿@model MachinePortal.Models.Sector
+@using MachinePortal.Models.ViewModels
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script>
+    function renderPartialEdit(ID) {
+        $.ajax({
+            url: '@Url.Action("AddPartialEdit", "Lines")',
+            data: { id: ID},
+            type: "POST",
+            success: function(data) {
+                $('#modalEdit').html(data);
+            }
+        });
+    }
+
+    function renderPartialDelete(ID) {
+        $.ajax({
+            url: '@Url.Action("AddPartialDelete", "Lines")',
+            data: { id: ID},
+            type: "POST",
+            success: function(data) {
+                $('#modalDelete').html(data);
+            }
+        });
+    }
+
+    function renderPartialDetails(ID) {
+        $.ajax({
+            url: '@Url.Action("AddPartialDetails", "Lines")',
+            data: { id: ID},
+            type: "POST",
+            success: function(data) {
+                $('#modalDetails').html(data);
+            }
+        });
+    }
+</script>
 
 @{
+    var AreaID = Model.AreaID;
     var SectorID = Model.ID;
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>Sector: @Html.DisplayFor(model => model.Name)</h2>
+<hr />
 
 <div>
-    <h4>Sectors</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dd>
-            <img src="@Html.DisplayFor(model => model.ImagePath)" height="200" />
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            Area
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Area.Name)
-        </dd>
-        <br />
-        <h3>Lines</h3>
-        <table class="table table-bordered table-responsive">
-            @foreach (var line in Model.Lines)
-            {
-                <tr>
-                    <th>Line</th>
-                    <td>@Html.DisplayFor(model => line.Name)</td>
-                    <td>
-                        <a class="btn-group" asp-action="Edit" asp-controller="Lines" asp-route-id="@line.ID">Edit</a>
-                        <a class="btn-group" asp-action="Details" asp-controller="Lines" asp-route-id="@line.ID">Details</a>
-                        <a class="btn-group" asp-action="Delete" asp-controller="Lines" asp-route-id="@line.ID">Delete</a>
-                    </td>
-                </tr>
-            }
-        </table>      
-</dl>
     <p>
-        <a asp-action="Create" asp-controller="Lines" asp-route-sectorID="@SectorID">Create New Line</a>
+        <button class="btn btn-primary" style="margin:10px; float:right" data-toggle="modal" data-target="#modalCreate">Create New Line</button>
     </p>
+    <dl class="dl-horizontal">
+        <h3>Lines</h3>
+        <table class="table table-bordered table-responsive table-responsive">
+            <thead class="table" style="background-color:rgb(240,230,10);">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Line line in Model.Lines)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(model => line.Name)</td>
+                        <td>
+                            <button class="btn btn-success" data-toggle="modal" onclick="renderPartialDetails(@line.ID)" data-target="#modalDetails">Open</button>
+                            <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@line.ID)" data-target="#modalEdit">Edit</button>
+                            <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@line.ID)" data-target="#modalDelete">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </dl>
 </div>
 <div>
     <input type="hidden" asp-for="ID" />
-    <a class="btn btn-default" asp-action="Index">Back to List</a>
-    <input type="submit" value="Edit" class="btn btn-info" />
+    <a class="btn btn-default" asp-controller="Areas" asp-action="Details" asp-route-ID="@AreaID">Back</a>
+</div>
+
+<div class="modal fade" id="modalCreate" role="dialog">
+    @Html.Partial("../Lines/Create", new LineFormViewModel(new Line { SectorID = SectorID }));
+</div>
+<div class="modal fade" id="modalDetails" role="dialog">
+</div>
+<div class="modal fade" id="modalEdit" role="dialog">
+</div>
+<div class="modal fade" id="modalDelete" role="dialog">
 </div>

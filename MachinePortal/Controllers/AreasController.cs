@@ -8,29 +8,42 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MachinePortal.Services;
-using MachinePortal.Models.ViewModels;
+using System.Security.Claims;
 
 namespace MachinePortal.Controllers
 {
     public class AreasController : Controller
     {
         private readonly AreaService _AreaService;
+        private readonly PermissionsService _PermissionsService;
         IHostingEnvironment _appEnvironment;
 
-        public AreasController(IHostingEnvironment enviroment, AreaService AreaService, SectorService SectorService)
+        public AreasController(IHostingEnvironment enviroment, AreaService AreaService, SectorService SectorService, PermissionsService permissionsService)
         {
             _AreaService = AreaService;
+            _PermissionsService = permissionsService;
             _appEnvironment = enviroment;
+        }
+
+        private void Permissions()
+        {
+            string userID = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userID != null)
+            {
+                ViewData["Permissions"] = _PermissionsService.GetUserPermissions(userID);
+            }
         }
 
         public async Task<IActionResult> Index()
         {
+            Permissions();
             var list = await _AreaService.FindAllAsync();
             return View(list);
         }
 
         public IActionResult Create()
         {
+            Permissions();
             return View();
         }
 
@@ -38,7 +51,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Area Area, IFormFile image)
         {
-
+            Permissions();
             if (image != null)
             {
                 long filesSize = image.Length;
@@ -68,6 +81,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Delete(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -85,6 +99,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int ID)
         {
+            Permissions();
             var Area = await _AreaService.FindByIDAsync(ID);
             try
             {
@@ -103,6 +118,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Details(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -118,6 +134,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Edit(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -135,6 +152,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Area Area, IFormFile image)
         {
+            Permissions();
             if (image != null)
             {
                 if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + Area.ImagePath))
@@ -165,6 +183,26 @@ namespace MachinePortal.Controllers
             await _AreaService.UpdateAsync(Area);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<PartialViewResult> AddPartialEdit(string id)
+        {
+            Area area = new Area();
+            int ID = int.Parse(id);
+            area = await _AreaService.FindByIDAsync(ID);
+            PartialViewResult partial = PartialView("Edit", area);
+            return partial;
+        }
+
+        [HttpPost]
+        public async Task<PartialViewResult> AddPartialDelete(string id)
+        {
+            Area area = new Area();
+            int ID = int.Parse(id);
+            area = await _AreaService.FindByIDAsync(ID);
+            PartialViewResult partial = PartialView("Delete", area);
+            return partial;
         }
     }
 }

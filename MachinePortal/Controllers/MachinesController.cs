@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
+using System.Security.Claims;
+using MachinePortal.Areas.Identity.Data;
 
 namespace MachinePortal.Controllers
 
@@ -29,6 +31,8 @@ namespace MachinePortal.Controllers
     public class MachinesController : Controller
     {
         private readonly MachineService _machineService;
+        private readonly PermissionsService _PermissionsService;
+        private readonly IdentityContext _identityContext;
         IHostingEnvironment _appEnvironment;
 
         private readonly ResponsibleService _responsibleService;
@@ -38,11 +42,14 @@ namespace MachinePortal.Controllers
         private readonly SectorService _sectorService;
         private readonly LineService _lineService;
 
-        public MachinesController(MachineService machineService, IHostingEnvironment enviroment, ResponsibleService responsibleService, DeviceService deviceService,
-            AreaService areaService, SectorService sectorService, LineService lineService)
+        public MachinesController(IdentityContext identityContext, MachineService machineService, IHostingEnvironment enviroment, ResponsibleService responsibleService, DeviceService deviceService,
+            AreaService areaService, SectorService sectorService, LineService lineService, PermissionsService permissionsService)
         {
+            _identityContext = identityContext;
             _machineService = machineService;
             _appEnvironment = enviroment;
+
+            _PermissionsService = permissionsService;
 
             _responsibleService = responsibleService;
             _deviceService = deviceService;
@@ -52,10 +59,22 @@ namespace MachinePortal.Controllers
             _lineService = lineService;
         }
 
+        private void Permissions()
+        {
+            string userID = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userID != null)
+            {
+                MachinePortalUser user = _identityContext.Users.FirstOrDefault(x => x.Id == userID);
+                ViewData["UserID"] = user.Id;
+                ViewData["UserName"] = user.FirstName + " " + user.LastName;
+                ViewData["Permissions"] = _PermissionsService.GetUserPermissions(userID);
+            }
+        }
+
         public async Task<IActionResult> Index()
         {
+            Permissions();
             List<Machine> machines = await _machineService.FindAllAsync();
-
             return View(machines);
         }
 
@@ -70,11 +89,11 @@ namespace MachinePortal.Controllers
             SelectList slDevices = new SelectList(devices, "ID", "Name");
             ViewBag.ListDevices = slDevices;
 
-            List<Area> areas = await _areaService.FindAllAsync();       
+            List<Area> areas = await _areaService.FindAllAsync();
             ViewBag.ListAreas = areas;
 
 
-            var viewModel = new MachineFormViewModel {  Responsibles = responsibles, Devices = devices };
+            var viewModel = new MachineFormViewModel { Responsibles = responsibles, Devices = devices };
             return View(viewModel);
 
         }
@@ -84,22 +103,23 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<String> Create(MachineFormViewModel machineFVM, IFormFile photo)
         {
+            Permissions();
             List<IFormFile> documents = new List<IFormFile>();
             List<IFormFile> images = new List<IFormFile>();
             List<IFormFile> videos = new List<IFormFile>();
             foreach (var file in Request.Form.Files)
             {
-                if(file.Name == "document") { documents.Add(file); }
+                if (file.Name == "document") { documents.Add(file); }
                 if (file.Name == "image") { images.Add(file); }
                 if (file.Name == "video") { videos.Add(file); }
             }
 
             List<MachineFile> MFiles = JsonConvert.DeserializeObject<List<MachineFile>>(Request.Form["files"]);
-           
+
             machineFVM.Machine.Area = await _areaService.FindByIDAsync(machineFVM.Machine.AreaID);
             machineFVM.Machine.Sector = await _sectorService.FindByIDAsync(machineFVM.Machine.SectorID);
             machineFVM.Machine.Line = await _lineService.FindByIDAsync(machineFVM.Machine.LineID);
-            
+
             if (photo != null)
             {
                 long filesSize = photo.Length;
@@ -137,9 +157,9 @@ namespace MachinePortal.Controllers
                 fileName += document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
                 string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Documents\\" + fileName;
                 MachineDocument doc = new MachineDocument();
-                foreach(MachineFile file in MFiles)
+                foreach (MachineFile file in MFiles)
                 {
-                    if(file.FileName == document.FileName && file.Type == "Document")
+                    if (file.FileName == document.FileName && file.Type == "Document")
                     {
                         doc.Name = file.Name;
                         doc.Category = file.Category;
@@ -261,6 +281,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Delete(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -278,6 +299,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int ID)
         {
+            Permissions();
             var machine = await _machineService.FindByIDAsync(ID);
             try
             {
@@ -285,7 +307,7 @@ namespace MachinePortal.Controllers
                 {
                     System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + machine.ImagePath);
                 }
-                foreach(MachineDocument MDoc in machine.MachineDocuments)
+                foreach (MachineDocument MDoc in machine.MachineDocuments)
                 {
                     if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + MDoc.Path))
                     {
@@ -306,18 +328,6 @@ namespace MachinePortal.Controllers
                         System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + MVid.Path);
                     }
                 }
-                //foreach (MachineComment MCom in machine.MachineComments)
-                //{
-
-                //}
-                //foreach (MachineDevice MDev in machine.MachineDevices)
-                //{
-
-                //}
-                //foreach (MachineResponsible MRes in machine.MachineResponsibles)
-                //{
-
-                //}
             }
             catch
             {
@@ -329,6 +339,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Details(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -360,7 +371,7 @@ namespace MachinePortal.Controllers
         public IActionResult UploadFiles()
         {
             List<IFormFile> files = new List<IFormFile>();
-            foreach(var file in Request.Form.Files)
+            foreach (var file in Request.Form.Files)
             {
                 files.Add(file);
             }
@@ -377,17 +388,16 @@ namespace MachinePortal.Controllers
         }
 
         [HttpPost]
-        public async Task<string> AddComment(string Author, string Comment, int MachineID)
+        public async Task<string> AddComment(string UserID, string Comment, int MachineID)
         {
             Machine machine = await _machineService.FindByIDAsync(MachineID);
-            MachineComment machineComment = new MachineComment { Author = Author, Comment = Comment, Date = DateTime.Now, Machine = machine, MachineID = machine.ID };
+            MachineComment machineComment = new MachineComment { UserID = UserID, Comment = Comment, Date = DateTime.Now, Machine = machine, MachineID = machine.ID };
             await _machineService.InsertMachineCommentAsync(machineComment);
-
             string data = "";
             List<MachineComment> comments = await _machineService.FindAllCommentsAsync(MachineID);
-            foreach(MachineComment mComment in comments)
+            foreach (MachineComment mComment in comments)
             {
-                data+= "<tr><td>" + mComment.Comment + "</td> <td>" + mComment.Author + "</td> <td>" + mComment.Date.ToString("dd/MM/yyyy HH:mm:ss") + "</td> <td>" + @"<button class=""btn btn-danger"" onclick=""removeComment(" + mComment.ID + @")"">Delete</button>" + "</td></tr>";
+                data += "<tr><td>" + mComment.Comment + "</td> <td>" + mComment.User.FirstName + " " + mComment.User.LastName + "</td> <td>" + mComment.Date.ToString("dd/MM/yyyy HH:mm:ss") + "</td> <td>" + @"<button class=""btn btn-danger"" onclick=""removeComment(" + mComment.ID + @")"">Delete</button>" + "</td></tr>";
             }
 
             return data;
@@ -402,16 +412,10 @@ namespace MachinePortal.Controllers
             List<MachineComment> comments = await _machineService.FindAllCommentsAsync(MachineID);
             foreach (MachineComment mComment in comments)
             {
-                data += "<tr><td>" + mComment.Comment + "</td> <td>" + mComment.Author + "</td> <td>" + mComment.Date.ToString("dd/MM/yyyy HH:mm:ss") + "</td> <td>" + @"<button class=""btn btn-danger"" onclick=""removeComment(" + mComment.ID + @")"">Delete</button>" + "</td></tr>";
+                data += "<tr><td>" + mComment.Comment + "</td> <td>" + mComment.User.FirstName + " " + mComment.User.LastName + "</td> <td>" + mComment.Date.ToString("dd/MM/yyyy HH:mm:ss") + "</td> <td>" + @"<button class=""btn btn-danger"" onclick=""removeComment(" + mComment.ID + @")"">Delete</button>" + "</td></tr>";
             }
             return data;
         }
 
-        [HttpPost]
-        public string Teste([FromBody]List<MachineFile> files)
-        {
-            List<MachineFile> teste = files;
-            return "Dados Recebidos";
-        }
     }
 }

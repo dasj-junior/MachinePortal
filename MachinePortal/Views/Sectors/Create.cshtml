@@ -4,37 +4,40 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
-
-<h4>Sector</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Sector.Name" class="control-label"></label>
-                <input asp-for="Sector.Name" class="form-control" />
-                <span asp-validation-for="Sector.Name" class="text-danger"></span>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form asp-action="Create" enctype="multipart/form-data" asp-controller="Sectors">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <h3 class="modal-title">Create Sector</h3>
             </div>
-            <div class="form-group">
-                <input type="hidden" asp-for="Sector.AreaID" class="form-control"></input>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-8">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Sector.Name" class="control-label"></label>
+                                <input asp-for="Sector.Name" class="form-control" />
+                                <span asp-validation-for="Sector.Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" asp-for="Sector.AreaID" class="form-control"></input>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Sector.ImagePath" class="control-label"></label>
+                                <input type="file" name="image" accept="image/*" />
+                            </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Sector.ImagePath" class="control-label"></label>
-                <input type="file" name="image" accept="image/*" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+            <div class="modal-footer">
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                        <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" />
+                    </div>
+                </div>
             </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

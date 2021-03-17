@@ -72,6 +72,7 @@ namespace MachinePortal.Services
                                         .Include(Mimg => Mimg.MachineImages)
                                         .Include(Mvid => Mvid.MachineVideos)
                                         .Include(Mcom => Mcom.MachineComments)
+                                        .ThenInclude(com => com.User)
                                         .Include(Mdev => Mdev.MachineDevices)
                                         .ThenInclude(dev => dev.Device)
                                         .Include(Mres => Mres.MachineResponsibles)
@@ -87,7 +88,7 @@ namespace MachinePortal.Services
         public async Task<List<MachineComment>> FindAllCommentsAsync(int ID)
         {
             var result = from obj in _context.MachineComments select obj;
-            result = result.Where(x => x.Machine.ID == ID);
+            result = result.Include(u => u.User).Where(x => x.Machine.ID == ID);
             return await result.ToListAsync();
         }
 

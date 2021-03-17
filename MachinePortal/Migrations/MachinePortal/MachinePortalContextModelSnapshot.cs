@@ -140,17 +140,19 @@ namespace MachinePortal.Migrations.MachinePortal
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Author");
-
                     b.Property<string>("Comment");
 
                     b.Property<DateTime>("Date");
 
                     b.Property<int>("MachineID");
 
+                    b.Property<string>("UserID");
+
                     b.HasKey("ID");
 
                     b.HasIndex("MachineID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("MachineComments");
                 });
@@ -343,6 +345,10 @@ namespace MachinePortal.Migrations.MachinePortal
                         .WithMany("MachineComments")
                         .HasForeignKey("MachineID")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MachinePortal.Areas.Identity.Data.MachinePortalUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
                 });
 
             modelBuilder.Entity("MachinePortal.Models.MachineDevice", b =>

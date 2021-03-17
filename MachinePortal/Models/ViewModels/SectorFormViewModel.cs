@@ -8,5 +8,14 @@ namespace MachinePortal.Models.ViewModels
     public class SectorFormViewModel
     {
         public Sector Sector { get; set; }
+
+        public SectorFormViewModel()
+        {
+        }
+
+        public SectorFormViewModel(Sector sector)
+        {
+            Sector = sector;
+        }
     }
 }

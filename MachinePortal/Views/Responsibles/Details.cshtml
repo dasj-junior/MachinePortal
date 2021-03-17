@@ -13,6 +13,7 @@
         <dd>
             <img src="@Html.DisplayFor(model => model.PhotoPath)" height="200"/>
         </dd>
+        <br />
         <dt>
             @Html.DisplayNameFor(model => model.FirstName)
         </dt>
@@ -51,8 +52,8 @@
         </dd>
     </dl>
 </div>
+<hr />
 <div>
     <input type="hidden" asp-for="ID" />
     <a class="btn btn-default" asp-action="Index">Back to List</a>
-    <input type="submit" value="Edit" class="btn btn-info" />
 </div>

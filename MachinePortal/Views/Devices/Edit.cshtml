@@ -4,14 +4,67 @@
     ViewData["Title"] = "Edit";
 }
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+@* Machine Photo Button and Preview *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Button triggers the photo file input
+        document.getElementById('openPhoto').addEventListener('click', () => {
+            document.getElementById('photo').click()
+        });
+
+        $("#photo").change(function () {
+            //Get file name and put it into input
+            var fileInput = document.getElementById('photo');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                document.getElementById("photoFilePath").value = sfilename;
+            }
+            //Load file and show the preview
+            if (typeof (FileReader) != "undefined") {
+                var dvPreview = $("#divImageMediaPreview");
+                dvPreview.html("");
+                $($(this)[0].files).each(function () {
+                    var file = $(this);
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var img = $("<img />");
+                        img.attr("style", "height:200px; margin: 10px;");
+                        img.attr("src", e.target.result);
+                        img.attr("class", "img-thumbnail");
+                        dvPreview.append(img);
+                    }
+                    reader.readAsDataURL(file[0]);
+                });
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        });
+    });
+</script>
+
 <h2>Edit</h2>
 
 <h4>Device</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form asp-action="Edit" enctype="multipart/form-data" asp-controller="Devices">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Photo</label>
+                <div id="divImageMediaPreview"></div>
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button id="openPhoto" class="btn btn-default" type="button">
+                            Open Photo
+                        </button>
+                    </span>
+                    <input id="photoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+                </div>
+                <input type="file" id="photo" name="image" accept="image/*" style="display:none" />
+            </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -47,14 +100,10 @@
                 <input asp-for="Supplier" class="form-control" />
                 <span asp-validation-for="Supplier" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ImagePath" class="control-label"></label>
-                <input type="hidden" asp-for="ImagePath" class="form-control" />
-                <input type="file" name="image" />
-            </div>
+            <hr />
             <div class="form-group">
                 <a class="btn btn-default" asp-action="Index">Back to List</a>
-                <input type="submit" value="Save" class="btn btn-success" />
+                <input style="float:right" type="submit" value="Save" class="btn btn-success" />
             </div>
         </form>
     </div>

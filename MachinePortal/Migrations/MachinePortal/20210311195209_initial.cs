@@ -174,10 +174,10 @@ namespace MachinePortal.Migrations.MachinePortal
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Author = table.Column<string>(nullable: true),
                     Comment = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
-                    MachineID = table.Column<int>(nullable: false)
+                    MachineID = table.Column<int>(nullable: false),
+                    UserID = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -188,6 +188,12 @@ namespace MachinePortal.Migrations.MachinePortal
                         principalTable: "Machine",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MachineComments_MachinePortalUser_UserID",
+                        column: x => x.UserID,
+                        principalTable: "aspnetusers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -342,6 +348,11 @@ namespace MachinePortal.Migrations.MachinePortal
                 name: "IX_MachineComments_MachineID",
                 table: "MachineComments",
                 column: "MachineID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MachineComments_UserID",
+                table: "MachineComments",
+                column: "UserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MachineDevice_DeviceID",

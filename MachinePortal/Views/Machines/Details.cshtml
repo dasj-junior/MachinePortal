@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Details";
+    var LoggedUserName = ViewData["UserName"];
+    var LoggedUserID = ViewData["UserID"];
 }
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -28,7 +30,7 @@
             $.ajax({
                 type: 'POST',
                 url: '@Url.Content("~/")' + "Machines/AddComment",
-                data: { Author: document.getElementById('commentAuthor').value, Comment: document.getElementById('commentComment').value, MachineID: document.getElementById('MachineID').value },
+                data: { UserID: document.getElementById('commentUserID').value, Comment: document.getElementById('commentComment').value, MachineID: document.getElementById('MachineID').value },
                 success: function (data) {
                     $('#tComments').html(data)
                     document.getElementById('commentAuthor').value = "";
@@ -228,7 +230,7 @@
                 <thead class="thead-dark">
                     <tr>
                         <th>@Html.DisplayNameFor(model => model.MachineComments.First().Comment)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineComments.First().Author)</th>
+                        <th>User Name</th>
                         <th>@Html.DisplayNameFor(model => model.MachineComments.First().Date)</th>
                         <th>Delete</th>
                     </tr>
@@ -238,7 +240,7 @@
                     {
                         <tr>
                             <td>@Html.DisplayFor(modelItem => item.Comment)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Author)</td>
+                            <td>@Html.DisplayFor(model => model.MachineComments.First().User.FirstName + " " + model.MachineComments.First().User.LastName)</td>
                             <td>@Html.DisplayFor(modelItem => item.Date)</td>
                             <td><button class="btn btn-danger" onclick="removeComment(@item.ID)">Delete</button></td>
                         </tr>
@@ -262,10 +264,11 @@
             </div>
             <div class="modal-body">
                 <dt>
-                    @Html.DisplayNameFor(model => model.MachineComments.First().Author)
+                    @Html.DisplayNameFor(model => model.MachineComments.First().User)
                 </dt>
                 <dd>
-                    <input id="commentAuthor" class="form-control" />
+                    <input readonly id="commentAuthor" class="form-control" value="@LoggedUserName"/>
+                    <input id="commentUserID" style="display:none;" value="@LoggedUserID"/>
                 </dd>
                 <br />
                 <dt>

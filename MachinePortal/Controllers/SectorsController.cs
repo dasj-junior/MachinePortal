@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MachinePortal.Services;
+using System.Security.Claims;
 
 namespace MachinePortal.Controllers
 {
@@ -17,25 +18,37 @@ namespace MachinePortal.Controllers
         private readonly AreaService _AreaService;
         private readonly SectorService _SectorService;
         private readonly LineService _LineService;
+        private readonly PermissionsService _PermissionsService;
         IHostingEnvironment _appEnvironment;
 
-        public SectorsController(IHostingEnvironment enviroment, SectorService sectorService, LineService lineService, AreaService areaService)
+        public SectorsController(IHostingEnvironment enviroment, SectorService sectorService, LineService lineService, AreaService areaService, PermissionsService permissionsService)
         {
+            _PermissionsService = permissionsService;
             _AreaService = areaService;
             _SectorService = sectorService;
             _LineService = lineService;
             _appEnvironment = enviroment;
         }
 
+        private void Permissions()
+        {
+            string userID = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userID != null)
+            {
+                ViewData["Permissions"] = _PermissionsService.GetUserPermissions(userID);
+            }
+        }
+
         public async Task<IActionResult> Index()
         {
-
+            Permissions();
             var listSector = await _SectorService.FindAllAsync();
             return View(listSector);
         }
 
         public async Task<IActionResult> Create(int? areaID)
         {
+            Permissions();
             var viewModel = new SectorFormViewModel();
             viewModel.Sector = new Sector();
             if (areaID != null)
@@ -51,6 +64,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Sector Sector, IFormFile image)
         {
+            Permissions();
             if (!ModelState.IsValid)
             {
                 var viewModel = new SectorFormViewModel { Sector = Sector };
@@ -86,6 +100,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Delete(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -103,6 +118,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int ID)
         {
+            Permissions();
             var Sector = await _SectorService.FindByIDAsync(ID);
             try
             {
@@ -121,6 +137,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Details(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -136,6 +153,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Edit(int? ID)
         {
+            Permissions();
             if (ID == null)
             {
                 return NotFound();
@@ -153,6 +171,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Sector Sector, IFormFile image)
         {
+            Permissions();
             if (image != null)
             {
                 if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + Sector.ImagePath))
@@ -183,6 +202,26 @@ namespace MachinePortal.Controllers
             await _SectorService.UpdateAsync(Sector);
 
             return RedirectToAction(@"Details/" + Sector.AreaID, "Areas");
+        }
+
+        [HttpPost]
+        public async Task<PartialViewResult> AddPartialEdit(string id)
+        {
+            Sector sector = new Sector();
+            int ID = int.Parse(id);
+            sector = await _SectorService.FindByIDAsync(ID);
+            PartialViewResult partial = PartialView("Edit", sector);
+            return partial;
+        }
+
+        [HttpPost]
+        public async Task<PartialViewResult> AddPartialDelete(string id)
+        {
+            Sector sector = new Sector();
+            int ID = int.Parse(id);
+            sector = await _SectorService.FindByIDAsync(ID);
+            PartialViewResult partial = PartialView("Delete", sector);
+            return partial;
         }
     }
 }

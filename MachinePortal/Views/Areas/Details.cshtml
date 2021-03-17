@@ -1,49 +1,78 @@
 ﻿@model MachinePortal.Models.Area
+@using MachinePortal.Models.ViewModels
 
 @{
     var AreaID = Model.ID;
-    ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script>
+    function renderPartialEdit(ID) {
+        $.ajax({
+            url: '@Url.Action("AddPartialEdit", "Sectors")',
+            data: { id: ID},
+            type: "POST",
+            success: function(data) {
+                $('#modalEdit').html(data);
+            }
+        });
+    }
+
+    function renderPartialDelete(ID) {
+        $.ajax({
+            url: '@Url.Action("AddPartialDelete", "Sectors")',
+            data: { id: ID},
+            type: "POST",
+            success: function(data) {
+                $('#modalDelete').html(data);
+            }
+        });
+    }
+</script>
+
+<h2>Area: @Html.DisplayFor(model => model.Name)</h2>
+<hr />
 
 <div>
-    <h4>Areas</h4>
-    <hr />
+    <p>
+        @*<a class="btn btn-primary" style="margin:10px; float:right" asp-action="Create" asp-controller="Sectors" asp-route-areaID="@AreaID">Create New Sector</a>*@
+        <button class="btn btn-primary" style="margin:10px; float:right" data-toggle="modal" data-target="#modalCreate">Create New Sector</button>
+    </p>
     <dl class="dl-horizontal">
-        <dd>
-            <img src="@Html.DisplayFor(model => model.ImagePath)" height="200" />
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <br />
         <h3>Sectors</h3>
-        <table class="table table-bordered table-responsive">
-
-            @foreach (Sector sector in Model.Sectors)
-            {
+        <table class="table table-bordered table-responsive table-responsive">
+            <thead class="table" style="background-color:rgb(240,230,10);">
                 <tr>
-                    <th>Sector</th>
-                    <td>@Html.DisplayFor(model => sector.Name)</td>
-                    <td>
-                        <a class="btn-group" asp-action="Edit" asp-controller="Sectors" asp-route-id="@sector.ID">Edit</a>
-                        <a class="btn-group" asp-action="Details" asp-controller="Sectors" asp-route-id="@sector.ID">Details</a>
-                        <a class="btn-group" asp-action="Delete" asp-controller="Sectors" asp-route-id="@sector.ID">Delete</a>
-                    </td>
+                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                    <th>Options</th>
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @foreach (Sector sector in Model.Sectors)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(model => sector.Name)</td>
+                        <td>
+                            <a class="btn btn-success" asp-action="Details" asp-controller="Sectors" asp-route-id="@sector.ID">Open</a>
+                            <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@sector.ID)" data-target="#modalEdit">Edit</button>
+                            <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@sector.ID)" data-target="#modalDelete">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
         </table>
     </dl>
-    <p>
-        <a asp-action="Create" asp-controller="Sectors" asp-route-areaID="@AreaID">Create New Sector</a>
-    </p>
 </div>
 <div>
     <input type="hidden" asp-for="ID" />
-    <input type="button" value="Back" class="btn btn-default" action="action" onclick="history.go(-1);" />
-    <input type="submit" value="Edit" class="btn btn-info" />
+    <a class="btn btn-default" asp-controller="Areas" asp-action="Index">Back</a>
+</div>
+
+<div class="modal fade" id="modalCreate" role="dialog">
+    @Html.Partial("../Sectors/Create", new SectorFormViewModel( new Sector { AreaID = AreaID }));
+</div>
+<div class="modal fade" id="modalEdit" role="dialog">
+</div>
+<div class="modal fade" id="modalDelete" role="dialog">
 </div>
