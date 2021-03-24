@@ -3,8 +3,13 @@
 }
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/webcodecamjs/js/jquery.js"></script>
+<script src="~/webcodecamjs/js/qrcodelib.js"></script>
+<script src="~/webcodecamjs/js/webcodecamjquery.js"></script>
+
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
 
+@* Machine Search By Input ID *@
 <script>
     $(document).ready(function () {
         $("#Search").on("click", function () {
@@ -12,48 +17,101 @@
             window.location.href = "Machines/Details/" + id;
         });
     });
-
 </script>
 
-<div class="row" style="margin:60px">
-    <div class="col-md-8 col-md-offset-2" align="center">
-        <div class="card">
-            <h2 class="card-header text-center">Search Machine By ID</h2>
-            <div class="card-body center-block">
-                <br />
-                <input style="text-align:center" id="InputID" placeholder="Type Machine ID" />
-                <a id="Search" class="btn btn-success">Search</a>
-                <br />
-                <br />
-            </div>
-        </div>
-    </div>
-</div>
+@* QR Code Decoder *@
+<script type="text/javascript">
+    var arg = {
+        resultFunction: function (result) {
+            window.location.href = "Machines/Details/" + result.code;
+        }
+    };
+    document.querySelector('select').addEventListener('change', function () {
+        decoder.stop().play();
+    });
+</script>
 
-<div class="row" style="margin:60px">
-    <div class="col-md-8 col-md-offset-2" align="center">
-        <div class="card">
-            <h2 class="card-header text-center">Search Machine By QR Code</h2>
-            <div class="card-body center-block">
-                <br />
-                <a id="Read" class="btn btn-success">Search</a>
-                <br />
-                <br />
+<body>
+    <div class="row" style="margin:60px">
+        <div class="col-md-6 col-md-offset-3" align="center">
+            <div class="card">
+                <h2 class="card-header text-center">Search Machine By ID</h2>
+                <div class="card-body center-block">
+                    <br />
+                    <input style="text-align:center" id="InputID" placeholder="Type Machine ID" />
+                    <br />
+                    <br />
+                    <a id="Search" class="btn btn-success">Search</a>
+                    <br />
+                    <br />
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="row" style="margin:60px">
-    <div class="col-md-8 col-md-offset-2" align="center">
-        <div class="card">
-            <h2 class="card-header text-center">Search Machine By Hierarchies</h2>
-            <div class="card-body center-block">
-                <br />
-                <a id="Search" class="btn btn-success">Search</a>
-                <br />
-                <br />
+    <div class="row" style="margin:60px">
+        <div class="col-md-6 col-md-offset-3" align="center">
+            <div class="card">
+                <h2 class="card-header text-center">Search Machine By QR Code</h2>
+                <div class="card-body center-block">
+                    <br />
+                    <img src="~/images/QRCodeIcon.png" width="150" />
+                    <br />
+                    <br />
+                    <button class="btn btn-success" type="button" data-toggle="modal" data-target="#modalQR">Search</button>
+                    <br />
+                    <br />
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="row" style="margin:60px">
+        <div class="col-md-6 col-md-offset-3" align="center">
+            <div class="card">
+                <h2 class="card-header text-center">Search Machine By Hierarchies</h2>
+                <div class="card-body center-block">
+                    <br />
+                    <a id="Read" class="btn btn-success">Search</a>
+                    <br />
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="modalQR" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <h3 class="modal-title text-center">Read QR Code</h3>
+                </div>
+                <div id="QR-Code" class="modal-body text-center">
+                    <br />
+                    <div align="center">
+                        <select class="form-control" style=" text-align:center; width:60%"></select>
+                    </div>
+                    <br />
+                    <br />
+                    <canvas></canvas>
+                    <script>
+                        var decoder = $("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery;
+                        decoder.buildSelectMenu("select");
+                        decoder.play();
+                    </script>
+                </div>
+                <div class="modal-footer">
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="button" value="Cancel" class="btn btn-danger" data-dismiss="modal" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

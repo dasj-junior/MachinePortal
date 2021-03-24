@@ -64,6 +64,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\webcodecamjs\js\DecoderWorker.js" />
+    <None Include="wwwroot\webcodecamjs\js\filereader.js" />
+    <None Include="wwwroot\webcodecamjs\js\jquery.js" />
+    <None Include="wwwroot\webcodecamjs\js\main.js" />
+    <None Include="wwwroot\webcodecamjs\js\mainjquery.js" />
+    <None Include="wwwroot\webcodecamjs\js\qrcodelib.js" />
+    <None Include="wwwroot\webcodecamjs\js\webcodecamjquery.js" />
+    <None Include="wwwroot\webcodecamjs\js\webcodecamjs.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="Areas\Identity\Pages\Account\Manage\ManagePermissions.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

@@ -1,7 +1,7 @@
 ﻿@model MachinePortal.Models.Machine
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Name ;
     var LoggedUserName = ViewData["UserName"];
     var LoggedUserID = ViewData["UserID"];
 }
@@ -43,10 +43,10 @@
     });
 </script>
 
-<h2>Details</h2>
+<h2>@ViewData["Title"]</h2>
 
 <div>
-    <h4>Machine</h4>
+    <h4>Details</h4>
     <hr />
     <dl class="dl-horizontal">
         <h3>General Data</h3>
@@ -240,7 +240,7 @@
                     {
                         <tr>
                             <td>@Html.DisplayFor(modelItem => item.Comment)</td>
-                            <td>@Html.DisplayFor(model => model.MachineComments.First().User.FirstName + " " + model.MachineComments.First().User.LastName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</td>
                             <td>@Html.DisplayFor(modelItem => item.Date)</td>
                             <td><button class="btn btn-danger" onclick="removeComment(@item.ID)">Delete</button></td>
                         </tr>
