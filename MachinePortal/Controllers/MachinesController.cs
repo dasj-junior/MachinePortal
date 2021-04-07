@@ -28,11 +28,9 @@ namespace MachinePortal.Controllers
         public string FileName { get; set; }
     }
 
-    public class MachinesController : Controller
+    public class MachinesController : BaseController<MachinesController>
     {
         private readonly MachineService _machineService;
-        private readonly PermissionsService _PermissionsService;
-        private readonly IdentityContext _identityContext;
         IHostingEnvironment _appEnvironment;
 
         private readonly ResponsibleService _responsibleService;
@@ -59,18 +57,6 @@ namespace MachinePortal.Controllers
             _lineService = lineService;
         }
 
-        private void Permissions()
-        {
-            string userID = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userID != null)
-            {
-                MachinePortalUser user = _identityContext.Users.FirstOrDefault(x => x.Id == userID);
-                ViewData["UserID"] = user.Id;
-                ViewData["UserName"] = user.FirstName + " " + user.LastName;
-                ViewData["Permissions"] = _PermissionsService.GetUserPermissions(userID);
-            }
-        }
-
         public async Task<IActionResult> Index()
         {
             Permissions();
@@ -80,6 +66,7 @@ namespace MachinePortal.Controllers
 
         public async Task<IActionResult> Create()
         {
+            Permissions();
             var responsibles = await _responsibleService.FindAllAsync();
             var devices = await _deviceService.FindAllAsync();
 
@@ -338,6 +325,86 @@ namespace MachinePortal.Controllers
         }
 
         public async Task<IActionResult> Details(int? ID)
+        {
+            Permissions();
+            if (ID == null)
+            {
+                return NotFound();
+            }
+            var obj = await _machineService.FindByIDAsync(ID.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        public async Task<IActionResult> MachineComments(int? ID)
+        {
+            Permissions();
+            if (ID == null)
+            {
+                return NotFound();
+            }
+            var obj = await _machineService.FindByIDAsync(ID.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        public async Task<IActionResult> MachineDevices(int? ID)
+        {
+            Permissions();
+            if (ID == null)
+            {
+                return NotFound();
+            }
+            var obj = await _machineService.FindByIDAsync(ID.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        public async Task<IActionResult> MachineDocuments(int? ID)
+        {
+            Permissions();
+            if (ID == null)
+            {
+                return NotFound();
+            }
+            var obj = await _machineService.FindByIDAsync(ID.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        public async Task<IActionResult> MachineImages(int? ID)
+        {
+            Permissions();
+            if (ID == null)
+            {
+                return NotFound();
+            }
+            var obj = await _machineService.FindByIDAsync(ID.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        public async Task<IActionResult> MachineVideos(int? ID)
         {
             Permissions();
             if (ID == null)

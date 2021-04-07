@@ -1,0 +1,84 @@
+﻿@model MachinePortal.Models.Machine
+
+@{
+    ViewData["Title"] = Model.Name;
+    var LoggedUserName = ViewData["UserName"];
+    var LoggedUserID = ViewData["UserID"];
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<div class="card fb-card">
+    <div style="background-color:#4B4B46;" class="card-header">
+
+        <div class="d-inline-block">
+            <h2 style="color:white">Machine: @ViewData["Title"]</h2>
+        </div>
+        <hr style="border:1px solid white" />
+        <div class="d-inline-block">
+            <h2 style="color:white">General Data</h2>
+        </div>
+    </div>
+    <div class="card-block card-padding">
+        <dl class="dl-horizontal">
+            <dt>
+                Machine Photo
+            </dt>
+            <dd>
+                <img src="@Html.DisplayFor(model => model.ImagePath)" width="200" />
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="card fb-card">
+    <div style="background-color:#4B4B46;" class="card-header">
+        <div class="d-inline-block">
+            <h2 style="color:white">Documents</h2>
+        </div>
+    </div>
+    <div class="card-block card-padding">
+        <dl class="dl-horizontal">
+            <table class="table table-bordered table-vitesco02">
+                <thead class="thead-vitesco02">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().Name)</th>
+                        <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().Category)</th>
+                        <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().FileName)</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var document in Model.MachineDocuments)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => document.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => document.Category)</td>
+                            <td>@Html.DisplayFor(modelItem => document.FileName)</td>
+                            <td>@Html.ActionLink("Download", "Download", new { filePath = document.Path, fileName = document.FileName, extension = document.Extension })</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </dl>
+    </div>
+</div>
+
+<div>
+    <input type="hidden" asp-for="ID" />
+    <input style="width:100px; font-weight:700;" type="button" value="Back" class="btn btn-primary" action="action" onclick="history.go(-1);" />
+</div>
+
+<input id="MachineID" style="display: none" value="@Html.DisplayFor(model => model.ID)" />

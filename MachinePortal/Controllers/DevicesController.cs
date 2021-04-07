@@ -14,28 +14,19 @@ using System.Security.Claims;
 
 namespace MachinePortal.Controllers
 {
-    public class DevicesController : Controller
+    public class DevicesController : BaseController<DevicesController>
     {
         private readonly DeviceService _deviceService;
         private readonly DocumentService _documentService;
-        private readonly PermissionsService _PermissionsService;
         IHostingEnvironment _appEnvironment;
 
-        public DevicesController(IHostingEnvironment enviroment, DeviceService deviceService, DocumentService documentService, PermissionsService permissionsService)
+        public DevicesController(IHostingEnvironment enviroment, DeviceService deviceService, DocumentService documentService, PermissionsService permissionsService, IdentityContext identityContext)
         {
+            _identityContext = identityContext;
             _deviceService = deviceService;
             _documentService = documentService;
             _PermissionsService = permissionsService;
             _appEnvironment = enviroment;
-        }
-
-        private void Permissions()
-        {
-            string userID = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userID != null)
-            {
-                ViewData["Permissions"] = _PermissionsService.GetUserPermissions(userID);
-            }
         }
 
         public async Task<IActionResult> Index()

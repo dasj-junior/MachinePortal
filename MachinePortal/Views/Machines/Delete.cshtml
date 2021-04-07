@@ -4,27 +4,37 @@
     ViewData["Title"] = "Delete";
 }
 
-<h2>Machine</h2>
-
-<h3>Delete</h3>
-<div>
-    <h4>Are you sure you want to delete this?</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dd>
-            <img src="@Html.DisplayFor(model => model.ImagePath)" width="200" />
-        </dd>
-    </dl>
-
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="ID" />
-        <a class="btn btn-default" asp-action="Index">Back to List</a>
-        <input type="submit" value="Delete" class="btn btn-danger" />
-    </form>
+<div class="row">
+    <div class="col-6">
+        <div class="card fb-card">
+            <div style="background-color:#d9534f;" class="card-header">
+                <i style="background-color:#d9534f;vertical-align:middle" class="ti-close"></i>
+                <div class="d-inline-block">
+                    <h2 style="color:white">Delete</h2>
+                </div>
+            </div>
+            <div style="padding-left:50px" class="card-block card-padding text-center">
+                <h4>@Html.DisplayFor(model => model.Name)</h4>
+                <hr />
+                <dl>
+                    <dd>
+                        @if (Model.ImagePath != null)
+                        {
+                            <img class="img img-thumbnail" src="@Html.DisplayFor(model => model.ImagePath)" width="200" />
+                        }
+                        else
+                        {
+                            <img class="img img-thumbnail" src="~/resources/General/NoImage.jpg" width="200" />
+                        }
+                    </dd>
+                    <br />
+                </dl>
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="ID" />
+                    <a class="btn btn-primary" asp-action="Index">Back to List</a>
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

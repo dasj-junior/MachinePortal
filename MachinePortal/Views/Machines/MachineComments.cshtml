@@ -1,0 +1,132 @@
+﻿@model MachinePortal.Models.Machine
+
+@{
+    ViewData["Title"] = Model.Name;
+    var LoggedUserName = ViewData["UserName"];
+    var LoggedUserID = ViewData["UserID"];
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+    function removeComment(ID) {
+        if (confirm("Do you want to remove comment?")) {
+             $.ajax({
+                type: 'POST',
+                url: '@Url.Content("~/")' + "Machines/RemoveComment",
+                data: { CommentID: ID , MachineID: document.getElementById('MachineID').value },
+                success: function (data) {
+                    $('#tComments').html(data)
+                },
+                async: true
+             });
+        }
+    };
+</script>
+
+<div class="card fb-card">
+    <div style="background-color:#4B4B46;" class="card-header">
+
+        <div class="d-inline-block">
+            <h2 style="color:white">Machine: @ViewData["Title"]</h2>
+        </div>
+        <hr style="border:1px solid white" />
+        <div class="d-inline-block">
+            <h2 style="color:white">General Data</h2>
+        </div>
+    </div>
+    <div class="card-block card-padding">
+        <dl class="dl-horizontal">
+            <dt>
+                Machine Photo
+            </dt>
+            <dd>
+                <img src="@Html.DisplayFor(model => model.ImagePath)" width="200" />
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="card fb-card">
+    <div style="background-color:#4B4B46;" class="card-header">
+        <div class="d-inline-block">
+            <h2 style="color:white">Comments</h2>
+        </div>
+    </div>
+    <div class="card-block card-padding">
+        <dl class="dl-horizontal">
+            <table style="table-layout:fixed" class="table table-bordered table-vitesco02">
+                <button class="btn btn-success" style="float:right; margin-bottom: 20px" data-toggle="modal" data-target="#modalComments">Add New Comment</button>
+                <thead class="thead-vitesco02">
+                    <tr>
+                        <th width="62%">@Html.DisplayNameFor(model => model.MachineComments.First().Comment)</th>
+                        <th width="15%">User Name</th>
+                        <th width="15%">@Html.DisplayNameFor(model => model.MachineComments.First().Date)</th>
+                        <th width="8%">Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="tComments">
+                    @foreach (var item in Model.MachineComments)
+                    {
+                    <tr>
+                        <td style="word-wrap:break-word;">@Html.DisplayFor(modelItem => item.Comment)</td>
+                        <td>@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                        <td><button class="btn btn-danger" onclick="removeComment(@item.ID)">Delete</button></td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </dl>
+    </div>
+</div>
+
+<div class="modal fade" id="modalComments" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add New Comment</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <dt>
+                    @Html.DisplayNameFor(model => model.MachineComments.First().User)
+                </dt>
+                <dd>
+                    <input readonly id="commentAuthor" class="form-control" value="@LoggedUserName" />
+                    <input id="commentUserID" style="display:none;" value="@LoggedUserID" />
+                </dd>
+                <br />
+                <dt>
+                    @Html.DisplayNameFor(model => model.MachineComments.First().Comment)
+                </dt>
+                <dd>
+                    <textarea id="commentComment" class="form-control"></textarea>
+                </dd>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="insertComment" class="btn btn-success">Insert</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <input type="hidden" asp-for="ID" />
+    <input style="width:100px; font-weight:700;" type="button" value="Back" class="btn btn-primary" action="action" onclick="history.go(-1);" />
+</div>
+
+<input id="MachineID" style="display: none" value="@Html.DisplayFor(model => model.ID)" />

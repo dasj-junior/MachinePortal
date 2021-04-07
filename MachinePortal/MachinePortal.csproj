@@ -64,6 +64,61 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\assets\icon\icofont\fonts\icofont.svg" />
+    <None Include="wwwroot\assets\icon\themify-icons\fonts\themify.svg" />
+    <None Include="wwwroot\assets\images\vitesco.svg" />
+    <None Include="wwwroot\assets\js\bootstrap-growl.min.js" />
+    <None Include="wwwroot\assets\js\bootstrap\js\bootstrap.min.js" />
+    <None Include="wwwroot\assets\js\classie.js" />
+    <None Include="wwwroot\assets\js\classie\classie.js" />
+    <None Include="wwwroot\assets\js\common-pages.js" />
+    <None Include="wwwroot\assets\js\demo-12.js" />
+    <None Include="wwwroot\assets\js\jquery-slimscroll\jquery.slimscroll.js" />
+    <None Include="wwwroot\assets\js\jquery-ui\jquery-ui.min.js" />
+    <None Include="wwwroot\assets\js\jquery.mCustomScrollbar.concat.min.js" />
+    <None Include="wwwroot\assets\js\jquery.mousewheel.min.js" />
+    <None Include="wwwroot\assets\js\jquery\jquery.min.js" />
+    <None Include="wwwroot\assets\js\modernizr\css-scrollbars.js" />
+    <None Include="wwwroot\assets\js\modernizr\modernizr.js" />
+    <None Include="wwwroot\assets\js\morris.js\morris.js" />
+    <None Include="wwwroot\assets\js\pcoded.min.js" />
+    <None Include="wwwroot\assets\js\popper.js\popper.min.js" />
+    <None Include="wwwroot\assets\js\raphael\raphael.min.js" />
+    <None Include="wwwroot\assets\js\script.js" />
+    <None Include="wwwroot\assets\js\script.min.js" />
+    <None Include="wwwroot\assets\js\SmoothScroll.js" />
+    <None Include="wwwroot\assets\pages\accordion\accordion.js" />
+    <None Include="wwwroot\assets\pages\accordion\accordion.min.js" />
+    <None Include="wwwroot\assets\pages\chart\morris\morris-custom-chart.js" />
+    <None Include="wwwroot\assets\pages\dashboard\amchart\js\amcharts.js" />
+    <None Include="wwwroot\assets\pages\dashboard\amchart\js\custom-amchart.js" />
+    <None Include="wwwroot\assets\pages\dashboard\amchart\js\export.min.js" />
+    <None Include="wwwroot\assets\pages\dashboard\amchart\js\images\dragIconRoundBig.svg" />
+    <None Include="wwwroot\assets\pages\dashboard\amchart\js\images\dragIconRoundBigH.svg" />
+    <None Include="wwwroot\assets\pages\dashboard\amchart\js\light.js" />
+    <None Include="wwwroot\assets\pages\dashboard\amchart\js\serial.js" />
+    <None Include="wwwroot\assets\pages\dashboard\custom-dashboard.js" />
+    <None Include="wwwroot\assets\pages\google-maps\gmaps.min.js" />
+    <None Include="wwwroot\assets\pages\google-maps\jquery.gmaps.js" />
+    <None Include="wwwroot\assets\pages\icon-modal.js" />
+    <None Include="wwwroot\assets\pages\notification\notification.js" />
+    <None Include="wwwroot\assets\pages\todo\todo.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\amcharts.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\amcharts.min.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\ammap.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\ammap.min.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\continentsLow.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\continentsLow.min.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\gauge.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\gauge.min.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\light.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\light.min.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\pie.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\pie.min.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\serial.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\serial.min.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\worldLow.js" />
+    <None Include="wwwroot\assets\pages\widget\amchart\worldLow.min.js" />
     <None Include="wwwroot\webcodecamjs\js\DecoderWorker.js" />
     <None Include="wwwroot\webcodecamjs\js\filereader.js" />
     <None Include="wwwroot\webcodecamjs\js\jquery.js" />
@@ -91,6 +146,9 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Areas\Edit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Hierarchies\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Areas\Index.cshtml">
@@ -140,6 +198,24 @@
     </Content>
     <Content Update="Views\Sectors\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="wwwroot\assets\css\jquery.mCustomScrollbar.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\assets\fonts\glyphicons-halflings-regular.eot">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\assets\fonts\glyphicons-halflings-regular.svg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\assets\fonts\glyphicons-halflings-regular.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\assets\fonts\glyphicons-halflings-regular.woff">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Update="wwwroot\assets\fonts\glyphicons-halflings-regular.woff2">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\css\site.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

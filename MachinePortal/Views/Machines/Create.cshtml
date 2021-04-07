@@ -1,7 +1,8 @@
 ﻿@model MachinePortal.Models.ViewModels.MachineFormViewModel
 
 @{
-    ViewData["Title"] = "Create new machine";
+    var LoggedUserName = ViewData["UserName"];
+    var LoggedUserID = ViewData["UserID"];
 }
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -261,215 +262,599 @@
     });
 </script>
 
-<h2>@ViewData["Title"]</h2>
-<hr />
-
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-10">
         <form asp-action="Create" id="form" class="form" method="post" enctype="multipart/form-data" asp-controller="Machines">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <h3>General Data</h3>
-            <hr />
-            <div class="form-group">
-                <label class="control-label">Photo</label>
-                <div id="divImageMediaPreview"></div>
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <button id="openPhoto" class="btn btn-default" type="button">
-                            Open Photo
-                        </button>
-                    </span>
-                    <input id="photoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Create new machine</h2>
+                    </div>
+                    <hr style="border:1px solid white" />
+                    <div class="d-inline-block">
+                        <h2 style="color:white">General Data</h2>
+                    </div>
                 </div>
-                <input type="file" id="photo" name="photo" accept="image/*" style="display:none" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Machine.Name" class="control-label"></label>
-                <input asp-for="Machine.Name" class="form-control" />
-                <span asp-validation-for="Machine.Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Machine.Description" class="control-label"></label>
-                <textarea asp-for="Machine.Description" class="form-control"></textarea>
-                <span asp-validation-for="Machine.Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Machine.AssetNumber" class="control-label"></label>
-                <input asp-for="Machine.AssetNumber" class="form-control" />
-                <span asp-validation-for="Machine.AssetNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Machine.MES_Name" class="control-label"></label>
-                <input asp-for="Machine.MES_Name" class="form-control" />
-                <span asp-validation-for="Machine.MES_Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Machine.SAP_Name" class="control-label"></label>
-                <input asp-for="Machine.SAP_Name" class="form-control" />
-                <span asp-validation-for="Machine.SAP_Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Machine.WorkCenter" class="control-label"></label>
-                <input asp-for="Machine.WorkCenter" class="form-control" />
-                <span asp-validation-for="Machine.WorkCenter" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Machine.CostCenter" class="control-label"></label>
-                <input asp-for="Machine.CostCenter" class="form-control" />
-                <span asp-validation-for="Machine.CostCenter" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Machine.ServerPath" class="control-label"></label>
-                <input asp-for="Machine.ServerPath" class="form-control" />
-                <span asp-validation-for="Machine.ServerPath" class="text-danger"></span>
-            </div>
-
-            <br />
-            <h2>Files</h2>
-            <hr />
-
-            <div class="form-group">
-                <label class="control-label">Documents</label>
-                <hr style="padding:0; margin:5px;" />
-                <input id="iDocuments" type="file" style="display:none" />
-                <button type="button" data-toggle="modal" data-target="#modalDocuments">Add Document</button>
-                <br /><br />
-                <table class="table table-bordered" id="tDocuments" style="visibility:hidden">
-                    <tr>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Category
-                        </th>
-                        <th>
-                            File Name
-                        </th>
-                        <th>
-                            Delete
-                        </th>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label">Images</label>
-                <hr style="padding:0; margin:5px;" />
-                <input id="iImages" type="file" style="display:none" />
-                <button type="button" data-toggle="modal" data-target="#modalImages">Add Images</button>
-                <br /><br />
-                <table class="table table-bordered" id="tImages" style="visibility:hidden">
-                    <tr>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Category
-                        </th>
-                        <th>
-                            File Name
-                        </th>
-                        <th>
-                            Delete
-                        </th>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label">Videos</label>
-                <hr style="padding:0; margin:5px;" />
-                <input id="iVideos" type="file" style="display:none" />
-                <button type="button" data-toggle="modal" data-target="#modalVideos">Add Videos</button>
-                <br /><br />
-                <table class="table table-bordered" id="tVideos" style="visibility:hidden">
-                    <tr>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Category
-                        </th>
-                        <th>
-                            File Name
-                        </th>
-                        <th>
-                            Delete
-                        </th>
-                    </tr>
-                </table>
-            </div>
-
-            <br />
-            <h3>Selection</h3>
-            <hr />
-
-            <div class="form-group">
-                <label asp-for="Devices" class="control-label"></label>
-                <div class="row">
-                    <div class="col-md-5 col-sm-5">
-                        <select id="DevicesSelect" asp-for="Devices" asp-items="@ViewBag.ListDevices" class="form-control" multiple></select>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <label class="control-label">Photo</label>
+                        <div id="divImageMediaPreview"></div>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button id="openPhoto" class="btn btn-default" type="button">
+                                    Open Photo
+                                </button>
+                            </span>
+                            <input id="photoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+                        </div>
+                        <input type="file" id="photo" name="photo" accept="image/*" style="display:none" />
                     </div>
-                    <div class="col-md-2 col-sm-2">
-                        <button type="button" id="rightDevices" class="btn btn-success btn-block glyphicon glyphicon-arrow-right"></button>
-                        <button type="button" id="leftDevices" class="btn btn-success btn-block btn-danger glyphicon glyphicon-arrow-left"></button>
+                    <div class="form-group">
+                        <label asp-for="Machine.Name" class="control-label"></label>
+                        <input asp-for="Machine.Name" class="form-control" />
+                        <span asp-validation-for="Machine.Name" class="text-danger"></span>
                     </div>
-                    <div class="col-md-5 col-sm-5">
-                        <select id="DevicesSelected" asp-for="SelectedDevices" class="form-control" multiple></select>
+                    <div class="form-group">
+                        <label asp-for="Machine.Description" class="control-label"></label>
+                        <textarea asp-for="Machine.Description" class="form-control"></textarea>
+                        <span asp-validation-for="Machine.Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.AssetNumber" class="control-label"></label>
+                        <input asp-for="Machine.AssetNumber" class="form-control" />
+                        <span asp-validation-for="Machine.AssetNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.MES_Name" class="control-label"></label>
+                        <input asp-for="Machine.MES_Name" class="form-control" />
+                        <span asp-validation-for="Machine.MES_Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.SAP_Name" class="control-label"></label>
+                        <input asp-for="Machine.SAP_Name" class="form-control" />
+                        <span asp-validation-for="Machine.SAP_Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.WorkCenter" class="control-label"></label>
+                        <input asp-for="Machine.WorkCenter" class="form-control" />
+                        <span asp-validation-for="Machine.WorkCenter" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.CostCenter" class="control-label"></label>
+                        <input asp-for="Machine.CostCenter" class="form-control" />
+                        <span asp-validation-for="Machine.CostCenter" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.ServerPath" class="control-label"></label>
+                        <input asp-for="Machine.ServerPath" class="form-control" />
+                        <span asp-validation-for="Machine.ServerPath" class="text-danger"></span>
                     </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Responsibles" class="control-label"></label>
-                <div class="row">
-                    <div class="col-md-5 col-sm-5">
-                        <select id="ResponsiblesSelect" asp-items="@ViewBag.ListResponsibles" class="form-control" multiple></select>
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Documents</h2>
                     </div>
-                    <div class="col-md-2 col-sm-2">
-                        <button type="button" id="rightResponsibles" class="btn btn-success btn-block glyphicon glyphicon-arrow-right"></button>
-                        <button type="button" id="leftResponsibles" class="btn btn-success btn-block btn-danger glyphicon glyphicon-arrow-left"></button>
+                </div>
+                <div class="card-block card-padding">
+                    <input id="iDocuments" type="file" style="display:none" />
+                    <button type="button" data-toggle="modal" data-target="#modalDocuments">Add Document</button>
+                    <br /><br />
+                    <table class="table table-bordered table-vitesco" id="tDocuments">
+                        <tr class="thead-vitesco">
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Category
+                            </th>
+                            <th>
+                                File Name
+                            </th>
+                            <th>
+                                Delete
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Images</h2>
                     </div>
-                    <div class="col-md-5 col-sm-5">
-                        <select id="ResponsiblesSelected" asp-for="SelectedResponsibles" class="form-control" multiple></select>
+                </div>
+                <div class="card-block card-padding">
+                    <input id="iImages" type="file" style="display:none" />
+                    <button type="button" data-toggle="modal" data-target="#modalImages">Add Images</button>
+                    <br /><br />
+                    <table class="table table-bordered table-vitesco" id="tImages">
+                        <tr class="thead-vitesco">
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Category
+                            </th>
+                            <th>
+                                File Name
+                            </th>
+                            <th>
+                                Delete
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Videos</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <input id="iVideos" type="file" style="display:none" />
+                    <button type="button" data-toggle="modal" data-target="#modalVideos">Add Videos</button>
+                    <br /><br />
+                    <table class="table table-bordered table-vitesco" id="tVideos">
+                        <tr class="thead-vitesco">
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Category
+                            </th>
+                            <th>
+                                File Name
+                            </th>
+                            <th>
+                                Delete
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Devices</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <label asp-for="Devices" class="control-label"></label>
+                        <div class="row">
+                            <div class="col-md-5 col-sm-5">
+                                <select id="DevicesSelect" asp-for="Devices" asp-items="@ViewBag.ListDevices" class="form-control" multiple></select>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" id="rightDevices" class="btn btn-success btn-block glyphicon glyphicon-arrow-right"></button>
+                                <button type="button" id="leftDevices" class="btn btn-success btn-block btn-danger glyphicon glyphicon-arrow-left"></button>
+                            </div>
+                            <div class="col-md-5 col-sm-5">
+                                <select id="DevicesSelected" asp-for="SelectedDevices" class="form-control" multiple></select>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <br />
-            <h2>Hierarchies</h2>
-            <hr />
-
-            <div class="form-group">
-                <label asp-for="Machine.AreaID" class="control-label"></label>
-                <select asp-for="Machine.AreaID" id="AreaID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListAreas,"ID","Name"))"></select>
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Responsibles</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <label asp-for="Responsibles" class="control-label"></label>
+                        <div class="row">
+                            <div class="col-md-5 col-sm-5">
+                                <select id="ResponsiblesSelect" asp-items="@ViewBag.ListResponsibles" class="form-control" multiple></select>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" id="rightResponsibles" class="btn btn-success btn-block glyphicon glyphicon-arrow-right"></button>
+                                <button type="button" id="leftResponsibles" class="btn btn-success btn-block btn-danger glyphicon glyphicon-arrow-left"></button>
+                            </div>
+                            <div class="col-md-5 col-sm-5">
+                                <select id="ResponsiblesSelected" asp-for="SelectedResponsibles" class="form-control" multiple></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Machine.SectorID" class="control-label"></label>
-                <select asp-for="Machine.SectorID" id="SectorID" class="form-control" asp-items="@(new SelectList(string.Empty, "ID","Name"))"></select>
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Hierarchies</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <label asp-for="Machine.AreaID" class="control-label"></label>
+                        <select asp-for="Machine.AreaID" id="AreaID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListAreas,"ID","Name"))"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Machine.SectorID" class="control-label"></label>
+                        <select asp-for="Machine.SectorID" id="SectorID" class="form-control" asp-items="@(new SelectList(string.Empty, "ID","Name"))"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Machine.LineID" class="control-label"></label>
+                        <select asp-for="Machine.LineID" id="LineID" class="form-control" asp-items="@(new SelectList(string.Empty, "ID","Name"))"></select>
+                    </div>
+                </div>
             </div>
-
             <div class="form-group">
-                <label asp-for="Machine.LineID" class="control-label"></label>
-                <select asp-for="Machine.LineID" id="LineID" class="form-control" asp-items="@(new SelectList(string.Empty, "ID","Name"))"></select>
-            </div>
-
-            <br /><br />
-
-            <div class="form-group">
-                <input type="submit" id="submit" value="Create" class="btn btn-default" />
+                <a style="width:120px;" class="btn btn-primary" asp-action="Index">Back to List</a>
+                <input style="width:120px;float:right;" type="submit" id="submit" value="Create" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
 
+@*<form asp-action="Create" id="form" class="form" method="post" enctype="multipart/form-data" asp-controller="Machines">
+        <div asp-validation-summary="ModelOnly" class="text-danger">
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Create new machine</h2>
+                    </div>
+                    <hr style="border:1px solid white" />
+                    <div class="d-inline-block">
+                        <h2 style="color:white">General Data</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <label class="control-label">Photo</label>
+                        <div id="divImageMediaPreview"></div>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <button id="openPhoto" class="btn btn-default" type="button">
+                                    Open Photo
+                                </button>
+                            </span>
+                            <input id="photoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+                        </div>
+                        <input type="file" id="photo" name="photo" accept="image/*" style="display:none" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.Name" class="control-label"></label>
+                        <input asp-for="Machine.Name" class="form-control" />
+                        <span asp-validation-for="Machine.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.Description" class="control-label"></label>
+                        <textarea asp-for="Machine.Description" class="form-control"></textarea>
+                        <span asp-validation-for="Machine.Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.AssetNumber" class="control-label"></label>
+                        <input asp-for="Machine.AssetNumber" class="form-control" />
+                        <span asp-validation-for="Machine.AssetNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.MES_Name" class="control-label"></label>
+                        <input asp-for="Machine.MES_Name" class="form-control" />
+                        <span asp-validation-for="Machine.MES_Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.SAP_Name" class="control-label"></label>
+                        <input asp-for="Machine.SAP_Name" class="form-control" />
+                        <span asp-validation-for="Machine.SAP_Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.WorkCenter" class="control-label"></label>
+                        <input asp-for="Machine.WorkCenter" class="form-control" />
+                        <span asp-validation-for="Machine.WorkCenter" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.CostCenter" class="control-label"></label>
+                        <input asp-for="Machine.CostCenter" class="form-control" />
+                        <span asp-validation-for="Machine.CostCenter" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.ServerPath" class="control-label"></label>
+                        <input asp-for="Machine.ServerPath" class="form-control" />
+                        <span asp-validation-for="Machine.ServerPath" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Documents</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <input id="iDocuments" type="file" style="display:none" />
+                    <button type="button" data-toggle="modal" data-target="#modalDocuments">Add Document</button>
+                    <br /><br />
+                    <table class="table table-bordered" id="tDocuments" style="visibility:hidden">
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Category
+                            </th>
+                            <th>
+                                File Name
+                            </th>
+                            <th>
+                                Delete
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Images</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <input id="iImages" type="file" style="display:none" />
+                    <button type="button" data-toggle="modal" data-target="#modalImages">Add Images</button>
+                    <br /><br />
+                    <table class="table table-bordered" id="tImages" style="visibility:hidden">
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Category
+                            </th>
+                            <th>
+                                File Name
+                            </th>
+                            <th>
+                                Delete
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Videos</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <input id="iVideos" type="file" style="display:none" />
+                    <button type="button" data-toggle="modal" data-target="#modalVideos">Add Videos</button>
+                    <br /><br />
+                    <table class="table table-bordered" id="tVideos" style="visibility:hidden">
+                        <tr>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Category
+                            </th>
+                            <th>
+                                File Name
+                            </th>
+                            <th>
+                                Delete
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Devices</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <label asp-for="Devices" class="control-label"></label>
+                        <div class="row">
+                            <div class="col-md-5 col-sm-5">
+                                <select id="DevicesSelect" asp-for="Devices" asp-items="@ViewBag.ListDevices" class="form-control" multiple></select>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" id="rightDevices" class="btn btn-success btn-block glyphicon glyphicon-arrow-right"></button>
+                                <button type="button" id="leftDevices" class="btn btn-success btn-block btn-danger glyphicon glyphicon-arrow-left"></button>
+                            </div>
+                            <div class="col-md-5 col-sm-5">
+                                <select id="DevicesSelected" asp-for="SelectedDevices" class="form-control" multiple></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Responsibles</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <label asp-for="Responsibles" class="control-label"></label>
+                        <div class="row">
+                            <div class="col-md-5 col-sm-5">
+                                <select id="ResponsiblesSelect" asp-items="@ViewBag.ListResponsibles" class="form-control" multiple></select>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" id="rightResponsibles" class="btn btn-success btn-block glyphicon glyphicon-arrow-right"></button>
+                                <button type="button" id="leftResponsibles" class="btn btn-success btn-block btn-danger glyphicon glyphicon-arrow-left"></button>
+                            </div>
+                            <div class="col-md-5 col-sm-5">
+                                <select id="ResponsiblesSelected" asp-for="SelectedResponsibles" class="form-control" multiple></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Hierarchies</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <label asp-for="Machine.AreaID" class="control-label"></label>
+                        <select asp-for="Machine.AreaID" id="AreaID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListAreas,"ID","Name"))"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Machine.SectorID" class="control-label"></label>
+                        <select asp-for="Machine.SectorID" id="SectorID" class="form-control" asp-items="@(new SelectList(string.Empty, "ID","Name"))"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Machine.LineID" class="control-label"></label>
+                        <select asp-for="Machine.LineID" id="LineID" class="form-control" asp-items="@(new SelectList(string.Empty, "ID","Name"))"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" id="submit" value="Create" class="btn btn-default" />
+        </div>
+
+        <div class="modal fade" id="modalDocuments" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add New Document</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="control-label">Name:</label>
+                            <input id="documentName" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Category:</label>
+                            <input id="documentCategory" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">File:</label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button id="openInputDocument" class="btn btn-default" type="button">
+                                        Open File
+                                    </button>
+                                </span>
+                                <input id="documentFilePath" type="text" class="form-control" placeholder="No file chosen" readonly></input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="insertDocument" class="btn btn-success">Insert</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalImages" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add New Image</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="control-label">Name:</label>
+                            <input id="imageName" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Category:</label>
+                            <input id="imageCategory" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">File:</label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button id="openInputImage" class="btn btn-default" type="button">
+                                        Open File
+                                    </button>
+                                </span>
+                                <input id="imageFilePath" type="text" class="form-control" placeholder="No file chosen" readonly></input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="insertImage" class="btn btn-success">Insert</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modalVideos" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add New Video</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="control-label">Name:</label>
+                            <input id="videoName" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Category:</label>
+                            <input id="videoCategory" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">File:</label>
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button id="openInputVideo" class="btn btn-default" type="button">
+                                        Open File
+                                    </button>
+                                </span>
+                                <input id="videoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly></input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="insertVideo" class="btn btn-success">Insert</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>*@
+
+
 <div class="modal fade" id="modalDocuments" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Add New Document</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -504,8 +889,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Add New Image</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -540,8 +925,8 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Add New Video</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -570,10 +955,6 @@
             </div>
         </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

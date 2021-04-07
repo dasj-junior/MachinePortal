@@ -12,26 +12,17 @@ using System.Security.Claims;
 
 namespace MachinePortal.Controllers
 {
-    public class AreasController : Controller
+    public class AreasController : BaseController<AreasController>
     {
         private readonly AreaService _AreaService;
-        private readonly PermissionsService _PermissionsService;
         IHostingEnvironment _appEnvironment;
 
-        public AreasController(IHostingEnvironment enviroment, AreaService AreaService, SectorService SectorService, PermissionsService permissionsService)
+        public AreasController(IHostingEnvironment enviroment, AreaService AreaService, SectorService SectorService, PermissionsService permissionsService, IdentityContext identityContext)
         {
+            _identityContext = identityContext;
             _AreaService = AreaService;
             _PermissionsService = permissionsService;
             _appEnvironment = enviroment;
-        }
-
-        private void Permissions()
-        {
-            string userID = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userID != null)
-            {
-                ViewData["Permissions"] = _PermissionsService.GetUserPermissions(userID);
-            }
         }
 
         public async Task<IActionResult> Index()

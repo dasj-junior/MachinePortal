@@ -80,6 +80,11 @@ namespace MachinePortal.Services
                                         .FirstOrDefaultAsync(obj => obj.ID == ID);
         }
 
+        public async Task<List<Machine>> FindByLine(int LineID)
+        {
+            return await _context.Machine.OrderBy(x => x.ID).Where(m => m.LineID == LineID).ToListAsync();
+        }
+
         public async Task<List<Machine>> FindAllAsync()
         {
             return await _context.Machine.OrderBy(x => x.ID).ToListAsync();

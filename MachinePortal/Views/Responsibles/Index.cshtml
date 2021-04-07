@@ -4,48 +4,56 @@
     ViewData["Title"] = "Responsibles";
 }
 
-<h2>@ViewData["Title"]</h2>
-<hr />
-<p>
-    <a class="btn btn-primary" style="margin:10px; float:right" asp-action="Create">Create New</a>
-</p>
-<table class="table table-bordered table-responsive">
-    <thead class="thead-dark">
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.PhotoPath)</th>
-            <th>@Html.DisplayNameFor(model => model.FirstName)</th>
-            <th>@Html.DisplayNameFor(model => model.LastName)</th>
-            <th>@Html.DisplayNameFor(model => model.Department)</th>
-            <th>@Html.DisplayNameFor(model => model.PhoneNumber)</th>
-            <th>@Html.DisplayNameFor(model => model.Mobile)</th>
-            <th>@Html.DisplayNameFor(model => model.Email)</th>
-            <th>Options</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            @if (item.PhotoPath != null)
-            {
-                <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.PhotoPath)" width="100" height="100" /></td>
-            }
-            else
-            {
-                <td><img class="img-thumbnail" src="~/resources/General/NoImage.jpg" width="100" height="100" /></td>
-            }
-            <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
-            <td>@Html.DisplayFor(modelItem => item.LastName)</td>
-            <td>@Html.DisplayFor(modelItem => item.Department)</td>
-            <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
-            <td>@Html.DisplayFor(modelItem => item.Mobile)</td>
-            <td>@Html.DisplayFor(modelItem => item.Email)</td>
-            <td>
-                <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">Open</a>
-                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.ID">Edit</a>
-                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
+<div class="card fb-card">
+    <div style="background-color:#64AF5A;" class="card-header">
+        <i style="background-color:#64AF5A;vertical-align:middle" class="ti-user"></i>
+        <div class="d-inline-block">
+            <h2 style="color:white;">@ViewData["Title"]</h2>
+        </div>
+    </div>
+    <div class="card-block card-padding">
+        <p>
+            <a class="btn btn-primary btn-create" asp-action="Create">Create New</a>
+        </p>
+        <table class="table table-bordered table-vitesco">
+            <thead class="thead-vitesco">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.PhotoPath)</th>
+                    <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+                    <th>@Html.DisplayNameFor(model => model.LastName)</th>
+                    <th>@Html.DisplayNameFor(model => model.Department)</th>
+                    <th>@Html.DisplayNameFor(model => model.PhoneNumber)</th>
+                    <th>@Html.DisplayNameFor(model => model.Mobile)</th>
+                    <th>@Html.DisplayNameFor(model => model.Email)</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @if (item.PhotoPath != null)
+                        {
+                            <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.PhotoPath)" width="100" height="100" /></td>
+                        }
+                        else
+                        {
+                            <td><img class="img-thumbnail" src="~/resources/General/NoImage.jpg" width="100" height="100" /></td>
+                        }
+                        <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Department)</td>
+                        <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Mobile)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                        <td>
+                            <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">Open</a>
+                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.ID">Edit</a>
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

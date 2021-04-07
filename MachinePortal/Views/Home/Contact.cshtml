@@ -1,17 +1,26 @@
 ﻿@{
     ViewData["Title"] = "Contact";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+<div class="card dribble-card">
+    <div class="card-header">
+        <i style="vertical-align:middle" class="ti-mobile"></i>
+        <div class="d-inline-block">
+            <h2 style="color:white;">@ViewData["Title"]</h2>
+            <h3 style="color:white;">@ViewData["Message"]</h3>
+        </div>
+    </div>
+    <div class="card-block card-padding">
+        <address>
+            One Microsoft Way<br />
+            Redmond, WA 98052-6399<br />
+            <abbr title="Phone">P:</abbr>
+            425.555.0100
+        </address>
 
-<address>
-    <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+        <address>
+            <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
+            <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
+        </address>
+    </div>
+</div>

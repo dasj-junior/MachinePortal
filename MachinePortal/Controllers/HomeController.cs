@@ -17,22 +17,15 @@ using MachinePortal.Services;
 namespace MachinePortal.Controllers
 {
 
-    public class HomeController : Controller
+    public class HomeController : BaseController<HomeController>
     {
-        private readonly PermissionsService _PermissionsService;
+        MachineService _MachineService;
 
-        public HomeController(PermissionsService permissionsService)
+        public HomeController(PermissionsService permissionsService, IdentityContext identityContext, MachineService machineService)
         {
+            _MachineService = machineService;
             _PermissionsService = permissionsService;
-        }
-
-        private void Permissions()
-        {
-            string userID = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userID != null)
-            {
-                ViewData["Permissions"] = _PermissionsService.GetUserPermissions(userID);
-            }
+            _identityContext = identityContext;
         }
 
         public IActionResult Index()
@@ -57,6 +50,20 @@ namespace MachinePortal.Controllers
         {
             Permissions();
             return View();
+        }
+
+        [HttpPost]
+        public async Task<bool> ValidateMachineID(int MachineID)
+        {
+            Machine mac = await _MachineService.FindByIDAsync(MachineID);
+            if(mac != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

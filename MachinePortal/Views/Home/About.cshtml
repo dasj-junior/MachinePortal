@@ -1,7 +1,16 @@
 ﻿@{
     ViewData["Title"] = "About";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
 
-<p>Use this area to provide additional information.</p>
+<div class="card fb-card">
+    <div style="background-color:#D7004B;" class="card-header">
+            <i style="background-color:#D7004B;vertical-align:middle" class="ti-info"></i>
+            <div class="d-inline-block">
+                <h2 style="color:white">@ViewData["Title"]</h2>
+            </div>
+    </div>
+    <div class="card-block card-padding">
+        <h3>@ViewData["Message"]</h3>
+        <p>Use this area to provide additional information.</p>
+    </div>
+</div>

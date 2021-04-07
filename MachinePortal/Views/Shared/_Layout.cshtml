@@ -1,10 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using MachinePortal.Areas.Identity.Data
 @using MachinePortal.Controllers
+@using MachinePortal.Areas.Identity.Pages.Account.Manage
 @inject SignInManager<MachinePortalUser> SignInManager
 @inject UserManager<MachinePortalUser> UserManager
 @* Get User Permissions *@
 @{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
     List<string> permissions = new List<string>();
     if (ViewData["permissions"] != null)
     {
@@ -13,110 +15,287 @@
     ViewData["permissions"] = permissions;
 }
 
-<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MachinePortal</title>
-
-    <environment include="Development">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
-    </environment>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <title>MachinePortal</title>
+    <!-- Style.css -->
+    <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
+    @*<link rel="stylesheet" type="text/css" href="~/assets/css/jquery.mCustomScrollbar.css">*@
+    @*<meta http-equiv="X-UA-Compatible" content="IE=edge" />*@
+    <!-- Favicon icon -->
+    <link rel="icon" href="~/assets/images/favicon.ico" type="image/x-icon">
+    <!-- Google font-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
+    <!-- Required Fremwork -->
+    <link rel="stylesheet" href="~/assets/css/bootstrap/css/bootstrap.min.css">
+    <!-- themify-icons line icon -->
+    <link rel="stylesheet" href="~/assets/icon/themify-icons/themify-icons.css">
+    <!-- Notification.css -->
+    <link rel="stylesheet" href="~/assets/pages/notification/notification.css">
+    <link rel="stylesheet" href="~/assets/pages/notification/bs4Toast.css">
+    <!-- ico font -->
+    <link rel="stylesheet" href="~/assets/icon/icofont/css/icofont.css">
+    <!-- Glyphicons font -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/js/bootstrap.min.js">
 </head>
+
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">MachinePortal</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    @if (permissions.Contains("PageDevices") && permissions != null)
-                    {
-                        <li><a asp-area="" asp-controller="Devices" asp-action="Index">Devices</a></li>
-                    }
-                    @if (permissions.Contains("PageResponsibles") && permissions != null)
-                    {
-                        <li><a asp-area="" asp-controller="Responsibles" asp-action="Index">Responsibles</a></li>
-                    }
-                    @if (permissions.Contains("PageHierarchies") && permissions != null)
-                    {
-                        <li><a asp-area="" asp-controller="Areas" asp-action="Index">Hierarchies</a></li>
-                    }
-                    @if (permissions.Contains("PageMachines") && permissions != null)
-                    {
-                        <li><a asp-area="" asp-controller="Machines" asp-action="Index">Machines</a></li>
-                    }
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
-                        <ul class="nav navbar-nav navbar-right">
-                            <li>
-                                <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-                            </li>
-                            <li>
-                                <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
-                            </li>
-                        </ul>
-                    </form>
-                }
-                else
-                {
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
-                        <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
-                    </ul>
-                }
+    <!-- Pre-loader start -->
+    <div class="theme-loader">
+        <div class="ball-scale">
+            <div class='contain'>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
             </div>
         </div>
-    </nav>
-
-    <partial name="_CookieConsentPartial" />
-
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2020 - MachinePortal</p>
-        </footer>
     </div>
-
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-        </script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd">
-        </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
-
-    @RenderSection("Scripts", required: false)
+    <!-- Pre-loader end -->
+    <div id="pcoded" class="pcoded">
+        <div class="pcoded-overlay-box"></div>
+        <div class="pcoded-container navbar-wrapper">
+            <nav class="navbar header-navbar pcoded-header" style="background-color:rgb(240,230,20)">
+                <div class="navbar-wrapper">
+                    <div class="navbar-container container-fluid">
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="d-inline navbar-logo" style="background-color:rgb(240,230,20)">
+                                    <a class="mobile-menu" id="mobile-collapse" href="#!">
+                                        <i class="ti-menu"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-8" style="text-align:center">
+                                <div class="d-inline-block" style="margin-top:18px">
+                                    <h1 style="font-family:'Beast Machines'; font-size:2rem">Machine Portal</h1>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="d-inline nav-right">
+                                    <div style="position:relative; padding:1.25rem;">
+                                        <img src="~/assets/images/vitesco.svg" style="width:100px; overflow:hidden" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="pcoded-main-container">
+                <div class="pcoded-wrapper">
+                    <nav class="pcoded-navbar">
+                        <div class="sidebar_toggle"><a href="#"><i class="icon-close icons"></i></a></div>
+                        <div class="pcoded-inner-navbar main-menu">
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">User Account</div>
+                                <div class=" ">
+                                    <div class="main-menu-header" style="padding-top:0px">
+                                        <img class="img-40 img-radius" src="@ViewData["UserPhoto"]" alt="User-Profile-Image">
+                                        <div class="user-details">
+                                            <span>@ViewData["UserName"]</span>
+                                            <span id="more-details">@ViewData["UserDepartment"]<i class="ti-angle-down"></i></span>
+                                        </div>
+                                    </div>
+                                    <div class="main-menu-content">
+                                        <ul>
+                                            <li class="more-details">
+                                                @*<a asp-area="Identity" asp-page="/Account/Manage/Index"><i class="ti-settings"></i>Managment</a>*@
+                                                <a asp-area="Identity" asp-page="/Account/Manage/Index"><i class="ti-user"></i>Profile</a>
+                                                <a id="change-password" asp-area="Identity" asp-page="/Account/Manage/ChangePassword"><i class="ti-key"></i>Password</a>
+                                                <a asp-area="Identity" asp-page="/Account/Manage/ManageUsers"><i class="ti-settings"></i>Manage Users</a>
+                                                <a asp-area="Identity" asp-page="/Account/Manage/Permissions"><i class="ti-briefcase"></i>Permissions</a>
+                                                <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm">
+                                                    <a type="submit" href=""><i class="ti-layout-sidebar-left"></i>Logout</a>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">User Account</div>
+                                <div class=" ">
+                                    <div class="main-menu-content">
+                                        <ul class="pcoded-item pcoded-left-item">
+                                            <li class="active">
+                                                <a asp-area="Identity" asp-page="/Account/Register">
+                                                    <span class="pcoded-micon"><i class="cr-icon glyphicon gly"></i></span>
+                                                    <span class="pcoded-mtext" data-i18n="nav.dash.main">Register</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class=" ">
+                                    <div class="main-menu-content">
+                                        <ul class="pcoded-item pcoded-left-item">
+                                            <li class="active">
+                                                <a asp-area="Identity" asp-page="/Account/Login">
+                                                    <span class="pcoded-micon"><i class="cr-icon icofont icofont-login"></i></span>
+                                                    <span class="pcoded-mtext" data-i18n="nav.dash.main">Login</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            }
+                            <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">Main Menu</div>
+                            <ul class="pcoded-item pcoded-left-item">
+                                <li class="active">
+                                    <a asp-area="" asp-controller="Home" asp-action="Index">
+                                        <span class="pcoded-micon"><i class="ti-home"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Home</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                                @if (permissions.Contains("PageMachines") && permissions != null)
+                                {
+                                    <li class=" ">
+                                        <a asp-area="" asp-controller="Machines" asp-action="Index">
+                                            <span class="pcoded-micon"><i class="ti-desktop"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.dash.main">Machines</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (permissions.Contains("PageDevices") && permissions != null)
+                                {
+                                    <li class=" ">
+                                        <a asp-area="" asp-controller="Devices" asp-action="Index">
+                                            <span class="pcoded-micon"><i class="ti-harddrives"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.dash.main">Devices</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (permissions.Contains("PageResponsibles") && permissions != null)
+                                {
+                                    <li class=" ">
+                                        <a asp-area="" asp-controller="Responsibles" asp-action="Index">
+                                            <span class="pcoded-micon"><i class="ti-user"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.dash.main">Responsibles</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (permissions.Contains("PageHierarchies") && permissions != null)
+                                {
+                                    <li class=" ">
+                                        <a asp-area="" asp-controller="Areas" asp-action="Index">
+                                            <span class="pcoded-micon"><i class="ti-layout-list-thumb"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.dash.main">Hierarchies</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                            <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">Info</div>
+                            <ul class="pcoded-item pcoded-left-item">
+                                <li class=" ">
+                                    <a asp-area="" asp-controller="Home" asp-action="About">
+                                        <span class="pcoded-micon"><i class="ti-info"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">About</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                                <li class=" ">
+                                    <a asp-area="" asp-controller="Home" asp-action="Contact">
+                                        <span class="pcoded-micon"><i class="ti-mobile"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Contact</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                    <div style="padding-bottom:60px" class="container body-content">
+                        <div style="margin:20px">
+                            <br />
+                            <br />
+                            @RenderBody()
+                            @RenderSection("Scripts", required: false)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="position:fixed; padding:10px 20px 0px 0px; text-align:right; vertical-align:middle; bottom:0px; left:0px; width:100%; background-color:white; box-shadow: 0 0 11px rgba(0, 0, 0, 0.13);">
+        <p>&copy; 2020 - MachinePortal - Vitesco Technologies - Salto Plant</p>
+    </div>
+    <!-- Warning Section Ends -->
+    <partial name="_CookieConsentPartial" />
 </body>
 </html>
 
+<!-- Required Jquery -->
+<script type="text/javascript" src="~/assets/js/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="~/assets/js/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="~/assets/js/popper.js/popper.min.js"></script>
+<script type="text/javascript" src="~/assets/js/bootstrap/js/bootstrap.min.js"></script>
+<!-- jquery slimscroll js -->
+<script type="text/javascript" src="~/assets/js/jquery-slimscroll/jquery.slimscroll.js"></script>
+<!-- modernizr js -->
+<script type="text/javascript" src="~/assets/js/modernizr/modernizr.js"></script>
+<!-- am chart -->
+<script src="~/assets/pages/widget/amchart/amcharts.min.js"></script>
+<script src="~/assets/pages/widget/amchart/serial.min.js"></script>
+<!-- notification js -->
+<script type="text/javascript" src="/assets/js/bootstrap-growl.min.js"></script>
+<script type="text/javascript" src="/assets/pages/notification/notification.js"></script>
+<script type="text/javascript" src="~/assets/pages/notification/bs4-toast.js"></script>
+<!-- Todo js -->
+<script type="text/javascript " src="~/assets/pages/todo/todo.js "></script>
+<!-- Custom js -->
+<script type="text/javascript" src="~/assets/pages/dashboard/custom-dashboard.js"></script>
+<script type="text/javascript" src="~/assets/js/script.js"></script>
+<script type="text/javascript " src="~/assets/js/SmoothScroll.js"></script>
+<script src="~/assets/js/pcoded.min.js"></script>
+<script src="~/assets/js/demo-12.js"></script>
+<script src="~/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
+
+<script>
+    var $window = $(window);
+    var nav = $('.fixed-button');
+    $window.scroll(function () {
+        if ($window.scrollTop() >= 200) {
+            nav.addClass('active');
+        }
+        else {
+            nav.removeClass('active');
+        }
+    });
+</script>

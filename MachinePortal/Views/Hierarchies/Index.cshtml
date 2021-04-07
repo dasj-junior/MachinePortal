@@ -1,0 +1,30 @@
+﻿@model IEnumerable<MachinePortal.Models.Area>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-4">
+            <a asp-action="Sectors" asp-route-id="@item.ID">
+                <div class="card fb-card">
+                    <div style="text-align:center" class="card-header">
+                        <div class="d-inline-block">
+                            <h2 style="color:white;">@Html.DisplayFor(modelItem => item.Name)</h2>
+                        </div>
+                    </div>
+                    <div class="card-block card-padding">
+                        @if (item.ImagePath != null)
+                        {
+                            <img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" height="200" />
+                        }
+                        else
+                        {
+                            <img class="img-thumbnail" src="~/resources/General/NoImage.jpg" height="200" />
+                        }
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+</div>
