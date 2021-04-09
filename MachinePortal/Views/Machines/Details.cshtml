@@ -359,8 +359,8 @@
 
 <div>
     <input type="hidden" asp-for="ID" />
-    <input style="width:100px; font-weight:700;" type="button" value="Back" class="btn btn-primary" action="action" onclick="history.go(-1);" />
-    <input style="width:100px; font-weight:700;" type="submit" value="Edit" class="btn btn-primary" />
+    <a style="width:100px; font-weight:700;" value="Back" class="btn btn-primary" action="action" onclick="history.go(-1);" />
+    <a style="width:100px; font-weight:700;" value="Edit" class="btn btn-primary" asp-action="Delete" asp-route-id="@Model.ID"/>
 </div>
 
 <div class="modal fade" id="modalComments" role="dialog">

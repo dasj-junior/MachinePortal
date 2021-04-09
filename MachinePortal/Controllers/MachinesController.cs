@@ -266,6 +266,47 @@ namespace MachinePortal.Controllers
             return ("Machine created successfuly");
         }
 
+        public async Task<IActionResult> Edit(int? ID)
+        {
+            Permissions();
+            var machine = await _machineService.FindByIDAsync(ID.Value);
+
+            var allResponsibles = await _responsibleService.FindAllAsync();
+            var responsibles = ((from obj in machine.MachineResponsibles select obj).ToList()).Select(r => r.Responsible).ToList();
+            var allDevices = await _deviceService.FindAllAsync();
+            var devices = ((from obj in machine.MachineDevices select obj).ToList()).Select(d => d.Device).ToList();
+
+            allResponsibles = allResponsibles.Where(x => !responsibles.Contains(x)).ToList();
+            allDevices = allDevices.Where(x => !devices.Contains(x)).ToList();
+
+            SelectList selectResponsibles = new SelectList(allResponsibles, "ID", "FullName");
+            SelectList selectedResponsibles = new SelectList(responsibles, "ID", "FullName");
+            ViewBag.ListSelectResponsibles = selectResponsibles;
+            ViewBag.ListSelectedResponsibles = selectedResponsibles;
+
+            SelectList selectDevices = new SelectList(allDevices, "ID", "Name");
+            SelectList selectedDevices = new SelectList(devices, "ID", "Name");
+            ViewBag.ListSelectDevices = selectDevices;
+            ViewBag.ListSelectedDevices = selectedDevices;
+
+            List<Area> areas = await _areaService.FindAllAsync();
+            ViewBag.ListAreas = areas;
+
+            List<Sector> sectors = await _sectorService.FindAllAsync();
+            ViewBag.ListSectors = sectors;
+
+            List<Line> lines = await _lineService.FindAllAsync();
+            ViewBag.ListLines = lines;
+
+            ViewData["SelectedArea"] = machine.Area.Name;
+            ViewData["SelectedSector"] = machine.Sector.Name;
+            ViewData["SelectedLine"] = machine.Line.Name;
+
+            var viewModel = new MachineFormViewModel { Machine = machine, Responsibles = responsibles, Devices = devices };
+
+            return View(viewModel);
+        }
+
         public async Task<IActionResult> Delete(int? ID)
         {
             Permissions();

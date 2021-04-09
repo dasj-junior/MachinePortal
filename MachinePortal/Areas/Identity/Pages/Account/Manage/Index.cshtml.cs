@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using MachinePortal.Areas.Identity.Data;
+using MachinePortal.Controllers;
+using MachinePortal.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace MachinePortal.Areas.Identity.Pages.Account.Manage
 {
@@ -74,6 +78,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync(IFormFile photo)
         {
+            //await Permissions();
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {

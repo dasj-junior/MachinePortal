@@ -15,7 +15,7 @@ using MachinePortal.Areas.Identity.Data;
 
 namespace MachinePortal.Controllers
 {
-    public abstract class BaseController<T> : Controller where T: BaseController<T>
+        public abstract class BaseController<T> : Controller where T: BaseController<T>
     {
         public PermissionsService _PermissionsService;
         public IdentityContext _identityContext;
@@ -26,25 +26,8 @@ namespace MachinePortal.Controllers
             if (userID != null)
             {
                 MachinePortalUser user = _identityContext.Users.FirstOrDefault(x => x.Id == userID);
-                ViewData["UserID"] = user.Id;
-                ViewData["UserName"] = user.FirstName + " " + user.LastName;
                 ViewData["Permissions"] = _PermissionsService.GetUserPermissions(userID);
-                ViewData["UserDepartment"] = user.Department;
-                if (user.PhotoPath != null)
-                {
-                    ViewData["UserPhoto"] = user.PhotoPath;
-                }
-                else
-                {
-                    ViewData["UserPhoto"] = "resources/General/DefaultUser.png";
-                }
-
             }
-        }
-
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            // Do whatever here...
         }
     }
 }

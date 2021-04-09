@@ -1,32 +1,739 @@
-﻿@model MachinePortal.Models.Machine
+﻿@model MachinePortal.Models.ViewModels.MachineFormViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    var LoggedUserName = ViewData["UserName"];
+    var LoggedUserID = ViewData["UserID"];
 }
 
-<h2>Edit</h2>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-<h4>Machines</h4>
-<hr />
+@* Input with embebedd icon *@
+<style>
+    .input-icons i {
+        position: absolute;
+        color: lightgray;
+    }
+
+    .input-icons {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .icon {
+        padding: 10px;
+        min-width: 40px;
+    }
+</style>
+
+@* Selection Filters *@
+<script>
+    function filter(search, select) {
+        var keyword = document.getElementById(search).value;
+        var select = document.getElementById(select);
+        for (var i = 0; i < select.length; i++) {
+            var txt = select.options[i].text;
+            if (!txt.match(keyword)) {
+                $(select.options[i]).attr('disabled', 'disabled').hide();
+            } else {
+                $(select.options[i]).removeAttr('disabled').show();
+            }
+
+        }
+    }
+
+    $(document).ready(function () {
+        $("#FilterSelectResponsible").on("keyup", function () {
+            filter("FilterSelectResponsible", "ResponsiblesSelect");
+        });
+        $("#FilterSelectedResponsible").on("keyup", function () {
+            filter("FilterSelectedResponsible", "ResponsiblesSelected");
+        });
+        $("#FilterSelectDevice").on("keyup", function () {
+            filter("FilterSelectDevice", "DeviceSelect");
+        });
+        $("#FilterSelectedDevice").on("keyup", function () {
+            filter("FilterSelectedDevice", "DeviceSelected");
+        });
+    });
+</script>
+
+@* Form Data Variable *@
+<script type="text/javascript">
+    var formdata = new FormData();
+    var Mfiles = [];
+</script>
+
+@* Send files through AJAX *@
+<script type="text/javascript">
+
+    function DeleteFile(Fileid, FileName) {
+        formdata.delete(FileName)
+        $("#" + Fileid).remove();
+        chkatchtbl();
+    }
+
+    function chkatchtbl() {
+        if ($('#tDocuments tr').length > 1) {
+            $("#tDocuments").css("visibility", "visible");
+        } else {
+            $("#tDocuments").css("visibility", "hidden");
+        }
+        if ($('#tImages tr').length > 1) {
+            $("#tImages").css("visibility", "visible");
+        } else {
+            $("#tImages").css("visibility", "hidden");
+        }
+        if ($('#tVideos tr').length > 1) {
+            $("#tVideos").css("visibility", "visible");
+        } else {
+            $("#tVideos").css("visibility", "hidden");
+        }
+    }
+
+    $(document).ready(function () {
+
+        document.getElementById('openInputDocument').addEventListener('click', () => {
+            document.getElementById('iDocuments').click()
+        });
+
+        document.getElementById('openInputImage').addEventListener('click', () => {
+            document.getElementById('iImages').click()
+        });
+
+        document.getElementById('openInputVideo').addEventListener('click', () => {
+            document.getElementById('iVideos').click()
+        });
+
+        $("#iDocuments").on("change", function () {
+            var fileInput = document.getElementById('iDocuments');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                document.getElementById("documentFilePath").value = sfilename;
+            }
+        });
+
+        $("#iImages").on("change", function () {
+            var fileInput = document.getElementById('iImages');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                document.getElementById("imageFilePath").value = sfilename;
+            }
+        });
+
+        $("#iVideos").on("change", function () {
+            var fileInput = document.getElementById('iVideos');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                document.getElementById("videoFilePath").value = sfilename;
+            }
+        });
+
+        $("#insertDocument").on("click", function () {
+            var fileInput = document.getElementById('iDocuments');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                var sName = document.getElementById('documentName').value;
+                var sCategory = document.getElementById('documentCategory').value;
+                let srandomid = Math.random().toString(36).substring(7);
+                var doc = { Name: sName, Category: sCategory, ID: srandomid, Type: "Document", FileName: sfilename };
+                Mfiles.push(doc);
+                formdata.append("document", fileInput.files[i]);
+                var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                    "\")'><span class='glyphicon glyphicon-remove' style='color: red'></span></a></td></tr>"; // Binding the file name
+                $("#tDocuments").append(markup);
+            }
+            chkatchtbl();
+            $('#iDocuments').val('');
+        });
+
+        $("#insertImage").on("click", function () {
+            var fileInput = document.getElementById('iImages');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                var sName = document.getElementById('imageName').value;
+                var sCategory = document.getElementById('imageCategory').value;
+                let srandomid = Math.random().toString(36).substring(7);
+                var img = { Name: sName, Category: sCategory, ID: srandomid, Type: "Image", FileName: sfilename };
+                Mfiles.push(img);
+                formdata.append("image", fileInput.files[i]);
+                var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                    "\")'><span class='glyphicon glyphicon-remove' style='color: red'></span></a></td></tr>"; // Binding the file name
+                $("#tImages").append(markup);
+            }
+            chkatchtbl();
+            $('#iImages').val('');
+        });
+
+        $("#insertVideo").on("click", function () {
+            var fileInput = document.getElementById('iVideos');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                var sName = document.getElementById('videoName').value;
+                var sCategory = document.getElementById('videoCategory').value;
+                let srandomid = Math.random().toString(36).substring(7);
+                var vid = { Name: sName, Category: sCategory, ID: srandomid, Type: "Video", FileName: sfilename };
+                Mfiles.push(vid);
+                formdata.append("video", fileInput.files[i]);
+                var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                    "\")'><span class='glyphicon glyphicon-remove' style='color: red'></span></a></td></tr>"; // Binding the file name
+                $("#tVideos").append(markup);
+            }
+            chkatchtbl();
+            $('#iVideos').val('');
+        });
+
+        $("form").submit(function (event) {
+            event.preventDefault();
+            var data = new FormData($('#form')[0]);
+            for (var pair of formdata.entries()) {
+                data.append(pair[0], pair[1]);
+            }
+            data.append('files', JSON.stringify(Mfiles));
+            $.ajax({
+                url: '@Url.Content("~/")' + "Machines/Create",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                data: data,
+                success: function () {
+                    window.location.href = "/Machines/Index";
+                }
+            });
+        });
+    });
+</script>
+
+@* Select all elements of "Select" on rigth side *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#submit').click(function () {
+            var selRes = document.getElementById("ResponsiblesSelected");
+            for (i = 0; i < selRes.length; i++) {
+                selRes.options[i].selected = 1;
+            }
+            var selDev = document.getElementById("DevicesSelected");
+            for (i = 0; i < selRes.length; i++) {
+                selDev.options[i].selected = 1;
+            }
+        });
+    });
+</script>
+
+@* Move selections *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#rightResponsibles").click(function () {
+            $("#ResponsiblesSelect option:selected").remove().appendTo($("#ResponsiblesSelected"));
+        })
+        $("#leftResponsibles").click(function () {
+            $("#ResponsiblesSelected option:selected").remove().appendTo($("#ResponsiblesSelect"));
+        })
+        $("#rightDevices").click(function () {
+            $("#DevicesSelect option:selected").remove().appendTo($("#DevicesSelected"));
+        })
+        $("#leftDevices").click(function () {
+            $("#DevicesSelected option:selected").remove().appendTo($("#DevicesSelect"));
+        })
+    });
+</script>
+
+@* Machine Photo Button and Preview *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Button triggers the photo file input
+        document.getElementById('openPhoto').addEventListener('click', () => {
+            document.getElementById('photo').click()
+        });
+
+        $("#photo").change(function () {
+            //Get file name and put it into input
+            var fileInput = document.getElementById('photo');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                document.getElementById("photoFilePath").value = sfilename;
+            }
+            //Load file and show the preview
+            if (typeof (FileReader) != "undefined") {
+                var dvPreview = $("#divImageMediaPreview");
+                dvPreview.html("");
+                $($(this)[0].files).each(function () {
+                    var file = $(this);
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var img = $("<img />");
+                        img.attr("style", "height:300px; padding: 10px");
+                        img.attr("src", e.target.result);
+                        dvPreview.append(img);
+                    }
+                    reader.readAsDataURL(file[0]);
+                });
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        });
+    });
+</script>
+
+@* Hierarchies Control *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#AreaID option:contains(@ViewData["SelectedArea"])').prop({ selected: true });
+        $('#SectorID option:contains(@ViewData["SelectedSector"])').prop({ selected: true });
+        $('#LineID option:contains(@ViewData["SelectedLine"])').prop({ selected: true });
+
+        $('#AreaID').on('change', function() {
+            var url = '@Url.Content("~/")' + "Machines/GetSector";
+            $.getJSON(url, { AreaID: $("#AreaID :selected").val() }, function (data) {
+                var items = '';
+                $('#SectorID').html(items);
+                $.each(data, function (i, sector) {
+                    items += "<option value='" + sector.value + "'>" + sector.text + "</option>";
+                });
+                $('#SectorID').append("<option value='-1'>Select</option>");
+                $('#SectorID').append(items);
+                $('#LineID').html("");
+                $('#LineID').append("<option value='-1'>Select</option>");
+            });
+        });
+
+        $('#SectorID').on('change', function() {
+            var url = '@Url.Content("~/")' + "Machines/GetLine";
+            $.getJSON(url, { SectorID: $("#SectorID :selected").val() }, function (data) {
+                var items = '';
+                $('#LineID').html(items);
+                $.each(data, function (i, line) {
+                    items += "<option value='" + line.value + "'>" + line.text + "</option>";
+                });
+                $('#LineID').append("<option value='-1'>Select</option>");
+                $('#LineID').append(items);
+            });
+        });
+    });
+</script>
+
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data" asp-controller="Machines">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+    <div class="col-md-10">
+        <form asp-action="Create" id="form" class="form" method="post" enctype="multipart/form-data" asp-controller="Machines">
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Edit Machine: @Model.Machine.Name</h2>
+                    </div>
+                    <hr style="border:1px solid white" />
+                    <div class="d-inline-block">
+                        <h2 style="color:white">General Data</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <label class="control-label">Photo</label>
+                        <div id="divImageMediaPreview"></div>
+                        <div class="input-group">
+                            <input id="photoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+                            <span class="input-group-append input-group-button">
+                                <button id="openPhoto" class="btn btn-default" type="button">
+                                    Open Photo
+                                </button>
+                            </span>
+                        </div>
+                        <input type="file" id="photo" name="photo" accept="image/*" style="display:none" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.Name" class="control-label"></label>
+                        <input asp-for="Machine.Name" class="form-control" />
+                        <span asp-validation-for="Machine.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.Description" class="control-label"></label>
+                        <textarea asp-for="Machine.Description" class="form-control"></textarea>
+                        <span asp-validation-for="Machine.Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.AssetNumber" class="control-label"></label>
+                        <input asp-for="Machine.AssetNumber" class="form-control" />
+                        <span asp-validation-for="Machine.AssetNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.MES_Name" class="control-label"></label>
+                        <input asp-for="Machine.MES_Name" class="form-control" />
+                        <span asp-validation-for="Machine.MES_Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.SAP_Name" class="control-label"></label>
+                        <input asp-for="Machine.SAP_Name" class="form-control" />
+                        <span asp-validation-for="Machine.SAP_Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.WorkCenter" class="control-label"></label>
+                        <input asp-for="Machine.WorkCenter" class="form-control" />
+                        <span asp-validation-for="Machine.WorkCenter" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.CostCenter" class="control-label"></label>
+                        <input asp-for="Machine.CostCenter" class="form-control" />
+                        <span asp-validation-for="Machine.CostCenter" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.ServerPath" class="control-label"></label>
+                        <input asp-for="Machine.ServerPath" class="form-control" />
+                        <span asp-validation-for="Machine.ServerPath" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Documents</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <input id="iDocuments" type="file" style="display:none" />
+                    <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalDocuments">Add Document</button>
+                    <br /><br />
+                          <table class="table table-bordered table-vitesco" id="tDocuments">
+                              <tr class="thead-vitesco">
+                                  <th>
+                                      ID
+                                  </th>
+                                  <th>
+                                      Name
+                                  </th>
+                                  <th>
+                                      Category
+                                  </th>
+                                  <th>
+                                      File Name
+                                  </th>
+                                  <th>
+                                      Delete
+                                  </th>
+                              </tr>
+                              @foreach (var item in Model.Machine.MachineDocuments)
+                              {
+                                  <tr>
+                                      <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                                      <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                      <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                                      <td>@Html.DisplayFor(modelItem => item.FileName)</td>
+                                      <td>
+                                          <a style="color:white" class="btn btn-danger">Delete</a>
+                                      </td>
+                                  </tr>
+                              }
+                          </table>
+                </div>
+            </div>
+
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Images</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <input id="iImages" type="file" style="display:none" />
+                    <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalImages">Add Images</button>
+                    <br /><br />
+                          <table class="table table-bordered table-vitesco" id="tImages">
+                              <tr class="thead-vitesco">
+                                  <th>
+                                      ID
+                                  </th>
+                                  <th>
+                                      Name
+                                  </th>
+                                  <th>
+                                      Category
+                                  </th>
+                                  <th>
+                                      File Name
+                                  </th>
+                                  <th>
+                                      Delete
+                                  </th>
+                              </tr>
+                              @foreach (var item in Model.Machine.MachineImages)
+                              {
+                                  <tr>
+                                      <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                                      <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                      <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                                      <td>@Html.DisplayFor(modelItem => item.FileName)</td>
+                                      <td>
+                                          <a style="color:white" class="btn btn-danger">Delete</a>
+                                      </td>
+                                  </tr>
+                              }
+                          </table>
+                </div>
+            </div>
+
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Videos</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <input id="iVideos" type="file" style="display:none" />
+                    <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalVideos">Add Videos</button>
+                    <br /><br />
+                          <table class="table table-bordered table-vitesco" id="tVideos">
+                              <tr class="thead-vitesco">
+                                  <th>
+                                      ID
+                                  </th>
+                                  <th>
+                                      Name
+                                  </th>
+                                  <th>
+                                      Category
+                                  </th>
+                                  <th>
+                                      File Name
+                                  </th>
+                                  <th>
+                                      Delete
+                                  </th>
+                              </tr>
+                              @foreach (var item in Model.Machine.MachineVideos)
+                              {
+                                  <tr>
+                                      <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                                      <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                      <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                                      <td>@Html.DisplayFor(modelItem => item.FileName)</td>
+                                      <td>
+                                          <a style="color:white" class="btn btn-danger">Delete</a>
+                                      </td>
+                                  </tr>
+                              }
+                          </table>
+                </div>
+            </div>
+
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Devices</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        @*<label asp-for="Devices" class="control-label"></label>*@
+                        <div class="row">
+                            <div class="col-md-5 col-sm-5">
+                                <div class="input-icons">
+                                    <i style="font-weight:700" class="bi-search icon"></i>
+                                    <input id="FilterSelectDevice" style="text-align:center" type="text" class="form-control" placeholder="Filter">
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                            </div>
+                            <div class="col-md-5 col-sm-5">
+                                <div class="input-icons">
+                                    <i style="font-weight:700" class="bi-search icon"></i>
+                                    <input id="FilterSelectedDevice" style="text-align:center" type="text" class="form-control" placeholder="Filter">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 col-sm-5">
+                                <select id="DevicesSelect" asp-items="@ViewBag.ListSelectDevices" class="form-control" multiple></select>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" id="rightDevices" class="btn btn-success btn-block bi-arrow-right"></button>
+                                <button type="button" id="leftDevices" class="btn btn-success btn-block btn-danger bi-arrow-left"></button>
+                            </div>
+                            <div class="col-md-5 col-sm-5">
+                                <select id="DevicesSelected" asp-items="@ViewBag.ListSelectedDevices" asp-for="SelectedDevices" class="form-control" multiple></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Responsibles</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        @*<label asp-for="Responsibles" class="control-label"></label>*@
+                        <div class="row">
+                            <div class="col-md-5 col-sm-5">
+                                <div class="input-icons">
+                                    <i style="font-weight:700" class="bi-search icon"></i>
+                                    <input id="FilterSelectResponsible" style="text-align:center" type="text" class="form-control" placeholder="Filter">
+
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                            </div>
+                            <div class="col-md-5 col-sm-5">
+                                <div class="input-icons">
+                                    <i style="font-weight:700" class="bi-search icon"></i>
+                                    <input id="FilterSelectedResponsible" style="text-align:center" type="text" class="form-control" placeholder="Filter">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 col-sm-5">
+                                <select id="ResponsiblesSelect" asp-items="@ViewBag.ListSelectResponsibles" class="form-control" multiple></select>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" id="rightResponsibles" class="btn btn-success btn-block bi-arrow-right"></button>
+                                <button type="button" id="leftResponsibles" class="btn btn-success btn-block btn-danger bi-arrow-left"></button>
+                            </div>
+                            <div class="col-md-5 col-sm-5">
+                                <select id="ResponsiblesSelected" asp-items="@ViewBag.ListSelectedResponsibles" asp-for="SelectedResponsibles" class="form-control" multiple></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card fb-card">
+                <div style="background-color:#4B4B46;" class="card-header">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Hierarchies</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <label class="control-label">Area</label>
+                        <select asp-for="Machine.AreaID" id="AreaID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListAreas,"ID","Name"))"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Sector</label>
+                        <select asp-for="Machine.SectorID" id="SectorID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListSectors,"ID","Name"))"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Line</label>
+                        <select asp-for="Machine.LineID" id="LineID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListLines,"ID","Name"))"></select>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
-                <label asp-for="ImagePath" class="control-label"></label>
-                <input type="hidden" asp-for="ImagePath" class="form-control" />
-                <input type="file" name="image" />
-            </div>
-            <div class="form-group">
-                <a class="btn btn-default" asp-action="Index">Back to List</a>
-                <input type="submit" value="Save" class="btn btn-success" />
+                <a style="width:120px;" class="btn btn-primary" asp-action="Index">Back to List</a>
+                <input style="width:120px;float:right;" type="submit" id="submit" value="Save" class="btn btn-success" />
             </div>
         </form>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="modalDocuments" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add New Document</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Name:</label>
+                    <input id="documentName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Category:</label>
+                    <input id="documentCategory" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">File:</label>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button id="openInputDocument" class="btn btn-default" type="button">
+                                Open File
+                            </button>
+                        </span>
+                        <input id="documentFilePath" type="text" class="form-control" placeholder="No file chosen" readonly></input>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="insertDocument" class="btn btn-success">Insert</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalImages" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add New Image</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Name:</label>
+                    <input id="imageName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Category:</label>
+                    <input id="imageCategory" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">File:</label>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button id="openInputImage" class="btn btn-default" type="button">
+                                Open File
+                            </button>
+                        </span>
+                        <input id="imageFilePath" type="text" class="form-control" placeholder="No file chosen" readonly></input>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="insertImage" class="btn btn-success">Insert</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalVideos" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add New Video</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Name:</label>
+                    <input id="videoName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Category:</label>
+                    <input id="videoCategory" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">File:</label>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button id="openInputVideo" class="btn btn-default" type="button">
+                                Open File
+                            </button>
+                        </span>
+                        <input id="videoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly></input>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="insertVideo" class="btn btn-success">Insert</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
     </div>
 </div>
 

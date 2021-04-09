@@ -64,6 +64,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\assets\icon\bootstrap-icons\fonts\bootstrap-icons.woff2" />
     <None Include="wwwroot\assets\icon\icofont\fonts\icofont.svg" />
     <None Include="wwwroot\assets\icon\themify-icons\fonts\themify.svg" />
     <None Include="wwwroot\assets\images\vitesco.svg" />
@@ -201,21 +202,6 @@
     </Content>
     <Content Update="wwwroot\assets\css\jquery.mCustomScrollbar.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\assets\fonts\glyphicons-halflings-regular.eot">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\assets\fonts\glyphicons-halflings-regular.svg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\assets\fonts\glyphicons-halflings-regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\assets\fonts\glyphicons-halflings-regular.woff">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Update="wwwroot\assets\fonts\glyphicons-halflings-regular.woff2">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Update="wwwroot\css\site.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
