@@ -30,12 +30,15 @@
     }
 </script>
 
-
-<div class="card fb-card bg-c-blue">
-    <div style="background-color:#008269;" class="card-header">
-        <i style="background-color:#008269;vertical-align:middle" class="ti-layout-list-thumb"></i>
+<div class="card fb-card c-vitesco-green-05">
+    <div class="card-header c-vitesco-green-05">
+        <i style="vertical-align:middle" class="ti-layout-list-thumb c-vitesco-green-05"></i>
         <div class="d-inline-block">
-            <h2 style="color:white;">@ViewData["Title"] - Areas</h2>
+            <h2 style="color:white;">@ViewData["Title"]</h2>
+        </div>
+        <hr style="border:1px solid white" />
+        <div class="d-inline-block">
+            <h2 style="color:white">Areas</h2>
         </div>
     </div>
     <div class="card-block card-padding">
@@ -74,13 +77,13 @@
                 </tbody>
             </table>
         </div>
-
-        <div class="modal fade" id="modalCreate" role="dialog">
-            @Html.Partial("Create", new Area());
-        </div>
-        <div class="modal fade" id="modalEdit" role="dialog">
-        </div>
-        <div class="modal fade" id="modalDelete" role="dialog">
-        </div>
     </div>
+</div>
+
+<div class="modal" id="modalCreate" role="dialog">
+    @Html.Partial("Create", new Area());
+</div>
+<div class="modal" id="modalEdit" role="dialog">
+</div>
+<div class="modal" id="modalDelete" role="dialog">
 </div>

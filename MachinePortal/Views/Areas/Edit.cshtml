@@ -1,34 +1,95 @@
 ﻿@model MachinePortal.Models.Area
 
+@* Machine Photo Button and Preview *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Modal Close
+        $("#closeModal01").on("click", function () {
+            document.getElementById("divImageMediaPreview").innerHTML = "";
+            document.getElementById("NameInput").value = "";
+            document.getElementById("photo").value = "";
+            document.getElementById("photoFilePath").value = "";
+        });
+
+        $("#closeModal02").on("click", function () {
+            document.getElementById("divImageMediaPreview").innerHTML = "";
+            document.getElementById("NameInput").value = "";
+            document.getElementById("photo").value = "";
+            document.getElementById("photoFilePath").value = "";
+        });
+
+        //Button triggers the photo file input
+        document.getElementById('openPhoto').addEventListener('click', () => {
+            document.getElementById('photo').click()
+        });
+
+        $("#photo").change(function () {
+            //Get file name and put it into input
+            var fileInput = document.getElementById('photo');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                document.getElementById("photoFilePath").value = sfilename;
+            }
+            //Load file and show the preview
+            if (typeof (FileReader) != "undefined") {
+                var dvPreview = $("#divImageMediaPreview");
+                dvPreview.html("");
+                $($(this)[0].files).each(function () {
+                    var file = $(this);
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var img = $("<img />");
+                        img.attr("style", "height:200px; padding: 10px;");
+                        img.attr("src", e.target.result);
+                        img.attr("class", "img-thumbnail");
+                        dvPreview.append(img);
+                    }
+                    reader.readAsDataURL(file[0]);
+                });
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        });
+    });
+</script>
+
 <div class="modal-dialog">
     <div class="modal-content">
         <form asp-action="Edit" enctype="multipart/form-data" asp-controller="Areas">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-                <h3 class="modal-title">Edit</h3>
+            <div class="modal-header c-vitesco-green-05">
+                <i style="color:white;font-size:30px;" class="bi-plus  c-vitesco-green-04"></i>
+                <h3 style="color:white;text-align:center;" class="modal-title">Edit: @Model.Name</h3>
+                <button id="closeModal01" style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Sectors" class="control-label"></label>
-                    <select asp-for="Sectors" asp-items="@(new SelectList(Model.Sectors,"ID","Name"))" class="form-control" multiple></select>
-                </div>
-                <div class="form-group">
-                    <label asp-for="ImagePath" class="control-label"></label>
-                    <input type="file" name="image" accept="image/*" />
+                <div style="padding:10px;" class="form-horizontal">
+                    <div class="form-group">
+                        <div style="margin-bottom:10px;" id="divImageMediaPreview"></div>
+                        <label class="control-label">Photo</label>
+                        <div class="input-group">
+                            <input id="photoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+                            <span style="float:right;" class="input-group-append input-group-button">
+                                <button id="openPhoto" class="btn btn-default" type="button">
+                                    Open Photo
+                                </button>
+                            </span>
+                        </div>
+                        <input type="file" id="photo" name="photo" accept="image/*" style="display:none" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Sectors" class="control-label"></label>
+                        <select asp-for="Sectors" asp-items="@(new SelectList(Model.Sectors,"ID","Name"))" class="form-control" multiple></select>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Save" class="btn btn-primary" />
-                        <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" />
-                    </div>
-                </div>
+                <input id="closeModal02" style="width:120px;" type="button" value="Cancel" class="btn btn-primary mr-auto" data-dismiss="modal" />
+                <input style="width:120px;float:right;" type="submit" value="Create" class="btn btn-success" />
             </div>
         </form>
     </div>

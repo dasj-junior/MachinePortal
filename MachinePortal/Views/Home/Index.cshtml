@@ -76,77 +76,79 @@
 </script>
 
 <body>
-    <div class="row" style="width:120%">
-        <div class="col-md-4">
-            <div class="card widget-card-1">
-                <div class="card-block-big">
-                    <span class="bg-c-blue card1-icon" style="font-size: 28px;">123</span>
-                    <br />
-                    <br />
-                    <h4 style="text-align: left;">
-                        Search By Machine ID
-                    </h4>
-                    <div>
-                        <span class="f-left" style=" width: 100%;">
-                            <div class="pcoded-search-box" style="text-align:left; padding-top:20px;">
-                                <input id="InputID" placeholder="Type Machine ID" type="text" style="width: 200px; text-align:center">
-                                <a id="SearchByID" style="color: black; font-size: 15px; font-weight:700;" class="btn btn-success">Search</a>
-                            </div>
-                        </span>
+    <div>
+        <div class="row">
+            <div class="col-4">
+                <div class="card widget-card-1">
+                    <div class="card-block-big">
+                        <span class="bg-c-blue card1-icon" style="font-size: 28px;">123</span>
+                        <br />
+                        <br />
+                        <h4 style="text-align: left;">
+                            Search By Machine ID
+                        </h4>
+                        <div>
+                            <span class="f-left" style=" width: 100%;">
+                                <div class="pcoded-search-box" style="text-align:left; padding-top:20px;">
+                                    <input id="InputID" placeholder="Type Machine ID" type="text" style="width: 200px; text-align:center">
+                                    <a id="SearchByID" style="color: black; font-size: 15px; font-weight:700;" class="btn btn-success">Search</a>
+                                </div>
+                            </span>
+                        </div>
+                        <br />
+                        <br />
+                        <br />
                     </div>
-                    <br />
-                    <br />
-                    <br />
+                </div>
+
+            </div>
+
+
+            <div class="col-4">
+                <div class="card widget-card-1">
+                    <div class="card-block-big">
+                        <i class="icofont icofont-qr-code bg-c-green card1-icon"></i>
+                        <br />
+                        <br />
+                        <h4 style="text-align: left;">
+                            Search By QR Code
+                        </h4>
+                        <br />
+                        <div>
+                            <span class="f-left" style="text-align:center; width: 100%;">
+                                <button id="SearchByQR" style="width:100%; height:40px; color: black; font-size: 15px; font-weight:700;" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalQR">Search</button>
+                            </span>
+                        </div>
+                        <br />
+                        <br />
+                    </div>
                 </div>
             </div>
 
-        </div>
-
-
-        <div class="col-md-4">
-            <div class="card widget-card-1">
-                <div class="card-block-big">
-                    <i class="icofont icofont-qr-code bg-c-green card1-icon"></i>
-                    <br />
-                    <br />
-                    <h4 style="text-align: left;">
-                        Search By QR Code
-                    </h4>
-                    <br />
-                    <div>
-                        <span class="f-left" style="text-align:center; width: 100%;">
-                            <button id="SearchByQR" style="width:100%; height:40px; color: black; font-size: 15px; font-weight:700;" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalQR">Search</button>
-                        </span>
+            <div class="col-4">
+                <div class="card widget-card-1">
+                    <div class="card-block-big">
+                        <i class="ti-layout-list-thumb bg-c-orenge card1-icon"></i>
+                        <br />
+                        <br />
+                        <h4 style="text-align: left; font-size: 22px">
+                            Search Machine By Hierarchies
+                        </h4>
+                        <br />
+                        <div>
+                            <span class="f-left" style="text-align:center; width: 100%;">
+                                <button id="SearchByHierarchies" style="width:100%; height:40px; color: black; font-size: 15px; font-weight:700;" class="btn btn-success">Search</button>
+                            </span>
+                        </div>
+                        <br />
+                        <br />
                     </div>
-                    <br />
-                    <br />
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card widget-card-1">
-                <div class="card-block-big">
-                    <i class="ti-layout-list-thumb bg-c-orenge card1-icon"></i>
-                    <br />
-                    <br />
-                    <h4 style="text-align: left; font-size: 22px">
-                        Search Machine By Hierarchies
-                    </h4>
-                    <br />
-                    <div>
-                        <span class="f-left" style="text-align:center; width: 100%;">
-                            <button id="SearchByHierarchies" style="width:100%; height:40px; color: black; font-size: 15px; font-weight:700;" class="btn btn-success">Search</button>
-                        </span>
-                    </div>
-                    <br />
-                    <br />
                 </div>
             </div>
         </div>
     </div>
-
 </body>
+
 
 <div class="modal fade" id="modalQR" role="dialog">
     <div style="margin-top:10%;border-radius:5px;" class="modal-dialog">
@@ -166,7 +168,7 @@
                 <script>
                     var decoder = $("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery;
                     decoder.buildSelectMenu("select");
-                                                                                                                                                                            //decoder.play();
+                                                                                                                                                                                            //decoder.play();
                 </script>
             </div>
         </div>

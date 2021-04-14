@@ -36,7 +36,7 @@
                 data: { UserID: document.getElementById('commentUserID').value, Comment: document.getElementById('commentComment').value, MachineID: document.getElementById('MachineID').value },
                 success: function (data) {
                     $('#tComments').html(data)
-                    document.getElementById('commentAuthor').value = "";
+                    //document.getElementById('commentAuthor').value = "";
                     document.getElementById('commentComment').value = "";
                     $('#modalComments').modal('hide');
                 },
@@ -46,11 +46,11 @@
     });
 </script>
 
-<div class="card fb-card">
-    <div style="background-color:#4B4B46;" class="card-header">
-
+<div class="card fb-card c-vitesco-gray">
+    <div class="card-header c-vitesco-gray">
+        <i style="vertical-align:middle" class="ti-desktop c-vitesco-gray"></i>
         <div class="d-inline-block">
-            <h2 style="color:white">Machine: @ViewData["Title"]</h2>
+            <h2 style="color:white">@ViewData["Title"]</h2>
         </div>
         <hr style="border:1px solid white" />
         <div class="d-inline-block">
@@ -63,7 +63,7 @@
                 Machine Photo
             </dt>
             <dd>
-                <img src="@Html.DisplayFor(model => model.ImagePath)" width="200" />
+                <img src="@Html.DisplayFor(model => model.ImagePath)" height="300" class="img-thumbnail"/>
             </dd>
             <dt>
                 @Html.DisplayNameFor(model => model.Name)
@@ -180,7 +180,7 @@
             {
                 <a href="@Url.Action("Download", "Machines", new { filePath = image.Path, fileName = image.FileName, extension = image.Extension })">
                     @{string imgFullPath = image.Path + image.FileName;}
-                    <img class="img-thumbnail" style="margin: 10px;" src="@imgFullPath" width="200" />
+                    <img class="img-thumbnail" style="margin: 10px;" src="@imgFullPath" height="300" />
                 </a>
             }
         </dl>
@@ -359,30 +359,30 @@
 
 <div>
     <input type="hidden" asp-for="ID" />
-    <a style="width:100px; font-weight:700;" value="Back" class="btn btn-primary" action="action" onclick="history.go(-1);" />
-    <a style="width:100px; font-weight:700;" value="Edit" class="btn btn-primary" asp-action="Delete" asp-route-id="@Model.ID"/>
+    <button style="width:100px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">Back</button>
+    <button style="width:100px; font-weight:700; float:right;" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ID">Edit</button>
 </div>
 
 <div class="modal fade" id="modalComments" role="dialog">
-    <div class="modal-dialog">
+    <div style="border-radius:8px; overflow:hidden;" class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Add New Comment</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="modal-header c-vitesco-green-04">
+                <h4 style="vertical-align:middle;" class="modal-title">Add New Comment</h4>
+                <button style="margin-top:-10px;" type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <dt>
+                <dt style="color:black;text-align:left;">
                     @Html.DisplayNameFor(model => model.MachineComments.First().User)
                 </dt>
-                <dd>
+                <dd style="color:black;text-align:left;">
                     <input readonly id="commentAuthor" class="form-control" value="@LoggedUserName" />
                     <input id="commentUserID" style="display:none;" value="@LoggedUserID" />
                 </dd>
                 <br />
-                <dt>
+                <dt style="color:black;text-align:left;">
                     @Html.DisplayNameFor(model => model.MachineComments.First().Comment)
                 </dt>
-                <dd>
+                <dd style="color:black;text-align:left;">
                     <textarea id="commentComment" class="form-control"></textarea>
                 </dd>
             </div>

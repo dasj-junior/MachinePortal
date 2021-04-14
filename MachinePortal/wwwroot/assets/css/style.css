@@ -234,7 +234,7 @@ p {
     }
 
     .card .card-header {
-        background-color: transparent;
+        /*background-color: transparent;*/
         border-bottom: none;
         padding: 25px 20px;
     }
@@ -4648,7 +4648,7 @@ table tbody .border-bottom-info td {
 
 /*======= All-Borders-color css ends  ======= */
 /**====== Generic-class css end ======**/
-.pcoded .pcoded-item.pcoded-left-item > li:nth-child(1) > a > .pcoded-micon {
+/*.pcoded .pcoded-item.pcoded-left-item > li:nth-child(1) > a > .pcoded-micon {
     background-color: #D7004B;
 }
 
@@ -4742,7 +4742,7 @@ table tbody .border-bottom-info td {
 
 .pcoded .pcoded-item.pcoded-left-item > li:nth-child(24) > a > .pcoded-micon {
     background-color: #FF5370;
-}
+}*/
 
 .pcoded[nav-type="st1"] .pcoded-item.pcoded-left-item > li > a > .pcoded-micon i, .pcoded[nav-type="st3"] .pcoded-item.pcoded-left-item > li > a > .pcoded-micon i {
     display: none;
@@ -5832,7 +5832,7 @@ table tbody .border-bottom-info td {
     display: block;
     position: relative;
     background: #F6F7FB;
-    min-height: calc(100vh - 80px);
+    min-height: calc(100vh - 100px);
 }
 
 .pcoded .pcoded-content {
@@ -7083,7 +7083,7 @@ table tbody .border-bottom-info td {
 }
 
 .pcoded[theme-layout="vertical"][vertical-placement="left"][vertical-nav-type="offcanvas"][vertical-effect="shrink"] .pcoded-content {
-    margin-left: 0;
+    margin-left: auto;
 }
 
 .pcoded[theme-layout="vertical"][vertical-placement="right"][vertical-nav-type="offcanvas"][vertical-effect="shrink"] .pcoded-header .pcoded-left-header {
@@ -12969,7 +12969,7 @@ table.footable-paging-center > tfoot > tr.footable-paging > td {
 }
 
 .prod-order-card ul {
-    margin-top: #e9e9e9;
+    margin-top: 0px;
 }
 
     .prod-order-card ul li {
@@ -15329,7 +15329,7 @@ table.footable-paging-center > tfoot > tr.footable-paging > td {
         padding: 7px 10px;
         font-size: 25px;
         margin-right: 20px;
-        top: -10px;
+        top: -5px;
         position: relative;
     }
 
@@ -15354,29 +15354,21 @@ table.footable-paging-center > tfoot > tr.footable-paging > td {
     margin-bottom: 0;
 }
 
-.dribble-card .card-header {
+/*.dribble-card .card-header {
     background-color: #4B4B46;
 }
 
-    .dribble-card .card-header i {
-        background-color: #4B4B46;
-    }
-
-.fb-card .card-header {
-    background-color: #4c70b9;
+.dribble-card .card-header i {
+   background-color: #4B4B46;
 }
-
-    .fb-card .card-header i {
-        background-color: #3B5997;
-    }
 
 .twitter-card .card-header {
     background-color: #74d1fc;
 }
 
-    .twitter-card .card-header i {
-        background-color: #42C0FB;
-    }
+.twitter-card .card-header i {
+    background-color: #42C0FB;
+}*/
 
 .card-comment img {
     float: left;
@@ -20860,14 +20852,6 @@ table.footable-paging-center > tfoot > tr.footable-paging > td {
     transition: all 0.3s linear;
 }
 
-.c-vitesco-green-01 {
-    background-color: #64AF5A;
-}
-
-.c-vitesco-green-02 {
-    background-color: #008269;
-}
-
 b-logout {
     background: none !important;
     border: none;
@@ -20878,4 +20862,72 @@ b-logout {
     color: #069;
     text-decoration: underline;
     cursor: pointer;
+}
+
+.c-vitesco-yellow {
+    background-color: #F0E614;
+}
+
+.c-vitesco-white {
+    background-color: #FFFFFF;
+}
+
+.c-vitesco-red {
+    background-color: #D7004B;
+}
+
+.c-vitesco-gray {
+    background-color: #4B4B46;
+}
+
+.c-vitesco-green-01 {
+    background-color: #B4C832;
+}
+
+.c-vitesco-green-02 {
+    background-color: #64AF5A;
+}
+
+.c-vitesco-green-03 {
+    background-color: #3CB4A0;
+}
+
+.c-vitesco-green-04 {
+    background-color: #008269;
+}
+
+.c-vitesco-green-05 {
+    background-color: #005546;
+}
+
+.c-vitesco-blue-01 {
+    background-color: #00A5E6;
+}
+
+.c-vitesco-blue-02 {
+    background-color: #006EAA;
+}
+
+.c-vitesco-blue-03 {
+    background-color: #005082;
+}
+
+.c-vitesco-pink-01 {
+    background-color: #DC5F96;
+}
+
+.c-vitesco-pink-02 {
+    background-color: #7D0F5F;
+}
+
+.c-vitesco-pp-01 {
+    background-color: #DC230F;
+}
+
+.c-vitesco-pp-02 {
+    background-color: #FFC300;
+}
+
+.c-vitesco-pp-03 {
+    background-color: #64AF5A;
 }

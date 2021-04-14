@@ -46,6 +46,18 @@
                     }
                 });
             });
+
+            $("#btnTeste").click(function (event) {
+                $.ajax({
+                    type: "POST",
+                    url: window.location.href + '?handler=Teste',
+                    data: "",
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    success: function () {
+                        location = location.href;
+                    }
+                });
+            });
         });
     });
 </script>
@@ -76,6 +88,8 @@
         }
     </tbody>
 </table>
+
+<button id="btnTeste" class="btn btn-primary">Teste</button>
 
 
 <div class="modal fade" id="modalCreate" role="dialog">

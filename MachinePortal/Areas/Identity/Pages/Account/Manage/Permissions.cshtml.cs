@@ -19,6 +19,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
     public class PermissionsModel : PageModel
     {
         public readonly IdentityContext _context;
+        private readonly IEmailSender _emailSender;
 
         [BindProperty]
         public List<Permission> permissions { get; set; }
@@ -26,9 +27,10 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
         [BindProperty]
         public Permission permission { get; set; }
 
-        public PermissionsModel(IdentityContext context)
+        public PermissionsModel(IdentityContext context, IEmailSender emailSender)
         {
             _context = context;
+            _emailSender = emailSender;
         }
 
         public void OnGet()
@@ -71,5 +73,14 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
             _context.SaveChanges();
             return RedirectToPage("/");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> OnPostTeste()
+        {
+            await _emailSender.SendEmailAsync("dasj.junior@gmail.com", "Confirm your email",$"Please confirm your account by");
+            return RedirectToPage("/");
+        }
+
     }
 }

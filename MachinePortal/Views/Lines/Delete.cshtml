@@ -1,41 +1,36 @@
 ﻿@model MachinePortal.Models.Line
 
-@{
-    ViewData["Title"] = "Delete";
-}
-
 <div class="modal-dialog">
     <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-            <h3 class="modal-title">Line: @Html.DisplayFor(model => model.Name)</h3>
-        </div>
-        <div class="modal-body">
-            <div>
-                <dl class="dl-horizontal">
-                    <dd>
-                        @if (Model.ImagePath != null)
-                        {
-                            <td><img class="img-thumbnail" src="@Html.DisplayFor(model => model.ImagePath)" height="200" /></td>
-                        }
-                        else
-                        {
-                            <td><img class="img-thumbnail" src="~/resources/General/NoImage.jpg" width="200" /></td>
-                        }
-                    </dd>
-                </dl>
+        <form asp-action="Delete">
+            <div style="background-color:#d9534f;" class="modal-header">
+                <i style="color:white;font-size:30px;background-color:#FA8072" class="bi-x"></i>
+                <h3 style="color:white;text-align:center;" class="modal-title">Delete</h3>
+                <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
             </div>
-        </div>
-        <div class="modal-footer">
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <form asp-action="Delete">
-                        <input type="hidden" asp-for="ID" />
-                        <input type="submit" value="Delete" class="btn btn-danger" />
-                        <input type="button" value="Cancel" class="btn btn-default" data-dismiss="modal" />
-                    </form>
+            <div class="modal-body text-center">
+                <div>
+                    <dl class="dl-horizontal">
+                        <dd>
+                            <h4>@Html.DisplayFor(model => model.Name)</h4>
+                            <hr />
+                            @if (Model.ImagePath != null)
+                            {
+                            <td><img class="img-thumbnail" src="@Html.DisplayFor(model => model.ImagePath)" height="200" /></td>
+                            }
+                            else
+                            {
+                            <td><img class="img-thumbnail" src="~/resources/General/NoImage.jpg" width="200" /></td>
+                            }
+                        </dd>
+                    </dl>
                 </div>
             </div>
-        </div>
+            <div class="modal-footer">
+                <input type="hidden" asp-for="ID" />
+                <input style="width:120px;" type="button" value="Cancel" class="btn btn-primary mr-auto" data-dismiss="modal" />
+                <input style="width:120px;float:right;" type="submit" value="Delete" class="btn btn-danger" />
+            </div>
+        </form>
     </div>
 </div>

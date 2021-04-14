@@ -1,74 +1,93 @@
 ﻿@model MachinePortal.Models.Device
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Name;
 }
 
-<h2>Details</h2>
+<div class="card fb-card c-vitesco-green-03">
+    <div class="card-header c-vitesco-green-03">
+        <i style="vertical-align:middle" class="ti-harddrives c-vitesco-green-03"></i>
+        <div class="d-inline-block">
+            <h2 style="color:white">@ViewData["Title"]</h2>
+        </div>
+        <hr style="border:1px solid white" />
+        <div class="d-inline-block">
+            <h2 style="color:white">General Data</h2>
+        </div>
+    </div>
+    <div class="card-block card-padding">
+        <dl class="dl-horizontal">
+            <dd>
+                <img src="@Html.DisplayFor(model => model.ImagePath)" height="200" class="img-thumbnail"/>
+            </dd>
+            <br />
+            <dt>
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Brand)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Brand)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Model)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Model)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.PartNumber)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.PartNumber)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Price)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Price)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Supplier)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Supplier)
+            </dd>
+        </dl>
+    </div>
+</div>
 
-<div>
-    <h4>Devices</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dd>
-            <img src="@Html.DisplayFor(model => model.ImagePath)" width="200" height="200" />
-        </dd>
-        <br />
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Brand)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Brand)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Model)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Model)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PartNumber)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PartNumber)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Supplier)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Supplier)
-        </dd>
-        @foreach (DeviceDocument document in Model.Documents)
-        {
-        <dt>
-            Document
-        </dt>
-        <dd>
-                @Html.ActionLink(document.Name, "Download", new { filePath = document.Path, fileName = document.Name, extension = document.Extension })
-        </dd>
-        }
-    </dl>
+<div class="card fb-card c-vitesco-green-03">
+    <div class="card-header c-vitesco-green-03">
+        <div class="d-inline-block">
+            <h2 style="color:white">Documents</h2>
+        </div>
+    </div>
+    <div class="card-block card-padding">
+        <dl class="dl-horizontal">
+            @foreach (DeviceDocument document in Model.Documents)
+            {
+                <dt>
+                    Document
+                </dt>
+                <dd>
+                    @Html.ActionLink(document.Name, "Download", new { filePath = document.Path, fileName = document.Name, extension = document.Extension })
+                </dd>
+            }
+        </dl>
+    </div>
 </div>
-<hr />
-<div>
-    <input type="hidden" asp-for="ID" />
-    <input type="button" value="Back" class="btn btn-default" action="action" onclick="history.go(-1);" />
-</div>
+
+<input type="hidden" asp-for="ID" />
+<button style="width:100px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">Back</button>
+<button style="width:100px; font-weight:700; float:right;" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ID">Edit</button>

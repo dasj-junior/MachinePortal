@@ -29,10 +29,11 @@
                     </dd>
                     <br />
                 </dl>
+                <hr />
                 <form asp-action="Delete">
                     <input type="hidden" asp-for="ID" />
-                    <a class="btn btn-primary" asp-action="Index">Back to List</a>
-                    <input type="submit" value="Delete" class="btn btn-danger" />
+                    <a style="float:left;" class="btn btn-primary" asp-action="Index">Back to List</a>
+                    <input style="float:right;" type="submit" value="Delete" class="btn btn-danger" />
                 </form>
             </div>
         </div>

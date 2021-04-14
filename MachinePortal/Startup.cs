@@ -14,6 +14,7 @@ using MachinePortal.Models;
 using MachinePortal.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace MachinePortal
 {
@@ -41,7 +42,8 @@ namespace MachinePortal
                 options.MultipartBodyLengthLimit = 1073741824;
             });
 
-            services.AddSession(options => {
+            services.AddSession(options =>
+            {
                 options.IdleTimeout = TimeSpan.FromSeconds(10);
                 options.Cookie.IsEssential = true;
             });
@@ -53,8 +55,8 @@ namespace MachinePortal
                         .AddPageApplicationModelConvention("/Create",
                             model =>
                             {
-                    model.Filters.Add(
-                                    new RequestSizeLimitAttribute(1073741824));
+                                model.Filters.Add(
+                                                new RequestSizeLimitAttribute(1073741824));
                             });
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -66,6 +68,7 @@ namespace MachinePortal
             {
                 // User settings.
                 options.User.RequireUniqueEmail = true;
+                options.SignIn.RequireConfirmedEmail = true;
                 options.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@";
 
@@ -115,7 +118,7 @@ namespace MachinePortal
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            
+
         }
     }
 }

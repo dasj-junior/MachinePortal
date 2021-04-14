@@ -8,6 +8,7 @@
 @inject IdentityContext identityContext
 @* Get User Permissions *@
 @{
+    var pageName = ViewContext.View.Path;
     var user = await UserManager.GetUserAsync(User);
     var username = "";
     var userphoto = "";
@@ -15,11 +16,18 @@
     if (user != null)
     {
         username = user != null ? user.FirstName + " " + user.LastName : "";
-        userphoto = user.PhotoPath != null ? user.PhotoPath : "resources/General/DefaultUser.png";
+        userphoto = user.PhotoPath != null ? user.PhotoPath : "~/resources/General/DefaultUser.png";
         permissions = ((from obj in identityContext.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == user.Id).ToList()).Select(p => p.Permission.PermissionName).ToList();
     }
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
+
+<script>
+    function LogoutSubmit() {
+        event.preventDefault();
+        document.getElementById("BtnLogoutSubmit").click();
+    };
+</script>
 
 <html>
 <head>
@@ -137,17 +145,13 @@
                                     <div class="main-menu-content">
                                         <ul>
                                             <li class="more-details">
-                                                @*<a asp-area="Identity" asp-page="/Account/Manage/Index"><i class="ti-settings"></i>Managment</a>*@
                                                 <a asp-area="Identity" asp-page="/Account/Manage/Index"><i class="ti-user"></i>Profile</a>
                                                 <a id="change-password" asp-area="Identity" asp-page="/Account/Manage/ChangePassword"><i class="ti-key"></i>Password</a>
                                                 <a asp-area="Identity" asp-page="/Account/Manage/ManageUsers"><i class="ti-settings"></i>Manage Users</a>
                                                 <a asp-area="Identity" asp-page="/Account/Manage/Permissions"><i class="ti-briefcase"></i>Permissions</a>
                                                 <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm">
-                                                    <button style="font-size:14px" type="submit" class="b-logout">
-                                                        Logout
-                                                        @*<i class="ti-layout-sidebar-left">*@
-                                                    </button>
-                                                    @*<a type="submit" href="/Identity/Account/Logout"><i class="ti-layout-sidebar-left"></i>Logout</a>*@
+                                                    <button id="BtnLogoutSubmit" type="submit" style="display:none"></button>
+                                                    <a id="aLogoutSubmit" onclick="LogoutSubmit()" href=""><i class="ti-layout-sidebar-left"></i>Logout</a>
                                                 </form>
                                             </li>
                                         </ul>
@@ -159,10 +163,10 @@
                                 <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">User Account</div>
                                 <div class=" ">
                                     <div class="main-menu-content">
-                                        <ul class="pcoded-item pcoded-left-item c-vitesco-green-01">
-                                            <li class="active">
+                                        <ul class="pcoded-item pcoded-left-item">
+                                            <li class=" ">
                                                 <a asp-area="Identity" asp-page="/Account/Register">
-                                                    <span class="pcoded-micon"><i class="bi-person-plus"></i></span>
+                                                    <span class="pcoded-micon c-vitesco-green-01"><i class="bi-person-plus"></i></span>
                                                     <span class="pcoded-mtext" data-i18n="nav.dash.main">Register</span>
                                                     <span class="pcoded-mcaret"></span>
                                                 </a>
@@ -172,10 +176,10 @@
                                 </div>
                                 <div class=" ">
                                     <div class="main-menu-content">
-                                        <ul  class="pcoded-item pcoded-left-item c-vitesco-green-02">
-                                            <li class="active">
+                                        <ul class="pcoded-item pcoded-left-item">
+                                            <li class="">
                                                 <a asp-area="Identity" asp-page="/Account/Login">
-                                                    <span class="pcoded-micon"><i class="bi-unlock"></i></span>
+                                                    <span class="pcoded-micon  c-vitesco-green-04"><i class="bi-unlock"></i></span>
                                                     <span class="pcoded-mtext" data-i18n="nav.dash.main">Login</span>
                                                     <span class="pcoded-mcaret"></span>
                                                 </a>
@@ -188,7 +192,7 @@
                             <ul class="pcoded-item pcoded-left-item">
                                 <li class="active">
                                     <a asp-area="" asp-controller="Home" asp-action="Index">
-                                        <span class="pcoded-micon"><i class="ti-home"></i></span>
+                                        <span class="pcoded-micon  c-vitesco-red"><i class="ti-home"></i></span>
                                         <span class="pcoded-mtext" data-i18n="nav.dash.main">Home</span>
                                         <span class="pcoded-mcaret"></span>
                                     </a>
@@ -197,7 +201,7 @@
                                 {
                                     <li class=" ">
                                         <a asp-area="" asp-controller="Machines" asp-action="Index">
-                                            <span class="pcoded-micon"><i class="ti-desktop"></i></span>
+                                            <span class="pcoded-micon  c-vitesco-gray"><i class="ti-desktop"></i></span>
                                             <span class="pcoded-mtext" data-i18n="nav.dash.main">Machines</span>
                                             <span class="pcoded-mcaret"></span>
                                         </a>
@@ -207,7 +211,7 @@
                                 {
                                     <li class=" ">
                                         <a asp-area="" asp-controller="Devices" asp-action="Index">
-                                            <span class="pcoded-micon"><i class="ti-harddrives"></i></span>
+                                            <span class="pcoded-micon  c-vitesco-green-03"><i class="ti-harddrives"></i></span>
                                             <span class="pcoded-mtext" data-i18n="nav.dash.main">Devices</span>
                                             <span class="pcoded-mcaret"></span>
                                         </a>
@@ -217,7 +221,7 @@
                                 {
                                     <li class=" ">
                                         <a asp-area="" asp-controller="Responsibles" asp-action="Index">
-                                            <span class="pcoded-micon"><i class="ti-user"></i></span>
+                                            <span class="pcoded-micon  c-vitesco-green-02"><i class="ti-user"></i></span>
                                             <span class="pcoded-mtext" data-i18n="nav.dash.main">Responsibles</span>
                                             <span class="pcoded-mcaret"></span>
                                         </a>
@@ -227,7 +231,7 @@
                                 {
                                     <li class=" ">
                                         <a asp-area="" asp-controller="Areas" asp-action="Index">
-                                            <span class="pcoded-micon"><i class="ti-layout-list-thumb"></i></span>
+                                            <span class="pcoded-micon  c-vitesco-green-05"><i class="ti-layout-list-thumb"></i></span>
                                             <span class="pcoded-mtext" data-i18n="nav.dash.main">Hierarchies</span>
                                             <span class="pcoded-mcaret"></span>
                                         </a>
@@ -238,14 +242,14 @@
                             <ul class="pcoded-item pcoded-left-item">
                                 <li class=" ">
                                     <a asp-area="" asp-controller="Home" asp-action="About">
-                                        <span class="pcoded-micon"><i class="ti-info"></i></span>
+                                        <span class="pcoded-micon  c-vitesco-blue-01"><i class="ti-info"></i></span>
                                         <span class="pcoded-mtext" data-i18n="nav.dash.main">About</span>
                                         <span class="pcoded-mcaret"></span>
                                     </a>
                                 </li>
                                 <li class=" ">
                                     <a asp-area="" asp-controller="Home" asp-action="Contact">
-                                        <span class="pcoded-micon"><i class="ti-mobile"></i></span>
+                                        <span class="pcoded-micon c-vitesco-blue-03"><i class="ti-mobile"></i></span>
                                         <span class="pcoded-mtext" data-i18n="nav.dash.main">Contact</span>
                                         <span class="pcoded-mcaret"></span>
                                     </a>
@@ -253,14 +257,34 @@
                             </ul>
                         </div>
                     </nav>
-                    <div style="padding-bottom:60px" class="container body-content">
-                        <div style="margin:20px">
-                            <br />
-                            <br />
-                            @RenderBody()
-                            @RenderSection("Scripts", required: false)
+                    @if (pageName.Contains("Login"))
+                    {
+                        
+                            <div style="padding-bottom:60px" class="pcoded-content">
+                                <div style="max-width:1650px" class="container body-content">
+                                    <section style="margin-top:-96px;" class="login p-fixed d-flex text-center bg-primary common-img-bg">
+                                        <br />
+                                        <br />
+                                        @RenderBody()
+                                        @RenderSection("Scripts", required: false)
+                                    </section>
+                                </div>
+                            </div>
+                        
+                    }
+                    else
+                    {
+                        <div style="padding-bottom:60px" class="pcoded-content">
+                            <div style="max-width:1650px" class="container body-content">
+                                <div style="margin:20px">
+                                    <br />
+                                    <br />
+                                    @RenderBody()
+                                    @RenderSection("Scripts", required: false)
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    }
                 </div>
             </div>
         </div>

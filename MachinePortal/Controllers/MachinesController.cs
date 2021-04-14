@@ -498,16 +498,22 @@ namespace MachinePortal.Controllers
         [HttpPost]
         public async Task<string> AddComment(string UserID, string Comment, int MachineID)
         {
-            Machine machine = await _machineService.FindByIDAsync(MachineID);
-            MachineComment machineComment = new MachineComment { UserID = UserID, Comment = Comment, Date = DateTime.Now, Machine = machine, MachineID = machine.ID };
-            await _machineService.InsertMachineCommentAsync(machineComment);
             string data = "";
-            List<MachineComment> comments = await _machineService.FindAllCommentsAsync(MachineID);
-            foreach (MachineComment mComment in comments)
+            try
             {
-                data += "<tr><td>" + mComment.Comment + "</td> <td>" + mComment.User.FirstName + " " + mComment.User.LastName + "</td> <td>" + mComment.Date.ToString("dd/MM/yyyy HH:mm:ss") + "</td> <td>" + @"<button class=""btn btn-danger"" onclick=""removeComment(" + mComment.ID + @")"">Delete</button>" + "</td></tr>";
+                Machine machine = await _machineService.FindByIDAsync(MachineID);
+                MachineComment machineComment = new MachineComment { UserID = UserID, Comment = Comment, Date = DateTime.Now, Machine = machine, MachineID = machine.ID };
+                await _machineService.InsertMachineCommentAsync(machineComment);
+                List<MachineComment> comments = await _machineService.FindAllCommentsAsync(MachineID);
+                foreach (MachineComment mComment in comments)
+                {
+                    data += "<tr><td>" + mComment.Comment + "</td> <td>" + mComment.User.FirstName + " " + mComment.User.LastName + "</td> <td>" + mComment.Date.ToString("dd/MM/yyyy HH:mm:ss") + "</td> <td>" + @"<button class=""btn btn-danger"" onclick=""removeComment(" + mComment.ID + @")"">Delete</button>" + "</td></tr>";
+                } 
             }
-
+            catch(Exception e)
+            {
+                string msg = e.Message;
+            }
             return data;
         }
 

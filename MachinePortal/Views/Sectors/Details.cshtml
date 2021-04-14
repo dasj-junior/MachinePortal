@@ -1,6 +1,12 @@
 ﻿@model MachinePortal.Models.Sector
 @using MachinePortal.Models.ViewModels
 
+@{
+    var AreaID = Model.AreaID;
+    var SectorID = Model.ID;
+    ViewData["Title"] = "Hierarchies";
+}
+
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 <script>
@@ -38,55 +44,61 @@
     }
 </script>
 
-@{
-    var AreaID = Model.AreaID;
-    var SectorID = Model.ID;
-    ViewData["Title"] = "Details";
-}
-
-<h2>Sector: @Html.DisplayFor(model => model.Name)</h2>
-<hr />
-
-<div>
-    <p>
-        <button class="btn btn-primary" style="margin:10px; float:right" data-toggle="modal" data-target="#modalCreate">Create New Line</button>
-    </p>
-    <dl class="dl-horizontal">
-        <h3>Lines</h3>
-        <table class="table table-bordered table-responsive table-responsive">
-            <thead class="table" style="background-color:rgb(240,230,10);">
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.Name)</th>
-                    <th>Options</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (Line line in Model.Lines)
-                {
+<div class="card fb-card c-vitesco-green-05">
+    <div class="card-header c-vitesco-green-05">
+        <i style="vertical-align:middle" class="ti-layout-list-thumb c-vitesco-green-05"></i>
+        <div class="d-inline-block">
+            <h2 style="color:white;">@ViewData["Title"]</h2>
+        </div>
+        <hr style="border:1px solid white" />
+        <div class="d-inline-block">
+            <h2 style="color:white">@Model.Name: Lines</h2>
+        </div>
+    </div>
+    <div class="card-block card-padding">
+        <div>
+            <p>
+                <button class="btn btn-primary btn-create" data-toggle="modal" data-target="#modalCreate">Create New Line</button>
+            </p>
+            <table style="table-layout:auto;" class="table table-bordered table-vitesco">
+                <thead class="thead-vitesco">
                     <tr>
-                        <td>@Html.DisplayFor(model => line.Name)</td>
-                        <td>
-                            <button class="btn btn-success" data-toggle="modal" onclick="renderPartialDetails(@line.ID)" data-target="#modalDetails">Open</button>
-                            <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@line.ID)" data-target="#modalEdit">Edit</button>
-                            <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@line.ID)" data-target="#modalDelete">Delete</button>
-                        </td>
+                        <th>@Html.DisplayNameFor(model => model.ImagePath)</th>
+                        <th>@Html.DisplayNameFor(model => model.Name)</th>
+                        <th>Options</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </dl>
-</div>
-<div>
-    <input type="hidden" asp-for="ID" />
-    <a class="btn btn-default" asp-controller="Areas" asp-action="Details" asp-route-ID="@AreaID">Back</a>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Lines)
+                    {
+                        <tr>
+                            @if (item.ImagePath != null)
+                            {
+                                <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" width="100" height="100" /></td>
+                            }
+                            else
+                            {
+                                <td><img class="img-thumbnail" src="~/resources/General/NoImage.jpg" width="100" height="100" /></td>
+                            }
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td>
+                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">Edit</button>
+                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
-<div class="modal fade" id="modalCreate" role="dialog">
+<div class="modal" id="modalCreate" role="dialog">
     @Html.Partial("../Lines/Create", new LineFormViewModel(new Line { SectorID = SectorID }));
 </div>
-<div class="modal fade" id="modalDetails" role="dialog">
+<div class="modal" id="modalDetails" role="dialog">
 </div>
-<div class="modal fade" id="modalEdit" role="dialog">
+<div class="modal" id="modalEdit" role="dialog">
 </div>
-<div class="modal fade" id="modalDelete" role="dialog">
+<div class="modal" id="modalDelete" role="dialog">
 </div>

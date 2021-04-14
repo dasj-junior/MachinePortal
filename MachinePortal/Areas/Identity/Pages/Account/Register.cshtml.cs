@@ -97,7 +97,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account
                                                     LastName = Input.LastName,
                                                     Department = Input.Department,
                                                     Email = Input.Email,
-                                                    EmailConfirmed = true,
+                                                    EmailConfirmed = false,
                                                     JobRole = Input.JobRole,
                                                     Mobile = Input.Mobile,
                                                     PhoneNumber = Input.PhoneNumber,

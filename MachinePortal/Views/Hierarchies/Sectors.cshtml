@@ -2,13 +2,13 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-<div class="row">
+<div class="row justify-content-around">
     @foreach (var item in Model)
     {
         <div class="col-4">
             <a asp-action="Lines" asp-route-id="@item.ID">
-                <div class="card fb-card">
-                    <div style="text-align:center" class="card-header">
+                <div class="card fb-card c-vitesco-blue-03">
+                    <div style="text-align:center" class="card-header c-vitesco-blue-03">
                         <div class="d-inline-block">
                             <h2 style="color:white">@Html.DisplayFor(modelItem => item.Name)</h2>
                         </div>

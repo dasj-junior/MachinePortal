@@ -143,9 +143,6 @@
     <Content Update="Views\Areas\Delete.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Areas\Details.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
     <Content Update="Views\Areas\Edit.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -159,9 +156,6 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Lines\Delete.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Views\Lines\Details.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Lines\Edit.cshtml">

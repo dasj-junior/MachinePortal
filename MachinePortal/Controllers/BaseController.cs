@@ -27,6 +27,8 @@ namespace MachinePortal.Controllers
             {
                 MachinePortalUser user = _identityContext.Users.FirstOrDefault(x => x.Id == userID);
                 ViewData["Permissions"] = _PermissionsService.GetUserPermissions(userID);
+                ViewData["UserName"] = user.FirstName + " " + user.LastName;
+                ViewData["UserID"] = user.Id;
             }
         }
     }
