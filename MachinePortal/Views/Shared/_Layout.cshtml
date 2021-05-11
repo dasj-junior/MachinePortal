@@ -8,6 +8,7 @@
 @inject IdentityContext identityContext
 @* Get User Permissions *@
 @{
+    var area = ViewContext.View.Path.Contains("Identity") ? "Identity" : "MachinePortal";
     var pageName = ViewContext.View.Path;
     var user = await UserManager.GetUserAsync(User);
     var username = "";
@@ -257,20 +258,31 @@
                             </ul>
                         </div>
                     </nav>
-                    @if (pageName.Contains("Login"))
+                    @if (area == "Identity" && pageName.Contains("Login"))
                     {
-                        
-                            <div style="padding-bottom:60px" class="pcoded-content">
-                                <div style="max-width:1650px" class="container body-content">
-                                    <section style="margin-top:-96px;" class="login p-fixed d-flex text-center bg-primary common-img-bg">
-                                        <br />
-                                        <br />
-                                        @RenderBody()
-                                        @RenderSection("Scripts", required: false)
-                                    </section>
+                        <div style="padding-bottom:60px" class="">
+                            <div style="max-width:2560px" class="container-vt body-content">
+                                <section style="margin-top:-96px;" class="login p-fixed d-flex text-center bg-primary common-img-bg">
+                                    <br />
+                                    <br />
+                                    @RenderBody()
+                                    @RenderSection("Scripts", required: false)
+                                </section>
+                            </div>
+                        </div>
+                    }
+                    else if (area == "Identity" && !pageName.Contains("Login"))
+                    {
+                        <div style="padding-bottom:60px; background:url(/assets/images/bg.jpg); background-size:cover; min-height:87vh;" class="pcoded-content">
+                            <div style="max-width:1650px" class="container body-content">
+                                <div style="margin:20px;">
+                                    <br />
+                                    <br />
+                                    @RenderBody()
+                                    @RenderSection("Scripts", required: false)
                                 </div>
                             </div>
-                        
+                        </div>
                     }
                     else
                     {

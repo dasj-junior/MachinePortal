@@ -5,46 +5,105 @@
     ViewData["Title"] = "Profile";
 }
 
-<h4>@ViewData["Title"]</h4>
-<hr/>
-@Html.Partial("_StatusMessage", Model.StatusMessage)
-<div class="row">
-    <div class="col-md-6">
-        <form id="profile-form" enctype="multipart/form-data" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
-                @if(PhotoPath != null)
-                {
-                    <div class="form-group">
-                        <img src="@PhotoPath" width="150" />
-                    </div>
-                }
-                <label asp-for="Input.FirstName"></label>
-                <input asp-for="Input.FirstName" class="form-control" />
-                <label asp-for="Input.LastName"></label>
-                <input asp-for="Input.LastName" class="form-control" />
-                <label asp-for="Input.UserName"></label>
-                <input asp-for="Input.UserName" class="form-control" />
-                <label asp-for="Input.Email"></label>
-                <input asp-for="Input.Email" class="form-control" />
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-                <label asp-for="Input.PhoneNumber"></label>
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-                <label asp-for="Input.Mobile"></label>
-                <input asp-for="Input.Mobile" class="form-control" />
-                <span asp-validation-for="Input.Mobile" class="text-danger"></span>
-                <label asp-for="Input.Department"></label>
-                <input asp-for="Input.Department" class="form-control" />
-                <label asp-for="Input.JobRole"></label>
-                <input asp-for="Input.JobRole" class="form-control" />
-                <label asp-for="Input.PhotoPath" class="control-label"></label>
-                <input type="hidden" asp-for="Input.PhotoPath" class="form-control" />
-                <input type="file" name="photo" />
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+@* Machine Photo Button and Preview *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Button triggers the photo file input
+        document.getElementById('openPhoto').addEventListener('click', () => {
+            document.getElementById('photo').click()
+        });
+
+        $("#photo").change(function () {
+            //Get file name and put it into input
+            var fileInput = document.getElementById('photo');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                document.getElementById("photoFilePath").value = sfilename;
+            }
+            //Load file and show the preview
+            if (typeof (FileReader) != "undefined") {
+                var dvPreview = $("#divImageMediaPreview");
+                dvPreview.html("");
+                $($(this)[0].files).each(function () {
+                    var file = $(this);
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var img = $("<img />");
+                        img.attr("style", "height:200px; margin: 10px;");
+                        img.attr("src", e.target.result);
+                        img.attr("class", "img-thumbnail");
+                        dvPreview.append(img);
+                    }
+                    reader.readAsDataURL(file[0]);
+                });
+            } else {
+                alert("This browser does not support HTML5.");
+            }
+        });
+    });
+</script>
+
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div class="card fb-card c-vitesco-green-04">
+            <div class="card-header c-vitesco-green-04">
+                <i style="vertical-align:middle" class="ti-user c-vitesco-green-04"></i>
+                <div class="d-inline-block">
+                    <h2 style="color:white">@ViewData["Title"]</h2>
+                </div>
             </div>
-            <br/>
-            <button type="submit" class="btn btn-default">Save</button>
-        </form>
+            <div class="card-block card-padding">
+                <form id="profile-form" enctype="multipart/form-data" method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <div id="divImageMediaPreview">
+                            @if (PhotoPath != null)
+                            {
+                                <div class="form-group">
+                                    <img src="@PhotoPath" style="height:200px" class="img-thumbnail m-10" />
+                                </div>
+                            }
+                        </div>
+                        <label asp-for="Input.PhotoPath"></label>
+                        <div class="input-group">
+                            <input id="photoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+                            <span class="input-group-append input-group-button">
+                                <button id="openPhoto" class="btn btn-default" type="button">
+                                    Open Photo
+                                </button>
+                            </span>
+                        </div>
+                        <input type="file" id="photo" name="photo" accept="image/*" style="display:none" />
+                        @*<input type="hidden" asp-for="Input.PhotoPath" class="form-control d-block" />*@
+                        @*<input type="file" name="photo" />*@
+                        <label asp-for="Input.FirstName"></label>
+                        <input asp-for="Input.FirstName" class="form-control" />
+                        <label asp-for="Input.LastName"></label>
+                        <input asp-for="Input.LastName" class="form-control" />
+                        <label asp-for="Input.UserName"></label>
+                        <input asp-for="Input.UserName" class="form-control" />
+                        <label asp-for="Input.Email"></label>
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        <label asp-for="Input.PhoneNumber"></label>
+                        <input asp-for="Input.PhoneNumber" class="form-control" />
+                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                        <label asp-for="Input.Mobile"></label>
+                        <input asp-for="Input.Mobile" class="form-control" />
+                        <span asp-validation-for="Input.Mobile" class="text-danger"></span>
+                        <label asp-for="Input.Department"></label>
+                        <input asp-for="Input.Department" class="form-control" />
+                        <label asp-for="Input.JobRole"></label>
+                        <input asp-for="Input.JobRole" class="form-control" />
+                    </div>
+                    <br />
+                    <button style="width:100px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">Back</button>
+                    <button style="float:right; width:100px; font-weight:700;" type="submit" class="btn btn-success">Save</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 

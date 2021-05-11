@@ -9,10 +9,10 @@
     $(document).ready(function () {
 
         $('#submit').click(function () {
-                var selPer = document.getElementById("PermissionsSelected");
-                for (i = 0; i < selPer.length; i++) {
-                    selPer.options[i].selected = 1;
-                }
+            var selPer = document.getElementById("PermissionsSelected");
+            for (i = 0; i < selPer.length; i++) {
+                selPer.options[i].selected = 1;
+            }
         });
 
         $('#submit').click(function () {
@@ -23,71 +23,88 @@
         });
 
         $("#rightPermissions").click(function () {
-                $("#PermissionsSelect option:selected").remove().appendTo($("#PermissionsSelected"));
+            $("#PermissionsSelect option:selected").remove().appendTo($("#PermissionsSelected"));
         });
 
         $("#leftPermissions").click(function () {
-                $("#PermissionsSelected option:selected").remove().appendTo($("#PermissionsSelect"));
+            $("#PermissionsSelected option:selected").remove().appendTo($("#PermissionsSelect"));
         });
 
     });
 </script>
-
-<hr />
-<h4>User Data</h4>
-<hr />
-
-<div>
-    <dl class="dl-horizontal">
-        <dt>
-                User Photo
-            </dt>
-            <dd>
-                <img src="@Html.DisplayFor(model => model.user.PhotoPath)" width="200" />
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.user.UserName)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.user.UserName)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.user.FirstName)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.user.FirstName)
-            </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.user.LastName)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.user.LastName)
-            </dd>
-    </dl>
-</div>
-
-<br />
-<hr />
-<h4>User Permissions</h4>
-<hr />
-
 <form enctype="multipart/form-data" method="post">
-    <div class="form-group">
-        <div class="row">
-            <div class="col-md-5 col-sm-5">
-                <select id="PermissionsSelect" asp-for="SelectPermissions" asp-items="Model.slAvailablePermissions" class="form-control" multiple></select>
+    <div class="row justify-content-center">
+        <div class="col-8">
+
+            <div class="card fb-card c-vitesco-green-04">
+                <div class="card-header c-vitesco-green-04">
+                    <i style="vertical-align:middle" class="ti-user c-vitesco-green-04"></i>
+                    <div class="d-inline-block">
+                        <h2 style="color:white">User Data</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div>
+                        <dl class="dl-horizontal">
+                            <dt>
+                                User Photo
+                            </dt>
+                            <dd>
+                                <img src="@Html.DisplayFor(model => model.user.PhotoPath)" width="200" />
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.user.UserName)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.user.UserName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.user.FirstName)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.user.FirstName)
+                            </dd>
+                            <dt>
+                                @Html.DisplayNameFor(model => model.user.LastName)
+                            </dt>
+                            <dd>
+                                @Html.DisplayFor(model => model.user.LastName)
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-2 col-sm-2">
-                <button type="button" id="rightPermissions" class="btn btn-success btn-block glyphicon glyphicon-arrow-right"></button>
-                <button type="button" id="leftPermissions" class="btn btn-success btn-block btn-danger glyphicon glyphicon-arrow-left"></button>
+
+            <div class="card fb-card c-vitesco-green-04">
+                <div class="card-header c-vitesco-green-04">
+                    <i style="vertical-align:middle" class="ti-user c-vitesco-green-04"></i>
+                    <div class="d-inline-block">
+                        <h2 style="color:white">User Permissions</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-5 col-sm-5">
+                                <select id="PermissionsSelect" asp-for="SelectPermissions" asp-items="Model.slAvailablePermissions" class="form-control" multiple></select>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" id="rightPermissions" class="btn btn-success btn-block bi-arrow-right"></button>
+                                <button type="button" id="leftPermissions" class="btn btn-success btn-block btn-danger bi-arrow-left"></button>
+                            </div>
+                            <div class="col-md-5 col-sm-5">
+                                <select id="PermissionsSelected" asp-for="SelectedPermissions" asp-items="Model.slCurrentPermissions" class="form-control" multiple></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-5 col-sm-5">
-                <select id="PermissionsSelected" asp-for="SelectedPermissions" asp-items="Model.slCurrentPermissions" class="form-control" multiple></select>
+
+            <div style="border-radius:5px;" class="form-group bg-white p-20">
+                <button style="width:120px; font-weight:700;" class="btn btn-primary" href='/Identity/Account/Manage/ManageUsers'>Back</button>
+                <button style="float:right; width:120px; font-weight:700;" class="btn btn-success" id="submit" type="submit">Save</button>
             </div>
+
         </div>
     </div>
-    <br />
-    <hr />
-    <a class="btn btn-default" href='/Identity/Account/Manage/ManageUsers'>Back</a>
-    <button id="submit" type="submit" style="float:right" class="btn btn-primary">Save</button>
 </form>

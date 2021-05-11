@@ -2,8 +2,20 @@
 
 @{
     ViewData["Title"] = "Machines";
+    string notMessage = (ViewData["notificationMessage"] != null) ? ViewData["notificationMessage"].ToString() : "";
+    string notIcon = (ViewData["notificationIcon"] != null) ? ViewData["notificationIcon"].ToString() : "";
+    string notType = (ViewData["notificationType"] != null) ? ViewData["notificationType"].ToString() : "";
 }
 
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        if ('@notMessage' != '') {
+            notify('', '@notMessage', 'top', 'right', '@notIcon', '@notType', 'animated fadeInRight', 'animated fadeInRight');
+        };
+    });
+</script>
 
 <div class="card dribble-card c-vitesco-gray">
     <div class="card-header c-vitesco-gray">
@@ -31,11 +43,11 @@
                     <tr>
                         @if (item.ImagePath != null)
                         {
-                            <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" width="100" height="100" /></td>
+                            <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" width="100" /></td>
                         }
                         else
                         {
-                            <td><img class="img-thumbnail" src="~/resources/General/NoImage.jpg" width="100" height="100" /></td>
+                            <td><img class="img-thumbnail" src="~/resources/General/NoImage.jpg" width="100" /></td>
                         }
                         <td>@Html.DisplayFor(modelItem => item.Name)</td>
                         <td>@Html.DisplayFor(modelItem => item.Description)</td>

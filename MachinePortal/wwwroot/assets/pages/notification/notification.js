@@ -13,12 +13,12 @@ function notify(title, message, from, align, icon, type, animIn, animOut) {
             align: align
         },
         offset: {
-            x: 30,
+            x: 36,
             y: 110
         },
         spacing: 10,
         z_index: 999999,
-        delay: 2500,
+        delay: 3500,
         timer: 1000,
         url_target: '_blank',
         mouse_over: false,
@@ -27,15 +27,20 @@ function notify(title, message, from, align, icon, type, animIn, animOut) {
             exit: animOut
         },
         icon_type: 'class',
-        template: '<div data-growl="container" class="alert" role="alert">' +
-            '<button type="button" class="close" data-growl="dismiss">' +
-            '<span aria-hidden="true">&times;</span>' +
-            '<span class="sr-only">Close</span>' +
-            '</button>' +
-            '<span data-growl="icon"></span>' +
-            '<span data-growl="title"></span>' +
-            '<span data-growl="message"></span>' +
-            '<a href="#" data-growl="url"></a>' +
+        template: '<div data-growl="rt-container" role="alert">' +
+            '<div class="col-rt-10">' +
+            '<div class="flag note note--' + type + '">' +
+            '<div class="flag__image note__icon">' +
+                '<i class="' + icon + '"></i>' +
+            '</div>' +
+            '<div class="flag__body note__text">' +
+                '<span data-growl="message"></span>' +
+            '</div>' +
+            '<a href="#" data-growl="dismiss" class="note__close">' +
+            '<i class="bi-x"></i>' +
+            '</a>' +
+            '</div>' +
+            '</div>' +
             '</div>'
     });
 };

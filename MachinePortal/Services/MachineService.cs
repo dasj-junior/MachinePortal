@@ -29,9 +29,21 @@ namespace MachinePortal.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task RemoveMachineDocumentAsync(MachineDocument obj)
+        {
+            _context.Remove(obj);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task InsertMachineImageAsync(MachineImage obj)
         {
             _context.Add(obj);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveMachineImageAsync(MachineImage obj)
+        {
+            _context.Remove(obj);
             await _context.SaveChangesAsync();
         }
 
@@ -41,15 +53,47 @@ namespace MachinePortal.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task RemoveMachineVideoAsync(MachineVideo obj)
+        {
+            _context.Remove(obj);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task InsertMachineResponsibleAsync(MachineResponsible obj)
         {
             _context.Add(obj);
             await _context.SaveChangesAsync();
         }
 
+        public async Task RemoveMachineResponsibleAsync(int MachineID, int ReponsibleID)
+        {
+            Machine machine = await _context.Machine.Include(Mres => Mres.MachineResponsibles).FirstOrDefaultAsync(obj => obj.ID == MachineID);
+            foreach(MachineResponsible Mres in machine.MachineResponsibles)
+            {
+                if(Mres.ResponsibleID == ReponsibleID)
+                {
+                    _context.Remove(Mres);
+                }
+            }
+            await _context.SaveChangesAsync();
+        }
+
         public async Task InsertMachineDeviceAsync(MachineDevice obj)
         {
             _context.Add(obj);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveMachineDeviceAsync(int MachineID, int DeviceID)
+        {
+            Machine machine = await _context.Machine.Include(Mdev => Mdev.MachineDevices).FirstOrDefaultAsync(obj => obj.ID == MachineID);
+            foreach (MachineDevice Mdev in machine.MachineDevices)
+            {
+                if(Mdev.DeviceID == DeviceID)
+                {
+                    _context.Remove(Mdev);
+                } 
+            }
             await _context.SaveChangesAsync();
         }
 
@@ -83,6 +127,42 @@ namespace MachinePortal.Services
         public async Task<List<Machine>> FindByLine(int LineID)
         {
             return await _context.Machine.OrderBy(x => x.ID).Where(m => m.LineID == LineID).ToListAsync();
+        }
+
+        public async Task<List<MachineDocument>> FindAllMachineDocuments(int ID)
+        {
+            Machine machine = await _context.Machine.Include(Mdoc => Mdoc.MachineDocuments).FirstOrDefaultAsync(obj => obj.ID == ID);
+            return machine.MachineDocuments.ToList();
+        }
+
+        public async Task<MachineDocument> FindMachineDocumentsByID(int MachineID, int MachineDocumentID)
+        {
+            Machine machine = await _context.Machine.Include(Mdoc => Mdoc.MachineDocuments).FirstOrDefaultAsync(obj => obj.ID == MachineID);
+            return machine.MachineDocuments.FirstOrDefault(x => x.ID == MachineDocumentID);
+        }
+
+        public async Task<List<MachineImage>> FindAllMachineImages(int ID)
+        {
+            Machine machine = await _context.Machine.Include(Mimg => Mimg.MachineImages).FirstOrDefaultAsync(obj => obj.ID == ID);
+            return machine.MachineImages.ToList();
+        }
+
+        public async Task<MachineImage> FindMachineImagesByID(int MachineID, int MachineImageID)
+        {
+            Machine machine = await _context.Machine.Include(Mimg => Mimg.MachineImages).FirstOrDefaultAsync(obj => obj.ID == MachineID);
+            return machine.MachineImages.FirstOrDefault(x => x.ID == MachineImageID);
+        }
+
+        public async Task<List<MachineVideo>> FindAllMachineVideos(int ID)
+        {
+            Machine machine = await _context.Machine.Include(Mvid => Mvid.MachineVideos).FirstOrDefaultAsync(obj => obj.ID == ID);
+            return machine.MachineVideos.ToList();
+        }
+
+        public async Task<MachineVideo> FindMachineVideosByID(int MachineID, int MachineVideoID)
+        {
+            Machine machine = await _context.Machine.Include(Mvid => Mvid.MachineVideos).FirstOrDefaultAsync(obj => obj.ID == MachineID);
+            return machine.MachineVideos.FirstOrDefault(x => x.ID == MachineVideoID);
         }
 
         public async Task<List<Machine>> FindAllAsync()

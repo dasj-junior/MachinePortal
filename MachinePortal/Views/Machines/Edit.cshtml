@@ -7,6 +7,15 @@
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
+@* Form Data Variable *@
+<script type="text/javascript">
+    var formdata = new FormData();
+    var Mfiles = [];
+    var DRemove = [];
+    var IRemove = [];
+    var VRemove = [];
+</script>
+
 @* Input with embebedd icon *@
 <style>
     .input-icons i {
@@ -24,6 +33,51 @@
         min-width: 40px;
     }
 </style>
+
+@* Documents, Images and Videos Removal *@
+<script>
+    function RemoveDocument(ID) {
+        if (confirm("Do you confirm remove this document?")) {
+            DRemove.push(ID)
+            var table = document.getElementById("tDocuments");
+            for (var i = 0, row; row = table.rows[i]; i++) {
+                for (var j = 0, col; col = row.cells[j]; j++) {
+                    if (row.cells[j].innerText == ID) {
+                        table.rows[i].remove();
+                    }
+                }
+            }
+        }
+    }
+
+    function RemoveImage(ID) {
+        if (confirm("Do you confirm remove this image?")) {
+            IRemove.push(ID)
+            var table = document.getElementById("tImages");
+            for (var i = 0, row; row = table.rows[i]; i++) {
+                for (var j = 0, col; col = row.cells[j]; j++) {
+                    if (row.cells[j].innerText == ID) {
+                        table.rows[i].remove();
+                    }
+                }
+            }
+        }
+    }
+
+    function RemoveVideo(ID) {
+        if (confirm("Do you confirm remove this video?")) {
+            VRemove.push(ID)
+            var table = document.getElementById("tVideos");
+            for (var i = 0, row; row = table.rows[i]; i++) {
+                for (var j = 0, col; col = row.cells[j]; j++) {
+                    if (row.cells[j].innerText == ID) {
+                        table.rows[i].remove();
+                    }
+                }
+            }
+        }
+    }
+</script>
 
 @* Selection Filters *@
 <script>
@@ -55,12 +109,6 @@
             filter("FilterSelectedDevice", "DeviceSelected");
         });
     });
-</script>
-
-@* Form Data Variable *@
-<script type="text/javascript">
-    var formdata = new FormData();
-    var Mfiles = [];
 </script>
 
 @* Send files through AJAX *@
@@ -138,8 +186,8 @@
                 var doc = { Name: sName, Category: sCategory, ID: srandomid, Type: "Document", FileName: sfilename };
                 Mfiles.push(doc);
                 formdata.append("document", fileInput.files[i]);
-                var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
-                    "\")'><span class='glyphicon glyphicon-remove' style='color: red'></span></a></td></tr>"; // Binding the file name
+                var markup = "<tr id='" + srandomid + "'><td>X</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' style='color: white' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                    "\")'>Delete</a></td></tr>"; // Binding the file name
                 $("#tDocuments").append(markup);
             }
             chkatchtbl();
@@ -156,8 +204,8 @@
                 var img = { Name: sName, Category: sCategory, ID: srandomid, Type: "Image", FileName: sfilename };
                 Mfiles.push(img);
                 formdata.append("image", fileInput.files[i]);
-                var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
-                    "\")'><span class='glyphicon glyphicon-remove' style='color: red'></span></a></td></tr>"; // Binding the file name
+                var markup = "<tr id='" + srandomid + "'><td>X</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' style='color: white' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                    "\")'>Delete</a></td></tr>"; // Binding the file name
                 $("#tImages").append(markup);
             }
             chkatchtbl();
@@ -174,8 +222,8 @@
                 var vid = { Name: sName, Category: sCategory, ID: srandomid, Type: "Video", FileName: sfilename };
                 Mfiles.push(vid);
                 formdata.append("video", fileInput.files[i]);
-                var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
-                    "\")'><span class='glyphicon glyphicon-remove' style='color: red'></span></a></td></tr>"; // Binding the file name
+                var markup = "<tr id='" + srandomid + "'><td>X</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' style='color: white' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                    "\")'>Delete</a></td></tr>"; // Binding the file name
                 $("#tVideos").append(markup);
             }
             chkatchtbl();
@@ -189,14 +237,17 @@
                 data.append(pair[0], pair[1]);
             }
             data.append('files', JSON.stringify(Mfiles));
+            data.append('DRemove', JSON.stringify(DRemove));
+            data.append('IRemove', JSON.stringify(IRemove));
+            data.append('VRemove', JSON.stringify(VRemove));
             $.ajax({
-                url: '@Url.Content("~/")' + "Machines/Create",
+                url: '@Url.Content("~/")' + "Machines/Edit",
                 type: "POST",
                 processData: false,
                 contentType: false,
                 data: data,
                 success: function () {
-                    window.location.href = "/Machines/Index";
+                        window.location.href = "/Machines/Index";
                 }
             });
         });
@@ -339,6 +390,10 @@
                         </div>
                         <input type="file" id="photo" name="photo" accept="image/*" style="display:none" />
                     </div>
+                    @* Save Machine ID *@
+                    <div class="form-group">
+                        <input asp-for="Machine.ID" style="display:none" />
+                    </div>
                     <div class="form-group">
                         <label asp-for="Machine.Name" class="control-label"></label>
                         <input asp-for="Machine.Name" class="form-control" />
@@ -392,37 +447,37 @@
                     <input id="iDocuments" type="file" style="display:none" />
                     <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalDocuments">Add Document</button>
                     <br /><br />
-                          <table class="table table-bordered table-vitesco" id="tDocuments">
-                              <tr class="thead-vitesco">
-                                  <th>
-                                      ID
-                                  </th>
-                                  <th>
-                                      Name
-                                  </th>
-                                  <th>
-                                      Category
-                                  </th>
-                                  <th>
-                                      File Name
-                                  </th>
-                                  <th>
-                                      Delete
-                                  </th>
-                              </tr>
-                              @foreach (var item in Model.Machine.MachineDocuments)
-                              {
-                                  <tr>
-                                      <td>@Html.DisplayFor(modelItem => item.ID)</td>
-                                      <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                                      <td>@Html.DisplayFor(modelItem => item.Category)</td>
-                                      <td>@Html.DisplayFor(modelItem => item.FileName)</td>
-                                      <td>
-                                          <a style="color:white" class="btn btn-danger">Delete</a>
-                                      </td>
-                                  </tr>
-                              }
-                          </table>
+                    <table class="table table-bordered table-vitesco" id="tDocuments">
+                        <tr class="thead-vitesco">
+                            <th>
+                                ID
+                            </th>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Category
+                            </th>
+                            <th>
+                                File Name
+                            </th>
+                            <th>
+                                Delete
+                            </th>
+                        </tr>
+                        @foreach (var item in Model.Machine.MachineDocuments)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                                <td>@Html.DisplayFor(modelItem => item.FileName)</td>
+                                <td>
+                                    <a style="color:white" class="btn btn-danger" onclick="RemoveDocument(@item.ID)">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
                 </div>
             </div>
 
@@ -436,37 +491,37 @@
                     <input id="iImages" type="file" style="display:none" />
                     <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalImages">Add Images</button>
                     <br /><br />
-                          <table class="table table-bordered table-vitesco" id="tImages">
-                              <tr class="thead-vitesco">
-                                  <th>
-                                      ID
-                                  </th>
-                                  <th>
-                                      Name
-                                  </th>
-                                  <th>
-                                      Category
-                                  </th>
-                                  <th>
-                                      File Name
-                                  </th>
-                                  <th>
-                                      Delete
-                                  </th>
-                              </tr>
-                              @foreach (var item in Model.Machine.MachineImages)
-                              {
-                                  <tr>
-                                      <td>@Html.DisplayFor(modelItem => item.ID)</td>
-                                      <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                                      <td>@Html.DisplayFor(modelItem => item.Category)</td>
-                                      <td>@Html.DisplayFor(modelItem => item.FileName)</td>
-                                      <td>
-                                          <a style="color:white" class="btn btn-danger">Delete</a>
-                                      </td>
-                                  </tr>
-                              }
-                          </table>
+                    <table class="table table-bordered table-vitesco" id="tImages">
+                        <tr class="thead-vitesco">
+                            <th>
+                                ID
+                            </th>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Category
+                            </th>
+                            <th>
+                                File Name
+                            </th>
+                            <th>
+                                Delete
+                            </th>
+                        </tr>
+                        @foreach (var item in Model.Machine.MachineImages)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                                <td>@Html.DisplayFor(modelItem => item.FileName)</td>
+                                <td>
+                                    <a style="color:white" class="btn btn-danger" onclick="RemoveImage(@item.ID)">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
                 </div>
             </div>
 
@@ -480,37 +535,37 @@
                     <input id="iVideos" type="file" style="display:none" />
                     <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalVideos">Add Videos</button>
                     <br /><br />
-                          <table class="table table-bordered table-vitesco" id="tVideos">
-                              <tr class="thead-vitesco">
-                                  <th>
-                                      ID
-                                  </th>
-                                  <th>
-                                      Name
-                                  </th>
-                                  <th>
-                                      Category
-                                  </th>
-                                  <th>
-                                      File Name
-                                  </th>
-                                  <th>
-                                      Delete
-                                  </th>
-                              </tr>
-                              @foreach (var item in Model.Machine.MachineVideos)
-                              {
-                                  <tr>
-                                      <td>@Html.DisplayFor(modelItem => item.ID)</td>
-                                      <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                                      <td>@Html.DisplayFor(modelItem => item.Category)</td>
-                                      <td>@Html.DisplayFor(modelItem => item.FileName)</td>
-                                      <td>
-                                          <a style="color:white" class="btn btn-danger">Delete</a>
-                                      </td>
-                                  </tr>
-                              }
-                          </table>
+                    <table class="table table-bordered table-vitesco" id="tVideos">
+                        <tr class="thead-vitesco">
+                            <th>
+                                ID
+                            </th>
+                            <th>
+                                Name
+                            </th>
+                            <th>
+                                Category
+                            </th>
+                            <th>
+                                File Name
+                            </th>
+                            <th>
+                                Delete
+                            </th>
+                        </tr>
+                        @foreach (var item in Model.Machine.MachineVideos)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Category)</td>
+                                <td>@Html.DisplayFor(modelItem => item.FileName)</td>
+                                <td>
+                                    <a style="color:white" class="btn btn-danger" onclick="RemoveVideo(@item.ID)">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
                 </div>
             </div>
 
@@ -627,8 +682,6 @@
         </form>
     </div>
 </div>
-
-
 
 <div class="modal fade" id="modalDocuments" role="dialog">
     <div class="modal-dialog">

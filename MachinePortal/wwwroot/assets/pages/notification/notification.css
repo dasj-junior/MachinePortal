@@ -1,171 +1,263 @@
-.alert {
-    padding: 30px;
-    margin-bottom: 18px;
-    border: 1px solid transparent;
-    border-radius: 2px;
-    font-size: 50px;
+@import url(http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
+@import url(http://fonts.googleapis.com/css?family=Roboto:700,400,300);
+@import url(https://raw.github.com/necolas/normalize.css/master/normalize.css);
+/**
+* Set up reusable colors
+*/
+/**
+* Colors from Flat UI
+* Source: http://flatuicolors.com
+*/
+* {
+    box-sizing: border-box;
+}
+/**
+* This can be extended to anything to make it get slightly bigger on hover,
+* which is a pretty commonly desired effect
+*/
+.big-on-hover {
+    transform: scale(1, 1);
 }
 
-.alert h4 {
-  margin-top: 0;
-  color: inherit;
+    .big-on-hover:hover {
+        transform: scale(1.2, 1.2);
+    }
+
+/**
+* Reusable single-direction margin declaration
+*/
+.margin, p, .flag {
+    margin-top: 0;
+    margin-bottom: 24px;
 }
 
-.alert .alert-link {
-  font-weight: bold;
+    .margin:last-child, p:last-child, .flag:last-child {
+        margin-bottom: 0;
+    }
+
+/**
+* Flag Object
+* Original Source: http://csswizardry.com/2013/05/the-flag-object/
+*/
+.flag {
+    display: table;
+    width: 100%;
 }
 
-.alert > p,
-.alert > ul {
-  margin-bottom: 0;
+.flag__image,
+.flag__body {
+    display: table-cell;
+    vertical-align: middle;
 }
 
-.alert > p + p {
-  margin-top: 5px;
+.flag--top .flag__image, .flag--top
+.flag__body {
+    vertical-align: top;
 }
 
-.alert-dismissable,
-.alert-dismissible {
-  padding-right: 35px;
+.flag--bottom .flag__image, .flag--bottom
+.flag__body {
+    vertical-align: bottom;
 }
 
-.alert-dismissable .close,
-.alert-dismissible .close {
-  position: relative;
-  top: -2px;
-  right: -21px;
-  color: inherit;
+.flag__image {
+    padding-right: 24px;
 }
 
-/* .alert-success {
-  background-color: #4caf50;
-  border-color: transparent;
-  color: #ffffff;
-} */
+    .flag__image > img {
+        display: block;
+        max-width: none;
+    }
 
-.alert-success hr {
-  border-top-color: rgba(0, 0, 0, 0);
+.flag--rev .flag__image {
+    padding-right: 0;
+    padding-left: 24px;
 }
 
-.alert-success .alert-link {
-  color: #e6e6e6;
+.flag__body {
+    width: 100%;
 }
 
-/* .alert-info {
-  background-color: #2196f3;
-  border-color: transparent;
-  color: #ffffff;
-} */
-
-.alert-info hr {
-  border-top-color: rgba(0, 0, 0, 0);
+/**
+* Notification Styles
+*/
+.note {
+    position: relative;
+    overflow: hidden;
+    color: white;
+    background-color: #E91E63;
 }
 
-.alert-info .alert-link {
-  color: #e6e6e6;
+.note--secondary {
+    background-color: #263238;
 }
 
-/* .alert-warning {
-  background-color: #ffc107;
-  border-color: transparent;
-  color: #ffffff;
-} */
-
-.alert-warning hr {
-  border-top-color: rgba(0, 0, 0, 0);
+.note--success {
+    background-color: #4CAF50;
 }
 
-.alert-warning .alert-link {
-  color: #e6e6e6;
-}
-/* 
-.alert-danger {
-  background-color: #f44336;
-  border-color: transparent;
-  color: #ffffff;
-} */
-
-.alert-danger hr {
-  border-top-color: rgba(0, 0, 0, 0);
+.note--warning {
+    background-color: #FFC107;
 }
 
-.alert-danger .alert-link {
-    color: #D7004B;
+.note--error {
+    background-color: #d50000;
 }
 
-@-webkit-keyframes progress-bar-stripes {
-  from {
-    background-position: 40px 0;
-  }
-
-  to {
-    background-position: 0 0;
-  }
+.note--info {
+    background-color: #03A9F4;
 }
 
-@keyframes progress-bar-stripes {
-  from {
-    background-position: 40px 0;
-  }
-
-  to {
-    background-position: 0 0;
-  }
+.note__icon,
+.note__text {
+    padding: 24px;
 }
 
-.alert {
-  padding-left: 30px;
-  font-size: 13px;
+.note__icon {
+    min-width: 80px;
+    text-align: center;
+    font-size: 32px;
+    font-size: 2rem;
+    background-color: rgba(0, 0, 0, 0.25);
 }
 
-.alert span {
-  cursor: pointer;
+.note__text {
+    padding-right: 48px;
 }
 
-.alert:not(.alert-dismissible) {
-  padding-right: 30px;
+.note__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 29px;
+    line-height: 30px;
+    font-size: 24px;
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    transition: all 0.25s;
 }
 
-.alert.alert-dismissable {
-  padding-right: 44px;
+    .note__close:hover {
+        background-color: rgba(0, 0, 0, 0.15);
+    }
+
+.note:hover .note__close {
+    opacity: 1;
 }
 
-.alert-inverse {
-  background-color: #333333;
-  border-color: transparent;
-  color: #ffffff;
+/* ******************************************************
+	Responsive Grids
+*********************************************************/
+
+.rt-container {
+    height: 80px;
+    margin: 0 auto;
 }
 
-.alert-inverse hr {
-  border-top-color: rgba(0, 0, 0, 0);
+.rt-row:before, .rt-row:after {
+    display: table;
+    line-height: 0;
+    content: "";
 }
 
-.alert-inverse .alert-link {
-  color: #e6e6e6;
+.rt-row:after {
+    clear: both;
+}
+
+[class^="col-rt-"] {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    /*padding: 0 15px;*/
+    min-height: 1px;
+    position: relative;
 }
 
 
+@media (min-width: 768px) {
+    .rt-container {
+        width: 750px;
+    }
 
-.growl-animated.alert-inverse {
-  box-shadow: 0 0 5px rgba(51, 51, 51, 0.5);
+    [class^="col-rt-"] {
+        float: right;
+        width: 49.9999999999%;
+    }
+
+    .col-rt-6{
+        width: 100%;
+    }
+
+    .col-rt-8 {
+        width: 150%;
+    }
+
+    .col-rt-10 {
+        width: 175%;
+    }
+
+    .col-rt-12 {
+        width: 200%;
+        float:right;
+    }
 }
 
-.growl-animated.alert-info {
-  box-shadow: 0 0 5px rgba(33, 150, 243, 0.5);
+@media (min-width: 1200px) {
+    .rt-container {
+        float: right;
+        width: 1170px;
+    }
+
+    .col-rt-1 {
+        width: 16.6%;
+    }
+
+    .col-rt-2 {
+        width: 30.33%;
+    }
+
+    .col-rt-3 {
+        width: 50%;
+    }
+
+    .col-rt-4 {
+        width: 67.664%;
+    }
+
+    .col-rt-5 {
+        width: 83.33%;
+    }
 }
 
-.growl-animated.alert-success {
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-}
+@media only screen and (min-width:240px) and (max-width: 768px) {
+    .ScriptTop h1, .ScriptTop ul {
+        text-align: center;
+    }
 
-.growl-animated.alert-warning {
-  box-shadow: 0 0 5px rgba(255, 193, 7, 0.5);
-}
+    .ScriptTop h1 {
+        margin-top: 0;
+        margin-bottom: 15px;
+    }
 
-.growl-animated.alert-danger {
-  box-shadow: 0 0 5px rgb(215, 0, 75);
-}
+    .ScriptTop ul {
+        margin-top: 12px;
+    }
 
-.alert-link {
-  color: #fff !important;
+    .ScriptHeader h1,
+    .ScriptHeader h2,
+    .scriptnav ul {
+        text-align: center;
+    }
+
+    .scriptnav ul {
+        margin-top: 12px;
+    }
+
+    #float-right {
+        float: none;
+    }
 }

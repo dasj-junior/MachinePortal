@@ -81,7 +81,8 @@
                     Document
                 </dt>
                 <dd>
-                    @Html.ActionLink(document.Name, "Download", new { filePath = document.Path, fileName = document.Name, extension = document.Extension })
+                    <a href="@document.Path@document.Name" target="_blank">@document.Name</a>
+                    @*@Html.ActionLink(document.Name, "Download", new { filePath = document.Path, fileName = document.Name, extension = document.Extension })*@
                 </dd>
             }
         </dl>
@@ -89,5 +90,5 @@
 </div>
 
 <input type="hidden" asp-for="ID" />
-<button style="width:100px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">Back</button>
-<button style="width:100px; font-weight:700; float:right;" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ID">Edit</button>
+<button style="width:120px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">Back</button>
+<button style="width:120px; font-weight:700; float:right;" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ID">Edit</button>

@@ -20931,3 +20931,15 @@ b-logout {
 .c-vitesco-pp-03 {
     background-color: #64AF5A;
 }
+
+.bt-vt-l{
+    width:120px;
+    float:left;
+    font-weight:700;
+}
+
+.bt-vt-r {
+    width: 120px;
+    float: right;
+    font-weight: 700;
+}

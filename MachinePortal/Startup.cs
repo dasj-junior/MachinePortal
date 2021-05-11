@@ -61,6 +61,7 @@ namespace MachinePortal
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+
             services.AddDbContext<MachinePortalContext>(options =>
                     options.UseMySql(Configuration.GetConnectionString("MachinePortalContext"), builder => builder.MigrationsAssembly("MachinePortal")));
 

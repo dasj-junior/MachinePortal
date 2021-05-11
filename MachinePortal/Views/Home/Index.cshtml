@@ -7,6 +7,24 @@
 
 @* Machine Search By Input ID *@
 <script>
+
+    $(document).ready(function () {
+        $(".note__close").click(function () {
+            $(this).parent()
+                .animate({ opacity: 0 }, 250, function () {
+                    $(this)
+                        .animate({ marginBottom: 0 }, 250)
+                        .children()
+                        .animate({ padding: 0 }, 250)
+                        .wrapInner("<div />")
+                        .children()
+                        .slideUp(250, function () {
+                            $(this).closest(".note").remove();
+                        });
+                });
+        });
+    });
+
     $(document).ready(function () {
         $("#SearchByID").on("click", function () {
             var id = $('#InputID').val();
@@ -19,7 +37,8 @@
                         window.location.href = "Machines/Details/" + id;
                     }
                     else {
-                        notify(' Error: ', 'Machine Not Found', 'top', 'right', 'ti-info', 'inverse', 'animated fadeInRight', 'animated fadeInRight')
+                        //options "success" "warning" "error" "secondary" "info"
+                        notify(' Error: ', 'Machine Not Found', 'top', 'right', 'bi-x-circle', 'error', 'animated fadeInRight', 'animated fadeInRight')
                     }
                 },
                 async: true
@@ -83,13 +102,12 @@
                     <div class="card-block-big">
                         <span class="bg-c-blue card1-icon" style="font-size: 28px;">123</span>
                         <br />
-                        <br />
-                        <h4 style="text-align: left;">
+                        <h4 style="text-align: center;">
                             Search By Machine ID
                         </h4>
                         <div>
                             <span class="f-left" style=" width: 100%;">
-                                <div class="pcoded-search-box" style="text-align:left; padding-top:20px;">
+                                <div class="pcoded-search-box" style="text-align:center; padding-top:20px;">
                                     <input id="InputID" placeholder="Type Machine ID" type="text" style="width: 200px; text-align:center">
                                     <a id="SearchByID" style="color: black; font-size: 15px; font-weight:700;" class="btn btn-success">Search</a>
                                 </div>
@@ -109,8 +127,7 @@
                     <div class="card-block-big">
                         <i class="icofont icofont-qr-code bg-c-green card1-icon"></i>
                         <br />
-                        <br />
-                        <h4 style="text-align: left;">
+                        <h4 style="text-align: center;">
                             Search By QR Code
                         </h4>
                         <br />
@@ -130,8 +147,7 @@
                     <div class="card-block-big">
                         <i class="ti-layout-list-thumb bg-c-orenge card1-icon"></i>
                         <br />
-                        <br />
-                        <h4 style="text-align: left; font-size: 22px">
+                        <h4 style="text-align: center; font-size: 22px">
                             Search Machine By Hierarchies
                         </h4>
                         <br />
@@ -168,7 +184,7 @@
                 <script>
                     var decoder = $("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery;
                     decoder.buildSelectMenu("select");
-                                                                                                                                                                                            //decoder.play();
+                                                                                                                                                                                                                            //decoder.play();
                 </script>
             </div>
         </div>
