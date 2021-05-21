@@ -68,9 +68,9 @@ namespace MachinePortal.Services
         public async Task RemoveMachineResponsibleAsync(int MachineID, int ReponsibleID)
         {
             Machine machine = await _context.Machine.Include(Mres => Mres.MachineResponsibles).FirstOrDefaultAsync(obj => obj.ID == MachineID);
-            foreach(MachineResponsible Mres in machine.MachineResponsibles)
+            foreach (MachineResponsible Mres in machine.MachineResponsibles)
             {
-                if(Mres.ResponsibleID == ReponsibleID)
+                if (Mres.ResponsibleID == ReponsibleID)
                 {
                     _context.Remove(Mres);
                 }
@@ -89,10 +89,10 @@ namespace MachinePortal.Services
             Machine machine = await _context.Machine.Include(Mdev => Mdev.MachineDevices).FirstOrDefaultAsync(obj => obj.ID == MachineID);
             foreach (MachineDevice Mdev in machine.MachineDevices)
             {
-                if(Mdev.DeviceID == DeviceID)
+                if (Mdev.DeviceID == DeviceID)
                 {
                     _context.Remove(Mdev);
-                } 
+                }
             }
             await _context.SaveChangesAsync();
         }
@@ -172,7 +172,7 @@ namespace MachinePortal.Services
 
         public async Task<List<MachineComment>> FindAllCommentsAsync(int ID)
         {
-            var result = from obj in _context.MachineComments select obj;
+            var result = from obj in _context.MachineComment select obj;
             result = result.Include(u => u.User).Where(x => x.Machine.ID == ID);
             return await result.ToListAsync();
         }
@@ -208,8 +208,8 @@ namespace MachinePortal.Services
         {
             try
             {
-                var obj = await _context.MachineComments.FindAsync(ID);
-                _context.MachineComments.Remove(obj);
+                var obj = await _context.MachineComment.FindAsync(ID);
+                _context.MachineComment.Remove(obj);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException e)
@@ -217,8 +217,5 @@ namespace MachinePortal.Services
                 throw new IntegrityException(e.Message);
             }
         }
-
-
-
     }
 }

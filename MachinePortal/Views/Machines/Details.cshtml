@@ -152,7 +152,7 @@
                         <td>@Html.DisplayFor(modelItem => document.Category)</td>
                         <td>@Html.DisplayFor(modelItem => document.FileName)</td>
                         @*<td>@Html.ActionLink("Download", "Download", new { filePath = document.Path, fileName = document.FileName, extension = document.Extension }) </td>*@
-                        <td><a class="btn btn-primary" href="@Html.DisplayFor(modelItem => document.Path)@Html.DisplayFor(modelItem => document.FileName)" target="_blank">Open<a /></td>
+                        <td><a class="btn btn-primary" href="@Html.DisplayFor(modelItem => document.Path)@Html.DisplayFor(modelItem => document.FileName)" target="_blank">Open<a/></td>
                     </tr>
                     }
                 </tbody>

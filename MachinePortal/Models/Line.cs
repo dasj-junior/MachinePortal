@@ -10,7 +10,7 @@ namespace MachinePortal.Models
     {
         public int ID { get; set; }
         [Required]
-        [StringLength(50, MinimumLength = 3)]
+        [StringLength(50, MinimumLength = 1)]
         public string Name { get; set; }
         [Display(Name = "Image")]
         public string ImagePath { get; set; }

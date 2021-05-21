@@ -22,7 +22,7 @@ namespace MachinePortal.Areas.Identity.Data
         public string Mobile { get; set; }
 
         [PersonalData]
-        public string Department { get; set; }
+        public Department Department { get; set; }
 
         [PersonalData]
         public string JobRole { get; set; }

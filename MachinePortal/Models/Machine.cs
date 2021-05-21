@@ -28,6 +28,8 @@ namespace MachinePortal.Models
         public int CostCenter { get; set; }
         [Display(Name = "Server Path")]
         public string ServerPath { get; set; }
+        //[Display(Name = "Last Preventive Maintenance")]
+        //public DateTime LastPreventiveMaintenance { get; set; }
 
         public int AreaID { get; set; }
         public Area Area { get; set; }
@@ -45,6 +47,8 @@ namespace MachinePortal.Models
 
         public ICollection<MachineResponsible> MachineResponsibles { get; set; }
         public ICollection<MachineDevice> MachineDevices { get; set; }
+
+        public ICollection<MachinePassword> MachinePasswords { get; set; }
 
         public void AddDocument(MachineDocument machineDocument)
         {

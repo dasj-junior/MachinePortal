@@ -23,7 +23,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account
         private readonly UserManager<MachinePortalUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        IHostingEnvironment _appEnvironment;
+        private readonly IHostingEnvironment _appEnvironment;
 
         public RegisterModel(
             IHostingEnvironment enviroment,
@@ -95,7 +95,6 @@ namespace MachinePortal.Areas.Identity.Pages.Account
                 var user = new MachinePortalUser { UserName = Input.UserName,
                                                     FirstName = Input.FirstName,
                                                     LastName = Input.LastName,
-                                                    Department = Input.Department,
                                                     Email = Input.Email,
                                                     EmailConfirmed = false,
                                                     JobRole = Input.JobRole,
@@ -106,8 +105,8 @@ namespace MachinePortal.Areas.Identity.Pages.Account
 
                 if (photo != null && photo.Length > 0)
                 {
-                    long filesSize = photo.Length;
-                    var filePath = Path.GetTempFileName();
+                    //long filesSize = photo.Length;
+                    //var filePath = Path.GetTempFileName();
 
                     string fileName = DateTime.Now.ToString("yyyyMMddHHmmssfffffff");
                     fileName += photo.FileName.Substring(photo.FileName.LastIndexOf("."), (photo.FileName.Length - photo.FileName.LastIndexOf(".")));
@@ -129,7 +128,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
                         pageHandler: null,
-                        values: new { userId = user.Id, code = code },
+                        values: new { userId = user.Id, code },
                         protocol: Request.Scheme);
 
                     await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",

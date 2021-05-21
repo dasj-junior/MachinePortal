@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using MachinePortal.Areas.Identity.Data;
-using Microsoft.AspNetCore.Identity;
+﻿using MachinePortal.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MachinePortal.Models;
 
-namespace MachinePortal.Models
+namespace MachinePortal.Areas.Identity.Data
 {
     public class IdentityContext : IdentityDbContext<MachinePortalUser>
     {
@@ -26,9 +20,16 @@ namespace MachinePortal.Models
 
             builder.Entity<UserPermission>()
                 .HasKey(x => new { x.UserID, x.PermissionID });
+            
+            builder.Entity<UserPermission>()
+                .HasKey(x => new { x.UserID, x.PermissionID });
+
         }
 
         public DbSet<Permission> Permission { get; set; }
         public DbSet<UserPermission> UserPermission { get; set; }
+        public DbSet<Department> Department { get; set; }
+        public DbSet<DepartmentRead> DepartmentRead { get; set; }
+        public DbSet<DepartmentWrite> DepartmentWrite { get; set; }
     }
 }

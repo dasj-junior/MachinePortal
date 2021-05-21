@@ -13,7 +13,8 @@ namespace MachinePortal.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MachinePortalUser>(entity => {
+            modelBuilder.Entity<MachinePortalUser>(entity =>
+            {
                 entity.ToTable("AspNetUsers");
             });
 
@@ -25,16 +26,16 @@ namespace MachinePortal.Models
 
             modelBuilder.Entity<UserPermission>()
                 .HasKey(x => new { x.UserID, x.PermissionID });
-
         }
 
         public DbSet<Device> Device { get; set; }
         public DbSet<DeviceDocument> DeviceDocument { get; set; }
-        public DbSet<MachineComment> MachineComments { get; set; }
+        public DbSet<MachineComment> MachineComment { get; set; }
         public DbSet<Responsible> Responsible { get; set; }
         public DbSet<Line> Line { get; set; }
         public DbSet<Sector> Sector { get; set; }
         public DbSet<Area> Area { get; set; }
         public DbSet<Machine> Machine { get; set; }
+        public DbSet<MachinePassword> MachinePassword { get; set; }
     }
 }

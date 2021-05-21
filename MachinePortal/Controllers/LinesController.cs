@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using MachinePortal.Services;
 using MachinePortal.Models.ViewModels;
 using System.Security.Claims;
+using MachinePortal.Areas.Identity.Data;
 
 namespace MachinePortal.Controllers
 {
@@ -17,7 +18,7 @@ namespace MachinePortal.Controllers
     {
         private readonly LineService _LineService;
         private readonly SectorService _SectorService;
-        IHostingEnvironment _appEnvironment;
+        private readonly IHostingEnvironment _appEnvironment;
 
         public LinesController(IHostingEnvironment enviroment, LineService LineService, SectorService SectorService, PermissionsService permissionsService, IdentityContext identityContext)
         {
@@ -38,8 +39,10 @@ namespace MachinePortal.Controllers
         public async Task<IActionResult> Create(int? sectorID)
         {
             Permissions();
-            var viewModel = new LineFormViewModel();
-            viewModel.Line = new Line();
+            var viewModel = new LineFormViewModel
+            {
+                Line = new Line()
+            };
             if (sectorID != null)
             {
                 var sector = await _SectorService.FindByIDAsync(sectorID.Value);
@@ -62,8 +65,8 @@ namespace MachinePortal.Controllers
 
             if (image != null)
             {
-                long filesSize = image.Length;
-                var filePath = Path.GetTempFileName();
+                //long filesSize = image.Length;
+                //var filePath = Path.GetTempFileName();
 
                 if (image == null || image.Length == 0)
                 {
@@ -168,8 +171,8 @@ namespace MachinePortal.Controllers
                     System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + Line.ImagePath);
                 }
 
-                long filesSize = image.Length;
-                var filePath = Path.GetTempFileName();
+                //long filesSize = image.Length;
+                //var filePath = Path.GetTempFileName();
 
                 if (image == null || image.Length == 0)
                 {
@@ -196,7 +199,7 @@ namespace MachinePortal.Controllers
         [HttpPost]
         public async Task<PartialViewResult> AddPartialEdit(string id)
         {
-            Line line = new Line();
+            Line line;
             int ID = int.Parse(id);
             line = await _LineService.FindByIDAsync(ID);
             PartialViewResult partial = PartialView("Edit", line);
@@ -206,7 +209,7 @@ namespace MachinePortal.Controllers
         [HttpPost]
         public async Task<PartialViewResult> AddPartialDelete(string id)
         {
-            Line line = new Line();
+            Line line;
             int ID = int.Parse(id);
             line = await _LineService.FindByIDAsync(ID);
             PartialViewResult partial = PartialView("Delete", line);
@@ -216,7 +219,7 @@ namespace MachinePortal.Controllers
         [HttpPost]
         public async Task<PartialViewResult> AddPartialDetails(string id)
         {
-            Line line = new Line();
+            Line line;
             int ID = int.Parse(id);
             line = await _LineService.FindByIDAsync(ID);
             PartialViewResult partial = PartialView("Details", line);

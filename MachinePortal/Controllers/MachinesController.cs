@@ -31,7 +31,7 @@ namespace MachinePortal.Controllers
     public class MachinesController : BaseController<MachinesController>
     {
         private readonly MachineService _machineService;
-        IHostingEnvironment _appEnvironment;
+        private readonly IHostingEnvironment _appEnvironment;
 
         private readonly ResponsibleService _responsibleService;
         private readonly DeviceService _deviceService;
@@ -118,8 +118,8 @@ namespace MachinePortal.Controllers
 
             if (photo != null)
             {
-                long filesSize = photo.Length;
-                var filePath = Path.GetTempFileName();
+                //long filesSize = photo.Length;
+                //var filePath = Path.GetTempFileName();
 
                 if (photo == null || photo.Length == 0)
                 {
@@ -402,12 +402,12 @@ namespace MachinePortal.Controllers
                         System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + machineOLD.ImagePath);
                     }
                 }
-                catch (Exception e)
+                catch
                 {
                 }
 
-                long filesSize = photo.Length;
-                var filePath = Path.GetTempFileName();
+                //long filesSize = photo.Length;
+                //var filePath = Path.GetTempFileName();
 
                 if (photo == null || photo.Length == 0)
                 {
@@ -429,7 +429,7 @@ namespace MachinePortal.Controllers
             foreach (IFormFile document in documents)
             {
                 long filesSize = document.Length;
-                var filePath = Path.GetTempFileName();
+                //var filePath = Path.GetTempFileName();
 
                 if (document == null || document.Length == 0)
                 {
@@ -550,7 +550,7 @@ namespace MachinePortal.Controllers
                         System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + document.Path + document.FileName);
                     }
                 }
-                catch (Exception e)
+                catch
                 {
                 }
             }
@@ -567,7 +567,7 @@ namespace MachinePortal.Controllers
                         System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + image.Path + image.FileName);
                     }
                 }
-                catch (Exception e)
+                catch
                 {
                 }
             }
@@ -584,7 +584,7 @@ namespace MachinePortal.Controllers
                         System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + video.Path + video.FileName);
                     }
                 }
-                catch (Exception e)
+                catch
                 {
                 }
             }
@@ -837,14 +837,14 @@ namespace MachinePortal.Controllers
 
         public async Task<JsonResult> GetSector(int AreaID)
         {
-            List<Sector> SectorList = new List<Sector>();
+            List<Sector> SectorList;
             SectorList = await _sectorService.FindByAreaIDAsync(AreaID);
             return Json(new SelectList(SectorList, "ID", "Name"));
         }
 
         public async Task<JsonResult> GetLine(int SectorID)
         {
-            List<Line> LineList = new List<Line>();
+            List<Line> LineList;
             LineList = await _lineService.FindBySectorIDAsync(SectorID);
             return Json(new SelectList(LineList, "ID", "Name"));
         }
@@ -884,9 +884,8 @@ namespace MachinePortal.Controllers
                     data += "<tr><td>" + mComment.Comment + "</td> <td>" + mComment.User.FirstName + " " + mComment.User.LastName + "</td> <td>" + mComment.Date.ToString("dd/MM/yyyy HH:mm:ss") + "</td> <td>" + @"<button class=""btn btn-danger"" onclick=""removeComment(" + mComment.ID + @")"">Delete</button>" + "</td></tr>";
                 }
             }
-            catch (Exception e)
+            catch
             {
-                string msg = e.Message;
             }
             return data;
         }

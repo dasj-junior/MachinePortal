@@ -24,7 +24,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<MachinePortalUser> _userManager;
         private readonly SignInManager<MachinePortalUser> _signInManager;
         private readonly IEmailSender _emailSender;
-        IHostingEnvironment _appEnvironment;
+        private readonly IHostingEnvironment _appEnvironment;
 
         public IndexModel(
             IHostingEnvironment enviroment,
@@ -76,7 +76,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
             public string PhotoPath { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync(IFormFile photo)
+        public async Task<IActionResult> OnGetAsync()
         {
             //await Permissions();
             var user = await _userManager.GetUserAsync(User);
@@ -86,6 +86,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
             }
 
             var userName = await _userManager.GetUserNameAsync(user);
+
 
             Username = userName;
 
@@ -97,7 +98,6 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 Mobile = user.Mobile,
-                Department = user.Department,
                 JobRole = user.JobRole,
                 PhotoPath = user.PhotoPath
             };
@@ -149,10 +149,6 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
             {
                 user.Mobile = Input.Mobile;
             }
-            if (Input.Department != user.Department)
-            {
-                user.Department = Input.Department;
-            }
             if (Input.JobRole != user.JobRole)
             {
                 user.JobRole = Input.JobRole;
@@ -165,8 +161,8 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
                     System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + Input.PhotoPath);
                 }
 
-                long filesSize = photo.Length;
-                var filePath = Path.GetTempFileName();
+                //long filesSize = photo.Length;
+                //var filePath = Path.GetTempFileName();
 
                 string fileName = DateTime.Now.ToString("yyyyMMddHHmmssfffffff");
                 fileName += photo.FileName.Substring(photo.FileName.LastIndexOf("."), (photo.FileName.Length - photo.FileName.LastIndexOf(".")));
@@ -205,7 +201,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
             var callbackUrl = Url.Page(
                 "/Account/ConfirmEmail",
                 pageHandler: null,
-                values: new { userId = userId, code = code },
+                values: new { userId, code },
                 protocol: Request.Scheme);
             await _emailSender.SendEmailAsync(
                 email,

@@ -9,13 +9,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Security.Claims;
+using MachinePortal.Areas.Identity.Data;
 
 namespace MachinePortal.Controllers
 {
     public class ResponsiblesController : BaseController<ResponsiblesController>
     {
         private readonly ResponsibleService _responsibleService;
-        IHostingEnvironment _appEnvironment;
+        private readonly IHostingEnvironment _appEnvironment;
 
         public ResponsiblesController(IHostingEnvironment enviroment, ResponsibleService responsibleService, PermissionsService permissionsService, IdentityContext identityContext)
         {

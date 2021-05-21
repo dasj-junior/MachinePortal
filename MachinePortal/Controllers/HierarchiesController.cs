@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MachinePortal.Services;
 using System.Security.Claims;
+using MachinePortal.Areas.Identity.Data;
 
 namespace MachinePortal.Controllers
 {
@@ -18,9 +19,8 @@ namespace MachinePortal.Controllers
         private readonly SectorService _SectorService;
         private readonly LineService _LineService;
         private readonly MachineService _MachineService;
-        IHostingEnvironment _appEnvironment;
 
-        public HierarchiesController(IHostingEnvironment enviroment, AreaService areaService, SectorService sectorService, LineService lineService, MachineService machineService, PermissionsService permissionsService, IdentityContext identityContext)
+        public HierarchiesController(AreaService areaService, SectorService sectorService, LineService lineService, MachineService machineService, PermissionsService permissionsService, IdentityContext identityContext)
         {
             _identityContext = identityContext;
             _AreaService = areaService;
@@ -28,7 +28,6 @@ namespace MachinePortal.Controllers
             _LineService = lineService;
             _MachineService = machineService;
             _PermissionsService = permissionsService;
-            _appEnvironment = enviroment;
         }
 
         public async Task<IActionResult> Index()

@@ -17,6 +17,99 @@ namespace MachinePortal.Migrations.MachinePortal
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("MachinePortal.Areas.Identity.Data.Department", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Department");
+                });
+
+            modelBuilder.Entity("MachinePortal.Areas.Identity.Data.MachinePortalUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("ConcurrencyStamp");
+
+                    b.Property<int?>("DepartmentID");
+
+                    b.Property<string>("Email");
+
+                    b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("JobRole");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("Mobile");
+
+                    b.Property<string>("NormalizedEmail");
+
+                    b.Property<string>("NormalizedUserName");
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("PhotoPath");
+
+                    b.Property<string>("SecurityStamp");
+
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentID");
+
+                    b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("MachinePortal.Areas.Identity.Data.Permission", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("PermissionName");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Permission");
+                });
+
+            modelBuilder.Entity("MachinePortal.Areas.Identity.Data.UserPermission", b =>
+                {
+                    b.Property<string>("UserID");
+
+                    b.Property<int>("PermissionID");
+
+                    b.Property<string>("MachinePortalUserId");
+
+                    b.HasKey("UserID", "PermissionID");
+
+                    b.HasIndex("MachinePortalUserId");
+
+                    b.HasIndex("PermissionID");
+
+                    b.ToTable("UserPermission");
+                });
+
             modelBuilder.Entity("MachinePortal.Models.Area", b =>
                 {
                     b.Property<int>("ID")
@@ -24,7 +117,9 @@ namespace MachinePortal.Migrations.MachinePortal
 
                     b.Property<string>("ImagePath");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.HasKey("ID");
 
@@ -36,21 +131,28 @@ namespace MachinePortal.Migrations.MachinePortal
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Brand");
+                    b.Property<string>("Brand")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasMaxLength(200);
 
                     b.Property<string>("ImagePath");
 
-                    b.Property<string>("Model");
+                    b.Property<string>("Model")
+                        .HasMaxLength(50);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
-                    b.Property<string>("PartNumber");
+                    b.Property<string>("PartNumber")
+                        .HasMaxLength(50);
 
                     b.Property<double>("Price");
 
-                    b.Property<string>("Supplier");
+                    b.Property<string>("Supplier")
+                        .HasMaxLength(50);
 
                     b.HasKey("ID");
 
@@ -66,7 +168,9 @@ namespace MachinePortal.Migrations.MachinePortal
 
                     b.Property<string>("Extension");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("Path");
 
@@ -84,7 +188,9 @@ namespace MachinePortal.Migrations.MachinePortal
 
                     b.Property<string>("ImagePath");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<int>("SectorID");
 
@@ -106,7 +212,8 @@ namespace MachinePortal.Migrations.MachinePortal
 
                     b.Property<int>("CostCenter");
 
-                    b.Property<string>("Description");
+                    b.Property<string>("Description")
+                        .HasMaxLength(200);
 
                     b.Property<string>("ImagePath");
 
@@ -114,7 +221,9 @@ namespace MachinePortal.Migrations.MachinePortal
 
                     b.Property<string>("MES_Name");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("SAP_Name");
 
@@ -154,7 +263,7 @@ namespace MachinePortal.Migrations.MachinePortal
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("MachineComments");
+                    b.ToTable("MachineComment");
                 });
 
             modelBuilder.Entity("MachinePortal.Models.MachineDevice", b =>
@@ -183,7 +292,9 @@ namespace MachinePortal.Migrations.MachinePortal
 
                     b.Property<int>("MachineID");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("Path");
 
@@ -209,7 +320,9 @@ namespace MachinePortal.Migrations.MachinePortal
 
                     b.Property<int>("MachineID");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("Path");
 
@@ -220,6 +333,34 @@ namespace MachinePortal.Migrations.MachinePortal
                     b.HasIndex("MachineID");
 
                     b.ToTable("MachineImage");
+                });
+
+            modelBuilder.Entity("MachinePortal.Models.MachinePassword", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("DepartmentID");
+
+                    b.Property<string>("EquipmentDescription");
+
+                    b.Property<string>("EquipmentName");
+
+                    b.Property<string>("Level");
+
+                    b.Property<int?>("MachineID");
+
+                    b.Property<string>("Password");
+
+                    b.Property<string>("User");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("DepartmentID");
+
+                    b.HasIndex("MachineID");
+
+                    b.ToTable("MachinePassword");
                 });
 
             modelBuilder.Entity("MachinePortal.Models.MachineResponsible", b =>
@@ -248,7 +389,9 @@ namespace MachinePortal.Migrations.MachinePortal
 
                     b.Property<int>("MachineID");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("Path");
 
@@ -266,15 +409,18 @@ namespace MachinePortal.Migrations.MachinePortal
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Department");
+                    b.Property<string>("Department")
+                        .IsRequired();
 
                     b.Property<string>("Email");
 
-                    b.Property<string>("FirstName");
+                    b.Property<string>("FirstName")
+                        .IsRequired();
 
                     b.Property<string>("FullName");
 
-                    b.Property<string>("LastName");
+                    b.Property<string>("LastName")
+                        .IsRequired();
 
                     b.Property<string>("Mobile");
 
@@ -296,13 +442,34 @@ namespace MachinePortal.Migrations.MachinePortal
 
                     b.Property<string>("ImagePath");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.HasKey("ID");
 
                     b.HasIndex("AreaID");
 
                     b.ToTable("Sector");
+                });
+
+            modelBuilder.Entity("MachinePortal.Areas.Identity.Data.MachinePortalUser", b =>
+                {
+                    b.HasOne("MachinePortal.Areas.Identity.Data.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentID");
+                });
+
+            modelBuilder.Entity("MachinePortal.Areas.Identity.Data.UserPermission", b =>
+                {
+                    b.HasOne("MachinePortal.Areas.Identity.Data.MachinePortalUser", "MachinePortalUser")
+                        .WithMany("UserPermissions")
+                        .HasForeignKey("MachinePortalUserId");
+
+                    b.HasOne("MachinePortal.Areas.Identity.Data.Permission", "Permission")
+                        .WithMany("UserPermissions")
+                        .HasForeignKey("PermissionID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("MachinePortal.Models.DeviceDocument", b =>
@@ -378,6 +545,17 @@ namespace MachinePortal.Migrations.MachinePortal
                         .WithMany("MachineImages")
                         .HasForeignKey("MachineID")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("MachinePortal.Models.MachinePassword", b =>
+                {
+                    b.HasOne("MachinePortal.Areas.Identity.Data.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentID");
+
+                    b.HasOne("MachinePortal.Models.Machine", "Machine")
+                        .WithMany("MachinePasswords")
+                        .HasForeignKey("MachineID");
                 });
 
             modelBuilder.Entity("MachinePortal.Models.MachineResponsible", b =>

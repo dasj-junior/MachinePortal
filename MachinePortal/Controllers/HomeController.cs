@@ -19,7 +19,7 @@ namespace MachinePortal.Controllers
 
     public class HomeController : BaseController<HomeController>
     {
-        MachineService _MachineService;
+        private readonly MachineService _MachineService;
 
         public HomeController(PermissionsService permissionsService, IdentityContext identityContext, MachineService machineService)
         {
@@ -56,7 +56,7 @@ namespace MachinePortal.Controllers
         public async Task<bool> ValidateMachineID(int MachineID)
         {
             Machine mac = await _MachineService.FindByIDAsync(MachineID);
-            if(mac != null)
+            if (mac != null)
             {
                 return true;
             }

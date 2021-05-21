@@ -9,15 +9,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MachinePortal.Services;
 using System.Security.Claims;
+using MachinePortal.Areas.Identity.Data;
 
 namespace MachinePortal.Controllers
 {
     public class AreasController : BaseController<AreasController>
     {
         private readonly AreaService _AreaService;
-        IHostingEnvironment _appEnvironment;
+        private readonly IHostingEnvironment _appEnvironment;
 
-        public AreasController(IHostingEnvironment enviroment, AreaService AreaService, SectorService SectorService, PermissionsService permissionsService, IdentityContext identityContext)
+        public AreasController(IHostingEnvironment enviroment, AreaService AreaService, PermissionsService permissionsService, IdentityContext identityContext)
         {
             _identityContext = identityContext;
             _AreaService = AreaService;
@@ -179,7 +180,7 @@ namespace MachinePortal.Controllers
         [HttpPost]
         public async Task<PartialViewResult> AddPartialEdit(string id)
         {
-            Area area = new Area();
+            Area area;
             int ID = int.Parse(id);
             area = await _AreaService.FindByIDAsync(ID);
             PartialViewResult partial = PartialView("Edit", area);
@@ -189,7 +190,7 @@ namespace MachinePortal.Controllers
         [HttpPost]
         public async Task<PartialViewResult> AddPartialDelete(string id)
         {
-            Area area = new Area();
+            Area area;
             int ID = int.Parse(id);
             area = await _AreaService.FindByIDAsync(ID);
             PartialViewResult partial = PartialView("Delete", area);

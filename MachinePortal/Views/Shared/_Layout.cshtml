@@ -13,12 +13,15 @@
     var user = await UserManager.GetUserAsync(User);
     var username = "";
     var userphoto = "";
+    var userdepartment = "";
     List<string> permissions = new List<string>();
     if (user != null)
     {
         username = user != null ? user.FirstName + " " + user.LastName : "";
         userphoto = user.PhotoPath != null ? user.PhotoPath : "~/resources/General/DefaultUser.png";
         permissions = ((from obj in identityContext.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == user.Id).ToList()).Select(p => p.Permission.PermissionName).ToList();
+        Department department = ((from obj in identityContext.Users select obj).Include(d => d.Department).Where(x => x.Id == user.Id).ToList()).Select(dep => dep.Department).FirstOrDefault();
+        userdepartment = department.Name;
     }
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
@@ -140,7 +143,8 @@
                                         <img class="img-40 img-radius" src="@userphoto" alt="User-Profile-Image">
                                         <div class="user-details">
                                             <span>@username</span>
-                                            <span id="more-details">@user.Department<i class="ti-angle-down"></i></span>
+                                            <span style="font-size:12px;">@user.JobRole</span>
+                                            <span id="more-details">@userdepartment<i class="ti-angle-down"></i></span>
                                         </div>
                                     </div>
                                     <div class="main-menu-content">
@@ -148,8 +152,6 @@
                                             <li class="more-details">
                                                 <a asp-area="Identity" asp-page="/Account/Manage/Index"><i class="ti-user"></i>Profile</a>
                                                 <a id="change-password" asp-area="Identity" asp-page="/Account/Manage/ChangePassword"><i class="ti-key"></i>Password</a>
-                                                <a asp-area="Identity" asp-page="/Account/Manage/ManageUsers"><i class="ti-settings"></i>Manage Users</a>
-                                                <a asp-area="Identity" asp-page="/Account/Manage/Permissions"><i class="ti-briefcase"></i>Permissions</a>
                                                 <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm">
                                                     <button id="BtnLogoutSubmit" type="submit" style="display:none"></button>
                                                     <a id="aLogoutSubmit" onclick="LogoutSubmit()" href=""><i class="ti-layout-sidebar-left"></i>Logout</a>
@@ -185,6 +187,73 @@
                                                     <span class="pcoded-mcaret"></span>
                                                 </a>
                                             </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            }
+                            @if (permissions.Contains("Administration") && permissions != null)
+                            {
+                                <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">Administration</div>
+                                <div class=" ">
+                                    <div class="main-menu-content">
+                                        <ul class="pcoded-item pcoded-left-item">
+                                            @*<li class="pcoded-hasmenu">
+                                                    <a href="javascript:void(0)">
+                                                        <span class="pcoded-micon  c-vitesco-red"><i class="bi-people"></i></span>
+                                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Departments</span>
+                                                        <span class="pcoded-mcaret"></span>
+                                                    </a>
+                                                    <ul class="pcoded-submenu">
+                                                        <li class=" ">
+                                                            <a asp-area="Identity" asp-page="/Account/Manage/Departments">
+                                                                <span class="pcoded-mtext" data-i18n="nav.dash.main">Departments</span>
+                                                                <span class="pcoded-mcaret"></span>
+                                                            </a>
+                                                        </li>
+                                                        <li class=" ">
+                                                            <a asp-area="Identity" asp-page="/Account/Manage/Departments">
+                                                                <span class="pcoded-mtext" data-i18n="nav.dash.main">Read Permissions</span>
+                                                                <span class="pcoded-mcaret"></span>
+                                                            </a>
+                                                        </li>
+                                                        <li class=" ">
+                                                            <a asp-area="Identity" asp-page="/Account/Manage/Departments">
+                                                                <span class="pcoded-mtext" data-i18n="nav.dash.main">Write Permissions</span>
+                                                                <span class="pcoded-mcaret"></span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>*@
+                                            @if (permissions.Contains("PageDepartments") && permissions != null)
+                                            {
+                                                <li class=" ">
+                                                    <a asp-area="Identity" asp-page="/Account/Manage/Departments">
+                                                        <span class="pcoded-micon  c-vitesco-red"><i class="bi-people"></i></span>
+                                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Departments</span>
+                                                        <span class="pcoded-mcaret"></span>
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (permissions.Contains("PageManageUsers") && permissions != null)
+                                            {
+                                                <li class=" ">
+                                                    <a asp-area="Identity" asp-page="/Account/Manage/ManageUsers">
+                                                        <span class="pcoded-micon  c-vitesco-gray"><i class="ti-settings"></i></span>
+                                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Manage Users</span>
+                                                        <span class="pcoded-mcaret"></span>
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (permissions.Contains("PagePermissions") && permissions != null)
+                                            {
+                                                <li class=" ">
+                                                    <a asp-area="Identity" asp-page="/Account/Manage/Permissions">
+                                                        <span class="pcoded-micon  c-vitesco-green-03"><i class="ti-briefcase"></i></span>
+                                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Permissions</span>
+                                                        <span class="pcoded-mcaret"></span>
+                                                    </a>
+                                                </li>
+                                            }
                                         </ul>
                                     </div>
                                 </div>
@@ -288,7 +357,7 @@
                     {
                         <div style="padding-bottom:60px" class="pcoded-content">
                             <div style="max-width:1650px" class="container body-content">
-                                <div style="margin:20px">
+                                <div style="margin:40px">
                                     <br />
                                     <br />
                                     @RenderBody()
@@ -301,7 +370,7 @@
             </div>
         </div>
     </div>
-    <div style="position:fixed; padding:10px 20px 0px 0px; text-align:right; vertical-align:middle; bottom:0px; left:0px; width:100%; background-color:white; box-shadow: 0 0 11px rgba(0, 0, 0, 0.13);">
+    <div style="position:fixed; padding:10px 20px 0px 0px; text-align:right; vertical-align:middle; bottom:0px; left:0px; width:100%; height:45px; background-color:white; box-shadow: 0 0 11px rgba(0, 0, 0, 0.13);">
         <p>&copy; 2020 - MachinePortal - Vitesco Technologies - Salto Plant</p>
     </div>
     <!-- Warning Section Ends -->

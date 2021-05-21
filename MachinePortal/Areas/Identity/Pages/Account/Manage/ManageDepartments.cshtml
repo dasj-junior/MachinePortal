@@ -1,0 +1,126 @@
+﻿@page
+@model ManageDepartmentsModel
+@{
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        $('#submit').click(function () {
+            var selRDept = document.getElementById("RDepartmentsSelected");
+            for (i = 0; i < selRDept.length; i++) {
+                selRDept.options[i].selected = 1;
+            }
+            var selWDept = document.getElementById("WDepartmentsSelected");
+            for (i = 0; i < selWDept.length; i++) {
+                selWDept.options[i].selected = 1;
+            }
+        });
+
+        $('#submit').click(function () {
+            var selRDept = document.getElementById("RDepartmentsSelect");
+            for (i = 0; i < selRDept.length; i++) {
+                selRDept.options[i].selected = 1;
+            }
+            var selWDept = document.getElementById("WDepartmentsSelect");
+            for (i = 0; i < selWDept.length; i++) {
+                selWDept.options[i].selected = 1;
+            }
+        });
+
+        $("#rightRDepartments").click(function () {
+            $("#RDepartmentsSelect option:selected").remove().appendTo($("#RDepartmentsSelected"));
+        });
+
+        $("#leftRDepartments").click(function () {
+            $("#RDepartmentsSelected option:selected").remove().appendTo($("#RDepartmentsSelect"));
+        });
+
+        $("#rightWDepartments").click(function () {
+            $("#WDepartmentsSelect option:selected").remove().appendTo($("#WDepartmentsSelected"));
+        });
+
+        $("#leftWDepartments").click(function () {
+            $("#WDepartmentsSelected option:selected").remove().appendTo($("#WDepartmentsSelect"));
+        });
+
+    });
+</script>
+<form id="form" enctype="multipart/form-data" method="post">
+    <div class="row justify-content-center">
+        <div class="col-8">
+
+            <div class="card fb-card c-vitesco-red">
+                <div class="card-header c-vitesco-red">
+                    <i style="vertical-align:middle" class="bi-people c-vitesco-red"></i>
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Department Permissions</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div>
+                        <h2>(@Html.DisplayFor(model => model.dept.ID)) @Html.DisplayFor(model => model.dept.Name)</h2>                 
+                    </div>
+                </div>
+            </div>
+
+            <div class="card fb-card c-vitesco-red">
+                <div class="card-header c-vitesco-red">
+                    <i style="vertical-align:middle" class="bi-people c-vitesco-red"></i>
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Can Read Passwords Of</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-5 col-sm-5">
+                                <select id="RDepartmentsSelect" asp-for="SelectRDepartments" asp-items="Model.SlAvailableRDepartments" class="form-control" multiple></select>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" id="rightRDepartments" class="btn btn-success btn-block bi-arrow-right"></button>
+                                <button type="button" id="leftRDepartments" class="btn btn-success btn-block btn-danger bi-arrow-left"></button>
+                            </div>
+                            <div class="col-md-5 col-sm-5">
+                                <select id="RDepartmentsSelected" asp-for="SelectedRDepartments" asp-items="Model.SlCurrentRDepartments" class="form-control" multiple></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card fb-card c-vitesco-red">
+                <div class="card-header c-vitesco-red">
+                    <i style="vertical-align:middle" class="bi-people c-vitesco-red"></i>
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Can Edit/Remove Passwords Of</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-5 col-sm-5">
+                                <select id="WDepartmentsSelect" asp-for="SelectWDepartments" asp-items="Model.SlAvailableWDepartments" class="form-control" multiple></select>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" id="rightWDepartments" class="btn btn-success btn-block bi-arrow-right"></button>
+                                <button type="button" id="leftWDepartments" class="btn btn-success btn-block btn-danger bi-arrow-left"></button>
+                            </div>
+                            <div class="col-md-5 col-sm-5">
+                                <select id="WDepartmentsSelected" asp-for="SelectedWDepartments" asp-items="Model.SlCurrentWDepartments" class="form-control" multiple></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="border-radius:5px;" class="form-group bg-white p-20">
+                <button style="width:120px; font-weight:700;" class="btn btn-primary" asp-page="./Departments">Back</button>
+                <button style="float:right; width:120px; font-weight:700;" class="btn btn-success" id="submit" type="submit">Save</button>
+            </div>
+
+        </div>
+    </div>
+</form>

@@ -22,12 +22,15 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<MachinePortalUser> _userManager;
         private readonly IdentityContext _context;
-        public SelectList slAvailablePermissions { get; set; }
-        public SelectList slCurrentPermissions { get; set; }
+        public SelectList SlAvailablePermissions { get; set; }
+        public SelectList SlCurrentPermissions { get; set; }
+        public SelectList SlDepartments { get; set; }
         public int[] SelectPermissions { get; set; }
         public int[] SelectedPermissions { get; set; }
         public MachinePortalUser user = new MachinePortalUser();
         public string ReturnUrl { get; set; }
+        [BindProperty]
+        public int SelectedDepartment { get; set; }
 
         public ManagePermissionsModel(IdentityContext context)
         {
@@ -44,20 +47,21 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
             }
             else
             {
-                List<Permission> AllPerms = new List<Permission>();
-                AllPerms = _context.Permission.ToList();
-                List<Permission> userPermissions = new List<Permission>();
-                userPermissions = ((from obj in _context.UserPermission select obj).Where(x => x.UserID == ID).ToList()).Select(p => p.Permission).ToList();
+                List<Permission> AllPerms = _context.Permission.ToList();
+                List<Department> AllDepts = _context.Department.ToList();
+                List<Permission> userPermissions = ((from obj in _context.UserPermission select obj).Where(x => x.UserID == ID).ToList()).Select(p => p.Permission).ToList();
                 AllPerms = AllPerms.Where(x => !userPermissions.Contains(x)).ToList();
-                slCurrentPermissions = new SelectList(userPermissions, "ID", "PermissionName");
-                slAvailablePermissions = new SelectList(AllPerms, "ID", "PermissionName");
+                SlCurrentPermissions = new SelectList(userPermissions, "ID", "PermissionName");
+                SlAvailablePermissions = new SelectList(AllPerms, "ID", "PermissionName");
+                SlDepartments = new SelectList(AllDepts, "ID", "Name");
+                SelectedDepartment = user.Department.ID;
             }
             return Page();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task OnPostAsync(string ID,[FromForm] int[] SelectPermissions, [FromForm] int[] SelectedPermissions)
+        public async Task OnPostAsync(string ID, [FromForm] int[] SelectedPermissions)
         {
             MachinePortalUser user = _context.Users.FirstOrDefault(u => u.Id == ID);
             List<Permission> CurrentPermissions = ((from obj in _context.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == ID).ToList()).Select(p => p.Permission).ToList();
@@ -82,6 +86,13 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
             {
                 UserPermission UP = _context.UserPermission.FirstOrDefault(up => up.PermissionID == p.ID && up.UserID == ID);
                 _context.UserPermission.Remove(UP);
+                await _context.SaveChangesAsync();
+            }
+
+            if(SelectedDepartment > 0)
+            {
+                Department department = _context.Department.FirstOrDefault(d => d.ID == SelectedDepartment);
+                user.Department = department;
                 await _context.SaveChangesAsync();
             }
 

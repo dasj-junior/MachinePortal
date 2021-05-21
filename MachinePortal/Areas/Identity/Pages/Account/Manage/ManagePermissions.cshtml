@@ -30,9 +30,13 @@
             $("#PermissionsSelected option:selected").remove().appendTo($("#PermissionsSelect"));
         });
 
+        $('#form').load(function () {
+            $('#DepartmentID').prepend("<option value='-1'>Select</option>");
+        });
+
     });
 </script>
-<form enctype="multipart/form-data" method="post">
+<form id="form" enctype="multipart/form-data" method="post">
     <div class="row justify-content-center">
         <div class="col-8">
 
@@ -86,22 +90,36 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-5 col-sm-5">
-                                <select id="PermissionsSelect" asp-for="SelectPermissions" asp-items="Model.slAvailablePermissions" class="form-control" multiple></select>
+                                <select id="PermissionsSelect" asp-for="SelectPermissions" asp-items="Model.SlAvailablePermissions" class="form-control" multiple></select>
                             </div>
                             <div class="col-md-2 col-sm-2">
                                 <button type="button" id="rightPermissions" class="btn btn-success btn-block bi-arrow-right"></button>
                                 <button type="button" id="leftPermissions" class="btn btn-success btn-block btn-danger bi-arrow-left"></button>
                             </div>
                             <div class="col-md-5 col-sm-5">
-                                <select id="PermissionsSelected" asp-for="SelectedPermissions" asp-items="Model.slCurrentPermissions" class="form-control" multiple></select>
+                                <select id="PermissionsSelected" asp-for="SelectedPermissions" asp-items="Model.SlCurrentPermissions" class="form-control" multiple></select>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <div class="card fb-card c-vitesco-green-04">
+                <div class="card-header c-vitesco-green-04">
+                    <i style="vertical-align:middle" class="bi-people c-vitesco-green-04"></i>
+                    <div class="d-inline-block">
+                        <h2 style="color:white">User Department</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <select asp-for="SelectedDepartment" id="DepartmentID" class="form-control" asp-items="Model.SlDepartments"></select>
+                    </div>
+                </div>
+            </div>
+
             <div style="border-radius:5px;" class="form-group bg-white p-20">
-                <button style="width:120px; font-weight:700;" class="btn btn-primary" href='/Identity/Account/Manage/ManageUsers'>Back</button>
+                <button style="width:120px; font-weight:700;" class="btn btn-primary" asp-page="./ManageUsers">Back</button>
                 <button style="float:right; width:120px; font-weight:700;" class="btn btn-success" id="submit" type="submit">Save</button>
             </div>
 

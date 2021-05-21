@@ -22,10 +22,10 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
         private readonly IEmailSender _emailSender;
 
         [BindProperty]
-        public List<Permission> permissions { get; set; }
+        public List<Permission> Permissions { get; set; }
 
         [BindProperty]
-        public Permission permission { get; set; }
+        public Permission Permission { get; set; }
 
         public PermissionsModel(IdentityContext context, IEmailSender emailSender)
         {
@@ -35,14 +35,14 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
 
         public void OnGet()
         {
-            permissions = _context.Permission.ToList();
+           Permissions = _context.Permission.ToList();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> OnPostAsync()
         {
-            await _context.Permission.AddAsync(permission);
+            await _context.Permission.AddAsync(Permission);
             await _context.SaveChangesAsync();
             return RedirectToPage("Permissions");
         }
@@ -51,7 +51,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> OnPostCreateAsync()
         {
-            await _context.Permission.AddAsync(permission);
+            await _context.Permission.AddAsync(Permission);
             await _context.SaveChangesAsync();
             return RedirectToPage("/");
         }
@@ -60,7 +60,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
         [ValidateAntiForgeryToken]
         public IActionResult OnPostRemove()
         {
-            _context.Permission.Remove(permission);
+            _context.Permission.Remove(Permission);
             _context.SaveChanges();
             return RedirectToPage("/");
         }
@@ -69,7 +69,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
         [ValidateAntiForgeryToken]
         public IActionResult OnPostEdit()
         {
-            _context.Permission.Update(permission);
+            _context.Permission.Update(Permission);
             _context.SaveChanges();
             return RedirectToPage("/");
         }

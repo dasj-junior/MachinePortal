@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MachinePortal.Services;
 using System.Security.Claims;
+using MachinePortal.Areas.Identity.Data;
 
 namespace MachinePortal.Controllers
 {
@@ -17,16 +18,14 @@ namespace MachinePortal.Controllers
     {
         private readonly AreaService _AreaService;
         private readonly SectorService _SectorService;
-        private readonly LineService _LineService;
-        IHostingEnvironment _appEnvironment;
+        private readonly IHostingEnvironment _appEnvironment;
 
-        public SectorsController(IHostingEnvironment enviroment, SectorService sectorService, LineService lineService, AreaService areaService, PermissionsService permissionsService, IdentityContext identityContext)
+        public SectorsController(IHostingEnvironment enviroment, SectorService sectorService, AreaService areaService, PermissionsService permissionsService, IdentityContext identityContext)
         {
             _identityContext = identityContext;
             _PermissionsService = permissionsService;
             _AreaService = areaService;
             _SectorService = sectorService;
-            _LineService = lineService;
             _appEnvironment = enviroment;
         }
 
@@ -40,8 +39,10 @@ namespace MachinePortal.Controllers
         public async Task<IActionResult> Create(int? areaID)
         {
             Permissions();
-            var viewModel = new SectorFormViewModel();
-            viewModel.Sector = new Sector();
+            var viewModel = new SectorFormViewModel
+            {
+                Sector = new Sector()
+            };
             if (areaID != null)
             {
                 var area = await _AreaService.FindByIDAsync(areaID.Value);
@@ -64,8 +65,8 @@ namespace MachinePortal.Controllers
 
             if (image != null)
             {
-                long filesSize = image.Length;
-                var filePath = Path.GetTempFileName();
+                //long filesSize = image.Length;
+                //var filePath = Path.GetTempFileName();
 
                 if (image == null || image.Length == 0)
                 {
@@ -170,8 +171,8 @@ namespace MachinePortal.Controllers
                     System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + Sector.ImagePath);
                 }
 
-                long filesSize = image.Length;
-                var filePath = Path.GetTempFileName();
+                //long filesSize = image.Length;
+                //var filePath = Path.GetTempFileName();
 
                 if (image == null || image.Length == 0)
                 {
@@ -198,7 +199,7 @@ namespace MachinePortal.Controllers
         [HttpPost]
         public async Task<PartialViewResult> AddPartialEdit(string id)
         {
-            Sector sector = new Sector();
+            Sector sector;
             int ID = int.Parse(id);
             sector = await _SectorService.FindByIDAsync(ID);
             PartialViewResult partial = PartialView("Edit", sector);
@@ -208,7 +209,7 @@ namespace MachinePortal.Controllers
         [HttpPost]
         public async Task<PartialViewResult> AddPartialDelete(string id)
         {
-            Sector sector = new Sector();
+            Sector sector;
             int ID = int.Parse(id);
             sector = await _SectorService.FindByIDAsync(ID);
             PartialViewResult partial = PartialView("Delete", sector);

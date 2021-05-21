@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using System.Security.Claims;
+using MachinePortal.Areas.Identity.Data;
 
 namespace MachinePortal.Controllers
 {
@@ -18,7 +19,7 @@ namespace MachinePortal.Controllers
     {
         private readonly DeviceService _deviceService;
         private readonly DocumentService _documentService;
-        IHostingEnvironment _appEnvironment;
+        private readonly IHostingEnvironment _appEnvironment;
 
         public DevicesController(IHostingEnvironment enviroment, DeviceService deviceService, DocumentService documentService, PermissionsService permissionsService, IdentityContext identityContext)
         {
@@ -85,11 +86,13 @@ namespace MachinePortal.Controllers
                 string fileName = document.FileName.Substring(0,document.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
                 fileName += document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
                 string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Devices\\Documents\\" + fileName;
-                DeviceDocument doc = new DeviceDocument();
-                doc.Name = fileName;
-                doc.Path = @"/resources/Devices/Documents/";
-                doc.Extension = document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
-                doc.Device = device;
+                DeviceDocument doc = new DeviceDocument
+                {
+                    Name = fileName,
+                    Path = @"/resources/Devices/Documents/",
+                    Extension = document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf("."))),
+                    Device = device
+                };
                 await _documentService.InsertAsync(doc);
                 device.AddDocument(doc);
 
@@ -143,7 +146,7 @@ namespace MachinePortal.Controllers
             await _deviceService.RemoveAsync(ID);
             return RedirectToAction(nameof(Index));
         }
-
+        
         public async Task<IActionResult> Details(int? ID)
         {
             Permissions();
