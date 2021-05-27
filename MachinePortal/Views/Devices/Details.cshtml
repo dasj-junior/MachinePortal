@@ -18,7 +18,7 @@
     <div class="card-block card-padding">
         <dl class="dl-horizontal">
             <dd>
-                <img src="@Html.DisplayFor(model => model.ImagePath)" height="200" class="img-thumbnail"/>
+                <img src="@Html.DisplayFor(model => model.ImagePath)" height="200" class="img-thumbnail" />
             </dd>
             <br />
             <dt>
@@ -62,6 +62,12 @@
             </dt>
             <dd>
                 @Html.DisplayFor(model => model.Supplier)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.StockLocation)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.StockLocation)
             </dd>
         </dl>
     </div>

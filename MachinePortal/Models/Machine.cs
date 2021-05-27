@@ -10,7 +10,7 @@ namespace MachinePortal.Models
     {
         public int ID { get; set; }
         [Required]
-        [StringLength(50, MinimumLength = 3)]
+        [StringLength(100, MinimumLength = 3)]
         public string Name { get; set; }
         [StringLength(200, MinimumLength = 3)]
         public string Description { get; set; }
@@ -28,8 +28,10 @@ namespace MachinePortal.Models
         public int CostCenter { get; set; }
         [Display(Name = "Server Path")]
         public string ServerPath { get; set; }
-        //[Display(Name = "Last Preventive Maintenance")]
-        //public DateTime LastPreventiveMaintenance { get; set; }
+        [Display(Name = "Last Preventive Maintenance")]
+        public DateTime LastPreventiveMaintenance { get; set; }
+        [Display(Name = "Start In Production Date")]
+        public DateTime StartDate { get; set; }
 
         public int AreaID { get; set; }
         public Area Area { get; set; }
@@ -48,7 +50,7 @@ namespace MachinePortal.Models
         public ICollection<MachineResponsible> MachineResponsibles { get; set; }
         public ICollection<MachineDevice> MachineDevices { get; set; }
 
-        public ICollection<MachinePassword> MachinePasswords { get; set; }
+        public ICollection<Password> Passwords { get; set; }
 
         public void AddDocument(MachineDocument machineDocument)
         {

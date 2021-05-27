@@ -18,6 +18,11 @@ namespace MachinePortal.Models
                 entity.ToTable("AspNetUsers");
             });
 
+            modelBuilder.Entity<Department>(entity =>
+            {
+                entity.ToTable("Department");
+            });
+
             modelBuilder.Entity<MachineResponsible>()
                 .HasKey(x => new { x.MachineID, x.ResponsibleID });
 
@@ -26,8 +31,11 @@ namespace MachinePortal.Models
 
             modelBuilder.Entity<UserPermission>()
                 .HasKey(x => new { x.UserID, x.PermissionID });
+
         }
 
+        //MachinePortal
+        public DbSet<Category> Category { get; set; }
         public DbSet<Device> Device { get; set; }
         public DbSet<DeviceDocument> DeviceDocument { get; set; }
         public DbSet<MachineComment> MachineComment { get; set; }
@@ -36,6 +44,6 @@ namespace MachinePortal.Models
         public DbSet<Sector> Sector { get; set; }
         public DbSet<Area> Area { get; set; }
         public DbSet<Machine> Machine { get; set; }
-        public DbSet<MachinePassword> MachinePassword { get; set; }
+        public DbSet<Password> Password { get; set; }       
     }
 }

@@ -12,18 +12,20 @@ namespace MachinePortal.Models
         [Required]
         [StringLength(200, MinimumLength = 3)]
         public string Name { get; set; }
-        [StringLength(50, MinimumLength = 3)]
+        [StringLength(100, MinimumLength = 3)]
         public string Brand { get; set; }
-        [StringLength(50, MinimumLength = 3)]
+        [StringLength(100, MinimumLength = 3)]
         public string Model { get; set; }
-        [StringLength(50, MinimumLength = 3)]
+        [StringLength(100, MinimumLength = 3)]
         public string PartNumber { get; set; }
         [StringLength(200, MinimumLength = 3)]
         public string Description { get; set; }
         [DataType(DataType.Currency)]
         public double Price { get; set; }
-        [StringLength(50, MinimumLength = 3)]
+        [StringLength(100, MinimumLength = 3)]
         public string Supplier { get; set; }
+        [StringLength(100, MinimumLength = 3)]
+        public string StockLocation { get; set; }
         [Display(Name = "Image")]
         public string ImagePath { get; set; }
         public ICollection<DeviceDocument> Documents { get; set; }

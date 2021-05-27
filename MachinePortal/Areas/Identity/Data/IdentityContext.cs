@@ -1,4 +1,5 @@
 ﻿using MachinePortal.Areas.Identity.Data;
+using MachinePortal.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,16 +21,21 @@ namespace MachinePortal.Areas.Identity.Data
 
             builder.Entity<UserPermission>()
                 .HasKey(x => new { x.UserID, x.PermissionID });
-            
+
+            builder.Entity<MachineResponsible>()
+                .HasKey(x => new { x.MachineID, x.ResponsibleID });
+
+            builder.Entity<MachineDevice>()
+                .HasKey(x => new { x.MachineID, x.DeviceID });
+
             builder.Entity<UserPermission>()
                 .HasKey(x => new { x.UserID, x.PermissionID });
-
         }
 
+        //Identity
         public DbSet<Permission> Permission { get; set; }
         public DbSet<UserPermission> UserPermission { get; set; }
         public DbSet<Department> Department { get; set; }
-        public DbSet<DepartmentRead> DepartmentRead { get; set; }
-        public DbSet<DepartmentWrite> DepartmentWrite { get; set; }
+        public DbSet<DefaultPermission> DefaultPermission { get; set; }
     }
 }

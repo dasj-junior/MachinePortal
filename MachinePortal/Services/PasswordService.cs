@@ -1,6 +1,5 @@
 ﻿using MachinePortal.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,21 +15,31 @@ namespace MachinePortal.Services
             _context = context;
         }
 
-        public async Task<List<MachinePassword>> FindByMachineIDAsync(int ID)
+        public async Task<List<Password>> FindByMachineIDAsync(int ID)
         {
-            Machine machine = await _context.Machine.Include(Mpas => Mpas.MachinePasswords).FirstOrDefaultAsync(obj => obj.ID == ID);
-            return machine.MachinePasswords.ToList();
+            Machine machine = await _context.Machine.Include(Mpas => Mpas.Passwords).FirstOrDefaultAsync(obj => obj.ID == ID);
+            return machine.Passwords.ToList();
+        }
+        public async Task<Password> FindByIDAsync(int ID)
+        {
+            return await _context.Password.FirstOrDefaultAsync(x => x.ID == ID);
         }
 
-        public async Task InsertAsync(MachinePassword obj)
+        public async Task InsertAsync(Password obj)
         {
-            _context.Add(obj);
+            _context.Password.Add(obj);
+            await _context.SaveChangesAsync();        
+        }
+
+        public async Task UpdateAsync(Password obj)
+        {
+            _context.Password.Update(obj);
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveAsync(MachinePassword obj)
+        public async Task RemoveAsync(Password obj)
         {
-            _context.Remove(obj);
+            _context.Password.Remove(obj);
             await _context.SaveChangesAsync();
         }
 

@@ -1,11 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using MachinePortal.Areas.Identity.Data
-@using MachinePortal.Controllers
-@using MachinePortal.Areas.Identity.Pages.Account.Manage
 @using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Hosting;
 @inject SignInManager<MachinePortalUser> SignInManager
 @inject UserManager<MachinePortalUser> UserManager
 @inject IdentityContext identityContext
+@inject IHostingEnvironment hostingEnv
 @* Get User Permissions *@
 @{
     var area = ViewContext.View.Path.Contains("Identity") ? "Identity" : "MachinePortal";
@@ -18,7 +18,7 @@
     if (user != null)
     {
         username = user != null ? user.FirstName + " " + user.LastName : "";
-        userphoto = user.PhotoPath != null ? user.PhotoPath : "~/resources/General/DefaultUser.png";
+        userphoto = user.PhotoPath != null ? user.PhotoPath : @Url.Content("/resources/General/DefaultUser.png");
         permissions = ((from obj in identityContext.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == user.Id).ToList()).Select(p => p.Permission.PermissionName).ToList();
         Department department = ((from obj in identityContext.Users select obj).Include(d => d.Department).Where(x => x.Id == user.Id).ToList()).Select(dep => dep.Department).FirstOrDefault();
         userdepartment = department.Name;
@@ -197,48 +197,11 @@
                                 <div class=" ">
                                     <div class="main-menu-content">
                                         <ul class="pcoded-item pcoded-left-item">
-                                            @*<li class="pcoded-hasmenu">
-                                                    <a href="javascript:void(0)">
-                                                        <span class="pcoded-micon  c-vitesco-red"><i class="bi-people"></i></span>
-                                                        <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Departments</span>
-                                                        <span class="pcoded-mcaret"></span>
-                                                    </a>
-                                                    <ul class="pcoded-submenu">
-                                                        <li class=" ">
-                                                            <a asp-area="Identity" asp-page="/Account/Manage/Departments">
-                                                                <span class="pcoded-mtext" data-i18n="nav.dash.main">Departments</span>
-                                                                <span class="pcoded-mcaret"></span>
-                                                            </a>
-                                                        </li>
-                                                        <li class=" ">
-                                                            <a asp-area="Identity" asp-page="/Account/Manage/Departments">
-                                                                <span class="pcoded-mtext" data-i18n="nav.dash.main">Read Permissions</span>
-                                                                <span class="pcoded-mcaret"></span>
-                                                            </a>
-                                                        </li>
-                                                        <li class=" ">
-                                                            <a asp-area="Identity" asp-page="/Account/Manage/Departments">
-                                                                <span class="pcoded-mtext" data-i18n="nav.dash.main">Write Permissions</span>
-                                                                <span class="pcoded-mcaret"></span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </li>*@
-                                            @if (permissions.Contains("PageDepartments") && permissions != null)
-                                            {
-                                                <li class=" ">
-                                                    <a asp-area="Identity" asp-page="/Account/Manage/Departments">
-                                                        <span class="pcoded-micon  c-vitesco-red"><i class="bi-people"></i></span>
-                                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Departments</span>
-                                                        <span class="pcoded-mcaret"></span>
-                                                    </a>
-                                                </li>
-                                            }
                                             @if (permissions.Contains("PageManageUsers") && permissions != null)
                                             {
                                                 <li class=" ">
                                                     <a asp-area="Identity" asp-page="/Account/Manage/ManageUsers">
-                                                        <span class="pcoded-micon  c-vitesco-gray"><i class="ti-settings"></i></span>
+                                                        <span class="pcoded-micon  c-vitesco-red"><i class="ti-settings"></i></span>
                                                         <span class="pcoded-mtext" data-i18n="nav.dash.main">Manage Users</span>
                                                         <span class="pcoded-mcaret"></span>
                                                     </a>
@@ -248,8 +211,28 @@
                                             {
                                                 <li class=" ">
                                                     <a asp-area="Identity" asp-page="/Account/Manage/Permissions">
-                                                        <span class="pcoded-micon  c-vitesco-green-03"><i class="ti-briefcase"></i></span>
+                                                        <span class="pcoded-micon  c-vitesco-gray"><i class="ti-briefcase"></i></span>
                                                         <span class="pcoded-mtext" data-i18n="nav.dash.main">Permissions</span>
+                                                        <span class="pcoded-mcaret"></span>
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (permissions.Contains("PageDepartments") && permissions != null)
+                                            {
+                                                <li class=" ">
+                                                    <a asp-area="Identity" asp-page="/Account/Manage/Departments">
+                                                        <span class="pcoded-micon  c-vitesco-green-03"><i class="bi-people"></i></span>
+                                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Departments</span>
+                                                        <span class="pcoded-mcaret"></span>
+                                                    </a>
+                                                </li>
+                                            }
+                                            @if (permissions.Contains("PageCategories") && permissions != null)
+                                            {
+                                                <li class=" ">
+                                                    <a asp-area="" asp-controller="Categories" asp-action="Index">
+                                                        <span class="pcoded-micon  c-vitesco-green-02"><i class="bi-grid"></i></span>
+                                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Categories</span>
                                                         <span class="pcoded-mcaret"></span>
                                                     </a>
                                                 </li>
@@ -371,7 +354,7 @@
         </div>
     </div>
     <div style="position:fixed; padding:10px 20px 0px 0px; text-align:right; vertical-align:middle; bottom:0px; left:0px; width:100%; height:45px; background-color:white; box-shadow: 0 0 11px rgba(0, 0, 0, 0.13);">
-        <p>&copy; 2020 - MachinePortal - Vitesco Technologies - Salto Plant</p>
+        <p>&copy; 2021 - MachinePortal - Vitesco Technologies - Salto Plant</p>
     </div>
     <!-- Warning Section Ends -->
     <partial name="_CookieConsentPartial" />

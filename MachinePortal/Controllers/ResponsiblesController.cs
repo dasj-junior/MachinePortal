@@ -30,6 +30,8 @@ namespace MachinePortal.Controllers
         public async Task<IActionResult> Index()
         {
             Permissions();
+            List<Department> departments = _identityContext.Department.ToList();
+            ViewBag.ListDepartments = departments;
             var list = await _responsibleService.FindAllAsync();
             return View(list);
         }
@@ -139,7 +141,6 @@ namespace MachinePortal.Controllers
             {
                 return NotFound();
             }
-
             return View(obj);
         }
 
@@ -180,6 +181,35 @@ namespace MachinePortal.Controllers
             await _responsibleService.UpdateAsync(responsible);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPost]
+        public async Task<PartialViewResult> AddPartialDetails(string id)
+        {
+            int ID = int.Parse(id);
+            Responsible responsible = await _responsibleService.FindByIDAsync(ID);
+            PartialViewResult partial = PartialView("Details", responsible);
+            return partial;
+        }
+
+        [HttpPost]
+        public async Task<PartialViewResult> AddPartialEdit(string id)
+        {
+            List<Department> departments = _identityContext.Department.ToList();
+            ViewBag.ListDepartments = departments;
+            int ID = int.Parse(id);
+            Responsible responsible = await _responsibleService.FindByIDAsync(ID);
+            PartialViewResult partial = PartialView("Edit", responsible);
+            return partial;
+        }
+
+        [HttpPost]
+        public async Task<PartialViewResult> AddPartialDelete(string id)
+        {
+            int ID = int.Parse(id);
+            Responsible responsible = await _responsibleService.FindByIDAsync(ID);
+            PartialViewResult partial = PartialView("Delete", responsible);
+            return partial;
         }
     }
 }

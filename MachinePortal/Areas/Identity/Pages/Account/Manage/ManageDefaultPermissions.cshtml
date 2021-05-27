@@ -1,0 +1,70 @@
+﻿@page
+@model ManageDefaultPermissionsModel
+@{
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+
+        $('#submit').click(function () {
+            var selPerm = document.getElementById("PermissionsSelected");
+            for (i = 0; i < selPerm.length; i++) {
+                selPerm.options[i].selected = 1;
+            }
+        });
+
+        $('#submit').click(function () {
+            var selPerm = document.getElementById("PermissionsSelect");
+            for (i = 0; i < selPerm.length; i++) {
+                selPerm.options[i].selected = 1;
+            }
+        });
+
+        $("#rightPermissions").click(function () {
+            $("#PermissionsSelect option:selected").remove().appendTo($("#PermissionsSelected"));
+        });
+
+        $("#leftPermissions").click(function () {
+            $("#PermissionsSelected option:selected").remove().appendTo($("#PermissionsSelect"));
+        });
+    });
+</script>
+<form id="form" enctype="multipart/form-data" method="post">
+    <div class="row justify-content-center">
+        <div class="col-8">
+
+            <div class="card fb-card c-vitesco-red">
+                <div class="card-header c-vitesco-red">
+                    <i style="vertical-align:middle" class="bi-people c-vitesco-red"></i>
+                    <div class="d-inline-block">
+                        <h2 style="color:white">Default Permissions</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-5 col-sm-5">
+                                <select id="PermissionsSelect" asp-for="SelectPermissions" asp-items="Model.SlAvailablePermissions" class="form-control" multiple></select>
+                            </div>
+                            <div class="col-md-2 col-sm-2">
+                                <button type="button" id="rightPermissions" class="btn btn-success btn-block bi-arrow-right"></button>
+                                <button type="button" id="leftPermissions" class="btn btn-success btn-block btn-danger bi-arrow-left"></button>
+                            </div>
+                            <div class="col-md-5 col-sm-5">
+                                <select id="PermissionsSelected" asp-for="SelectedPermissions" asp-items="Model.SlCurrentPermissions" class="form-control" multiple></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="border-radius:5px;" class="form-group bg-white p-20">
+                <button style="width:120px; font-weight:700;" class="btn btn-primary" asp-page="./Departments">Back</button>
+                <button style="float:right; width:120px; font-weight:700;" class="btn btn-success" id="submit" type="submit">Save</button>
+            </div>
+
+        </div>
+    </div>
+</form>

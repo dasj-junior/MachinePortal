@@ -35,19 +35,26 @@ namespace MachinePortal.Controllers
 
         private readonly ResponsibleService _responsibleService;
         private readonly DeviceService _deviceService;
+        private readonly PasswordService _passwordService;
+        private readonly CategoryService _categoryService;
 
         private readonly AreaService _areaService;
         private readonly SectorService _sectorService;
         private readonly LineService _lineService;
 
-        public MachinesController(IdentityContext identityContext, MachineService machineService, IHostingEnvironment enviroment, ResponsibleService responsibleService, DeviceService deviceService,
-            AreaService areaService, SectorService sectorService, LineService lineService, PermissionsService permissionsService)
+        public MachinesController(IdentityContext identityContext, MachineService machineService,
+            IHostingEnvironment enviroment, ResponsibleService responsibleService,
+            DeviceService deviceService, AreaService areaService, SectorService sectorService,
+            LineService lineService, PermissionsService permissionsService, PasswordService passwordService, 
+            CategoryService categoryService)
         {
             _identityContext = identityContext;
             _machineService = machineService;
             _appEnvironment = enviroment;
 
             _PermissionsService = permissionsService;
+            _passwordService = passwordService;
+            _categoryService = categoryService;
 
             _responsibleService = responsibleService;
             _deviceService = deviceService;
@@ -88,6 +95,8 @@ namespace MachinePortal.Controllers
             List<Area> areas = await _areaService.FindAllAsync();
             ViewBag.ListAreas = areas;
 
+            List<Category> categories = await _categoryService.FindAllAsync();
+            ViewBag.ListCategories = categories;
 
             var viewModel = new MachineFormViewModel { Responsibles = responsibles, Devices = devices };
             return View(viewModel);
@@ -158,7 +167,8 @@ namespace MachinePortal.Controllers
                     if (file.FileName == document.FileName && file.Type == "Document")
                     {
                         doc.Name = file.Name;
-                        doc.Category = file.Category;
+                        doc.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                        doc.CategoryID = doc.Category.ID;
                     }
                 }
                 doc.FileName = fileName;
@@ -196,7 +206,8 @@ namespace MachinePortal.Controllers
                     if (file.FileName == image.FileName && file.Type == "Image")
                     {
                         img.Name = file.Name;
-                        img.Category = file.Category;
+                        img.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                        img.CategoryID = img.Category.ID;
                     }
                 }
                 img.FileName = fileName;
@@ -232,7 +243,8 @@ namespace MachinePortal.Controllers
                     if (file.FileName == video.FileName && file.Type == "Video")
                     {
                         vid.Name = file.Name;
-                        vid.Category = file.Category;
+                        vid.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                        vid.CategoryID = vid.Category.ID;
                     }
                 }
                 vid.FileName = fileName;
@@ -306,6 +318,9 @@ namespace MachinePortal.Controllers
 
             List<Line> lines = await _lineService.FindAllAsync();
             ViewBag.ListLines = lines;
+
+            List<Category> categories = await _categoryService.FindAllAsync();
+            ViewBag.ListCategories = categories;
 
             ViewData["SelectedArea"] = machine.Area.Name;
             ViewData["SelectedSector"] = machine.Sector.Name;
@@ -445,7 +460,8 @@ namespace MachinePortal.Controllers
                     if (file.FileName == document.FileName && file.Type == "Document")
                     {
                         doc.Name = file.Name;
-                        doc.Category = file.Category;
+                        doc.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                        doc.CategoryID = doc.Category.ID;
                     }
                 }
                 doc.FileName = fileName;
@@ -484,7 +500,8 @@ namespace MachinePortal.Controllers
                     if (file.FileName == image.FileName && file.Type == "Image")
                     {
                         img.Name = file.Name;
-                        img.Category = file.Category;
+                        img.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                        img.CategoryID = img.Category.ID;
                     }
                 }
                 img.FileName = fileName;
@@ -521,7 +538,8 @@ namespace MachinePortal.Controllers
                     if (file.FileName == video.FileName && file.Type == "Video")
                     {
                         vid.Name = file.Name;
-                        vid.Category = file.Category;
+                        vid.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                        vid.CategoryID = vid.Category.ID;
                     }
                 }
                 vid.FileName = fileName;
@@ -590,25 +608,28 @@ namespace MachinePortal.Controllers
             }
 
             //Add Responsibles to machine
-            foreach (int res in machineNEW.SelectedResponsibles)
+            if(machineNEW.SelectedResponsibles != null)
             {
-                bool found = false;
-                foreach (MachineResponsible resOLD in machineOLD.MachineResponsibles)
+                foreach (int res in machineNEW.SelectedResponsibles)
                 {
-                    if (resOLD.ResponsibleID == res && resOLD.MachineID == machineOLD.ID)
+                    bool found = false;
+                    foreach (MachineResponsible resOLD in machineOLD.MachineResponsibles)
                     {
-                        found = true;
+                        if (resOLD.ResponsibleID == res && resOLD.MachineID == machineOLD.ID)
+                        {
+                            found = true;
+                        }
+                    }
+                    if (found == false)
+                    {
+                        Responsible responsible = await _responsibleService.FindByIDAsync(res);
+                        MachineResponsible machineResponsible = new MachineResponsible { Machine = machineNEW.Machine, MachineID = machineNEW.Machine.ID, Responsible = responsible, ResponsibleID = responsible.ID };
+                        await _machineService.InsertMachineResponsibleAsync(machineResponsible);
+                        machineOLD.MachineResponsibles.Add(machineResponsible);
                     }
                 }
-                if (found == false)
-                {
-                    Responsible responsible = await _responsibleService.FindByIDAsync(res);
-                    MachineResponsible machineResponsible = new MachineResponsible { Machine = machineNEW.Machine, MachineID = machineNEW.Machine.ID, Responsible = responsible, ResponsibleID = responsible.ID };
-                    await _machineService.InsertMachineResponsibleAsync(machineResponsible);
-                    machineOLD.MachineResponsibles.Add(machineResponsible);
-                }
             }
-
+            
             //Remove responsibles from machine
             if (machineOLD.MachineResponsibles != null)
             {
@@ -751,6 +772,11 @@ namespace MachinePortal.Controllers
             {
                 return NotFound();
             }
+
+            List<Department> departments = _identityContext.Department.ToList();
+            ViewBag.ListDepartments = departments;
+            ViewBag.MachineName = obj.Name;
+            ViewBag.MachineID = obj.ID;
 
             return View(obj);
         }
@@ -904,5 +930,50 @@ namespace MachinePortal.Controllers
             return data;
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreatePassword(Password Password)
+        {
+            await _passwordService.InsertAsync(Password);
+            return RedirectToAction("Details/" + Password.MachineID, "Machines");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditPassword(Password Password)
+        {
+            await _passwordService.UpdateAsync(Password);
+            return RedirectToAction("Details/" +  Password.MachineID, "Machines");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePassword(Password Password)
+        {
+            await _passwordService.RemoveAsync(Password);
+            return RedirectToAction("Details/" + Password.MachineID, "Machines");
+        }
+
+        [HttpPost]
+        public async Task<PartialViewResult> AddPartialEditPassword(int ID, string MachineName, int MachineID)
+        {
+            List<Department> departments = _identityContext.Department.ToList();
+            Password password = await _passwordService.FindByIDAsync(ID);
+            ViewBag.ListDepartments = departments;
+            ViewBag.MachineName = MachineName;
+            ViewBag.MachineID = MachineID;
+            PartialViewResult partial = PartialView("PasswordEdit", password);
+            return partial;
+        }
+
+        //[HttpPost]
+        public async Task<PartialViewResult> AddPartialDeletePassword(int ID, string MachineName, int MachineID)
+        {
+            Password password = await _passwordService.FindByIDAsync(ID);
+            ViewBag.MachineName = MachineName;
+            ViewBag.MachineID = MachineID;
+            PartialViewResult partial = PartialView("PasswordDelete", password);
+            return partial;
+        }
     }
 }

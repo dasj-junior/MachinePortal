@@ -133,9 +133,10 @@
             for (i = 0; i < fileInput.files.length; i++) {
                 var sfilename = fileInput.files[i].name;
                 var sName = document.getElementById('documentName').value;
-                var sCategory = document.getElementById('documentCategory').value;
+                var iCategory = document.getElementById('documentCategory').value;
+                var sCategory = document.getElementById('documentCategory').options[document.getElementById('documentCategory').selectedIndex].text;
                 let srandomid = Math.random().toString(36).substring(7);
-                var doc = { Name: sName, Category: sCategory, ID: srandomid, Type: "Document", FileName: sfilename };
+                var doc = { Name: sName, Category: iCategory, ID: srandomid, Type: "Document", FileName: sfilename };
                 Mfiles.push(doc);
                 formdata.append("document", fileInput.files[i]);
                 var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
@@ -151,9 +152,10 @@
             for (i = 0; i < fileInput.files.length; i++) {
                 var sfilename = fileInput.files[i].name;
                 var sName = document.getElementById('imageName').value;
-                var sCategory = document.getElementById('imageCategory').value;
+                var iCategory = document.getElementById('imageCategory').value;
+                var sCategory = document.getElementById('imageCategory').options[document.getElementById('imageCategory').selectedIndex].text;
                 let srandomid = Math.random().toString(36).substring(7);
-                var img = { Name: sName, Category: sCategory, ID: srandomid, Type: "Image", FileName: sfilename };
+                var img = { Name: sName, Category: iCategory, ID: srandomid, Type: "Image", FileName: sfilename };
                 Mfiles.push(img);
                 formdata.append("image", fileInput.files[i]);
                 var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
@@ -169,9 +171,10 @@
             for (i = 0; i < fileInput.files.length; i++) {
                 var sfilename = fileInput.files[i].name;
                 var sName = document.getElementById('videoName').value;
-                var sCategory = document.getElementById('videoCategory').value;
+                var iCategory = document.getElementById('videoCategory').value;
+                var sCategory = document.getElementById('videoCategory').options[document.getElementById('videoCategory').selectedIndex].text;
                 let srandomid = Math.random().toString(36).substring(7);
-                var vid = { Name: sName, Category: sCategory, ID: srandomid, Type: "Video", FileName: sfilename };
+                var vid = { Name: sName, Category: iCategory, ID: srandomid, Type: "Video", FileName: sfilename };
                 Mfiles.push(vid);
                 formdata.append("video", fileInput.files[i]);
                 var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
@@ -379,6 +382,16 @@
                         <label asp-for="Machine.ServerPath" class="control-label"></label>
                         <input asp-for="Machine.ServerPath" class="form-control" />
                         <span asp-validation-for="Machine.ServerPath" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.StartDate" class="control-label"></label>
+                        <input type="datetime" asp-for="Machine.StartDate" placeholder="@DateTime.Now.ToString("dd/MM/yyyy")" class="form-control" />
+                        <span asp-validation-for="Machine.StartDate" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Machine.LastPreventiveMaintenance" class="control-label"></label>
+                        <input type="datetime" asp-for="Machine.LastPreventiveMaintenance" placeholder="@DateTime.Now.ToString("dd/MM/yyyy")" class="form-control" />
+                        <span asp-validation-for="Machine.LastPreventiveMaintenance" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -600,7 +613,8 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Category:</label>
-                    <input id="documentCategory" class="form-control" />
+                    <select id="documentCategory" class="form-control" asp-items="@(new SelectList(@ViewBag.ListCategories,"ID","Name"))"></select>
+                    @*<input id="documentCategory" class="form-control" />*@
                 </div>
                 <div class="form-group">
                     <label class="control-label">File:</label>
@@ -636,7 +650,8 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Category:</label>
-                    <input id="imageCategory" class="form-control" />
+                    <select id="imageCategory" class="form-control" asp-items="@(new SelectList(@ViewBag.ListCategories,"ID","Name"))"></select>
+                    @*<input id="imageCategory" class="form-control" />*@
                 </div>
                 <div class="form-group">
                     <label class="control-label">File:</label>
@@ -672,7 +687,8 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Category:</label>
-                    <input id="videoCategory" class="form-control" />
+                    <select id="videoCategory" class="form-control" asp-items="@(new SelectList(@ViewBag.ListCategories,"ID","Name"))"></select>
+                    @*<input id="videoCategory" class="form-control" />*@
                 </div>
                 <div class="form-group">
                     <label class="control-label">File:</label>

@@ -49,7 +49,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Services\" />
-    <Folder Include="Views\Users\" />
     <Folder Include="wwwroot\resources\Areas\Images\" />
     <Folder Include="wwwroot\resources\Assets\Images\" />
     <Folder Include="wwwroot\resources\Devices\Images\" />
@@ -132,7 +131,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Areas\Identity\Pages\Account\Manage\ManageDepartments.cshtml">
+    <Content Update="Areas\Identity\Pages\Account\Manage\ManageDefaultPermissions.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Areas\Identity\Pages\Account\Manage\ManagePermissions.cshtml">
@@ -145,6 +144,15 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Areas\Identity\Pages\Account\Manage\ManageUsers.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Categories\Delete.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Categories\Edit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Categories\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Areas\Delete.cshtml">

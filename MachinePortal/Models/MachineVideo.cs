@@ -12,15 +12,18 @@ namespace MachinePortal.Models
         [Required]
         [StringLength(200, MinimumLength = 3)]
         public string Name { get; set; }
-        public string Category { get; set; }
         [Display(Name = "File Name")]
         public string FileName { get; set; }
         public string Path { get; set; }
         public string Extension { get; set; }
         public string Type { get; set; }
+        public string Location { get; set; } //File ServerPath WebLink 
 
         public int MachineID { get; set; }
         public Machine Machine { get; set; }
+
+        public int CategoryID { get; set; }
+        public Category Category { get; set; }
 
         public MachineVideo()
         {
@@ -30,7 +33,7 @@ namespace MachinePortal.Models
         {
             ID = Id;
             Name = name;
-            Category = category;
+            //Category = category;
             FileName = filename;
             Path = path;
             Extension = extension;

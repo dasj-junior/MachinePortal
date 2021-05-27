@@ -16,8 +16,8 @@ namespace MachinePortal.Models
         public string Extension { get; set; }
 
         public int DeviceID { get; set; }
-        public Device Device { get; set; }
-
+        public Device Device { get; set; } 
+        
         public DeviceDocument()
         {
         }

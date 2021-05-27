@@ -44,18 +44,16 @@
     });
 </script>
 
-<div class="row">
-    <div class="col-md-6">
+<div class="modal-dialog">
+    <div class="modal-content">
         <form asp-action="Create" enctype="multipart/form-data" asp-controller="Responsibles">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="card fb-card c-vitesco-green-02">
-                <div class="card-header c-vitesco-green-02">
-                    <i style="vertical-align:middle" class="ti-user c-vitesco-green-02"></i>
-                    <div class="d-inline-block">
-                        <h2 style="color:white">Create new responsible</h2>
-                    </div>
-                </div>
-                <div class="card-block card-padding">
+            <div class="modal-header c-vitesco-green-03">
+                <i style="color:white;font-size:30px;" class="bi-plus-circle c-vitesco-green-03"></i>
+                <h3 style="color:white;text-align:center;" class="modal-title">Create New Responsible</h3>
+                <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <div style="padding:10px;" class="form-horizontal">
                     <div class="form-group">
                         <label class="control-label">Photo</label>
                         <div id="divImageMediaPreview"></div>
@@ -80,8 +78,8 @@
                         <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Department" class="control-label"></label>
-                        <input asp-for="Department" class="form-control" />
+                        <label>Department</label>
+                        <select asp-for="Department.ID" class="form-control" asp-items="@(new SelectList(ViewBag.ListDepartments,"ID","Name"))"></select>
                         <span asp-validation-for="Department" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -101,9 +99,9 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <a style="width:120px;" class="btn btn-primary" asp-action="Index">Back to List</a>
-                <input style="width:120px;float:right;" type="submit" id="submit" value="Create" class="btn btn-success" />
+            <div class="modal-footer">
+                <input style="width:120px;" type="button" value="Cancel" class="btn btn-dan mr-auto" data-dismiss="modal" />
+                <input style="width:120px;float:right;" type="submit" value="Create" class="btn btn-success" />
             </div>
         </form>
     </div>

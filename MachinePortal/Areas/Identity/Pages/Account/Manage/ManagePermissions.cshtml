@@ -40,9 +40,9 @@
     <div class="row justify-content-center">
         <div class="col-8">
 
-            <div class="card fb-card c-vitesco-green-04">
-                <div class="card-header c-vitesco-green-04">
-                    <i style="vertical-align:middle" class="ti-user c-vitesco-green-04"></i>
+            <div class="card fb-card c-vitesco-red">
+                <div class="card-header c-vitesco-red">
+                    <i style="vertical-align:middle" class="ti-user c-vitesco-red"></i>
                     <div class="d-inline-block">
                         <h2 style="color:white">User Data</h2>
                     </div>
@@ -79,9 +79,23 @@
                 </div>
             </div>
 
-            <div class="card fb-card c-vitesco-green-04">
-                <div class="card-header c-vitesco-green-04">
-                    <i style="vertical-align:middle" class="ti-user c-vitesco-green-04"></i>
+            <div class="card fb-card c-vitesco-red">
+                <div class="card-header c-vitesco-red">
+                    <i style="vertical-align:middle" class="bi-people c-vitesco-red"></i>
+                    <div class="d-inline-block">
+                        <h2 style="color:white">User Department</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <div class="form-group">
+                        <select asp-for="SelectedDepartment" id="DepartmentID" class="form-control" asp-items="Model.SlDepartments"></select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card fb-card c-vitesco-red">
+                <div class="card-header c-vitesco-red">
+                    <i style="vertical-align:middle" class="ti-user c-vitesco-red"></i>
                     <div class="d-inline-block">
                         <h2 style="color:white">User Permissions</h2>
                     </div>
@@ -100,20 +114,6 @@
                                 <select id="PermissionsSelected" asp-for="SelectedPermissions" asp-items="Model.SlCurrentPermissions" class="form-control" multiple></select>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card fb-card c-vitesco-green-04">
-                <div class="card-header c-vitesco-green-04">
-                    <i style="vertical-align:middle" class="bi-people c-vitesco-green-04"></i>
-                    <div class="d-inline-block">
-                        <h2 style="color:white">User Department</h2>
-                    </div>
-                </div>
-                <div class="card-block card-padding">
-                    <div class="form-group">
-                        <select asp-for="SelectedDepartment" id="DepartmentID" class="form-control" asp-items="Model.SlDepartments"></select>
                     </div>
                 </div>
             </div>

@@ -73,15 +73,15 @@
             </div>
             <div class="card-block card-padding">
                 <p>
-                    <button style="float:right;" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalCreate">Create New Permission</button>
+                    <button style="float:right;" class="btn btn-primary" type="button" data-toggle="modal" data-target="#modalCreate">Create New Department</button>
                 </p>
                 <br />
                 <table class="table table-bordered table-vitesco">
                     <br />
                     <thead class="thead-vitesco">
                         <tr>
-                            <th>@Html.DisplayNameFor(model => model.departments[0].Name)</th>
-                            <th>Options</th>
+                            <th width="80%">@Html.DisplayNameFor(model => model.departments[0].Name)</th>
+                            <th width="20%">Options</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,7 +90,6 @@
                             <tr>
                                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                                 <td>
-                                    <a class="btn btn-secondary" asp-page="./ManageDepartments" asp-route-id="@item.ID">Permissions</a>
                                     <button class="btn btn-primary" type="button" onclick="document.getElementById('editName').value = '@item.Name'; document.getElementById('editID').value = '@item.ID'" data-toggle="modal" data-target="#modalEdit">Edit</button>
                                     <button class="btn btn-danger" type="button" onclick="document.getElementById('removeName').value = '@item.Name'; document.getElementById('removeID').value = '@item.ID'" data-toggle="modal" data-target="#modalRemove">Remove</button>
                                 </td>

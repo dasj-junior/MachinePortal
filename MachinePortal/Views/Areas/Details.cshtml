@@ -6,55 +6,6 @@
     ViewData["Title"] = "Hierarchies";
 }
 
-@*<h2>Details</h2>
-
-<div>
-    <h4>Areas</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dd>
-            <img src="@Html.DisplayFor(model => model.ImagePath)" height="200" />
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <br />
-        <h3>Sectors</h3>
-        <table class="table table-bordered table-responsive">
-
-            @foreach (Sector sector in Model.Sectors)
-            {
-                <tr>
-                    <th>Sector</th>
-                    <td>@Html.DisplayFor(model => sector.Name)</td>
-                    <td>
-                        <a class="btn-group" asp-action="Edit" asp-controller="Sectors" asp-route-id="@sector.ID">Edit</a>
-                        <a class="btn-group" asp-action="Details" asp-controller="Sectors" asp-route-id="@sector.ID">Details</a>
-                        <a class="btn-group" asp-action="Delete" asp-controller="Sectors" asp-route-id="@sector.ID">Delete</a>
-                    </td>
-                </tr>
-            }
-        </table>
-    </dl>
-    <p>
-        <a asp-action="Create" asp-controller="Sectors" asp-route-areaID="@AreaID">Create New Sector</a>
-    </p>
-</div>
-<div>
-    <input type="hidden" asp-for="ID" />
-    <input type="button" value="Back" class="btn btn-default" action="action" onclick="history.go(-1);" />
-    <input type="submit" value="Edit" class="btn btn-info" />
-</div>
-
-@{
-    var AreaID = Model.AreaID;
-    var SectorID = Model.ID;
-    ViewData["Title"] = "Hierarchies";
-}*@
-
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 <script>
@@ -111,9 +62,9 @@
             <table style="table-layout:auto;" class="table table-bordered table-vitesco">
                 <thead class="thead-vitesco">
                     <tr>
-                        <th>@Html.DisplayNameFor(model => model.ImagePath)</th>
-                        <th>@Html.DisplayNameFor(model => model.Name)</th>
-                        <th>Options</th>
+                        <th width="20%">@Html.DisplayNameFor(model => model.ImagePath)</th>
+                        <th width="60%">@Html.DisplayNameFor(model => model.Name)</th>
+                        <th width="20%">Options</thwidth="80%">
                     </tr>
                 </thead>
                 <tbody>
@@ -141,6 +92,8 @@
         </div>
     </div>
 </div>
+
+<button style="width:120px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">Back</button>
 
 <div class="modal" id="modalCreate" role="dialog">
     @Html.Partial("../Sectors/Create", new SectorFormViewModel(new Sector { AreaID = AreaID }));

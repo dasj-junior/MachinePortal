@@ -1,0 +1,27 @@
+﻿@model MachinePortal.Models.Category
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form asp-action="Edit" asp-controller="Categories">
+            <div class="modal-header c-vitesco-blue-03">
+                <i style="color:white;font-size:30px;" class="bi-pencil c-vitesco-blue-03"></i>
+                <h3 style="color:white;text-align:center;" class="modal-title">Edit Category</h3>
+                <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <div style="padding:10px;" class="form-horizontal">
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                        <input style="display:none" asp-for="ID" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input style="width:120px;" type="button" value="Cancel" class="btn btn-primary mr-auto" data-dismiss="modal" />
+                <input style="width:120px;float:right;" type="submit" value="Edit" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>

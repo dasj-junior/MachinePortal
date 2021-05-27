@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using MachinePortal.Areas.Identity.Data;
 
 namespace MachinePortal.Models
 {
@@ -18,8 +15,8 @@ namespace MachinePortal.Models
         public string LastName { get; set; }
         [Display(Name = "Full Name")]
         public string FullName { get; set; }
-        [Required]
-        public string Department { get; set; }
+        [Display(Name = "Job Role")]
+        public string JobRole { get; set; }
         [Display(Name = "Phone Number")]
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
@@ -30,11 +27,14 @@ namespace MachinePortal.Models
         [Display(Name = "Photo")]
         public string PhotoPath { get; set; }
 
+        public int DepartmentID { get; set; }
+        public Department Department { get; set; }
+
         public Responsible()
         {
         }
 
-        public Responsible(int Id, string firstName, string lastName, string department, string phoneNumber, string mobile, string email, string photoPath)
+        public Responsible(int Id, string firstName, string lastName, Department department, string phoneNumber, string mobile, string email, string photoPath)
         {
             ID = Id;
             FirstName = firstName;

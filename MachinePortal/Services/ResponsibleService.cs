@@ -26,12 +26,14 @@ namespace MachinePortal.Services
 
         public async Task<Responsible> FindByIDAsync(int ID)
         {
-            return await _context.Responsible.FirstOrDefaultAsync(obj => obj.ID == ID);
+            return await _context.Responsible.Include(d => d.Department)
+                .FirstOrDefaultAsync(obj => obj.ID == ID);
         }
 
         public async Task<List<Responsible>> FindAllAsync()
         {
-            return await _context.Responsible.OrderBy(x => x.ID).ToListAsync();
+            return await _context.Responsible.Include(d => d.Department)
+                .OrderBy(x => x.ID).ToListAsync();
         }
 
         public async Task UpdateAsync(Responsible obj)

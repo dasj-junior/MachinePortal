@@ -5,11 +5,40 @@
     var LoggedUserName = ViewData["UserName"];
     var LoggedUserID = ViewData["UserID"];
 
-    int ImgQty = 0;
-    int VidQty = 0;
+    int Qty = 0;
 }
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script>
+    function renderPartialEdit(ID) {
+        $.ajax({
+            url: '@Url.Action("AddPartialEditPassword", "Machines")',
+            data: { 'ID': ID, 'MachineName': '@Model.Name', 'MachineID': @Model.ID},
+           type: "POST",
+            success: function(data) {
+                $('#modalEditPassword').html(data);
+            },
+            error: function (response, xhr, data) {
+                $('#modalEditPassword').html(response);
+            }
+        });
+    }
+
+    function renderPartialDelete(ID) {
+        $.ajax({
+            url: '@Url.Action("AddPartialDeletePassword", "Machines")',
+            data: { 'ID': ID, 'MachineName': '@Model.Name', 'MachineID': @Model.ID},
+            type: "POST",
+            success: function(data) {
+                $('#modalDeletePassword').html(data);
+            },
+            error: function (response, xhr, data) {
+                $('#modalDeletePassword').html(response);
+            }
+        });
+    }
+</script>
 
 <script type="text/javascript">
     function removeComment(ID) {
@@ -63,8 +92,16 @@
                 Machine Photo
             </dt>
             <dd>
-                <img src="@Html.DisplayFor(model => model.ImagePath)" height="300" class="img-thumbnail"/>
+                @if (Model.ImagePath != null)
+                {
+                    <img src="@Html.DisplayFor(model => model.ImagePath)" height="300" class="img-thumbnail" />
+                }
+                else
+                {
+                    <img src="~/resources/General/NoImage.jpg" height="300" class="img-thumbnail" />
+                }
             </dd>
+
             <dt>
                 @Html.DisplayNameFor(model => model.Name)
             </dt>
@@ -113,6 +150,18 @@
             <dd>
                 @Html.DisplayFor(model => model.ServerPath)
             </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.StartDate)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.LastPreventiveMaintenance)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.LastPreventiveMaintenance)
+            </dd>
         </dl>
     </div>
 </div>
@@ -124,12 +173,12 @@
         </div>
         @if (Model.MachineDocuments.Count > 10)
         {
-            ImgQty = 10;
+            Qty = 10;
             <a asp-action="MachineDocuments" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">Show All</a>
         }
         else
         {
-            ImgQty = Model.MachineDocuments.Count;
+            Qty = Model.MachineDocuments.Count;
         }
     </div>
     <div class="card-block card-padding">
@@ -140,20 +189,18 @@
                         <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().Name)</th>
                         <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().Category)</th>
                         <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().FileName)</th>
-                        @*<th>Link</th>*@
                         <th>Open</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var document in Model.MachineDocuments.Take(10))
                     {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => document.Name)</td>
-                        <td>@Html.DisplayFor(modelItem => document.Category)</td>
-                        <td>@Html.DisplayFor(modelItem => document.FileName)</td>
-                        @*<td>@Html.ActionLink("Download", "Download", new { filePath = document.Path, fileName = document.FileName, extension = document.Extension }) </td>*@
-                        <td><a class="btn btn-primary" href="@Html.DisplayFor(modelItem => document.Path)@Html.DisplayFor(modelItem => document.FileName)" target="_blank">Open<a/></td>
-                    </tr>
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => document.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => document.Category.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => document.FileName)</td>
+                            <td><a class="btn btn-primary" href="@Html.DisplayFor(modelItem => document.Path)@Html.DisplayFor(modelItem => document.FileName)" target="_blank">Open<a /></td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -168,22 +215,18 @@
         </div>
         @if (Model.MachineImages.Count > 5)
         {
-            ImgQty = 5;
+            Qty = 5;
             <a asp-controller="Machines" asp-action="MachineImages" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">Show All</a>
         }
         else
         {
-            ImgQty = Model.MachineImages.Count;
+            Qty = Model.MachineImages.Count;
         }
     </div>
     <div class="card-block card-padding">
         <dl class="dl-horizontal">
             @foreach (var image in Model.MachineImages.Take(5))
             {
-                @*<a href="@Url.Action("Download", "Machines", new { filePath = image.Path, fileName = image.FileName, extension = image.Extension })">
-                @{string imgFullPath = image.Path + image.FileName;}
-                <img class="img-thumbnail" style="margin: 10px;" src="@imgFullPath" height="300" />
-                </a>*@
                 <a href="@image.Path@image.FileName" target="_blank">
                     @{string imgFullPath = image.Path + image.FileName;}
                     <img class="img-thumbnail" style="margin: 10px;" src="@imgFullPath" height="300" />
@@ -200,12 +243,12 @@
         </div>
         @if (Model.MachineVideos.Count > 1)
         {
-            ImgQty = 1;
+            Qty = 1;
             <a asp-action="MachineVideos" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">Show All</a>
         }
         else
         {
-            ImgQty = Model.MachineVideos.Count;
+            Qty = Model.MachineVideos.Count;
         }
     </div>
     <div class="card-block card-padding">
@@ -216,7 +259,7 @@
                     Name: <h5>@video.Name</h5>
                 </dt>
                 <dt>
-                    Category: <h5>@video.Category</h5>
+                    Category: <h5>@video.Category.Name</h5>
                 </dt>
                 <dd>
                     @{string vidFullPath = video.Path + video.FileName;}
@@ -236,12 +279,12 @@
         </div>
         @if (Model.MachineDevices.Count > 5)
         {
-            ImgQty = 5;
+            Qty = 5;
             <a asp-action="MachineDevices" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">Show All</a>
         }
         else
         {
-            ImgQty = Model.MachineDevices.Count;
+            Qty = Model.MachineDevices.Count;
         }
     </div>
     <div class="card-block card-padding">
@@ -329,12 +372,12 @@
         </div>
         @if (Model.MachineComments.Count > 5)
         {
-            ImgQty = 5;
+            Qty = 5;
             <a asp-action="MachineComments" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">Show All</a>
         }
         else
         {
-            ImgQty = Model.MachineComments.Count;
+            Qty = Model.MachineComments.Count;
         }
     </div>
     <div class="card-block card-padding">
@@ -367,6 +410,63 @@
         </dl>
     </div>
 </div>
+
+<div class="card fb-card">
+    <div style="background-color:#4B4B46;" class="card-header">
+        <div class="d-inline-block">
+            <h2 style="color:white">Passwords</h2>
+        </div>
+        @if (Model.Passwords.Count > 10)
+        {
+            Qty = 5;
+            <a asp-action="MachinePasswords" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">Show All</a>
+        }
+        else
+        {
+            Qty = Model.Passwords.Count;
+        }
+    </div>
+    <div class="card-block card-padding">
+        <dl class="dl-horizontal">
+            <table style="table-layout:fixed" class="table table-bordered table-vitesco02">
+                <p>
+                    <button class="btn btn-success btn-create" data-toggle="modal" data-target="#modalCreatePassword">Create New Password</button>
+                </p>
+                <thead class="thead-vitesco02">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Passwords.First().ID)</th>
+                        <th>@Html.DisplayNameFor(model => model.Passwords.First().EquipmentName)</th>
+                        <th>@Html.DisplayNameFor(model => model.Passwords.First().EquipmentDescription)</th>
+                        <th>@Html.DisplayNameFor(model => model.Passwords.First().Level)</th>
+                        <th>@Html.DisplayNameFor(model => model.Passwords.First().DepartmentName)</th>
+                        <th>@Html.DisplayNameFor(model => model.Passwords.First().User)</th>
+                        <th>@Html.DisplayNameFor(model => model.Passwords.First().Pass)</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody id="tPasswords">
+                    @foreach (var item in Model.Passwords.Take(10))
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                            <td>@Html.DisplayFor(modelItem => item.EquipmentName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.EquipmentDescription)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Level)</td>
+                            <td>@Html.DisplayFor(modelItem => item.DepartmentName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.User)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Pass)</td>
+                            <td>
+                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEditPassword">Edit</button>
+                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDeletePassword">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </dl>
+    </div>
+</div>
+
 
 <div>
     <input type="hidden" asp-for="ID" />
@@ -405,5 +505,12 @@
     </div>
 </div>
 
-
 <input id="MachineID" style="display: none" value="@Html.DisplayFor(model => model.ID)" />
+
+<div class="modal" id="modalCreatePassword" role="dialog">
+    @Html.Partial("PasswordCreate", new Password());
+</div>
+<div class="modal" id="modalEditPassword" role="dialog">
+</div>
+<div class="modal" id="modalDeletePassword" role="dialog">
+</div>

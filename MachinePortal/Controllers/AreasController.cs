@@ -18,10 +18,10 @@ namespace MachinePortal.Controllers
         private readonly AreaService _AreaService;
         private readonly IHostingEnvironment _appEnvironment;
 
-        public AreasController(IHostingEnvironment enviroment, AreaService AreaService, PermissionsService permissionsService, IdentityContext identityContext)
+        public AreasController(IHostingEnvironment enviroment, AreaService areaService, PasswordService passwordService, PermissionsService permissionsService, IdentityContext identityContext)
         {
             _identityContext = identityContext;
-            _AreaService = AreaService;
+            _AreaService = areaService;
             _PermissionsService = permissionsService;
             _appEnvironment = enviroment;
         }
@@ -180,9 +180,8 @@ namespace MachinePortal.Controllers
         [HttpPost]
         public async Task<PartialViewResult> AddPartialEdit(string id)
         {
-            Area area;
             int ID = int.Parse(id);
-            area = await _AreaService.FindByIDAsync(ID);
+            Area area = await _AreaService.FindByIDAsync(ID);
             PartialViewResult partial = PartialView("Edit", area);
             return partial;
         }
@@ -190,9 +189,8 @@ namespace MachinePortal.Controllers
         [HttpPost]
         public async Task<PartialViewResult> AddPartialDelete(string id)
         {
-            Area area;
             int ID = int.Parse(id);
-            area = await _AreaService.FindByIDAsync(ID);
+            Area area = await _AreaService.FindByIDAsync(ID);
             PartialViewResult partial = PartialView("Delete", area);
             return partial;
         }

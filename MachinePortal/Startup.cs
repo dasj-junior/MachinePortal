@@ -63,7 +63,7 @@ namespace MachinePortal
 
 
             services.AddDbContext<MachinePortalContext>(options =>
-                    options.UseMySql(Configuration.GetConnectionString("MachinePortalContext"), builder => builder.MigrationsAssembly("MachinePortal")));
+                    options.UseMySql(Configuration.GetConnectionString("MachinePortalContext"), builder => builder.MigrationsAssembly("MachinePortal")).EnableSensitiveDataLogging());
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -93,21 +93,29 @@ namespace MachinePortal
             services.AddScoped<AreaService>();
             services.AddScoped<MachineService>();
             services.AddScoped<PermissionsService>();
+            services.AddScoped<PasswordService>();
+            services.AddScoped<CategoryService>();
+            services.AddScoped<SeedingService>();
+            services.AddScoped<SeedingServiceDEV>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, SeedingService seedingService, SeedingServiceDEV seedingServiceDEV)
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                seedingService.Seed();
+                seedingServiceDEV.Seed();
+                app.UseDeveloperExceptionPage(); 
             }
             else
             {
+                seedingService.Seed();
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
 
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
