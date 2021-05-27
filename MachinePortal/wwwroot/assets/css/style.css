@@ -1071,6 +1071,10 @@ a.bg-danger:hover {
     border-bottom-style: double;
 }
 
+th{
+     word-wrap:break-word;
+}
+
 /**====== Table css end ======**/
 /**  =====================
       List-chart css start

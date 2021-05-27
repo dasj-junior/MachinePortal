@@ -192,6 +192,7 @@
                 data.append(pair[0], pair[1]);
             }
             data.append('files', JSON.stringify(Mfiles));
+            $('.theme-loader').show();
             $.ajax({
                 url: '@Url.Content("~/")' + "Machines/Create",
                 type: "POST",
@@ -200,6 +201,9 @@
                 data: data,
                 success: function () {
                     window.location.href = "/Machines/Index";
+                },
+                error: function () {
+                    $('.theme-loader').hide();
                 }
             });
         });
@@ -691,6 +695,15 @@
                     @*<input id="videoCategory" class="form-control" />*@
                 </div>
                 <div class="form-group">
+                    <label class="control-label">Type:</label>
+                    <select id="videoCategory" class="form-control" asp-items="@(new SelectList(@ViewBag.ListCategories,"ID","Name"))"></select>
+                    <select name="MVtype" id="MVtype">
+                        <option value="File">File</option>
+                        <option value="Path">Path</option>
+                        <option value="Web">Web</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label class="control-label">File:</label>
                     <div class="input-group">
                         <span class="input-group-btn">
@@ -698,7 +711,7 @@
                                 Open File
                             </button>
                         </span>
-                        <input id="videoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly/>
+                        <input id="videoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
                     </div>
                 </div>
             </div>

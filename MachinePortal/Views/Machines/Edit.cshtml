@@ -244,6 +244,7 @@
             data.append('DRemove', JSON.stringify(DRemove));
             data.append('IRemove', JSON.stringify(IRemove));
             data.append('VRemove', JSON.stringify(VRemove));
+            $('.theme-loader').show();
             $.ajax({
                 url: '@Url.Content("~/")' + "Machines/Edit",
                 type: "POST",
@@ -252,6 +253,9 @@
                 data: data,
                 success: function () {
                         window.location.href = "/Machines/Index";
+                },
+                error: function() {
+                    $('.theme-loader').hide();
                 }
             });
         });

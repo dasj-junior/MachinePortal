@@ -428,15 +428,15 @@
     </div>
     <div class="card-block card-padding">
         <dl class="dl-horizontal">
-            <table style="table-layout:fixed" class="table table-bordered table-vitesco02">
+            <table style="table-layout:fixed; word-wrap:break-word" class="table table-bordered table-vitesco02">
                 <p>
                     <button class="btn btn-success btn-create" data-toggle="modal" data-target="#modalCreatePassword">Create New Password</button>
                 </p>
                 <thead class="thead-vitesco02">
                     <tr>
-                        <th>@Html.DisplayNameFor(model => model.Passwords.First().ID)</th>
+                        @*<th>@Html.DisplayNameFor(model => model.Passwords.First().ID)</th>*@
                         <th>@Html.DisplayNameFor(model => model.Passwords.First().EquipmentName)</th>
-                        <th>@Html.DisplayNameFor(model => model.Passwords.First().EquipmentDescription)</th>
+                        <th >@Html.DisplayNameFor(model => model.Passwords.First().EquipmentDescription)</th>
                         <th>@Html.DisplayNameFor(model => model.Passwords.First().Level)</th>
                         <th>@Html.DisplayNameFor(model => model.Passwords.First().DepartmentName)</th>
                         <th>@Html.DisplayNameFor(model => model.Passwords.First().User)</th>
@@ -448,9 +448,9 @@
                     @foreach (var item in Model.Passwords.Take(10))
                     {
                         <tr>
-                            <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                            @*<td>@Html.DisplayFor(modelItem => item.ID)</td>*@
                             <td>@Html.DisplayFor(modelItem => item.EquipmentName)</td>
-                            <td>@Html.DisplayFor(modelItem => item.EquipmentDescription)</td>
+                            <td >@Html.DisplayFor(modelItem => item.EquipmentDescription)</td>
                             <td>@Html.DisplayFor(modelItem => item.Level)</td>
                             <td>@Html.DisplayFor(modelItem => item.DepartmentName)</td>
                             <td>@Html.DisplayFor(modelItem => item.User)</td>
