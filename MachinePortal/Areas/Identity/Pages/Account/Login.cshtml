@@ -1,8 +1,7 @@
 ﻿@page
 @model LoginModel
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <div style="margin-top:auto; margin-bottom:auto; margin-left:auto; margin-right:auto; display:inline" class="row">
     <div class="col-sm-12">
@@ -11,7 +10,7 @@
                 <div class="auth-box">
                     <div class="row m-b-20">
                         <div class="col-md-12">
-                            <h3 class="text-left txt-primary">Log In</h3>
+                            <h3 class="text-left txt-primary">@Localizer["Log In"].Value</h3>
                         </div>
                     </div>
                     <hr />
@@ -32,23 +31,23 @@
                                 <label asp-for="Input.RememberMe">
                                     <input asp-for="Input.RememberMe" type="checkbox">
                                     <span class="cr"><i class="cr-icon icofont icofont-ui-check txt-primary"></i></span>
-                                    <span class="text-inverse">Remember me</span>
+                                    <span class="text-inverse">@Localizer["Remember Me"].Value</span>
                                 </label>
                             </div>
                         </div>
                         <div class="col-sm-5 col-xs-12 forgot-phone text-right">
-                            <a asp-page="./ForgotPassword" class="text-right f-w-600 text-inverse"> Forgot Your Password?</a>
+                            <a asp-page="./ForgotPassword" class="text-right f-w-600 text-inverse"> @Localizer["Forgot Your Password?"].Value</a>
                         </div>
                     </div>
                     <div class="row m-t-30">
                         <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">Log in</button>
+                            <button type="submit" class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20">@Localizer["Log In"].Value</button>
                         </div>
                     </div>
                     <hr />
                     <div class="row">
                         <div class="col-md-10">
-                            <p class="text-inverse text-left m-b-0">Thank you and enjoy our website.</p>
+                            <p class="text-inverse text-left m-b-0">@Localizer["Thank you and enjoy our website."].Value</p>
                         </div>
                     </div>
                 </div>

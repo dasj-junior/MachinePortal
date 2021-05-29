@@ -1,66 +1,68 @@
-﻿@model MachinePortal.Models.Responsible
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model MachinePortal.Models.Responsible
 
 <div class="modal-dialog">
     <div class="modal-content">
-            <div class="modal-header c-vitesco-blue-03">
-                <i style="color:white;font-size:30px;" class="bi-file-text c-vitesco-blue-03"></i>
-                <h3 style="color:white;text-align:center;" class="modal-title">Details</h3>
-                <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-            </div>
-            <div class="modal-body text-center">
-                <dl class="dl-horizontal">
-                    <dd>
-                        @if (Model.PhotoPath != null)
-                        {
-                            <img src="@Html.DisplayFor(model => model.PhotoPath)" height="300" class="img-thumbnail" />
-                        }
-                        else
-                        {
-                            <img src="~/resources/General/NoImage.jpg" height="300" class="img-thumbnail" />
-                        }
-                    </dd>
-                    <br />
-                    <dt>
-                        @Html.DisplayNameFor(model => model.FirstName)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.FirstName)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.LastName)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.LastName)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Department.Name)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Department.Name)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.PhoneNumber)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.PhoneNumber)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Mobile)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Mobile)
-                    </dd>
-                    <dt>
-                        @Html.DisplayNameFor(model => model.Email)
-                    </dt>
-                    <dd>
-                        @Html.DisplayFor(model => model.Email)
-                    </dd>
-                </dl>
-            </div>
-            <div class="modal-footer">
-                <input style="width:120px;" type="button" value="Cancel" class="btn btn-danger mr-auto" data-dismiss="modal" />
-                <input style="width:120px;float:right;" type="submit" value="Edit" class="btn btn-primary" />
-            </div>
+        <div class="modal-header c-vitesco-blue-03">
+            <i style="color:white;font-size:30px;" class="bi-file-text c-vitesco-blue-03"></i>
+            <h3 style="color:white;text-align:center;" class="modal-title">Details</h3>
+            <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">Close</span></button>
+        </div>
+        <div class="modal-body text-center">
+            <dl class="dl-horizontal">
+                <dd>
+                    @if (Model.PhotoPath != null)
+                    {
+                        <img src="@Html.DisplayFor(model => model.PhotoPath)" height="300" class="img-thumbnail" />
+                    }
+                    else
+                    {
+                        <img src="~/resources/General/NoImage.jpg" height="300" class="img-thumbnail" />
+                    }
+                </dd>
+                <br />
+                <dt>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.FirstName)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.LastName)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Department.Name)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Department.Name)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.PhoneNumber)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.PhoneNumber)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Mobile)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Mobile)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+            </dl>
+        </div>
+        <div class="modal-footer">
+            <input style="width:120px;" type="button" value="Cancel" class="btn btn-danger mr-auto" data-dismiss="modal" />
+            <input style="width:120px;float:right;" type="submit" value="Edit" class="btn btn-primary" />
+        </div>
     </div>
 </div>

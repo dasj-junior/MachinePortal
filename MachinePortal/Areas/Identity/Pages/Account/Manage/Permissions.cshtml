@@ -1,9 +1,7 @@
 ﻿@page
 @model PermissionsModel
-@{
-}
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <script>
     $(document).ready(function () {
@@ -81,7 +79,7 @@
                     <thead class="thead-vitesco">
                         <tr>
                             <th width="80%">@Html.DisplayNameFor(model => model.Permissions[0].PermissionName)</th>
-                            <th width="20%">Options</th>
+                            <th width="20%" class="text-center">Options</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,7 +87,7 @@
                         {
                             <tr>
                                 <td>@Html.DisplayFor(modelItem => item.PermissionName)</td>
-                                <td>
+                                <td class="text-center">
                                     <button class="btn btn-primary" type="button" onclick="document.getElementById('editName').value = '@item.PermissionName'; document.getElementById('editID').value = '@item.ID'" data-toggle="modal" data-target="#modalEdit">Edit</button>
                                     <button class="btn btn-danger" type="button" onclick="document.getElementById('removeName').value = '@item.PermissionName'; document.getElementById('removeID').value = '@item.ID'" data-toggle="modal" data-target="#modalRemove">Remove</button>
                                 </td>
@@ -109,7 +107,7 @@
                 <div class="modal-header c-vitesco-green-03">
                     <i style="color:white;font-size:30px;" class="bi-plus-circle c-vitesco-green-03"></i>
                     <h3 style="color:white;text-align:center;" class="modal-title">Create Permission</h3>
-                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">Close</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal">
@@ -133,7 +131,7 @@
                 <div class="modal-header c-vitesco-blue-03">
                     <i style="color:white;font-size:30px;" class="bi-pencil c-vitesco-blue-03"></i>
                     <h3 style="color:white;text-align:center;" class="modal-title">Edit Permission</h3>
-                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">Close</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal">
@@ -158,7 +156,7 @@
                 <div style="background-color: #dc3545;" class="modal-header">
                     <i style="color:white;font-size:30px;background-color:#dc3545;" class="bi-x-circle"></i>
                     <h3 style="color:white;text-align:center;" class="modal-title">Remove Permission</h3>
-                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">Close</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal">

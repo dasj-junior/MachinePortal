@@ -1,12 +1,11 @@
-﻿@model MachinePortal.Models.Machine
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model MachinePortal.Models.Machine
 
 @{
-    ViewData["Title"] = Model.Name;
     var LoggedUserName = ViewData["UserName"];
     var LoggedUserID = ViewData["UserID"];
 }
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 <script type="text/javascript">
     function removeComment(ID) {
@@ -28,7 +27,7 @@
     <div class="card-header c-vitesco-gray">
         <i style="vertical-align:middle" class="ti-desktop c-vitesco-gray"></i>
         <div class="d-inline-block">
-            <h2 style="color:white">Machine: @ViewData["Title"]</h2>
+            <h2 style="color:white">Machine: @Model.Name</h2>
         </div>
         <hr style="border:1px solid white" />
         <div class="d-inline-block">
@@ -80,12 +79,12 @@
                 <tbody id="tComments">
                     @foreach (var item in Model.MachineComments)
                     {
-                    <tr>
-                        <td style="word-wrap:break-word;">@Html.DisplayFor(modelItem => item.Comment)</td>
-                        <td>@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Date)</td>
-                        <td><button class="btn btn-danger" onclick="removeComment(@item.ID)">Delete</button></td>
-                    </tr>
+                        <tr>
+                            <td style="word-wrap:break-word;">@Html.DisplayFor(modelItem => item.Comment)</td>
+                            <td>@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                            <td><button class="btn btn-danger" onclick="removeComment(@item.ID)">Delete</button></td>
+                        </tr>
                     }
                 </tbody>
             </table>

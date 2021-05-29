@@ -1,10 +1,6 @@
-﻿@model IEnumerable<MachinePortal.Models.Area>
-
-@{
-    ViewData["Title"] = "Hierarchies";
-}
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model IEnumerable<MachinePortal.Models.Area>
 
 <script>
     function renderPartialEdit(ID) {
@@ -34,7 +30,7 @@
     <div class="card-header c-vitesco-green-05">
         <i style="vertical-align:middle" class="ti-layout-list-thumb c-vitesco-green-05"></i>
         <div class="d-inline-block">
-            <h2 style="color:white;">@ViewData["Title"]</h2>
+            <h2 style="color:white;">Hierarchies</h2>
         </div>
         <hr style="border:1px solid white" />
         <div class="d-inline-block">

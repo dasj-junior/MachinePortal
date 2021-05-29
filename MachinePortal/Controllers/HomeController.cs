@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using MachinePortal.Services;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
+using System.Threading;
 
 namespace MachinePortal.Controllers
 {
@@ -71,5 +74,17 @@ namespace MachinePortal.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+                Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
+            return LocalRedirect(returnUrl);
+        }
+
     }
 }

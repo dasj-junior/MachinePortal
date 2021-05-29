@@ -1,4 +1,6 @@
-﻿@model IEnumerable<MachinePortal.Models.Machine>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model IEnumerable<MachinePortal.Models.Machine>
 
 <div class="row justify-content-around">
     @foreach (var item in Model)

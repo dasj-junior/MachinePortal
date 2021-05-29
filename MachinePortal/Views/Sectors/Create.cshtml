@@ -1,5 +1,6 @@
-﻿@model MachinePortal.Models.ViewModels.SectorFormViewModel
-
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model MachinePortal.Models.ViewModels.SectorFormViewModel
 @* Machine Photo Button and Preview *@
 <script type="text/javascript">
     $(document).ready(function () {
@@ -59,7 +60,7 @@
             <div class="modal-header c-vitesco-green-03">
                 <i style="color:white;font-size:30px;" class="bi-plus-circle c-vitesco-green-03"></i>
                 <h3 style="color:white;text-align:center;" class="modal-title">Create New Sector</h3>
-                <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body">
                 <div style="padding:10px;" class="form-horizontal">

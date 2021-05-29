@@ -1,7 +1,7 @@
 ﻿@page
 @model ManageUsersModel
-@{
-}
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <div class="row justify-content-center">
     <div class="col-8">
@@ -25,8 +25,8 @@
                             <th>
                                 @Html.DisplayNameFor(model => model.Users[0].FullName)
                             </th>
-                            <th>
-                                Edit Permissions
+                            <th class="text-center">
+                               Options
                             </th>
                         </tr>
                     </thead>
@@ -43,7 +43,7 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.FullName)
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <a class="btn btn-primary" asp-page="./ManagePermissions" asp-route-id="@item.ID">Edit</a>
                                 </td>
                             </tr>

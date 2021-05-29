@@ -1,10 +1,6 @@
-﻿@model MachinePortal.Models.Device
-
-@{
-    ViewData["Title"] = Model.Name;
-}
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model MachinePortal.Models.Device
 
 @* Machine Photo Button and Preview *@
 <script type="text/javascript">
@@ -51,7 +47,7 @@
                 <div class="card-header c-vitesco-green-03">
                     <i style="vertical-align:middle" class="ti-harddrives c-vitesco-green-03"></i>
                     <div class="d-inline-block">
-                        <h2 style="color:white">Edit: @ViewData["Title"]</h2>
+                        <h2 style="color:white">Edit: @Model.Name</h2>
                     </div>
                 </div>
                 <div class="card-block card-padding">

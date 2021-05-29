@@ -1,13 +1,12 @@
-﻿@model IEnumerable<MachinePortal.Models.Machine>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model IEnumerable<MachinePortal.Models.Machine>
 
 @{
-    ViewData["Title"] = "Machines";
     string notMessage = (ViewData["notificationMessage"] != null) ? ViewData["notificationMessage"].ToString() : "";
     string notIcon = (ViewData["notificationIcon"] != null) ? ViewData["notificationIcon"].ToString() : "";
     string notType = (ViewData["notificationType"] != null) ? ViewData["notificationType"].ToString() : "";
 }
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -21,7 +20,7 @@
     <div class="card-header c-vitesco-gray">
         <i style="vertical-align:middle" class="ti-desktop c-vitesco-gray"></i>
         <div class="d-inline-block">
-            <h2 style="color:white;">@ViewData["Title"]</h2>
+            <h2 style="color:white;">Machines</h2>
         </div>
     </div>
     <div class="card-block card-padding">

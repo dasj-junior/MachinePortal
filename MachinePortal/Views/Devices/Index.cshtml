@@ -1,15 +1,12 @@
-﻿@model IEnumerable<MachinePortal.Models.Device>
-
-@{
-    ViewData["Title"] = "Devices";
-}
-
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model IEnumerable<MachinePortal.Models.Device>
 
 <div class="card fb-card c-vitesco-green-03">
     <div class="card-header c-vitesco-green-03">
         <i style="vertical-align:middle;" class="ti-harddrives c-vitesco-green-03"></i>
         <div class="d-inline-block">
-            <h2 style="color:white;">@ViewData["Title"]</h2>
+            <h2 style="color:white;">Devices</h2>
         </div>
     </div>
     <div class="card-block card-padding">

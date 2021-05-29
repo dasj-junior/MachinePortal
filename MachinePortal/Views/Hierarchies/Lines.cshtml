@@ -1,28 +1,30 @@
-﻿@model IEnumerable<MachinePortal.Models.Line>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model IEnumerable<MachinePortal.Models.Line>
 
 <div class="row justify-content-around">
     @foreach (var item in Model)
     {
-    <div class="col-4">
-        <a asp-controller="Hierarchies" asp-action="Machines" asp-route-id="@item.ID">
-            <div class="card fb-card c-vitesco-blue-03">
-                <div style="text-align:center" class="card-header c-vitesco-blue-03">
-                    <div class="d-inline-block">
-                        <h2 style="color:white">@Html.DisplayFor(modelItem => item.Name)</h2>
+        <div class="col-4">
+            <a asp-controller="Hierarchies" asp-action="Machines" asp-route-id="@item.ID">
+                <div class="card fb-card c-vitesco-blue-03">
+                    <div style="text-align:center" class="card-header c-vitesco-blue-03">
+                        <div class="d-inline-block">
+                            <h2 style="color:white">@Html.DisplayFor(modelItem => item.Name)</h2>
+                        </div>
                     </div>
-                </div>
-                <div style="text-align:center" class="card-block card-padding">
-                    @if (item.ImagePath != null)
+                    <div style="text-align:center" class="card-block card-padding">
+                        @if (item.ImagePath != null)
                         {
-                    <img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" width="300" />
+                            <img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" width="300" />
                         }
                         else
                         {
-                    <img class="img-thumbnail" src="~/resources/General/NoImage.jpg" width="300" />
+                            <img class="img-thumbnail" src="~/resources/General/NoImage.jpg" width="300" />
                         }
+                    </div>
                 </div>
-            </div>
-        </a>
-    </div>
+            </a>
+        </div>
     }
 </div>

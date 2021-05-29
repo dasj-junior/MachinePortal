@@ -1,10 +1,7 @@
 ﻿@page
 @model RegisterModel
-@{
-    ViewData["Title"] = "Register";
-}
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @* Machine Photo Button and Preview *@
 <script type="text/javascript">

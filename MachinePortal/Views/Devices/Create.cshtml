@@ -1,11 +1,6 @@
-﻿@model MachinePortal.Models.Device
-
-@{
-    ViewData["Title"] = "Create";
-}
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model MachinePortal.Models.Device
 @* Machine Photo Button and Preview *@
 <script type="text/javascript">
     $(document).ready(function () {

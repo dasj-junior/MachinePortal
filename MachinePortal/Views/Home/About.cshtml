@@ -1,13 +1,12 @@
-﻿@{
-    ViewData["Title"] = "About";
-}
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <div class="card fb-card c-vitesco-blue-01">
     <div class="card-header c-vitesco-blue-01">
-            <i style="vertical-align:middle" class="ti-info c-vitesco-blue-01"></i>
-            <div class="d-inline-block">
-                <h2 style="color:white">@ViewData["Title"]</h2>
-            </div>
+        <i style="vertical-align:middle" class="ti-info c-vitesco-blue-01"></i>
+        <div class="d-inline-block">
+            <h2 style="color:white">About</h2>
+        </div>
     </div>
     <div class="card-block card-padding">
         <h3>@ViewData["Message"]</h3>

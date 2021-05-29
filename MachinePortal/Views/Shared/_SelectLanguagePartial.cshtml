@@ -1,0 +1,17 @@
+﻿@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+@inject IViewLocalizer Localizer
+@inject IOptions<RequestLocalizationOptions> LocOptions
+@{ var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var returnUrl = string.IsNullOrEmpty(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}"; 
+}
+
+<div style="display:inline-block">
+    <form id="selectLanguage" asp-controller="Home" asp-action="SetLanguage" asp-route-returnUrl="@returnUrl" method="post" class="form-horizontal" role="form">
+        <a style="display:block; margin:3px" onclick="document.getElementById('selLang').value = 'en-US'; document.getElementById('selectLanguage').submit();"><img src="~/resources/General/en-US.png" style="height:16px; width:30px" /></a>
+        <a style="display:block; margin:3px" onclick="document.getElementById('selLang').value = 'pt-BR';document.getElementById('selectLanguage').submit();"><img src="~/resources/General/pt-BR.png" style="height:16px; width:30px" /></a>
+        <input name="culture" id="selLang" style="display:none" asp-for="@requestCulture.RequestCulture.UICulture.Name" />
+    </form>
+</div>

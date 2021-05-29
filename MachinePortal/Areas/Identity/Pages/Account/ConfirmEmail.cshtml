@@ -1,8 +1,7 @@
 ﻿@page
 @model ConfirmEmailModel
-@{
-    ViewData["Title"] = "Confirm email";
-}
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <div class="row justify-content-center">
     <div class="col-6">
@@ -10,7 +9,7 @@
             <div class="card-header c-vitesco-green-04">
                 <i style="vertical-align:middle" class="bi-door-closed c-vitesco-green-02"></i>
                 <div class="d-inline-block">
-                    <h2 style="color:white">@ViewData["Title"]</h2>
+                    <h2 style="color:white">Confirm email</h2>
                 </div>
             </div>
             <div class="card-block card-padding">

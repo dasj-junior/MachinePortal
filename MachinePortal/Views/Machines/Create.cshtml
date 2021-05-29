@@ -1,11 +1,11 @@
-﻿@model MachinePortal.Models.ViewModels.MachineFormViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model MachinePortal.Models.ViewModels.MachineFormViewModel
 
 @{
     var LoggedUserName = ViewData["UserName"];
     var LoggedUserID = ViewData["UserID"];
 }
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 @* Input with embebedd icon *@
 <style>
@@ -628,7 +628,7 @@
                                 Open File
                             </button>
                         </span>
-                        <input id="documentFilePath" type="text" class="form-control" placeholder="No file chosen" readonly/>
+                        <input id="documentFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
                     </div>
                 </div>
             </div>
@@ -665,7 +665,7 @@
                                 Open File
                             </button>
                         </span>
-                        <input id="imageFilePath" type="text" class="form-control" placeholder="No file chosen" readonly/>
+                        <input id="imageFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
                     </div>
                 </div>
             </div>

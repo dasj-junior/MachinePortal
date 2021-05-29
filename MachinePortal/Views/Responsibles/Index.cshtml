@@ -1,6 +1,6 @@
-﻿@model IEnumerable<MachinePortal.Models.Responsible>
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model IEnumerable<MachinePortal.Models.Responsible>
 
 <script>
     function renderPartialDetails(ID) {
@@ -41,7 +41,7 @@
     <div class="card-header c-vitesco-green-02">
         <i style="vertical-align:middle" class="ti-user c-vitesco-green-02"></i>
         <div class="d-inline-block">
-            <h2 style="color:white;">@ViewData["Title"]</h2>
+            <h2 style="color:white;">Responsibles</h2>
         </div>
     </div>
     <div class="card-block card-padding">

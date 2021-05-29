@@ -1,11 +1,10 @@
 ﻿@page
 @model IndexModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @{
     string PhotoPath = Model.Input.PhotoPath;
-    ViewData["Title"] = "Profile";
 }
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 @* Machine Photo Button and Preview *@
 <script type="text/javascript">
@@ -51,7 +50,7 @@
             <div class="card-header c-vitesco-green-04">
                 <i style="vertical-align:middle" class="ti-user c-vitesco-green-04"></i>
                 <div class="d-inline-block">
-                    <h2 style="color:white">@ViewData["Title"]</h2>
+                    <h2 style="color:white">Profile</h2>
                 </div>
             </div>
             <div class="card-block card-padding">
@@ -94,7 +93,7 @@
                         <input asp-for="Input.Mobile" class="form-control" />
                         <span asp-validation-for="Input.Mobile" class="text-danger"></span>
                         @*<label asp-for="Input.Department"></label>
-                        <input asp-for="Input.Department" class="form-control" />*@
+                            <input asp-for="Input.Department" class="form-control" />*@
                         <label asp-for="Input.JobRole"></label>
                         <input asp-for="Input.JobRole" class="form-control" />
                     </div>

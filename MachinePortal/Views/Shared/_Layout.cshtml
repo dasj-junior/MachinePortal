@@ -2,10 +2,14 @@
 @using MachinePortal.Areas.Identity.Data
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.AspNetCore.Hosting;
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
 @inject SignInManager<MachinePortalUser> SignInManager
 @inject UserManager<MachinePortalUser> UserManager
 @inject IdentityContext identityContext
 @inject IHostingEnvironment hostingEnv
+
 @* Get User Permissions *@
 @{
     var area = ViewContext.View.Path.Contains("Identity") ? "Identity" : "MachinePortal";
@@ -40,12 +44,10 @@
     <title>MachinePortal</title>
     <!-- Style.css -->
     <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
-    @*<link rel="stylesheet" type="text/css" href="~/assets/css/jquery.mCustomScrollbar.css">*@
+    <link rel="stylesheet" type="text/css" href="~/assets/css/jquery.mCustomScrollbar.css">
     @*<meta http-equiv="X-UA-Compatible" content="IE=edge" />*@
     <!-- Favicon icon -->
     <link rel="icon" href="~/assets/images/favicon.ico" type="image/x-icon">
-    <!-- Google font-->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
     <!-- Required Fremwork -->
     <link rel="stylesheet" href="~/assets/css/bootstrap/css/bootstrap.min.css">
     <!-- themify-icons line icon -->
@@ -106,7 +108,7 @@
             <nav class="navbar header-navbar pcoded-header" style="background-color:rgb(240,230,20)">
                 <div class="navbar-wrapper">
                     <div class="navbar-container container-fluid">
-                        <div class="row">
+                        <div style="height:80px" class="row">
                             <div class="col-2">
                                 <div class="d-inline navbar-logo" style="background-color:rgb(240,230,20)">
                                     <a class="mobile-menu" id="mobile-collapse" href="#!">
@@ -116,15 +118,18 @@
                             </div>
                             <div class="col-8" style="text-align:center">
                                 <div class="d-inline-block" style="margin-top:18px">
-                                    <h1 style="font-family:'Beast Machines'; font-size:2rem">Machine Portal</h1>
-                                </div>
+                                    <h1 style="font-family:'Beast Machines'; font-size:2rem">@Localizer["Machine Portal"].Value</h1>
+</div>
                             </div>
                             <div class="col-2">
-                                <div class="d-inline nav-right">
-                                    <div style="position:relative; padding:1.25rem;">
-                                        <img src="~/assets/images/vitesco.svg" style="width:100px; overflow:hidden" />
+                                <div style="width:218px" class="d-inline nav-right">
+                                    <div style="position:relative; padding:1.25rem">
+                                        <img src="~/assets/images/vitesco.svg" style="width:116px; overflow:hidden; margin-top:-23px;"/>
+                                        @await Html.PartialAsync("_SelectLanguagePartial")
                                     </div>
+                                    
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -137,7 +142,7 @@
                         <div class="pcoded-inner-navbar main-menu">
                             @if (SignInManager.IsSignedIn(User))
                             {
-                                <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">User Account</div>
+                                <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">@Localizer["User Account"].Value</div>
                                 <div class=" ">
                                     <div class="main-menu-header" style="padding-top:0px">
                                         <img class="img-40 img-radius" src="@userphoto" alt="User-Profile-Image">
@@ -150,11 +155,11 @@
                                     <div class="main-menu-content">
                                         <ul>
                                             <li class="more-details">
-                                                <a asp-area="Identity" asp-page="/Account/Manage/Index"><i class="ti-user"></i>Profile</a>
-                                                <a id="change-password" asp-area="Identity" asp-page="/Account/Manage/ChangePassword"><i class="ti-key"></i>Password</a>
+                                                <a asp-area="Identity" asp-page="/Account/Manage/Index"><i class="ti-user"></i>@Localizer["Profile"].Value</a>
+                                                <a id="change-password" asp-area="Identity" asp-page="/Account/Manage/ChangePassword"><i class="ti-key"></i>@Localizer["Password"].Value</a>
                                                 <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm">
                                                     <button id="BtnLogoutSubmit" type="submit" style="display:none"></button>
-                                                    <a id="aLogoutSubmit" onclick="LogoutSubmit()" href=""><i class="ti-layout-sidebar-left"></i>Logout</a>
+                                                    <a id="aLogoutSubmit" onclick="LogoutSubmit()" href=""><i class="ti-layout-sidebar-left"></i>@Localizer["Logout"].Value</a>
                                                 </form>
                                             </li>
                                         </ul>
@@ -163,14 +168,14 @@
                             }
                             else
                             {
-                                <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">User Account</div>
+                                <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">@Localizer["User Account"].Value</div>
                                 <div class=" ">
                                     <div class="main-menu-content">
                                         <ul class="pcoded-item pcoded-left-item">
                                             <li class=" ">
                                                 <a asp-area="Identity" asp-page="/Account/Register">
                                                     <span class="pcoded-micon c-vitesco-green-01"><i class="bi-person-plus"></i></span>
-                                                    <span class="pcoded-mtext" data-i18n="nav.dash.main">Register</span>
+                                                    <span class="pcoded-mtext" data-i18n="nav.dash.main">@Localizer["Register"].Value</span>
                                                     <span class="pcoded-mcaret"></span>
                                                 </a>
                                             </li>
@@ -183,7 +188,7 @@
                                             <li class="">
                                                 <a asp-area="Identity" asp-page="/Account/Login">
                                                     <span class="pcoded-micon  c-vitesco-green-04"><i class="bi-unlock"></i></span>
-                                                    <span class="pcoded-mtext" data-i18n="nav.dash.main">Login</span>
+                                                    <span class="pcoded-mtext" data-i18n="nav.dash.main">@Localizer["Login"].Value</span>
                                                     <span class="pcoded-mcaret"></span>
                                                 </a>
                                             </li>
@@ -193,7 +198,7 @@
                             }
                             @if (permissions.Contains("Administration") && permissions != null)
                             {
-                                <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">Administration</div>
+                                <div style="margin-top:-20px;" class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">@Localizer["Administration"].Value</div>
                                 <div class=" ">
                                     <div class="main-menu-content">
                                         <ul class="pcoded-item pcoded-left-item">
@@ -202,7 +207,7 @@
                                                 <li class=" ">
                                                     <a asp-area="Identity" asp-page="/Account/Manage/ManageUsers">
                                                         <span class="pcoded-micon  c-vitesco-red"><i class="ti-settings"></i></span>
-                                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Manage Users</span>
+                                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">@Localizer["Manage Users"].Value</span>
                                                         <span class="pcoded-mcaret"></span>
                                                     </a>
                                                 </li>
@@ -212,7 +217,7 @@
                                                 <li class=" ">
                                                     <a asp-area="Identity" asp-page="/Account/Manage/Permissions">
                                                         <span class="pcoded-micon  c-vitesco-gray"><i class="ti-briefcase"></i></span>
-                                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Permissions</span>
+                                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">@Localizer["Permissions"].Value</span>
                                                         <span class="pcoded-mcaret"></span>
                                                     </a>
                                                 </li>
@@ -222,7 +227,7 @@
                                                 <li class=" ">
                                                     <a asp-area="Identity" asp-page="/Account/Manage/Departments">
                                                         <span class="pcoded-micon  c-vitesco-green-03"><i class="bi-people"></i></span>
-                                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Departments</span>
+                                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">@Localizer["Departments"].Value</span>
                                                         <span class="pcoded-mcaret"></span>
                                                     </a>
                                                 </li>
@@ -232,7 +237,7 @@
                                                 <li class=" ">
                                                     <a asp-area="" asp-controller="Categories" asp-action="Index">
                                                         <span class="pcoded-micon  c-vitesco-green-02"><i class="bi-grid"></i></span>
-                                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Categories</span>
+                                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">@Localizer["Categories"].Value</span>
                                                         <span class="pcoded-mcaret"></span>
                                                     </a>
                                                 </li>
@@ -241,7 +246,7 @@
                                     </div>
                                 </div>
                             }
-                            <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">Main Menu</div>
+                            <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">@Localizer["Main Menu"].Value</div>
                             <ul class="pcoded-item pcoded-left-item">
                                 <li class="active">
                                     <a asp-area="" asp-controller="Home" asp-action="Index">
@@ -255,7 +260,7 @@
                                     <li class=" ">
                                         <a asp-area="" asp-controller="Machines" asp-action="Index">
                                             <span class="pcoded-micon  c-vitesco-gray"><i class="ti-desktop"></i></span>
-                                            <span class="pcoded-mtext" data-i18n="nav.dash.main">Machines</span>
+                                            <span class="pcoded-mtext" data-i18n="nav.dash.main">@Localizer["Machines"].Value</span>
                                             <span class="pcoded-mcaret"></span>
                                         </a>
                                     </li>
@@ -265,7 +270,7 @@
                                     <li class=" ">
                                         <a asp-area="" asp-controller="Devices" asp-action="Index">
                                             <span class="pcoded-micon  c-vitesco-green-03"><i class="ti-harddrives"></i></span>
-                                            <span class="pcoded-mtext" data-i18n="nav.dash.main">Devices</span>
+                                            <span class="pcoded-mtext" data-i18n="nav.dash.main">@Localizer["Devices"].Value</span>
                                             <span class="pcoded-mcaret"></span>
                                         </a>
                                     </li>
@@ -275,7 +280,7 @@
                                     <li class=" ">
                                         <a asp-area="" asp-controller="Responsibles" asp-action="Index">
                                             <span class="pcoded-micon  c-vitesco-green-02"><i class="ti-user"></i></span>
-                                            <span class="pcoded-mtext" data-i18n="nav.dash.main">Responsibles</span>
+                                            <span class="pcoded-mtext" data-i18n="nav.dash.main">@Localizer["Responsibles"].Value</span>
                                             <span class="pcoded-mcaret"></span>
                                         </a>
                                     </li>
@@ -285,51 +290,54 @@
                                     <li class=" ">
                                         <a asp-area="" asp-controller="Areas" asp-action="Index">
                                             <span class="pcoded-micon  c-vitesco-green-05"><i class="ti-layout-list-thumb"></i></span>
-                                            <span class="pcoded-mtext" data-i18n="nav.dash.main">Hierarchies</span>
+                                            <span class="pcoded-mtext" data-i18n="nav.dash.main">@Localizer["Hierarchies"].Value</span>
                                             <span class="pcoded-mcaret"></span>
                                         </a>
                                     </li>
                                 }
                             </ul>
-                            <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">Info</div>
+                            <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">@Localizer["Info"].Value</div>
                             <ul class="pcoded-item pcoded-left-item">
                                 <li class=" ">
                                     <a asp-area="" asp-controller="Home" asp-action="About">
                                         <span class="pcoded-micon  c-vitesco-blue-01"><i class="ti-info"></i></span>
-                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">About</span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">@Localizer["About"].Value</span>
                                         <span class="pcoded-mcaret"></span>
                                     </a>
                                 </li>
                                 <li class=" ">
                                     <a asp-area="" asp-controller="Home" asp-action="Contact">
                                         <span class="pcoded-micon c-vitesco-blue-03"><i class="ti-mobile"></i></span>
-                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">Contact</span>
+                                        <span class="pcoded-mtext" data-i18n="nav.dash.main">@Localizer["Contact"].Value</span>
                                         <span class="pcoded-mcaret"></span>
                                     </a>
                                 </li>
                             </ul>
+                            <br />
                         </div>
                     </nav>
                     @if (area == "Identity" && pageName.Contains("Login"))
                     {
                         <div style="padding-bottom:60px" class="">
                             <div style="max-width:2560px" class="container-vt body-content">
-                                <section style="margin-top:-96px;" class="login p-fixed d-flex text-center bg-primary common-img-bg">
+                                <section style="margin-top:-96px; background-size:cover;" class="login p-fixed d-flex text-center bg-primary common-img-bg">
                                     <br />
                                     <br />
+                                    <script src="~/lib/jquery/dist/jquery.min.js"></script>
                                     @RenderBody()
                                     @RenderSection("Scripts", required: false)
                                 </section>
                             </div>
                         </div>
                     }
-                    else if (area == "Identity" && !pageName.Contains("Login"))
+                    else if ((area == "Identity" && !pageName.Contains("Login")) || (area != "Identity" && pageName.Contains("Categories")))
                     {
                         <div style="padding-bottom:60px; background:url(/assets/images/bg.jpg); background-size:cover; min-height:87vh;" class="pcoded-content">
                             <div style="max-width:1650px" class="container body-content">
                                 <div style="margin:20px;">
                                     <br />
                                     <br />
+                                    <script src="~/lib/jquery/dist/jquery.min.js"></script>
                                     @RenderBody()
                                     @RenderSection("Scripts", required: false)
                                 </div>
@@ -343,6 +351,7 @@
                                 <div style="margin:40px">
                                     <br />
                                     <br />
+                                    <script src="~/lib/jquery/dist/jquery.min.js"></script>
                                     @RenderBody()
                                     @RenderSection("Scripts", required: false)
                                 </div>

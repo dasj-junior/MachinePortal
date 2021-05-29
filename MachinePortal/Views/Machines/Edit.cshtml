@@ -1,12 +1,12 @@
-﻿@model MachinePortal.Models.ViewModels.MachineFormViewModel
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model MachinePortal.Models.ViewModels.MachineFormViewModel
 
 @{
     var LoggedUserName = ViewData["UserName"];
     var LoggedUserID = ViewData["UserID"];
     var dateFormat = "dd/MM/yyyy";
 }
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 @* Form Data Variable *@
 <script type="text/javascript">

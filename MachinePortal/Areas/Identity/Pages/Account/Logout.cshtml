@@ -1,8 +1,7 @@
 ﻿@page
 @model LogoutModel
-@{
-    ViewData["Title"] = "Logout";
-}
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <div class="row justify-content-center">
     <div class="col-6">
@@ -10,7 +9,7 @@
             <div class="card-header c-vitesco-green-04">
                 <i style="vertical-align:middle; display:inline-block; margin-top:-5px;" class="bi-door-closed c-vitesco-green-04"></i>
                 <div class="d-inline-block">
-                    <h2 style="color:white">@ViewData["Title"]</h2>
+                    <h2 style="color:white">Logout</h2>
                 </div>
             </div>
             <div class="card-block card-padding">

@@ -1,8 +1,6 @@
-﻿@model MachinePortal.Models.Responsible
-
-@{
-    ViewData["Title"] = "Delete";
-}
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model MachinePortal.Models.Responsible
 
 <div class="modal-dialog">
     <div class="modal-content">
@@ -10,7 +8,7 @@
             <div style="background-color: #dc3545;" class="modal-header">
                 <i style="color:white;font-size:30px;background-color:#dc3545;" class="bi-x-circle"></i>
                 <h3 style="color:white;text-align:center;" class="modal-title">Remove Responsible</h3>
-                <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">Close</span></button>
             </div>
             <div class="modal-body text-center">
                 <div style="padding-left:50px" class="card-block card-padding text-center">
