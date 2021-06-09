@@ -62,16 +62,16 @@
 
 <div class="row justify-content-center">
     <div class="col-8">
-        <div class="card fb-card c-vitesco-red">
-            <div class="card-header c-vitesco-red">
-                <i style="vertical-align:middle" class="bi-people c-vitesco-red"></i>
+        <div class="card fb-card c-vitesco-green-03">
+            <div class="card-header c-vitesco-green-03">
+                <i style="vertical-align:middle" class="bi-people c-vitesco-green-03"></i>
                 <div class="d-inline-block">
-                    <h2 style="color:white">Departments</h2>
+                    <h2 style="color:white">@Localizer["Departments"].Value</h2>
                 </div>
             </div>
             <div class="card-block card-padding">
                 <p>
-                    <button style="float:right;" class="btn btn-primary" type="button" data-toggle="modal" data-target="#modalCreate">Create New Department</button>
+                    <button style="float:right;" class="btn btn-primary" type="button" data-toggle="modal" data-target="#modalCreate">@Localizer["Create New Department"].Value</button>
                 </p>
                 <br />
                 <table class="table table-bordered table-vitesco">
@@ -88,8 +88,8 @@
                             <tr>
                                 <td>@Html.DisplayFor(modelItem => item.Name)</td>
                                 <td class="text-center">
-                                    <button class="btn btn-primary" type="button" onclick="document.getElementById('editName').value = '@item.Name'; document.getElementById('editID').value = '@item.ID'" data-toggle="modal" data-target="#modalEdit">Edit</button>
-                                    <button class="btn btn-danger" type="button" onclick="document.getElementById('removeName').value = '@item.Name'; document.getElementById('removeID').value = '@item.ID'" data-toggle="modal" data-target="#modalRemove">Remove</button>
+                                    <button class="btn btn-primary" type="button" onclick="document.getElementById('editName').value = '@item.Name'; document.getElementById('editID').value = '@item.ID'" data-toggle="modal" data-target="#modalEdit">@Localizer["Edit"].Value</button>
+                                    <button class="btn btn-danger" type="button" onclick="document.getElementById('removeName').value = '@item.Name'; document.getElementById('removeID').value = '@item.ID'" data-toggle="modal" data-target="#modalRemove">@Localizer["Remove"].Value</button>
                                 </td>
                             </tr>
                         }
@@ -107,7 +107,7 @@
                 <div class="modal-header c-vitesco-green-03">
                     <i style="color:white;font-size:30px;" class="bi-plus-circle c-vitesco-green-03"></i>
                     <h3 style="color:white;text-align:center;" class="modal-title">Create Department</h3>
-                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">Close</span></button>
+                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">@Localizer["Close"].Value</span></button>
                 </div>
                 <div class="modal-body">
                     <br /><br />
@@ -118,8 +118,8 @@
                     <br /><br />
                 </div>
                 <div class="modal-footer">
-                    <input style="width:120px;" type="button" value="Cancel" class="btn btn-danger mr-auto" data-dismiss="modal" />
-                    <input type="submit" style="width:120px;float:right;" value="Create" class="btn btn-primary" />
+                    <input style="width:120px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-danger mr-auto" data-dismiss="modal" />
+                    <input type="submit" style="width:120px;float:right;" value="@Localizer["Create"].Value" class="btn btn-primary" />
                 </div>
             </form>
         </div>
@@ -133,7 +133,7 @@
                 <div class="modal-header c-vitesco-blue-03">
                     <i style="color:white;font-size:30px;" class="bi-pencil c-vitesco-blue-03"></i>
                     <h3 style="color:white;text-align:center;" class="modal-title">Edit Department</h3>
-                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">Close</span></button>
+                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">@Localizer["Close"].Value</span></button>
                 </div>
                 <div class="modal-body">
                     <br /><br />
@@ -145,8 +145,8 @@
                     <br /><br />
                 </div>
                 <div class="modal-footer">
-                    <input style="width:120px;" type="button" value="Cancel" class="btn btn-danger mr-auto" data-dismiss="modal" />
-                    <input type="submit" style="width:120px;float:right;" value="Update" class="btn btn-primary" />
+                    <input style="width:120px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-danger mr-auto" data-dismiss="modal" />
+                    <input type="submit" style="width:120px;float:right;" value="@Localizer["Update"].Value" class="btn btn-primary" />
                 </div>
             </form>
         </div>
@@ -160,7 +160,7 @@
                 <div style="background-color: #dc3545;" class="modal-header">
                     <i style="color:white;font-size:30px;background-color:#dc3545;" class="bi-x-circle"></i>
                     <h3 style="color:white;text-align:center;" class="modal-title">Remove Department</h3>
-                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">Close</span></button>
+                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">@Localizer["Close"].Value</span></button>
                 </div>
                 <div class="modal-body">
                     <br /><br />
@@ -172,8 +172,8 @@
                     <br /><br />
                 </div>
                 <div class="modal-footer">
-                    <input style="width:120px;" type="button" value="Cancel" class="btn btn-danger mr-auto" data-dismiss="modal" />
-                    <input type="submit" style="width:120px;float:right;" value="Remove" class="btn btn-danger" />
+                    <input style="width:120px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-danger mr-auto" data-dismiss="modal" />
+                    <input type="submit" style="width:120px;float:right;" value="@Localizer["Remove"].Value" class="btn btn-danger" />
                 </div>
             </form>
         </div>

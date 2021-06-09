@@ -60,8 +60,8 @@
         <form asp-action="Edit" enctype="multipart/form-data" asp-controller="Areas">
             <div class="modal-header c-vitesco-blue-03">
                 <i style="color:white;font-size:30px;" class="bi-pencil c-vitesco-blue-03"></i>
-                <h3 style="color:white;text-align:center;" class="modal-title">Edit: @Model.Name</h3>
-                <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">Close</span></button>
+                <h3 style="color:white;text-align:center;" class="modal-title">@Localizer["Edit"].Value: @Model.Name</h3>
+                <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">@Localizer["Close"].Value</span></button>
             </div>
             <div class="modal-body">
                 <div style="padding:10px;" class="form-horizontal">
@@ -69,14 +69,14 @@
                         <div style="margin-bottom:10px;" id="divImageMediaPreview"></div>
                         <label class="control-label">Photo</label>
                         <div class="input-group">
-                            <input id="photoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+                            <input id="photoFilePath" type="text" class="form-control" placeholder="@Localizer["No file chosen"].Value" readonly />
                             <span style="float:right;" class="input-group-append input-group-button">
                                 <button id="openPhoto" class="btn btn-default" type="button">
-                                    Open Photo
+                                    @Localizer["Open Photo"].Value
                                 </button>
                             </span>
                         </div>
-                        <input type="file" id="photo" name="photo" accept="image/*" style="display:none" />
+                        <input type="file" id="photo" name="image" accept="image/*" style="display:none" />
                     </div>
                     <div class="form-group">
                         <label asp-for="Name" class="control-label"></label>
@@ -91,8 +91,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <input id="closeModal02" style="width:120px;" type="button" value="Cancel" class="btn btn-primary mr-auto" data-dismiss="modal" />
-                <input style="width:120px;float:right;" type="submit" value="Edit" class="btn btn-success" />
+                <input id="closeModal02" style="width:120px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-primary mr-auto" data-dismiss="modal" />
+                <input style="width:120px;float:right;" type="submit" value="@Localizer["Edit"].Value" class="btn btn-success" />
             </div>
         </form>
     </div>

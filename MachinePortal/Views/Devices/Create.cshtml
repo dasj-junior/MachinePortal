@@ -1,6 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @model MachinePortal.Models.Device
+
+@* Form Data Variable *@
+<script type="text/javascript">
+    var formdata = new FormData();
+    var Mfiles = [];
+</script>
+
 @* Machine Photo Button and Preview *@
 <script type="text/javascript">
     $(document).ready(function () {
@@ -36,33 +43,93 @@
                 alert("This browser does not support HTML5.");
             }
         });
+
+        function DeleteFile(Fileid, FileName) {
+            formdata.delete(FileName)
+            $("#" + Fileid).remove();
+            //chkatchtbl();
+        }
+
+        document.getElementById('openInputDocument').addEventListener('click', () => {
+            document.getElementById('iDocuments').click()
+        });
+
+        $("#iDocuments").on("change", function () {
+            var fileInput = document.getElementById('iDocuments');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                document.getElementById("documentFilePath").value = sfilename;
+            }
+        });
+
+        $("#insertDocument").on("click", function () {
+            var fileInput;
+            var sfilename;
+            fileInput = document.getElementById('iDocuments');
+            sfilename = fileInput.value;
+            var sName = document.getElementById('documentName').value;
+            var iCategory = document.getElementById('documentCategory').value;
+            var sCategory = document.getElementById('documentCategory').options[document.getElementById('documentCategory').selectedIndex].text;
+            let srandomid = Math.random().toString(36).substring(7);
+            var doc = { Name: sName, Category: iCategory, ID: srandomid, Type: "Document", FileName: sfilename };
+            formdata.append("document", fileInput.files[0]);
+            Mfiles.push(doc);
+            // Binding the file name
+            var markup = "<tr id='" + srandomid + "'><td>" + srandomid + "</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                "\")'><span>Delete</span></a></td></tr>";
+            $("#tDocuments").append(markup);
+            //chkatchtbl();
+            $('#iDocuments').val('');
+        });
+
+        $("form").submit(function (event) {
+            var data = new FormData($('#form')[0]);
+            for (var pair of formdata.entries()) {
+                data.append(pair[0], pair[1]);
+            }
+            data.append('files', JSON.stringify(Mfiles));
+            $('.theme-loader').show();
+            $.ajax({
+                url: '@Url.Content("~/")' + "Devices/Create",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                data: data,
+                success: function () {
+                    window.location.href = "/Devices/Index";
+                },
+                error: function () {
+                    $('.theme-loader').hide();
+                }
+            });
+        });
     });
 </script>
 
 <div class="row">
     <div class="col-md-10">
-        <form asp-action="Create" enctype="multipart/form-data" asp-controller="Devices">
+        <form asp-action="Create"  id="form" class="form" method="post" enctype="multipart/form-data" asp-controller="Devices">
             <div class="card fb-card c-vitesco-green-03">
                 <div class="card-header c-vitesco-green-03">
                     <i style="vertical-align:middle" class="ti-harddrives c-vitesco-green-03"></i>
                     <div class="d-inline-block">
-                        <h2 style="color:white">Create new device</h2>
+                        <h2 style="color:white">@Localizer["Create new device"].Value</h2>
                     </div>
                     <hr style="border:1px solid white" />
                     <div class="d-inline-block">
-                        <h2 style="color:white">General Data</h2>
+                        <h2 style="color:white">@Localizer["General Data"].Value</h2>
                     </div>
                 </div>
                 <div class="card-block card-padding">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label class="control-label">Photo</label>
+                        <label class="control-label">@Localizer["Photo"].Value</label>
                         <div id="divImageMediaPreview"></div>
                         <div class="input-group">
-                            <input id="photoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+                            <input id="photoFilePath" type="text" class="form-control" placeholder="@Localizer["No file chosen"].Value" readonly />
                             <span class="input-group-append input-group-button">
                                 <button id="openPhoto" class="btn btn-default" type="button">
-                                    Open Photo
+                                    @Localizer["Open Photo"].Value
                                 </button>
                             </span>
                         </div>
@@ -114,24 +181,79 @@
             <div class="card fb-card c-vitesco-green-03">
                 <div class="card-header c-vitesco-green-03">
                     <div class="d-inline-block">
-                        <h2 style="color:white">Documents</h2>
+                        <h2 style="color:white">@Localizer["Documents"].Value</h2>
                     </div>
                 </div>
                 <div class="card-block card-padding">
-                    <div class="form-group">
-                        <label asp-for="Documents" class="control-label"></label>
-                        <input type="file" class="form-control-file" name="documents" multiple />
-                    </div>
+                    <input id="iDocuments" type="file" style="display:none" />
+                    <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalDocuments">@Localizer["Add Documents"].Value</button>
+                    <br /><br />
+                    <table class="table table-bordered table-vitesco" id="tDocuments">
+                        <tr class="thead-vitesco">
+                            <th>
+                                @Localizer["ID"].Value
+                            </th>
+                            <th>
+                                @Localizer["Name"].Value
+                            </th>
+                            <th>
+                                @Localizer["Category"].Value
+                            </th>
+                            <th>
+                                @Localizer["File Name"].Value
+                            </th>
+                            <th>
+                                @Localizer["Delete"].Value
+                            </th>
+                        </tr>
+                    </table>
                 </div>
             </div>
 
             <div class="form-group">
-                <a style="width:120px;" class="btn btn-primary" asp-action="Index">Back to List</a>
-                <input style="width:120px;float:right;" type="submit" id="submit" value="Create" class="btn btn-success" />
+                <a style="width:120px;" class="btn btn-primary" asp-action="Index">@Localizer["Back to List"].Value</a>
+                <input style="width:120px;float:right;" type="submit" id="submit" value="@Localizer["Create"].Value" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
+
+<div class="modal fade" id="modalDocuments" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add New Document</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Name:</label>
+                    <input id="documentName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Category:</label>
+                    <select id="documentCategory" class="form-control" asp-items="@(new SelectList(@ViewBag.ListCategories,"ID","Name"))"></select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">File:</label>
+                    <div class="input-group">
+                        <span id="DGroup" class="input-group-btn">
+                            <button id="openInputDocument" class="btn btn-default" type="button">
+                                Open File
+                            </button>
+                        </span>
+                        <input id="documentFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="insertDocument" class="btn btn-success">Insert</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

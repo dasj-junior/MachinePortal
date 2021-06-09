@@ -30,24 +30,24 @@
     <div class="card-header c-vitesco-green-05">
         <i style="vertical-align:middle" class="ti-layout-list-thumb c-vitesco-green-05"></i>
         <div class="d-inline-block">
-            <h2 style="color:white;">Hierarchies</h2>
+            <h2 style="color:white;">@Localizer["Hierarchies"].Value</h2>
         </div>
         <hr style="border:1px solid white" />
         <div class="d-inline-block">
-            <h2 style="color:white">Areas</h2>
+            <h2 style="color:white">@Localizer["Areas"].Value</h2>
         </div>
     </div>
     <div class="card-block card-padding">
         <div>
             <p>
-                <button class="btn btn-primary btn-create" data-toggle="modal" data-target="#modalCreate">Create New Area</button>
+                <button class="btn btn-primary btn-create" data-toggle="modal" data-target="#modalCreate">@Localizer["Create New Area"].Value</button>
             </p>
             <table style="table-layout:auto;" class="table table-bordered table-vitesco">
                 <thead class="thead-vitesco">
                     <tr>
                         <th width="20%">@Html.DisplayNameFor(model => model.ImagePath)</th>
                         <th width="60%">@Html.DisplayNameFor(model => model.Name)</th>
-                        <th width="20%">Options</th>
+                        <th width="20%">@Localizer["Options"].Value</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,17 +56,17 @@
                         <tr>
                             @if (item.ImagePath != null)
                             {
-                                <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" width="100" height="100" /></td>
+                                <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" height="100"/></td>
                             }
                             else
                             {
-                                <td><img class="img-thumbnail" src="~/resources/General/NoImage.jpg" width="100" height="100" /></td>
+                                <td><img class="img-thumbnail" src="~/resources/General/NoImage.jpg" height="100"/></td>
                             }
                             <td>@Html.DisplayFor(modelItem => item.Name)</td>
                             <td>
-                                <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">Open</a>
-                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">Edit</button>
-                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">Delete</button>
+                                <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">@Localizer["Open"].Value</a>
+                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
+                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
                             </td>
                         </tr>
                     }

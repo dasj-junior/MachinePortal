@@ -35,6 +35,71 @@
     }
 </style>
 
+@* Files Location *@
+<script>
+    $(document).ready(function () {
+        $("#documentLocation").on("change", function () {
+            var dLoc = document.getElementById('documentLocation');
+            var dInp = document.getElementById('documentFilePath');
+            if (dLoc.value == 'path') {
+                $("#DGroup").hide();
+                dInp.readOnly = false;
+                dInp.setAttribute('placeholder', "\\\\servername\\folder\\file.pdf");
+            }
+            else if (dLoc.value == 'web') {
+                $("#DGroup").hide();
+                dInp.readOnly = false;
+                dInp.setAttribute('placeholder', 'http://www.sharepoint.com/path/file.pdf');
+            }
+            else {
+                $("#DGroup").show();
+                dInp.readOnly = true;
+                dInp.setAttribute('placeholder', 'No file chosen');
+            }
+        });
+
+        $("#imageLocation").on("change", function () {
+            var iLoc = document.getElementById('imageLocation');
+            var dInp = document.getElementById('imageFilePath');
+            if (iLoc.value == 'path') {
+                $("#IGroup").hide();
+                dInp.readOnly = false;
+                dInp.setAttribute('placeholder', "\\\\servername\\folder\\file.pdf");
+            }
+            else if (iLoc.value == 'web') {
+                $("#IGroup").hide();
+                dInp.readOnly = false;
+                dInp.setAttribute('placeholder', 'http://www.sharepoint.com/path/file.pdf');
+            }
+            else {
+                $("#IGroup").show();
+                dInp.readOnly = true;
+                dInp.setAttribute('placeholder', 'No file chosen');
+            }
+        });
+
+        $("#videoLocation").on("change", function () {
+            var vLoc = document.getElementById('videoLocation');
+            var dInp = document.getElementById('videoFilePath');
+            if (vLoc.value == 'path') {
+                $("#VGroup").hide();
+                dInp.readOnly = false;
+                dInp.setAttribute('placeholder', "\\\\servername\\folder\\file.pdf");
+            }
+            else if (vLoc.value == 'web') {
+                $("#VGroup").hide();
+                dInp.readOnly = false;
+                dInp.setAttribute('placeholder', 'http://www.sharepoint.com/path/file.pdf');
+            }
+            else {
+                $("#VGroup").show();
+                dInp.readOnly = true;
+                dInp.setAttribute('placeholder', 'No file chosen');
+            }
+        });
+    });
+</script>
+
 @* Documents, Images and Videos Removal *@
 <script>
     function RemoveDocument(ID) {
@@ -178,59 +243,81 @@
         });
 
         $("#insertDocument").on("click", function () {
-            var fileInput = document.getElementById('iDocuments');
-            for (i = 0; i < fileInput.files.length; i++) {
-                var sfilename = fileInput.files[i].name;
-                var sName = document.getElementById('documentName').value;
-                var iCategory = document.getElementById('documentCategory').value;
-                var sCategory = document.getElementById('documentCategory').options[document.getElementById('documentCategory').selectedIndex].text;
-                let srandomid = Math.random().toString(36).substring(7);
-                var doc = { Name: sName, Category: iCategory, ID: srandomid, Type: "Document", FileName: sfilename };
-                Mfiles.push(doc);
-                formdata.append("document", fileInput.files[i]);
-                var markup = "<tr id='" + srandomid + "'><td>X</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' style='color: white' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
-                    "\")'>Delete</a></td></tr>"; // Binding the file name
-                $("#tDocuments").append(markup);
+            var dLoc = document.getElementById('documentLocation');
+            var fileInput;
+            var sfilename;
+            if (dLoc.value == 'file') {
+                fileInput = document.getElementById('iDocuments');
+                sfilename = fileInput.files[0].name;
+                formdata.append("document", fileInput.files[0]);
+            } else {
+                fileInput = document.getElementById('documentFilePath');
+                sfilename = fileInput.value;
             }
-            chkatchtbl();
+            var sName = document.getElementById('documentName').value;
+            var sLocation = document.getElementById('documentLocation').value;
+            var iCategory = document.getElementById('documentCategory').value;
+            var sCategory = document.getElementById('documentCategory').options[document.getElementById('documentCategory').selectedIndex].text;
+            let srandomid = Math.random().toString(36).substring(7);
+            var doc = { Name: sName, Category: iCategory, ID: srandomid, Type: "Document", FileName: sfilename, Location: sLocation };
+            Mfiles.push(doc);
+            var markup = "<tr id='" + srandomid + "'><td>" + srandomid + "</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                "\")'><span>Delete</span></a></td></tr>"; // Binding the file name
+            $("#tDocuments").append(markup);
+            //chkatchtbl();
             $('#iDocuments').val('');
         });
 
         $("#insertImage").on("click", function () {
-            var fileInput = document.getElementById('iImages');
-            for (i = 0; i < fileInput.files.length; i++) {
-                var sfilename = fileInput.files[i].name;
-                var sName = document.getElementById('imageName').value;
-                var iCategory = document.getElementById('imageCategory').value;
-                var sCategory = document.getElementById('imageCategory').options[document.getElementById('imageCategory').selectedIndex].text;
-                let srandomid = Math.random().toString(36).substring(7);
-                var img = { Name: sName, Category: iCategory, ID: srandomid, Type: "Image", FileName: sfilename };
-                Mfiles.push(img);
-                formdata.append("image", fileInput.files[i]);
-                var markup = "<tr id='" + srandomid + "'><td>X</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' style='color: white' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
-                    "\")'>Delete</a></td></tr>"; // Binding the file name
-                $("#tImages").append(markup);
+            var iLoc = document.getElementById('imageLocation');
+            var fileInput;
+            var sfilename;
+            if (iLoc.value == 'file') {
+                fileInput = document.getElementById('iImages');
+                sfilename = fileInput.files[0].name;
+                formdata.append("image", fileInput.files[0]);
+            } else {
+                fileInput = document.getElementById('imageFilePath');
+                sfilename = fileInput.value;
             }
-            chkatchtbl();
+            var sName = document.getElementById('imageName').value;
+            var sLocation = document.getElementById('imageLocation').value;
+            var iCategory = document.getElementById('imageCategory').value;
+            var sCategory = document.getElementById('imageCategory').options[document.getElementById('imageCategory').selectedIndex].text;
+            let srandomid = Math.random().toString(36).substring(7);
+            var img = { Name: sName, Category: iCategory, ID: srandomid, Type: "Image", FileName: sfilename, Location: sLocation };
+            Mfiles.push(img);
+
+            var markup = "<tr id='" + srandomid + "'><td>" + srandomid + "</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                "\")'><span>Delete</span></a></td></tr>"; // Binding the file name
+            $("#tImages").append(markup);
+            //chkatchtbl();
             $('#iImages').val('');
         });
 
         $("#insertVideo").on("click", function () {
-            var fileInput = document.getElementById('iVideos');
-            for (i = 0; i < fileInput.files.length; i++) {
-                var sfilename = fileInput.files[i].name;
-                var sName = document.getElementById('videoName').value;
-                var iCategory = document.getElementById('videoCategory').value;
-                var sCategory = document.getElementById('videoCategory').options[document.getElementById('videoCategory').selectedIndex].text;
-                let srandomid = Math.random().toString(36).substring(7);
-                var vid = { Name: sName, Category: iCategory, ID: srandomid, Type: "Video", FileName: sfilename };
-                Mfiles.push(vid);
-                formdata.append("video", fileInput.files[i]);
-                var markup = "<tr id='" + srandomid + "'><td>X</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' style='color: white' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
-                    "\")'>Delete</a></td></tr>"; // Binding the file name
-                $("#tVideos").append(markup);
+            var vLoc = document.getElementById('videoLocation');
+            var fileInput;
+            var sfilename;
+            if (vLoc.value == 'file') {
+                fileInput = document.getElementById('iVideos');
+                sfilename = fileInput.files[0].name;
+                formdata.append("video", fileInput.files[0]);
+            } else {
+                fileInput = document.getElementById('videoFilePath');
+                sfilename = fileInput.value;
             }
-            chkatchtbl();
+            var sName = document.getElementById('videoName').value;
+            var sLocation = document.getElementById('imageLocation').value;
+            var iCategory = document.getElementById('videoCategory').value;
+            var sCategory = document.getElementById('videoCategory').options[document.getElementById('videoCategory').selectedIndex].text;
+            let srandomid = Math.random().toString(36).substring(7);
+            var vid = { Name: sName, Category: iCategory, ID: srandomid, Type: "Video", FileName: sfilename, Location: sLocation };
+            Mfiles.push(vid);
+            var markup = "<tr id='" + srandomid + "'><td>" + srandomid + "</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                "\")'><span>Delete</span></a></td></tr>"; // Binding the file name
+            $("#tVideos").append(markup);
+            //chkatchtbl();
             $('#iVideos').val('');
         });
 
@@ -377,22 +464,22 @@
                 <div class="card-header c-vitesco-gray">
                     <i style="vertical-align:middle" class="ti-desktop c-vitesco-gray"></i>
                     <div class="d-inline-block">
-                        <h2 style="color:white">Edit: @Model.Machine.Name</h2>
+                        <h2 style="color:white">@Localizer["Edit"].Value: @Model.Machine.Name</h2>
                     </div>
                     <hr style="border:1px solid white" />
                     <div class="d-inline-block">
-                        <h2 style="color:white">General Data</h2>
+                        <h2 style="color:white">@Localizer["General Data"].Value</h2>
                     </div>
                 </div>
                 <div class="card-block card-padding">
                     <div class="form-group">
-                        <label class="control-label">Photo</label>
+                        <label class="control-label">@Localizer["Photo"].Value</label>
                         <div id="divImageMediaPreview"></div>
                         <div class="input-group">
-                            <input id="photoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+                            <input id="photoFilePath" type="text" class="form-control" placeholder="@Localizer["No file chosen"].Value" readonly />
                             <span class="input-group-append input-group-button">
                                 <button id="openPhoto" class="btn btn-default" type="button">
-                                    Open Photo
+                                    @Localizer["Open Photo"].Value
                                 </button>
                             </span>
                         </div>
@@ -458,29 +545,29 @@
             <div class="card fb-card">
                 <div style="background-color:#4B4B46;" class="card-header">
                     <div class="d-inline-block">
-                        <h2 style="color:white">Documents</h2>
+                        <h2 style="color:white">@Localizer["Documents"].Value</h2>
                     </div>
                 </div>
                 <div class="card-block card-padding">
                     <input id="iDocuments" type="file" style="display:none" />
-                    <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalDocuments">Add Document</button>
+                    <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalDocuments">@Localizer["Add Documents"].Value</button>
                     <br /><br />
                     <table class="table table-bordered table-vitesco" id="tDocuments">
                         <tr class="thead-vitesco">
                             <th>
-                                ID
+                                @Localizer["ID"].Value
                             </th>
                             <th>
-                                Name
+                                @Localizer["Name"].Value
                             </th>
                             <th>
-                                Category
+                                @Localizer["Category"].Value
                             </th>
                             <th>
-                                File Name
+                                @Localizer["File Name"].Value
                             </th>
                             <th>
-                                Delete
+                                @Localizer["Delete"].Value
                             </th>
                         </tr>
                         @foreach (var item in Model.Machine.MachineDocuments)
@@ -491,7 +578,7 @@
                                 <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
                                 <td>@Html.DisplayFor(modelItem => item.FileName)</td>
                                 <td>
-                                    <a style="color:white" class="btn btn-danger" onclick="RemoveDocument(@item.ID)">Delete</a>
+                                    <a style="color:white" class="btn btn-danger" onclick="RemoveDocument(@item.ID)">@Localizer["Delete"].Value</a>
                                 </td>
                             </tr>
                         }
@@ -502,29 +589,29 @@
             <div class="card fb-card">
                 <div style="background-color:#4B4B46;" class="card-header">
                     <div class="d-inline-block">
-                        <h2 style="color:white">Images</h2>
+                        <h2 style="color:white">@Localizer["Images"].Value</h2>
                     </div>
                 </div>
                 <div class="card-block card-padding">
                     <input id="iImages" type="file" style="display:none" />
-                    <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalImages">Add Images</button>
+                    <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalImages">@Localizer["Add Images"].Value</button>
                     <br /><br />
                     <table class="table table-bordered table-vitesco" id="tImages">
                         <tr class="thead-vitesco">
                             <th>
-                                ID
+                                @Localizer["ID"].Value
                             </th>
                             <th>
-                                Name
+                                @Localizer["Name"].Value
                             </th>
                             <th>
-                                Category
+                                @Localizer["Category"].Value
                             </th>
                             <th>
-                                File Name
+                                @Localizer["File Name"].Value
                             </th>
                             <th>
-                                Delete
+                                @Localizer["Delete"].Value
                             </th>
                         </tr>
                         @foreach (var item in Model.Machine.MachineImages)
@@ -535,7 +622,7 @@
                                 <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
                                 <td>@Html.DisplayFor(modelItem => item.FileName)</td>
                                 <td>
-                                    <a style="color:white" class="btn btn-danger" onclick="RemoveImage(@item.ID)">Delete</a>
+                                    <a style="color:white" class="btn btn-danger" onclick="RemoveImage(@item.ID)">@Localizer["Delete"].Value</a>
                                 </td>
                             </tr>
                         }
@@ -546,29 +633,29 @@
             <div class="card fb-card">
                 <div style="background-color:#4B4B46;" class="card-header">
                     <div class="d-inline-block">
-                        <h2 style="color:white">Videos</h2>
+                        <h2 style="color:white">@Localizer["Videos"].Value</h2>
                     </div>
                 </div>
                 <div class="card-block card-padding">
                     <input id="iVideos" type="file" style="display:none" />
-                    <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalVideos">Add Videos</button>
+                    <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalVideos">@Localizer["Add Videos"].Value</button>
                     <br /><br />
                     <table class="table table-bordered table-vitesco" id="tVideos">
                         <tr class="thead-vitesco">
                             <th>
-                                ID
+                                @Localizer["ID"].Value
                             </th>
                             <th>
-                                Name
+                                @Localizer["Name"].Value
                             </th>
                             <th>
-                                Category
+                                @Localizer["Category"].Value
                             </th>
                             <th>
-                                File Name
+                                @Localizer["File Name"].Value
                             </th>
                             <th>
-                                Delete
+                                @Localizer["Delete"].Value
                             </th>
                         </tr>
                         @foreach (var item in Model.Machine.MachineVideos)
@@ -579,7 +666,7 @@
                                 <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
                                 <td>@Html.DisplayFor(modelItem => item.FileName)</td>
                                 <td>
-                                    <a style="color:white" class="btn btn-danger" onclick="RemoveVideo(@item.ID)">Delete</a>
+                                    <a style="color:white" class="btn btn-danger" onclick="RemoveVideo(@item.ID)">@Localizer["Delete"].Value</a>
                                 </td>
                             </tr>
                         }
@@ -590,17 +677,16 @@
             <div class="card fb-card">
                 <div style="background-color:#4B4B46;" class="card-header">
                     <div class="d-inline-block">
-                        <h2 style="color:white">Devices</h2>
+                        <h2 style="color:white">@Localizer["Devices"].Value</h2>
                     </div>
                 </div>
                 <div class="card-block card-padding">
                     <div class="form-group">
-                        @*<label asp-for="Devices" class="control-label"></label>*@
                         <div class="row">
                             <div class="col-md-5 col-sm-5">
                                 <div class="input-icons">
                                     <i style="font-weight:700" class="bi-search icon"></i>
-                                    <input id="FilterSelectDevice" style="text-align:center" type="text" class="form-control" placeholder="Filter">
+                                    <input id="FilterSelectDevice" style="text-align:center" type="text" class="form-control" placeholder="@Localizer["Filter"].Value">
                                 </div>
                             </div>
                             <div class="col-md-2 col-sm-2">
@@ -608,7 +694,7 @@
                             <div class="col-md-5 col-sm-5">
                                 <div class="input-icons">
                                     <i style="font-weight:700" class="bi-search icon"></i>
-                                    <input id="FilterSelectedDevice" style="text-align:center" type="text" class="form-control" placeholder="Filter">
+                                    <input id="FilterSelectedDevice" style="text-align:center" type="text" class="form-control" placeholder="@Localizer["Filter"].Value">
                                 </div>
                             </div>
                         </div>
@@ -631,7 +717,7 @@
             <div class="card fb-card">
                 <div style="background-color:#4B4B46;" class="card-header">
                     <div class="d-inline-block">
-                        <h2 style="color:white">Responsibles</h2>
+                        <h2 style="color:white">@Localizer["Responsibles"].Value</h2>
                     </div>
                 </div>
                 <div class="card-block card-padding">
@@ -641,7 +727,7 @@
                             <div class="col-md-5 col-sm-5">
                                 <div class="input-icons">
                                     <i style="font-weight:700" class="bi-search icon"></i>
-                                    <input id="FilterSelectResponsible" style="text-align:center" type="text" class="form-control" placeholder="Filter">
+                                    <input id="FilterSelectResponsible" style="text-align:center" type="text" class="form-control" placeholder="@Localizer["Filter"].Value">
 
                                 </div>
                             </div>
@@ -650,7 +736,7 @@
                             <div class="col-md-5 col-sm-5">
                                 <div class="input-icons">
                                     <i style="font-weight:700" class="bi-search icon"></i>
-                                    <input id="FilterSelectedResponsible" style="text-align:center" type="text" class="form-control" placeholder="Filter">
+                                    <input id="FilterSelectedResponsible" style="text-align:center" type="text" class="form-control" placeholder="@Localizer["Filter"].Value">
                                 </div>
                             </div>
                         </div>
@@ -673,29 +759,29 @@
             <div class="card fb-card">
                 <div style="background-color:#4B4B46;" class="card-header">
                     <div class="d-inline-block">
-                        <h2 style="color:white">Hierarchies</h2>
+                        <h2 style="color:white">@Localizer["Hierarchies"].Value</h2>
                     </div>
                 </div>
                 <div class="card-block card-padding">
                     <div class="form-group">
-                        <label class="control-label">Area</label>
+                        <label class="control-label">@Localizer["Area"].Value</label>
                         <select asp-for="Machine.AreaID" id="AreaID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListAreas,"ID","Name"))"></select>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label">Sector</label>
+                        <label class="control-label">@Localizer["Sector"].Value</label>
                         <select asp-for="Machine.SectorID" id="SectorID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListSectors,"ID","Name"))"></select>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label">Line</label>
+                        <label class="control-label">@Localizer["Line"].Value</label>
                         <select asp-for="Machine.LineID" id="LineID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListLines,"ID","Name"))"></select>
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                <a style="width:120px;" class="btn btn-primary" asp-action="Index">Back to List</a>
-                <input style="width:120px;float:right;" type="submit" id="submit" value="Edit" class="btn btn-success" />
+                <a style="width:120px;" class="btn btn-primary" asp-action="Index">@Localizer["Back to List"].Value</a>
+                <input style="width:120px;float:right;" type="submit" id="submit" value="@Localizer["Edit"].Value" class="btn btn-success" />
             </div>
         </form>
     </div>
@@ -705,34 +791,42 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add New Document</h4>
+                <h4 class="modal-title">@Localizer["Add New Document"].Value</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="control-label">Name:</label>
+                    <label class="control-label">@Localizer["Name:"].Value</label>
                     <input id="documentName" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Category:</label>
+                    <label class="control-label">@Localizer["Category:"].Value</label>
                     <select id="documentCategory" class="form-control" asp-items="@(new SelectList(@ViewBag.ListCategories,"ID","Name"))"></select>
                     @*<input id="documentCategory" class="form-control" />*@
                 </div>
                 <div class="form-group">
+                    <label class="control-label">@Localizer["Type:"].Value</label>
+                    <select id="documentLocation" class="form-control">
+                        <option value="file">@Localizer["File"].Value</option>
+                        <option value="path">@Localizer["Network File"].Value</option>
+                        <option value="web">@Localizer["Web Link"].Value</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label class="control-label">File:</label>
                     <div class="input-group">
-                        <span class="input-group-btn">
+                        <span id="DGroup" class="input-group-btn">
                             <button id="openInputDocument" class="btn btn-default" type="button">
-                                Open File
+                                @Localizer["Open File"].Value
                             </button>
                         </span>
-                        <input id="documentFilePath" type="text" class="form-control" placeholder="No file chosen" readonly></input>
+                        <input id="documentFilePath" type="text" class="form-control" placeholder="@Localizer["No file chosen"].Value" readonly />
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="insertDocument" class="btn btn-success">Insert</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                <button type="button" id="insertDocument" class="btn btn-success">@Localizer["Insert"].Value</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">@Localizer["Close"].Value</button>
             </div>
         </div>
     </div>
@@ -742,34 +836,41 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add New Image</h4>
+                <h4 class="modal-title">@Localizer["Add New Image"].Value</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="control-label">Name:</label>
+                    <label class="control-label">@Localizer["Name:"].Value</label>
                     <input id="imageName" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Category:</label>
+                    <label class="control-label">@Localizer["Category:"].Value</label>
                     <select id="imageCategory" class="form-control" asp-items="@(new SelectList(@ViewBag.ListCategories,"ID","Name"))"></select>
-                    @*<input id="imageCategory" class="form-control" />*@
                 </div>
                 <div class="form-group">
-                    <label class="control-label">File:</label>
+                    <label class="control-label">@Localizer["Type:"].Value</label>
+                    <select id="imageLocation" class="form-control">
+                        <option value="file">@Localizer["File"].Value</option>
+                        <option value="path">@Localizer["Network File"].Value</option>
+                        <option value="web">@Localizer["Web Link"].Value</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">@Localizer["File:"].Value</label>
                     <div class="input-group">
-                        <span class="input-group-btn">
+                        <span id="IGroup" class="input-group-btn">
                             <button id="openInputImage" class="btn btn-default" type="button">
-                                Open File
+                                @Localizer["Open File"].Value
                             </button>
                         </span>
-                        <input id="imageFilePath" type="text" class="form-control" placeholder="No file chosen" readonly></input>
+                        <input id="imageFilePath" type="text" class="form-control" placeholder="@Localizer["No file chosen"].Value" readonly />
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="insertImage" class="btn btn-success">Insert</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                <button type="button" id="insertDocument" class="btn btn-success">@Localizer["Insert"].Value</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">@Localizer["Close"].Value</button>
             </div>
         </div>
     </div>
@@ -779,34 +880,41 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add New Video</h4>
+                <h4 class="modal-title">@Localizer["Add New Video"].Value</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label class="control-label">Name:</label>
+                    <label class="control-label">@Localizer["Name:"].Value</label>
                     <input id="videoName" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Category:</label>
+                    <label class="control-label">@Localizer["Category:"].Value</label>
                     <select id="videoCategory" class="form-control" asp-items="@(new SelectList(@ViewBag.ListCategories,"ID","Name"))"></select>
-                    @*<input id="videoCategory" class="form-control" />*@
                 </div>
                 <div class="form-group">
-                    <label class="control-label">File:</label>
+                    <label class="control-label">@Localizer["Type:"].Value</label>
+                    <select id="videoLocation" class="form-control">
+                        <option value="file">@Localizer["File"].Value</option>
+                        <option value="path">@Localizer["Network File"].Value</option>
+                        <option value="web">@Localizer["Web Link"].Value</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">@Localizer["File:"].Value</label>
                     <div class="input-group">
-                        <span class="input-group-btn">
+                        <span id="VGroup" class="input-group-btn">
                             <button id="openInputVideo" class="btn btn-default" type="button">
-                                Open File
+                                @Localizer["Open File"].Value
                             </button>
                         </span>
-                        <input id="videoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly></input>
+                        <input id="videoFilePath" type="text" class="form-control" placeholder="@Localizer["No file chosen"].Value" readonly />
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="insertVideo" class="btn btn-success">Insert</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                <button type="button" id="insertDocument" class="btn btn-success">@Localizer["Insert"].Value</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">@Localizer["Close"].Value</button>
             </div>
         </div>
     </div>

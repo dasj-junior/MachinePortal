@@ -8,11 +8,13 @@ namespace MachinePortal.Models
 {
     public class Area
     {
+        [Display(Name = "ID")]
         public int ID { get; set; }
         [Required]
         [StringLength(100, MinimumLength = 1)]
+        [Display(Name = "Name")]
         public string Name { get; set; }
-        [Display(Name = "Image")]
+        [Display(Name = "Photo")]
         public string ImagePath { get; set; }
         public ICollection<Sector> Sectors { get; set; }
 

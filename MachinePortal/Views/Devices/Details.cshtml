@@ -10,13 +10,20 @@
         </div>
         <hr style="border:1px solid white" />
         <div class="d-inline-block">
-            <h2 style="color:white">General Data</h2>
+            <h2 style="color:white">@Localizer["General Data"].Value</h2>
         </div>
     </div>
     <div class="card-block card-padding">
         <dl class="dl-horizontal">
             <dd>
-                <img src="@Html.DisplayFor(model => model.ImagePath)" height="200" class="img-thumbnail" />
+                @if (Model.ImagePath != null)
+                {
+                    <img src="@Html.DisplayFor(model => model.ImagePath)" height="300" class="img-thumbnail" />
+                }
+                else
+                {
+                    <img src="~/resources/General/NoImage.jpg" height="300" class="img-thumbnail" />
+                }
             </dd>
             <br />
             <dt>
@@ -74,25 +81,42 @@
 <div class="card fb-card c-vitesco-green-03">
     <div class="card-header c-vitesco-green-03">
         <div class="d-inline-block">
-            <h2 style="color:white">Documents</h2>
+            <h2 style="color:white">@Localizer["Documents"].Value</h2>
         </div>
     </div>
     <div class="card-block card-padding">
         <dl class="dl-horizontal">
-            @foreach (DeviceDocument document in Model.Documents)
-            {
-                <dt>
-                    Document
-                </dt>
-                <dd>
-                    <a href="@document.Path@document.Name" target="_blank">@document.Name</a>
-                    @*@Html.ActionLink(document.Name, "Download", new { filePath = document.Path, fileName = document.Name, extension = document.Extension })*@
-                </dd>
-            }
-        </dl>
-    </div>
-</div>
+            <table class="table table-bordered table-vitesco" id="tImages">
+                <tr class="thead-vitesco">
+                    <th>
+                        @Localizer["ID"].Value
+                    </th>
+                    <th>
+                        @Localizer["Name"].Value
+                    </th>
+                    <th>
+                        Download
+                    </th>
+                    <th>
+                        Open
+                    </th>
+                </tr>
+                @foreach (DeviceDocument document in Model.Documents)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => document.ID)</td>
+                        <td>@Html.DisplayFor(modelItem => document.Name)</td>
+                        <td><button style="color:white" class="btn btn-primary">@Html.ActionLink("", "Download", new { filePath = document.Path, fileName = document.Name, extension = document.Extension })</button></td>
+                        <td><a class="btn btn-success" href="@document.Path@document.Name" target="_blank">Open</a></td>
+                    </tr>
+                }
+             </table>
 
-<input type="hidden" asp-for="ID" />
-<button style="width:120px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">Back</button>
-<button style="width:120px; font-weight:700; float:right;" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ID">Edit</button>
+
+            </dl>
+        </div>
+    </div>
+
+    <input type="hidden" asp-for="ID" />
+    <button style="width:120px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">@Localizer["Back"].Value</button>
+    <button style="width:120px; font-weight:700; float:right;" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ID">@Localizer["Edit"].Value</button>

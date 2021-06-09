@@ -50,7 +50,7 @@
             <div class="card-header c-vitesco-green-04">
                 <i style="vertical-align:middle" class="ti-user c-vitesco-green-04"></i>
                 <div class="d-inline-block">
-                    <h2 style="color:white">Profile</h2>
+                    <h2 style="color:white">@Localizer["Profile"].Value</h2>
                 </div>
             </div>
             <div class="card-block card-padding">
@@ -67,16 +67,14 @@
                         </div>
                         <label asp-for="Input.PhotoPath"></label>
                         <div class="input-group">
-                            <input id="photoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+                            <input id="photoFilePath" type="text" class="form-control" placeholder="@Localizer["No file chosen"].Value" readonly />
                             <span class="input-group-append input-group-button">
                                 <button id="openPhoto" class="btn btn-default" type="button">
-                                    Open Photo
+                                    @Localizer["Open Photo"].Value
                                 </button>
                             </span>
                         </div>
                         <input type="file" id="photo" name="photo" accept="image/*" style="display:none" />
-                        @*<input type="hidden" asp-for="Input.PhotoPath" class="form-control d-block" />*@
-                        @*<input type="file" name="photo" />*@
                         <label asp-for="Input.FirstName"></label>
                         <input asp-for="Input.FirstName" class="form-control" />
                         <label asp-for="Input.LastName"></label>
@@ -92,14 +90,12 @@
                         <label asp-for="Input.Mobile"></label>
                         <input asp-for="Input.Mobile" class="form-control" />
                         <span asp-validation-for="Input.Mobile" class="text-danger"></span>
-                        @*<label asp-for="Input.Department"></label>
-                            <input asp-for="Input.Department" class="form-control" />*@
                         <label asp-for="Input.JobRole"></label>
                         <input asp-for="Input.JobRole" class="form-control" />
                     </div>
                     <br />
-                    <button style="width:100px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">Back</button>
-                    <button style="float:right; width:100px; font-weight:700;" type="submit" class="btn btn-success">Save</button>
+                    <button style="width:100px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">@Localizer["Back"].Value</button>
+                    <button style="float:right; width:100px; font-weight:700;" type="submit" class="btn btn-success">@Localizer["Save"].Value</button>
                 </form>
             </div>
         </div>

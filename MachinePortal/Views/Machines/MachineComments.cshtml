@@ -27,17 +27,17 @@
     <div class="card-header c-vitesco-gray">
         <i style="vertical-align:middle" class="ti-desktop c-vitesco-gray"></i>
         <div class="d-inline-block">
-            <h2 style="color:white">Machine: @Model.Name</h2>
+            <h2 style="color:white">@Localizer["Machine:"].Value @Model.Name</h2>
         </div>
         <hr style="border:1px solid white" />
         <div class="d-inline-block">
-            <h2 style="color:white">General Data</h2>
+            <h2 style="color:white">@Localizer["General Data"].Value</h2>
         </div>
     </div>
     <div class="card-block card-padding">
         <dl class="dl-horizontal">
             <dt>
-                Machine Photo
+                @Localizer["Machine Photo"].Value
             </dt>
             <dd>
                 <img src="@Html.DisplayFor(model => model.ImagePath)" width="200" />
@@ -61,19 +61,19 @@
 <div class="card fb-card">
     <div style="background-color:#4B4B46;" class="card-header">
         <div class="d-inline-block">
-            <h2 style="color:white">Comments</h2>
+            <h2 style="color:white">@Localizer["Comments"].Value</h2>
         </div>
     </div>
     <div class="card-block card-padding">
         <dl class="dl-horizontal">
             <table style="table-layout:fixed" class="table table-bordered table-vitesco02">
-                <button class="btn btn-success" style="float:right; margin-bottom: 20px" data-toggle="modal" data-target="#modalComments">Add New Comment</button>
+                <button class="btn btn-success" style="float:right; margin-bottom: 20px" data-toggle="modal" data-target="#modalComments">@Localizer["Add New Comment"].Value</button>
                 <thead class="thead-vitesco02">
                     <tr>
                         <th width="62%">@Html.DisplayNameFor(model => model.MachineComments.First().Comment)</th>
-                        <th width="15%">User Name</th>
+                        <th width="15%">@Localizer["User Name"].Value</th>
                         <th width="15%">@Html.DisplayNameFor(model => model.MachineComments.First().Date)</th>
-                        <th width="8%">Delete</th>
+                        <th width="8%">@Localizer["Delete"].Value</th>
                     </tr>
                 </thead>
                 <tbody id="tComments">
@@ -83,7 +83,7 @@
                             <td style="word-wrap:break-word;">@Html.DisplayFor(modelItem => item.Comment)</td>
                             <td>@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</td>
                             <td>@Html.DisplayFor(modelItem => item.Date)</td>
-                            <td><button class="btn btn-danger" onclick="removeComment(@item.ID)">Delete</button></td>
+                            <td><button class="btn btn-danger" onclick="removeComment(@item.ID)">@Localizer["Delete"].Value</button></td>
                         </tr>
                     }
                 </tbody>
@@ -96,7 +96,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add New Comment</h4>
+                <h4 class="modal-title">@Localizer["Add New Comment"].Value</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -116,8 +116,8 @@
                 </dd>
             </div>
             <div class="modal-footer">
-                <button type="button" id="insertComment" class="btn btn-success">Insert</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" id="insertComment" class="btn btn-success">@Localizer["Insert"].Value</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">@Localizer["Close"].Value</button>
             </div>
         </div>
     </div>
@@ -125,7 +125,7 @@
 
 <div>
     <input type="hidden" asp-for="ID" />
-    <input style="width:100px; font-weight:700;" type="button" value="Back" class="btn btn-primary" action="action" onclick="history.go(-1);" />
+    <input style="width:100px; font-weight:700;" type="button" value="@Localizer["Back"].Value" class="btn btn-primary" action="action" onclick="history.go(-1);" />
 </div>
 
 <input id="MachineID" style="display: none" value="@Html.DisplayFor(model => model.ID)" />

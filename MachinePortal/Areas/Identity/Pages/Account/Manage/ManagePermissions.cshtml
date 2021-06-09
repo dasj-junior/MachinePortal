@@ -42,14 +42,14 @@
                 <div class="card-header c-vitesco-red">
                     <i style="vertical-align:middle" class="ti-user c-vitesco-red"></i>
                     <div class="d-inline-block">
-                        <h2 style="color:white">User Data</h2>
+                        <h2 style="color:white">@Localizer["User Data"].Value</h2>
                     </div>
                 </div>
                 <div class="card-block card-padding">
                     <div>
                         <dl class="dl-horizontal">
                             <dt>
-                                User Photo
+                                @Localizer["User Photo"].Value
                             </dt>
                             <dd>
                                 <img src="@Html.DisplayFor(model => model.user.PhotoPath)" width="200" />
@@ -81,7 +81,7 @@
                 <div class="card-header c-vitesco-red">
                     <i style="vertical-align:middle" class="bi-people c-vitesco-red"></i>
                     <div class="d-inline-block">
-                        <h2 style="color:white">User Department</h2>
+                        <h2 style="color:white">@Localizer["User Department"].Value</h2>
                     </div>
                 </div>
                 <div class="card-block card-padding">
@@ -95,7 +95,7 @@
                 <div class="card-header c-vitesco-red">
                     <i style="vertical-align:middle" class="ti-user c-vitesco-red"></i>
                     <div class="d-inline-block">
-                        <h2 style="color:white">User Permissions</h2>
+                        <h2 style="color:white">@Localizer["User Permissions"].Value</h2>
                     </div>
                 </div>
                 <div class="card-block card-padding">
@@ -117,8 +117,8 @@
             </div>
 
             <div style="border-radius:5px;" class="form-group bg-white p-20">
-                <button style="width:120px; font-weight:700;" class="btn btn-primary" asp-page="./ManageUsers">Back</button>
-                <button style="float:right; width:120px; font-weight:700;" class="btn btn-success" id="submit" type="submit">Save</button>
+                <button style="width:120px; font-weight:700;" class="btn btn-primary" asp-page="./ManageUsers">@Localizer["Back"].Value</button>
+                <button style="float:right; width:120px; font-weight:700;" class="btn btn-success" id="submit" type="submit">@Localizer["Save"].Value</button>
             </div>
 
         </div>

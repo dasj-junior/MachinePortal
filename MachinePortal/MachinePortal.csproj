@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\assets\js\popper.js\popper.min.js_OLD" />
     <Content Remove="wwwroot\resources\Devices\Documents\20201228155207.jpg" />
     <Content Remove="wwwroot\resources\Devices\Documents\20201228155245.jpg" />
     <Content Remove="wwwroot\resources\Devices\Documents\20201228155245.png" />
@@ -49,7 +50,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Identity\Services\" />
+    <Folder Include="Resources\Areas\Identity\Data\" />
     <Folder Include="Resources\Areas\Identity\Pages\Account\Manage\" />
     <Folder Include="Resources\Views\Hierarchies\" />
     <Folder Include="wwwroot\resources\Areas\Images\" />
@@ -86,6 +87,7 @@
     <None Include="wwwroot\assets\js\modernizr\modernizr.js" />
     <None Include="wwwroot\assets\js\morris.js\morris.js" />
     <None Include="wwwroot\assets\js\pcoded.min.js" />
+    <None Include="wwwroot\assets\js\popper.js\popper.min.js_OLD" />
     <None Include="wwwroot\assets\js\popper.js\popper.min.js" />
     <None Include="wwwroot\assets\js\raphael\raphael.min.js" />
     <None Include="wwwroot\assets\js\script.js" />

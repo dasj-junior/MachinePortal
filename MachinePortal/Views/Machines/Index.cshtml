@@ -20,12 +20,12 @@
     <div class="card-header c-vitesco-gray">
         <i style="vertical-align:middle" class="ti-desktop c-vitesco-gray"></i>
         <div class="d-inline-block">
-            <h2 style="color:white;">Machines</h2>
+            <h2 style="color:white;">@Localizer["Machines"].Value</h2>
         </div>
     </div>
     <div class="card-block card-padding">
         <p>
-            <a class="btn btn-primary btn-create" asp-action="Create">Create New Machine</a>
+            <a class="btn btn-primary btn-create" asp-action="Create">@Localizer["Create New Machine"].Value</a>
         </p>
         <table style="table-layout:auto; padding-top:20px" class="table table-bordered table-vitesco">
             <thead class="thead-vitesco">
@@ -33,7 +33,7 @@
                     <th width="10%">@Html.DisplayNameFor(model => model.ImagePath)</th>
                     <th width="30%">@Html.DisplayNameFor(model => model.Name)</th>
                     <th width="40%">@Html.DisplayNameFor(model => model.Description)</th>
-                    <th width="20%">Options</th>
+                    <th width="20%">@Localizer["Options"].Value</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,9 +51,9 @@
                         <td>@Html.DisplayFor(modelItem => item.Name)</td>
                         <td>@Html.DisplayFor(modelItem => item.Description)</td>
                         <td>
-                            <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">Open</a>
-                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.ID">Edit</a>
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                            <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">@Localizer["Open"].Value</a>
+                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.ID">@Localizer["Edit"].Value</a>
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID">@Localizer["Delete"].Value</a>
                         </td>
                     </tr>
                 }

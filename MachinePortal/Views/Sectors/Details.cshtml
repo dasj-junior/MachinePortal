@@ -19,7 +19,7 @@
             }
         });
     }
-
+    
     function renderPartialDelete(ID) {
         $.ajax({
             url: '@Url.Action("AddPartialDelete", "Lines")',
@@ -47,11 +47,11 @@
     <div class="card-header c-vitesco-green-05">
         <i style="vertical-align:middle" class="ti-layout-list-thumb c-vitesco-green-05"></i>
         <div class="d-inline-block">
-            <h2 style="color:white;">Hierarchies</h2>
+            <h2 style="color:white;">@Localizer["Hierarchies"].Value</h2>
         </div>
         <hr style="border:1px solid white" />
         <div class="d-inline-block">
-            <h2 style="color:white">@Model.Name: Lines</h2>
+            <h2 style="color:white">@Model.Name: @Localizer["Lines"].Value</h2>
         </div>
     </div>
     <div class="card-block card-padding">
@@ -64,7 +64,7 @@
                     <tr>
                         <th width="20%">@Html.DisplayNameFor(model => model.ImagePath)</th>
                         <th width="60%">@Html.DisplayNameFor(model => model.Name)</th>
-                        <th width="20%">Options</th>
+                        <th width="20%">@Localizer["Options"].Value</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -73,16 +73,16 @@
                         <tr>
                             @if (item.ImagePath != null)
                             {
-                                <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" width="100" height="100" /></td>
+                                <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" height="100"/></td>
                             }
                             else
                             {
-                                <td><img class="img-thumbnail" src="~/resources/General/NoImage.jpg" width="100" height="100" /></td>
+                                <td><img class="img-thumbnail" src="~/resources/General/NoImage.jpg" height="100"/></td>
                             }
                             <td>@Html.DisplayFor(modelItem => item.Name)</td>
                             <td>
-                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">Edit</button>
-                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">Delete</button>
+                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
+                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
                             </td>
                         </tr>
                     }
@@ -92,7 +92,7 @@
     </div>
 </div>
 
-<button style="width:120px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">Back</button>
+<button style="width:120px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">@Localizer["Back"].Value</button>
 
 <div class="modal" id="modalCreate" role="dialog">
     @Html.Partial("../Lines/Create", new LineFormViewModel(new Line { SectorID = SectorID }));

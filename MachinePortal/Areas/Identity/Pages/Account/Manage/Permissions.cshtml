@@ -66,12 +66,12 @@
             <div class="card-header c-vitesco-gray">
                 <i style="vertical-align:middle" class="ti-briefcase c-vitesco-gray"></i>
                 <div class="d-inline-block">
-                    <h2 style="color:white">Permissions</h2>
+                    <h2 style="color:white">@Localizer["Permissions"].Value</h2>
                 </div>
             </div>
             <div class="card-block card-padding">
                 <p>
-                    <button style="float:right;" class="btn btn-primary" type="button" data-toggle="modal" data-target="#modalCreate">Create New Permission</button>
+                    <button style="float:right;" class="btn btn-primary" type="button" data-toggle="modal" data-target="#modalCreate">@Localizer["Create New Permission"].Value</button>
                 </p>
                 <br />
                 <table class="table table-bordered table-vitesco">
@@ -79,7 +79,7 @@
                     <thead class="thead-vitesco">
                         <tr>
                             <th width="80%">@Html.DisplayNameFor(model => model.Permissions[0].PermissionName)</th>
-                            <th width="20%" class="text-center">Options</th>
+                            <th width="20%" class="text-center">@Localizer["Options"].Value</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -88,8 +88,8 @@
                             <tr>
                                 <td>@Html.DisplayFor(modelItem => item.PermissionName)</td>
                                 <td class="text-center">
-                                    <button class="btn btn-primary" type="button" onclick="document.getElementById('editName').value = '@item.PermissionName'; document.getElementById('editID').value = '@item.ID'" data-toggle="modal" data-target="#modalEdit">Edit</button>
-                                    <button class="btn btn-danger" type="button" onclick="document.getElementById('removeName').value = '@item.PermissionName'; document.getElementById('removeID').value = '@item.ID'" data-toggle="modal" data-target="#modalRemove">Remove</button>
+                                    <button class="btn btn-primary" type="button" onclick="document.getElementById('editName').value = '@item.PermissionName'; document.getElementById('editID').value = '@item.ID'" data-toggle="modal" data-target="#modalEdit">@Localizer["Edit"].Value</button>
+                                    <button class="btn btn-danger" type="button" onclick="document.getElementById('removeName').value = '@item.PermissionName'; document.getElementById('removeID').value = '@item.ID'" data-toggle="modal" data-target="#modalRemove">@Localizer["Remove"].Value</button>
                                 </td>
                             </tr>
                         }
@@ -106,8 +106,8 @@
             <form id="formCreate">
                 <div class="modal-header c-vitesco-green-03">
                     <i style="color:white;font-size:30px;" class="bi-plus-circle c-vitesco-green-03"></i>
-                    <h3 style="color:white;text-align:center;" class="modal-title">Create Permission</h3>
-                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">Close</span></button>
+                    <h3 style="color:white;text-align:center;" class="modal-title">@Localizer["Create Permission"].Value</h3>
+                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">@Localizer["Close"].Value</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal">
@@ -116,8 +116,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input style="width:120px;" type="button" value="Cancel" class="btn btn-danger mr-auto" data-dismiss="modal" />
-                    <input type="submit" style="width:120px;float:right;" value="Create" class="btn btn-primary" />
+                    <input style="width:120px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-danger mr-auto" data-dismiss="modal" />
+                    <input type="submit" style="width:120px;float:right;" value="@Localizer["Create"].Value" class="btn btn-primary" />
                 </div>
             </form>
         </div>
@@ -130,8 +130,8 @@
             <form id="formEdit">
                 <div class="modal-header c-vitesco-blue-03">
                     <i style="color:white;font-size:30px;" class="bi-pencil c-vitesco-blue-03"></i>
-                    <h3 style="color:white;text-align:center;" class="modal-title">Edit Permission</h3>
-                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">Close</span></button>
+                    <h3 style="color:white;text-align:center;" class="modal-title">@Localizer["Edit Permission"].Value</h3>
+                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">@Localizer["Close"].Value</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal">
@@ -141,8 +141,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input style="width:120px;" type="button" value="Cancel" class="btn btn-danger mr-auto" data-dismiss="modal" />
-                    <input type="submit" style="width:120px;float:right;" value="Update" class="btn btn-primary" />
+                    <input style="width:120px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-danger mr-auto" data-dismiss="modal" />
+                    <input type="submit" style="width:120px;float:right;" value="@Localizer["Update"].Value" class="btn btn-primary" />
                 </div>
             </form>
         </div>
@@ -155,8 +155,8 @@
             <form id="formRemove">
                 <div style="background-color: #dc3545;" class="modal-header">
                     <i style="color:white;font-size:30px;background-color:#dc3545;" class="bi-x-circle"></i>
-                    <h3 style="color:white;text-align:center;" class="modal-title">Remove Permission</h3>
-                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">Close</span></button>
+                    <h3 style="color:white;text-align:center;" class="modal-title">@Localizer["Remove Permission"].Value</h3>
+                    <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">@Localizer["Close"].Value</span></button>
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal">
@@ -166,8 +166,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input style="width:120px;" type="button" value="Cancel" class="btn btn-danger mr-auto" data-dismiss="modal" />
-                    <input type="submit" style="width:120px;float:right;" value="Remove" class="btn btn-danger" />
+                    <input style="width:120px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-danger mr-auto" data-dismiss="modal" />
+                    <input type="submit" style="width:120px;float:right;" value="@Localizer["Remove"].Value" class="btn btn-danger" />
                 </div>
             </form>
         </div>

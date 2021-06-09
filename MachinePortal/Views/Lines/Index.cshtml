@@ -30,11 +30,11 @@
     <div class="card-header c-vitesco-green-05">
         <i style="vertical-align:middle" class="ti-layout-list-thumb c-vitesco-green-05"></i>
         <div class="d-inline-block">
-            <h2 style="color:white;">Hierarchies</h2>
+            <h2 style="color:white;">@Localizer["Hierarchies"].Value</h2>
         </div>
         <hr style="border:1px solid white" />
         <div class="d-inline-block">
-            <h2 style="color:white">Lines</h2>
+            <h2 style="color:white">@Localizer["Lines"].Value</h2>
         </div>
     </div>
     <div class="card-block card-padding">
@@ -53,17 +53,17 @@
                         <tr>
                             @if (item.ImagePath != null)
                             {
-                                <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" width="100" height="100" /></td>
+                                <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" height="100"/></td>
                             }
                             else
                             {
-                                <td><img class="img-thumbnail" src="~/resources/General/NoImage.jpg" width="100" height="100" /></td>
+                                <td><img class="img-thumbnail" src="~/resources/General/NoImage.jpg" height="100"/></td>
                             }
                             <td>@Html.DisplayFor(modelItem => item.Name)</td>
                             <td>
-                                <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">Open</a>
-                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">Edit</button>
-                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">Delete</button>
+                                <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">@Localizer["Open"].Value</a>
+                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
+                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
                             </td>
                         </tr>
                     }
@@ -71,7 +71,7 @@
             </table>
         </div>
         <br />
-        <a style="width:120px;" class="btn btn-primary" asp-controller="Lines" asp-action="Index">Back</a>
+        <a style="width:120px;" class="btn btn-primary" asp-controller="Lines" asp-action="Index">@Localizer["Back"].Value</a>
     </div>
 </div>
 

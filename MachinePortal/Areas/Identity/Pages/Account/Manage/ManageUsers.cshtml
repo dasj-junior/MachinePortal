@@ -9,7 +9,7 @@
             <div class="card-header c-vitesco-red">
                 <i style="vertical-align:middle" class="ti-settings c-vitesco-red"></i>
                 <div class="d-inline-block">
-                    <h2 style="color:white">Manage Users</h2>
+                    <h2 style="color:white">@Localizer["Manage Users"].Value</h2>
                 </div>
             </div>
             <div class="card-block card-padding">
@@ -26,7 +26,7 @@
                                 @Html.DisplayNameFor(model => model.Users[0].FullName)
                             </th>
                             <th class="text-center">
-                               Options
+                                @Localizer["Options"].Value
                             </th>
                         </tr>
                     </thead>
@@ -44,7 +44,7 @@
                                     @Html.DisplayFor(modelItem => item.FullName)
                                 </td>
                                 <td class="text-center">
-                                    <a class="btn btn-primary" asp-page="./ManagePermissions" asp-route-id="@item.ID">Edit</a>
+                                    <a class="btn btn-primary" asp-page="./ManagePermissions" asp-route-id="@item.ID">@Localizer["Edit"].Value</a>
                                 </td>
                             </tr>
                         }

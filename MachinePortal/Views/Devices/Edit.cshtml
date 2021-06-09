@@ -47,18 +47,18 @@
                 <div class="card-header c-vitesco-green-03">
                     <i style="vertical-align:middle" class="ti-harddrives c-vitesco-green-03"></i>
                     <div class="d-inline-block">
-                        <h2 style="color:white">Edit: @Model.Name</h2>
+                        <h2 style="color:white">@Localizer["Edit"].Value: @Model.Name</h2>
                     </div>
                 </div>
                 <div class="card-block card-padding">
                     <div class="form-group">
-                        <label class="control-label">Photo</label>
+                        <label class="control-label">@Localizer["Photo"].Value</label>
                         <div id="divImageMediaPreview"></div>
                         <div class="input-group">
-                            <input id="photoFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+                            <input id="photoFilePath" type="text" class="form-control" placeholder="@Localizer["No file chosen"].Value" readonly />
                             <span class="input-group-append input-group-button">
                                 <button id="openPhoto" class="btn btn-default" type="button">
-                                    Open Photo
+                                    @Localizer["Open Photo"].Value
                                 </button>
                             </span>
                         </div>
@@ -107,8 +107,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <a style="width:120px;" class="btn btn-primary" asp-action="Index">Back to List</a>
-                <input style="width:120px;float:right;" type="submit" id="submit" value="Edit" class="btn btn-success" />
+                <a style="width:120px;" class="btn btn-primary" asp-action="Index">@Localizer["Back to List"].Value</a>
+                <input style="width:120px;float:right;" type="submit" id="submit" value="@Localizer["Edit"].Value" class="btn btn-success" />
             </div>
         </form>
     </div>

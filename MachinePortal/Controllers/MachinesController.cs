@@ -26,6 +26,7 @@ namespace MachinePortal.Controllers
         public string ID { get; set; }
         public string Type { get; set; }
         public string FileName { get; set; }
+        public string Location { get; set; }
     }
 
     public class MachinesController : BaseController<MachinesController>
@@ -261,6 +262,58 @@ namespace MachinePortal.Controllers
                 }
             }
 
+            //Files with location path and web
+            foreach (MachineFile file in MFiles)
+            {
+                if (file.Type == "Document" && (file.Location == "path" || file.Location == "web"))
+                {                  
+                    Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                    MachineDocument doc = new MachineDocument 
+                    { 
+                        Name = file.Name,
+                        FileName = file.FileName,
+                        Category = Category,
+                        CategoryID = Category.ID,
+                        Location = file.Location,
+                        Machine = machineFVM.Machine,
+                        MachineID = machineFVM.Machine.ID
+                    };
+                    await _machineService.InsertMachineDocumentAsync(doc);
+                    machineFVM.Machine.AddDocument(doc);
+                }
+                if (file.Type == "Image" && (file.Location == "path" || file.Location == "web"))
+                {
+                    Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                    MachineImage img = new MachineImage
+                    {
+                        Name = file.Name,
+                        FileName = file.FileName,
+                        Category = Category,
+                        CategoryID = Category.ID,
+                        Location = file.Location,
+                        Machine = machineFVM.Machine,
+                        MachineID = machineFVM.Machine.ID
+                    };
+                    await _machineService.InsertMachineImageAsync(img);
+                    machineFVM.Machine.AddImage(img);
+                }
+                if (file.Type == "Video" && (file.Location == "path" || file.Location == "web"))
+                {
+                    Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                    MachineVideo vid = new MachineVideo
+                    {
+                        Name = file.Name,
+                        FileName = file.FileName,
+                        Category = Category,
+                        CategoryID = Category.ID,
+                        Location = file.Location,
+                        Machine = machineFVM.Machine,
+                        MachineID = machineFVM.Machine.ID
+                    };
+                    await _machineService.InsertMachineVideoAsync(vid);
+                    machineFVM.Machine.AddVideo(vid);
+                }
+            }
 
             if (machineFVM.SelectedResponsibles != null)
             {
@@ -954,7 +1007,6 @@ namespace MachinePortal.Controllers
             return RedirectToAction("Details/" + Password.MachineID, "Machines");
         }
 
-        [HttpPost]
         public async Task<PartialViewResult> AddPartialEditPassword(int ID, string MachineName, int MachineID)
         {
             List<Department> departments = _identityContext.Department.ToList();
@@ -966,7 +1018,6 @@ namespace MachinePortal.Controllers
             return partial;
         }
 
-        //[HttpPost]
         public async Task<PartialViewResult> AddPartialDeletePassword(int ID, string MachineName, int MachineID)
         {
             Password password = await _passwordService.FindByIDAsync(ID);

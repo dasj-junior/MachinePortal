@@ -45,8 +45,8 @@
             constraints: {
                 video: {
                     mandatory: {
-                        maxWidth: 1280,
-                        maxHeight: 720
+                        maxWidth: 1920,
+                        maxHeight: 1080
                     },
                     optional: [{
                         sourceId: true
@@ -57,7 +57,7 @@
             flipVertical: false,
             flipHorizontal: false,
             zoom: 0,
-            beep: 'https://andrastoth.github.io/webcodecamjs/audio/beep.mp3',
+            beep: '../webcodecamjs/audio/beep.mp3',
             decoderWorker: '~/DecoderWorker.js',
             brightness: 0,
             autoBrightnessValue: 0,

@@ -81,13 +81,13 @@
         </div>
         <hr style="border:1px solid white" />
         <div class="d-inline-block">
-            <h2 style="color:white">General Data</h2>
+            <h2 style="color:white">@Localizer["General Data"].Value</h2>
         </div>
     </div>
     <div class="card-block card-padding">
         <dl class="dl-horizontal">
             <dt>
-                Machine Photo
+                @Localizer["Machine Photo"].Value
             </dt>
             <dd>
                 @if (Model.ImagePath != null)
@@ -99,7 +99,6 @@
                     <img src="~/resources/General/NoImage.jpg" height="300" class="img-thumbnail" />
                 }
             </dd>
-
             <dt>
                 @Html.DisplayNameFor(model => model.Name)
             </dt>
@@ -167,12 +166,12 @@
 <div class="card fb-card">
     <div style="background-color:#4B4B46;" class="card-header">
         <div class="d-inline-block">
-            <h2 style="color:white">Documents</h2>
+            <h2 style="color:white">@Localizer["Documents"].Value</h2>
         </div>
         @if (Model.MachineDocuments.Count > 10)
         {
             Qty = 10;
-            <a asp-action="MachineDocuments" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">Show All</a>
+    <a asp-action="MachineDocuments" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
         }
         else
         {
@@ -187,7 +186,7 @@
                         <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().Name)</th>
                         <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().Category)</th>
                         <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().FileName)</th>
-                        <th>Open</th>
+                        <th>@Localizer["Open"].Value</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -197,7 +196,7 @@
                             <td>@Html.DisplayFor(modelItem => document.Name)</td>
                             <td>@Html.DisplayFor(modelItem => document.Category.Name)</td>
                             <td>@Html.DisplayFor(modelItem => document.FileName)</td>
-                            <td><a class="btn btn-primary" href="@Html.DisplayFor(modelItem => document.Path)@Html.DisplayFor(modelItem => document.FileName)" target="_blank">Open<a /></td>
+                            <td><a class="btn btn-primary" href="@Html.DisplayFor(modelItem => document.Path)@Html.DisplayFor(modelItem => document.FileName)" target="_blank">@Localizer["Open"].Value<a /></td>
                         </tr>
                     }
                 </tbody>
@@ -209,12 +208,12 @@
 <div class="card fb-card">
     <div style="background-color:#4B4B46;" class="card-header">
         <div class="d-inline-block">
-            <h2 style="color:white">Images</h2>
+            <h2 style="color:white">@Localizer["Images"].Value</h2>
         </div>
         @if (Model.MachineImages.Count > 5)
         {
             Qty = 5;
-            <a asp-controller="Machines" asp-action="MachineImages" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">Show All</a>
+    <a asp-controller="Machines" asp-action="MachineImages" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
         }
         else
         {
@@ -237,12 +236,12 @@
 <div class="card fb-card">
     <div style="background-color:#4B4B46;" class="card-header">
         <div class="d-inline-block">
-            <h2 style="color:white">Videos</h2>
+            <h2 style="color:white">@Localizer["Videos"].Value</h2>
         </div>
         @if (Model.MachineVideos.Count > 1)
         {
             Qty = 1;
-            <a asp-action="MachineVideos" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">Show All</a>
+    <a asp-action="MachineVideos" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
         }
         else
         {
@@ -262,7 +261,7 @@
                 <dd>
                     @{string vidFullPath = video.Path + video.FileName;}
                     <video src="@Url.Content(vidFullPath)" controls="controls" width="640" height="360" loop>
-                        <a href="@Url.Content(vidFullPath)" download>Download</a>
+                        <a href="@Url.Content(vidFullPath)" download>@Localizer["Download"].Value</a>
                     </video>
                 </dd>
             }
@@ -278,7 +277,7 @@
         @if (Model.MachineDevices.Count > 5)
         {
             Qty = 5;
-            <a asp-action="MachineDevices" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">Show All</a>
+    <a asp-action="MachineDevices" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
         }
         else
         {
@@ -298,7 +297,7 @@
                         <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Description)</th>
                         <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Price)</th>
                         <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Supplier)</th>
-                        <th>Details</th>
+                        <th>@Localizer["Details"].Value</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -314,7 +313,7 @@
                             <td>@Html.DisplayFor(modelItem => item.Device.Price)</td>
                             <td>@Html.DisplayFor(modelItem => item.Device.Supplier)</td>
                             <td>
-                                <a class="btn btn-primary" asp-controller="Devices" asp-action="Details" asp-route-id="@item.Device.ID">Details</a>
+                                <a class="btn btn-primary" asp-controller="Devices" asp-action="Details" asp-route-id="@item.Device.ID">@Localizer["Details"].Value</a>
                             </td>
                         </tr>
                     }
@@ -327,7 +326,7 @@
 <div class="card fb-card">
     <div style="background-color:#4B4B46;" class="card-header">
         <div class="d-inline-block">
-            <h2 style="color:white">Responsibles</h2>
+            <h2 style="color:white">@Localizer["Responsibles"].Value</h2>
         </div>
     </div>
     <div class="card-block card-padding">
@@ -366,7 +365,7 @@
 <div class="card fb-card">
     <div style="background-color:#4B4B46;" class="card-header">
         <div class="d-inline-block">
-            <h2 style="color:white">Comments</h2>
+            <h2 style="color:white">@Localizer["Comments"].Value</h2>
         </div>
         @if (Model.MachineComments.Count > 5)
         {
@@ -388,9 +387,9 @@
                 <thead class="thead-vitesco02">
                     <tr>
                         <th width="62%">@Html.DisplayNameFor(model => model.MachineComments.First().Comment)</th>
-                        <th width="15%">User Name</th>
+                        <th width="15%">@Localizer["User Name"].Value</th>
                         <th width="15%">@Html.DisplayNameFor(model => model.MachineComments.First().Date)</th>
-                        <th width="8%">Delete</th>
+                        <th width="8%">@Localizer["Delete"].Value</th>
                     </tr>
                 </thead>
                 <tbody id="tComments">
@@ -400,7 +399,7 @@
                             <td style="word-wrap:break-word;">@Html.DisplayFor(modelItem => item.Comment)</td>
                             <td>@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</td>
                             <td>@Html.DisplayFor(modelItem => item.Date)</td>
-                            <td><button class="btn btn-danger" onclick="removeComment(@item.ID)">Delete</button></td>
+                            <td><button class="btn btn-danger" onclick="removeComment(@item.ID)">@Localizer["Delete"].Value</button></td>
                         </tr>
                     }
                 </tbody>
@@ -412,12 +411,12 @@
 <div class="card fb-card">
     <div style="background-color:#4B4B46;" class="card-header">
         <div class="d-inline-block">
-            <h2 style="color:white">Passwords</h2>
+            <h2 style="color:white">@Localizer["Passwords"].Value</h2>
         </div>
         @if (Model.Passwords.Count > 10)
         {
             Qty = 5;
-            <a asp-action="MachinePasswords" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">Show All</a>
+    <a asp-action="MachinePasswords" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
         }
         else
         {
@@ -428,7 +427,7 @@
         <dl class="dl-horizontal">
             <table style="table-layout:fixed; word-wrap:break-word" class="table table-bordered table-vitesco02">
                 <p>
-                    <button class="btn btn-success btn-create" data-toggle="modal" data-target="#modalCreatePassword">Create New Password</button>
+                    <button class="btn btn-success btn-create" data-toggle="modal" data-target="#modalCreatePassword">@Localizer["Create New Password"].Value</button>
                 </p>
                 <thead class="thead-vitesco02">
                     <tr>
@@ -439,7 +438,7 @@
                         <th>@Html.DisplayNameFor(model => model.Passwords.First().DepartmentName)</th>
                         <th>@Html.DisplayNameFor(model => model.Passwords.First().User)</th>
                         <th>@Html.DisplayNameFor(model => model.Passwords.First().Pass)</th>
-                        <th>Options</th>
+                        <th>@Localizer["Options"].Value</th>
                     </tr>
                 </thead>
                 <tbody id="tPasswords">
@@ -454,8 +453,8 @@
                             <td>@Html.DisplayFor(modelItem => item.User)</td>
                             <td>@Html.DisplayFor(modelItem => item.Pass)</td>
                             <td>
-                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEditPassword">Edit</button>
-                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDeletePassword">Delete</button>
+                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEditPassword">@Localizer["Edit"].Value</button>
+                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDeletePassword">@Localizer["Delete"].Value</button>
                             </td>
                         </tr>
                     }
@@ -468,15 +467,15 @@
 
 <div>
     <input type="hidden" asp-for="ID" />
-    <button style="width:120px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">Back</button>
-    <a style="width:120px; font-weight:700; float:right;" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ID">Edit</a>
+    <button style="width:120px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">@Localizer["Back"].Value</button>
+    <a style="width:120px; font-weight:700; float:right;" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ID">@Localizer["Edit"].Value</a>
 </div>
 
 <div class="modal fade" id="modalComments" role="dialog">
     <div style="border-radius:8px; overflow:hidden;" class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header c-vitesco-green-04">
-                <h4 style="vertical-align:middle;" class="modal-title">Add New Comment</h4>
+                <h4 style="vertical-align:middle;" class="modal-title">@Localizer["Add New Comment"].Value</h4>
                 <button style="margin-top:-10px;" type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
@@ -496,8 +495,8 @@
                 </dd>
             </div>
             <div class="modal-footer">
-                <button type="button" id="insertComment" class="btn btn-success">Insert</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" id="insertComment" class="btn btn-success">@Localizer["Insert"].Value</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">@Localizer["Close"].Value</button>
             </div>
         </div>
     </div>

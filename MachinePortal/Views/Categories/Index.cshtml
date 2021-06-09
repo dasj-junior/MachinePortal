@@ -32,17 +32,17 @@
             <div class="card-header c-vitesco-green-02">
                 <i style="vertical-align:middle" class="bi-grid c-vitesco-green-02"></i>
                 <div class="d-inline-block">
-                    <h2 style="color:white;">Categories</h2>
+                    <h2 style="color:white;">@Localizer["Categories"].Value</h2>
                 </div>
             </div>
             <div class="card-block card-padding">
                 <div>
-                    <button class="btn btn-primary btn-create" data-toggle="modal" data-target="#modalCreate">Create New Category</button>
+                    <button class="btn btn-primary btn-create" data-toggle="modal" data-target="#modalCreate">@Localizer["Create New Category"].Value</button>
                     <table style="table-layout:auto;" class="table table-bordered table-vitesco">
                         <thead class="thead-vitesco">
                             <tr>
                                 <th width="80%">@Html.DisplayNameFor(model => model.Name)</th>
-                                <th width="20%" class="text-center">Options</th>
+                                <th width="20%" class="text-center">@Localizer["Options"].Value</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,8 +51,8 @@
                                 <tr>
                                     <td>@Html.DisplayFor(modelItem => item.Name)</td>
                                     <td class="text-center">
-                                        <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">Edit</button>
-                                        <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">Delete</button>
+                                        <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
+                                        <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
                                     </td>
                                 </tr>
                             }

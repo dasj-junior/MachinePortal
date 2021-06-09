@@ -8,26 +8,45 @@ namespace MachinePortal.Models
 {
     public class Device
     {
+        [Display(Name = "ID")]
         public int ID { get; set; }
+        
         [Required]
         [StringLength(200, MinimumLength = 3)]
+        [Display(Name = "Name")]
         public string Name { get; set; }
+        
         [StringLength(100, MinimumLength = 3)]
+        [Display(Name = "Brand")]
         public string Brand { get; set; }
+        
         [StringLength(100, MinimumLength = 3)]
+        [Display(Name = "Model")]
         public string Model { get; set; }
+        
         [StringLength(100, MinimumLength = 3)]
+        [Display(Name = "Part Number")]
         public string PartNumber { get; set; }
+        
         [StringLength(200, MinimumLength = 3)]
+        [Display(Name = "Description")]
         public string Description { get; set; }
+        
         [DataType(DataType.Currency)]
+        [Display(Name = "Price")]
         public double Price { get; set; }
+        
         [StringLength(100, MinimumLength = 3)]
+        [Display(Name = "Supplier")]
         public string Supplier { get; set; }
+        
         [StringLength(100, MinimumLength = 3)]
+        [Display(Name = "StockLocation")]
         public string StockLocation { get; set; }
-        [Display(Name = "Image")]
+        
+        [Display(Name = "Photo")]
         public string ImagePath { get; set; }
+
         public ICollection<DeviceDocument> Documents { get; set; }
 
         public Device()

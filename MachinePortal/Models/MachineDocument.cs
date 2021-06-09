@@ -8,21 +8,37 @@ namespace MachinePortal.Models
 {
     public class MachineDocument
     {
+        [Display(Name = "ID")]
         public int ID { get; set; }
+        
         [Required]
         [StringLength(200, MinimumLength = 3)]
+        [Display(Name = "Name")]
         public string Name { get; set; }      
+        
         [Display(Name = "File Name")]
         public string FileName { get; set; }
+
+        [Display(Name = "Path")]
         public string Path { get; set; }
+
+        [Display(Name = "Extension")]
         public string Extension { get; set; }
+
+        [Display(Name = "Type")]
         public string Type { get; set; }
+
+        [Display(Name = "Location")]
         public string Location { get; set; } //File ServerPath WebLink 
 
+        [Display(Name = "Category ID")]
         public int CategoryID { get; set; }
+        [Display(Name = "Category")]
         public Category Category  { get; set; }
 
+        [Display(Name = "Machine ID")]
         public int MachineID { get; set; }
+        [Display(Name = "Machine")]
         public Machine Machine { get; set; }
 
         public MachineDocument()

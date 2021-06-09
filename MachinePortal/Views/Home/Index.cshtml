@@ -1,11 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 
+<!-- Scripts JQuery and WebCodeCam -->
 <script src="~/webcodecamjs/js/jquery.js"></script>
 <script src="~/webcodecamjs/js/qrcodelib.js"></script>
 <script src="~/webcodecamjs/js/webcodecamjquery.js"></script>
-<!-- Bootstrap -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
 
 @* Machine Search By Input ID *@
 <script>
@@ -91,8 +90,10 @@
             });
         }
     };
-    document.querySelector('select').addEventListener('change', function () {
-        decoder.stop().play();
+    $(document).ready(function () {
+        document.querySelector('select').addEventListener('change', function () {
+            decoder.stop().play();
+        });
     });
 </script>
 
@@ -171,15 +172,15 @@
     <div class="modal-dialog">
         <div class="modal-content rounded-0">
             <div class="modal-header bg-c-green">
-                    <div class="col-2">
-                        <i style="color:white;font-size:30px;" class="icofont icofont-qr-code bg-c-green"></i>
-                    </div>
-                    <div class="col-8">
-                        <h3 style="color:white;text-align:center;" class="modal-title">@Localizer["Read QR Code"].Value</h3>
-                    </div>
-                    <div class="col-2">
-                        <button style="color:red;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">@Localizer["Close"].Value</span></button>
-                    </div>
+                <div class="col-2">
+                    <i style="color:white;font-size:30px;" class="icofont icofont-qr-code bg-c-green"></i>
+                </div>
+                <div class="col-8">
+                    <h3 style="color:white;text-align:center;" class="modal-title">@Localizer["Read QR Code"].Value</h3>
+                </div>
+                <div class="col-2">
+                    <button style="margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">@Localizer["Close"].Value</span></button>
+                </div>
             </div>
             <div id="QR-Code" class="modal-body text-center p-b-50">
                 <br />
@@ -192,10 +193,9 @@
                 <script>
                     var decoder = $("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery;
                     decoder.buildSelectMenu("select");
-                                                                                                                                                                                                                                                                                                                                                    //decoder.play();
+                                                                                                                                                                                                                                                                                                                                                                                                                    //decoder.play();
                 </script>
             </div>
         </div>
     </div>
 </div>
-

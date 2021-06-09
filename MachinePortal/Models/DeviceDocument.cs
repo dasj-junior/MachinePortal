@@ -8,14 +8,23 @@ namespace MachinePortal.Models
 {
     public class DeviceDocument
     {
+        [Display(Name = "ID")]
         public int ID { get; set; }
+        
         [Required]
         [StringLength(200, MinimumLength = 3)]
+        [Display(Name = "Name")]
         public string Name { get; set; }
+
+        [Display(Name = "Path")]
         public string Path { get; set; }
+
+        [Display(Name = "Extension")]
         public string Extension { get; set; }
 
+        [Display(Name = "Device ID")]
         public int DeviceID { get; set; }
+        [Display(Name = "Device")]
         public Device Device { get; set; } 
         
         public DeviceDocument()

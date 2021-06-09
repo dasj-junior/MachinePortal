@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,11 +10,8 @@ using MachinePortal.Models;
 using MachinePortal.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using System.Globalization;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Mvc.Razor;
+using MachinePortal.Areas.Identity.Services;
 
 namespace MachinePortal
 {
@@ -34,6 +27,7 @@ namespace MachinePortal
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
             services.AddHttpContextAccessor();
             services.AddLocalization(options => options.ResourcesPath = "Resources");
 

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using System.Security.Claims;
 using MachinePortal.Areas.Identity.Data;
+using Newtonsoft.Json;
 
 namespace MachinePortal.Controllers
 {
@@ -19,14 +20,18 @@ namespace MachinePortal.Controllers
     {
         private readonly DeviceService _deviceService;
         private readonly DocumentService _documentService;
+        private readonly CategoryService _categoryService;
         private readonly IHostingEnvironment _appEnvironment;
 
-        public DevicesController(IHostingEnvironment enviroment, DeviceService deviceService, DocumentService documentService, PermissionsService permissionsService, IdentityContext identityContext)
+        public DevicesController(IHostingEnvironment enviroment, DeviceService deviceService, 
+            DocumentService documentService, PermissionsService permissionsService, 
+            IdentityContext identityContext, CategoryService categoryService)
         {
             _identityContext = identityContext;
             _deviceService = deviceService;
             _documentService = documentService;
             _PermissionsService = permissionsService;
+            _categoryService = categoryService;
             _appEnvironment = enviroment;
         }
 
@@ -37,17 +42,29 @@ namespace MachinePortal.Controllers
             return View(list);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             Permissions();
+
+            List<Category> categories = await _categoryService.FindAllAsync();
+            ViewBag.ListCategories = categories;
+
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Device device, IFormFile image, List<IFormFile> documents)
+        public async Task<IActionResult> Create(Device device, IFormFile image)
         {
             Permissions();
+
+            //Generate list of documents from the update page
+            List<IFormFile> documents = new List<IFormFile>();
+            foreach (var file in Request.Form.Files)
+            {
+                if (file.Name == "document") { documents.Add(file); }
+            }
+
             if (image != null)
             {
                 long filesSize = image.Length;

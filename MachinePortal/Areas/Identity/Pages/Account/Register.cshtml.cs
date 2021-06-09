@@ -13,6 +13,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
 
 namespace MachinePortal.Areas.Identity.Pages.Account
 {
@@ -21,15 +23,17 @@ namespace MachinePortal.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<MachinePortalUser> _signInManager;
         private readonly UserManager<MachinePortalUser> _userManager;
+        private readonly IdentityContext _context;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IHostingEnvironment _appEnvironment;
 
-        public RegisterModel(
+                public RegisterModel(
             IHostingEnvironment enviroment,
             UserManager<MachinePortalUser> userManager,
             SignInManager<MachinePortalUser> signInManager,
             ILogger<RegisterModel> logger,
+            IdentityContext context,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -37,12 +41,17 @@ namespace MachinePortal.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _appEnvironment = enviroment;
+            _context = context;
         }
 
         [BindProperty]
         public InputModel Input { get; set; }
 
         public string ReturnUrl { get; set; }
+
+        [BindProperty]
+        public int SelectedDepartment { get; set; }
+        public SelectList SlDepartments { get; set; }
 
         public class InputModel
         {
@@ -84,6 +93,8 @@ namespace MachinePortal.Areas.Identity.Pages.Account
 
         public void OnGet(string returnUrl = null)
         {
+            List<Department> AllDepts = _context.Department.ToList();
+            SlDepartments = new SelectList(AllDepts, "ID", "Name");
             ReturnUrl = returnUrl;
         }
 
@@ -92,11 +103,13 @@ namespace MachinePortal.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
+                var dpt = _context.Department.FirstOrDefault(d => d.ID == SelectedDepartment);
                 var user = new MachinePortalUser { UserName = Input.UserName,
                                                     FirstName = Input.FirstName,
                                                     LastName = Input.LastName,
                                                     Email = Input.Email,
-                                                    EmailConfirmed = true,
+                                                    EmailConfirmed = false,
+                                                    Department = dpt,
                                                     JobRole = Input.JobRole,
                                                     Mobile = Input.Mobile,
                                                     PhoneNumber = Input.PhoneNumber,

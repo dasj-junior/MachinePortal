@@ -8,7 +8,7 @@
             <div style="background-color:#d9534f;" class="card-header">
                 <i style="background-color:#d9534f;vertical-align:middle" class="ti-close"></i>
                 <div class="d-inline-block">
-                    <h2 style="color:white">Delete</h2>
+                    <h2 style="color:white">@Localizer["Delete"].Value</h2>
                 </div>
             </div>
             <div style="padding-left:50px" class="card-block card-padding text-center">
@@ -42,8 +42,8 @@
                 <hr />
                 <form asp-action="Delete">
                     <input type="hidden" asp-for="ID" />
-                    <a style="float:left; width:120px;" class="btn btn-primary" asp-action="Index">Back to List</a>
-                    <input style="float:right; width:120px;" type="submit" value="Delete" class="btn btn-danger" />
+                    <a style="float:left; width:120px;" class="btn btn-primary" asp-action="Index">@Localizer["Back to List"].Value</a>
+                    <input style="float:right; width:120px;" type="submit" value="@Localizer["Delete"].Value" class="btn btn-danger" />
                 </form>
             </div>
         </div>
