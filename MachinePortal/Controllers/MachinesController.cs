@@ -15,6 +15,7 @@ using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using MachinePortal.Areas.Identity.Data;
+using SimpleImpersonation;
 
 namespace MachinePortal.Controllers
 
@@ -170,6 +171,7 @@ namespace MachinePortal.Controllers
                         doc.Name = file.Name;
                         doc.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
                         doc.CategoryID = doc.Category.ID;
+                        doc.Location = file.Location;
                     }
                 }
                 doc.FileName = fileName;
@@ -524,7 +526,6 @@ namespace MachinePortal.Controllers
                 doc.MachineID = machineNEW.Machine.ID;
 
                 await _machineService.InsertMachineDocumentAsync(doc);
-
                 machineOLD.AddDocument(doc);
 
                 using (var stream = new FileStream(destinationPath, FileMode.Create))
@@ -609,6 +610,59 @@ namespace MachinePortal.Controllers
                 }
             }
 
+            //Files with location path and web
+            foreach (MachineFile file in MFiles)
+            {
+                if (file.Type == "Document" && (file.Location == "path" || file.Location == "web"))
+                {
+                    Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                    MachineDocument doc = new MachineDocument
+                    {
+                        Name = file.Name,
+                        FileName = file.FileName,
+                        Category = Category,
+                        CategoryID = Category.ID,
+                        Location = file.Location,
+                        Machine = machineOLD,
+                        MachineID = machineOLD.ID
+                    };
+                    await _machineService.InsertMachineDocumentAsync(doc);
+                    machineOLD.AddDocument(doc);
+                }
+                if (file.Type == "Image" && (file.Location == "path" || file.Location == "web"))
+                {
+                    Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                    MachineImage img = new MachineImage
+                    {
+                        Name = file.Name,
+                        FileName = file.FileName,
+                        Category = Category,
+                        CategoryID = Category.ID,
+                        Location = file.Location,
+                        Machine = machineOLD,
+                        MachineID = machineOLD.ID
+                    };
+                    await _machineService.InsertMachineImageAsync(img);
+                    machineOLD.AddImage(img);
+                }
+                if (file.Type == "Video" && (file.Location == "path" || file.Location == "web"))
+                {
+                    Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                    MachineVideo vid = new MachineVideo
+                    {
+                        Name = file.Name,
+                        FileName = file.FileName,
+                        Category = Category,
+                        CategoryID = Category.ID,
+                        Location = file.Location,
+                        Machine = machineOLD,
+                        MachineID = machineOLD.ID
+                    };
+                    await _machineService.InsertMachineVideoAsync(vid);
+                    machineOLD.AddVideo(vid);
+                }
+            }
+
             //Remove documents
             foreach (MachineDocument document in RemoveDocumets)
             {
@@ -616,6 +670,10 @@ namespace MachinePortal.Controllers
                 {
                     await _machineService.RemoveMachineDocumentAsync(document);
                     machineOLD.MachineDocuments.Remove(document);
+                    if(document.Location == "file")
+                    {
+
+                    }
                     if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + document.Path + document.FileName))
                     {
                         System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + document.Path + document.FileName);
@@ -633,9 +691,12 @@ namespace MachinePortal.Controllers
                 {
                     await _machineService.RemoveMachineImageAsync(image);
                     machineOLD.MachineImages.Remove(image);
-                    if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + image.Path + image.FileName))
+                    if (image.Location == "file")
                     {
-                        System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + image.Path + image.FileName);
+                        if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + image.Path + image.FileName))
+                        {
+                            System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + image.Path + image.FileName);
+                        }
                     }
                 }
                 catch
@@ -650,9 +711,12 @@ namespace MachinePortal.Controllers
                 {
                     await _machineService.RemoveMachineVideoAsync(video);
                     machineOLD.MachineVideos.Remove(video);
-                    if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + video.Path + video.FileName))
+                    if (video.Location == "file")
                     {
-                        System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + video.Path + video.FileName);
+                        if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + video.Path + video.FileName))
+                        {
+                            System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + video.Path + video.FileName);
+                        }
                     }
                 }
                 catch
@@ -946,6 +1010,24 @@ namespace MachinePortal.Controllers
             var readStream = fileInfo.CreateReadStream();
             string mimeType = MimeTypes.GetMimeType(extension);
             return File(readStream, mimeType, fileName);
+        }
+
+        public FileResult DownloadPath(string path)
+        {
+            var credentials = new UserCredentials("vt1", "uidj7882", "Engineer17*");
+            string type = MimeTypes.GetMimeType(path);
+            string name = ""; 
+            if(path.Contains("\\"))
+            {
+                var pathLIO = path.LastIndexOf('\\');
+                name = path.Substring(pathLIO + 1, (path.Length - (pathLIO + 1)));
+            }
+            var FileResult = Impersonation.RunAsUser(credentials, LogonType.Interactive, () =>
+            {
+                byte[] fileBytes = System.IO.File.ReadAllBytes(path);
+                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, path);
+            });
+            return File(FileResult.FileContents, type, name);
         }
 
         [HttpPost]

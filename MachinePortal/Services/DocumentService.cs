@@ -23,10 +23,23 @@ namespace MachinePortal.Services
             return await result.ToListAsync();
         }
 
+        public async Task<DeviceDocument> FindByIDAsync(int ID)
+        {
+            return await _context.DeviceDocument.FirstOrDefaultAsync(d => d.ID == ID);
+        }
+
         public async Task InsertAsync(DeviceDocument obj)
         {
-            _context.Add(obj);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.DeviceDocument.Add(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch(Exception e)
+            {
+                string teste = e.Message;
+            }
+            
         }
 
         public async Task RemoveAsync(DeviceDocument obj)

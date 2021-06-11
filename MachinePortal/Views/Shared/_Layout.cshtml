@@ -9,7 +9,6 @@
 @inject UserManager<MachinePortalUser> UserManager
 @inject IdentityContext identityContext
 @inject IHostingEnvironment hostingEnv
-
 @* Get User Permissions *@
 @{
     var area = ViewContext.View.Path.Contains("Identity") ? "Identity" : "MachinePortal";
@@ -64,6 +63,7 @@
 <body>
     <!-- Pre-loader start -->
     <div class="theme-loader">
+        <h2 style="text-align:center; top:50%; margin-top:-80px; position:relative;">@Localizer["Loading"].Value</h2>
         <div class="ball-scale">
             <div class='contain'>
                 <div class="ring">
@@ -116,18 +116,20 @@
                             </div>
                             <div class="col-8" style="text-align:center">
                                 <div class="d-inline-block" style="margin-top:18px; margin-top:-5px;">
-                                    <h1 style="font-family:'Beast Machines'; font-size:2rem">@Localizer["Machine Portal"].Value</h1>
-</div>
+                                    <h1 style="font-family:'Beast Machines'; font-size:2rem">Machine Portal</h1>
+                                </div>
                             </div>
                             <div class="col-2">
                                 <div style="width:218px" class="d-inline nav-right">
                                     <div style="position:relative; padding:1.25rem">
-                                        <img src="~/assets/images/vitesco.svg" style="width:116px; overflow:hidden; margin-top:-23px;"/>
-                                        @await Html.PartialAsync("_SelectLanguagePartial")
+                                        <img class="d-none d-sm-none d-md-none d-lg-inline d-xl-inline" src="~/assets/images/vitesco.svg" style="width:116px; overflow:hidden; margin-top:-23px;" />
+                                        <div class="d-none d-sm-none d-md-none d-lg-inline d-xl-inline">
+                                            @await Html.PartialAsync("_SelectLanguagePartial")
+                                        </div>
                                     </div>
-                                    
+
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>

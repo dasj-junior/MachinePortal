@@ -106,7 +106,7 @@
                     <tr>
                         <td>@Html.DisplayFor(modelItem => document.ID)</td>
                         <td>@Html.DisplayFor(modelItem => document.Name)</td>
-                        <td><button style="color:white" class="btn btn-primary">@Html.ActionLink("", "Download", new { filePath = document.Path, fileName = document.Name, extension = document.Extension })</button></td>
+                        <td>@Html.ActionLink("Download", "Download", new { filePath = document.Path, fileName = document.Name, extension = document.Extension }, new { @class = "btn btn-primary" })</td>
                         <td><a class="btn btn-success" href="@document.Path@document.Name" target="_blank">Open</a></td>
                     </tr>
                 }

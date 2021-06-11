@@ -3,19 +3,24 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 
-<div class="row justify-content-center">
+<div class="row justify-content-around">
     <div class="col-6">
-        <div class="card fb-card c-vitesco-green-04">
-            <div class="card-header c-vitesco-green-04">
-                <i style="vertical-align:middle" class="bi-door-closed c-vitesco-green-02"></i>
-                <div class="d-inline-block">
-                    <h2 style="color:white">@Localizer["Confirm email"].Value</h2>
-                </div>
+        <div class="card fb-card c-vitesco-green-02">
+            <div class="card-header c-vitesco-green-02">
+                <i style="float: left; font-size: 40px; margin-right: 0px; padding: 10px 0px 0px 0px;" class="bi-check-circle c-vitesco-green-02"></i>
+                <h2 style="color: white; text-align:center; margin:5px 35px 0px 0px;">@Localizer["EMAIL CONFIRMED"].Value</h2>
             </div>
-            <div class="card-block card-padding">
+            <div style="text-align:center" class="card-block card-padding">
+                <h1 style="font-size:60px">@Localizer["THANK YOU!"].Value</h1>
+                @*<i class="bi-check-circle" style="font-size:80px"></i>*@
+                <img src="~/resources/General/Thanks.png" width="200" />
+                <br /><br />
+                <h4>@Localizer["Your email has been confirmed successfuly"].Value</h4>
+                <br /><br />
+                <h4>@Localizer["Now you're already able to access all features of Machine Portal"].Value</h4>
                 <br />
-                <h3>@Localizer["Thank you for confirming your email."].Value</h3>
-                <br />
+                <p style="font-size:18px">@Localizer["click "].Value<a style="font-size:18px" href="/">here</a>@Localizer[" to return to the home page."].Value</p>
+
             </div>
         </div>
     </div>

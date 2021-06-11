@@ -47,6 +47,7 @@
     <PackageReference Include="Modernizr" Version="2.8.3" />
     <PackageReference Include="NToastNotify" Version="7.0.0" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.1" />
+    <PackageReference Include="SimpleImpersonation" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>

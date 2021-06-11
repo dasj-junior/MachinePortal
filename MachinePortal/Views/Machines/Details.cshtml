@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using System.Web;
 @inject IViewLocalizer Localizer
 @model MachinePortal.Models.Machine
 
@@ -36,6 +37,21 @@
             }
         });
     }
+
+    function openDocumentPath(path) {
+        $('.theme-loader').show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Content("~/")' + "Machines/DownloadPath",
+            data: { path },
+            xhrFields: { responseType: 'blob' },
+            success: function (data) {
+                $('.theme-loader').hide();
+                var url = window.URL.createObjectURL(data);
+                var newWindow = window.open(url, "_blank");
+            }
+        });
+    };
 </script>
 
 <script type="text/javascript">
@@ -171,7 +187,7 @@
         @if (Model.MachineDocuments.Count > 10)
         {
             Qty = 10;
-    <a asp-action="MachineDocuments" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
+            <a asp-action="MachineDocuments" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
         }
         else
         {
@@ -196,7 +212,19 @@
                             <td>@Html.DisplayFor(modelItem => document.Name)</td>
                             <td>@Html.DisplayFor(modelItem => document.Category.Name)</td>
                             <td>@Html.DisplayFor(modelItem => document.FileName)</td>
-                            <td><a class="btn btn-primary" href="@Html.DisplayFor(modelItem => document.Path)@Html.DisplayFor(modelItem => document.FileName)" target="_blank">@Localizer["Open"].Value<a /></td>
+                            @if (document.Location == "file")
+                            {
+                                <td><a class="btn btn-success" href="@Html.DisplayFor(modelItem => document.Path)@Html.DisplayFor(modelItem => document.FileName)" target="_blank">@Localizer["Open"].Value<a /></td>
+                            }
+                            else if (document.Location == "web")
+                            {
+                                <td><a class="btn btn-success" href="@Html.DisplayFor(modelItem => document.FileName)" target="_blank">@Localizer["Open"].Value<a /></td>
+                            }
+                            else if (document.Location == "path")
+                            {
+                                <td><button class="btn btn-success" onclick="openDocumentPath('@HttpUtility.JavaScriptStringEncode(document.FileName)')">@Localizer["Open"].Value</button></td>
+                                @*<td>@Html.ActionLink("Open", "DownloadPath", new { path = document.FileName }, new { target = "_blank" })</td>*@
+                            }
                         </tr>
                     }
                 </tbody>
@@ -213,7 +241,7 @@
         @if (Model.MachineImages.Count > 5)
         {
             Qty = 5;
-    <a asp-controller="Machines" asp-action="MachineImages" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
+            <a asp-controller="Machines" asp-action="MachineImages" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
         }
         else
         {
@@ -241,7 +269,7 @@
         @if (Model.MachineVideos.Count > 1)
         {
             Qty = 1;
-    <a asp-action="MachineVideos" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
+            <a asp-action="MachineVideos" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
         }
         else
         {
@@ -277,7 +305,7 @@
         @if (Model.MachineDevices.Count > 5)
         {
             Qty = 5;
-    <a asp-action="MachineDevices" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
+            <a asp-action="MachineDevices" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
         }
         else
         {
@@ -416,7 +444,7 @@
         @if (Model.Passwords.Count > 10)
         {
             Qty = 5;
-    <a asp-action="MachinePasswords" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
+            <a asp-action="MachinePasswords" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
         }
         else
         {

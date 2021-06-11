@@ -183,6 +183,7 @@ namespace MachinePortal.Controllers
         public async Task<IActionResult> Edit(int? ID)
         {
             Permissions();
+
             if (ID == null)
             {
                 return NotFound();
@@ -193,6 +194,9 @@ namespace MachinePortal.Controllers
                 return NotFound();
             }
 
+            List<Category> categories = await _categoryService.FindAllAsync();
+            ViewBag.ListCategories = categories;
+
             return View(obj);
         }
 
@@ -201,6 +205,23 @@ namespace MachinePortal.Controllers
         public async Task<IActionResult> Edit(Device device, IFormFile image)
         {
             Permissions();
+
+            //List of files to delete
+            List<DeviceDocument> RemoveDocumets = new List<DeviceDocument>();
+            int[] DRemove = JsonConvert.DeserializeObject<int[]>(Request.Form["DRemove"]);
+            foreach (int ID in DRemove)
+            {
+                RemoveDocumets.Add(await _documentService.FindByIDAsync(ID));
+            }
+
+            //Generate list of documents to be added
+            List<IFormFile> documents = new List<IFormFile>();
+            foreach (var file in Request.Form.Files)
+            {
+                if (file.Name == "document") { documents.Add(file); }
+            }
+
+            //Update photo
             if (image != null)
             {
                 if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + device.ImagePath))
@@ -227,7 +248,56 @@ namespace MachinePortal.Controllers
                     await image.CopyToAsync(stream);
                 }
             }
-            
+
+            //Add documents
+            foreach (IFormFile document in documents)
+            {
+                long filesSize = document.Length;
+                var filePath = Path.GetTempFileName();
+
+                if (document == null || document.Length == 0)
+                {
+                    ViewData["Error"] = "Error: No file selected";
+                    return View(ViewData);
+                }
+
+                string fileName = document.FileName.Substring(0, document.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
+                fileName += document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
+                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Devices\\Documents\\" + fileName;
+                DeviceDocument doc = new DeviceDocument
+                {
+                    Name = fileName,
+                    Path = @"/resources/Devices/Documents/",
+                    Extension = document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf("."))),
+                    Device = device,
+                    DeviceID = device.ID
+                };
+                await _documentService.InsertAsync(doc);
+                device.AddDocument(doc);
+
+                using (var stream = new FileStream(destinationPath, FileMode.Create))
+                {
+                    await document.CopyToAsync(stream);
+                }
+            }
+
+            //Remove documents
+            foreach (DeviceDocument document in RemoveDocumets)
+            {
+                try
+                {
+                    await _documentService.RemoveAsync(document);
+                    device.RemoveDocument(document);
+                    if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + document.Path + document.Name))
+                    {
+                        System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + document.Path + document.Name);
+                    }
+                }
+                catch
+                {
+                }
+            }
+
             await _deviceService.UpdateAsync(device);
 
             return RedirectToAction(nameof(Index));
@@ -241,6 +311,14 @@ namespace MachinePortal.Controllers
             string mimeType = MimeTypes.GetMimeType(extension);
             return File(readStream, mimeType, fileName);
         }
-        
+
+        [HttpPost]
+        public async Task<PartialViewResult> AddPartialDelete(string id)
+        {
+            int ID = int.Parse(id);
+            Device device = await _deviceService.FindByIDAsync(ID);
+            PartialViewResult partial = PartialView("Delete", device);
+            return partial;
+        }
     }
 }

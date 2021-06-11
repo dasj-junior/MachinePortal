@@ -584,9 +584,13 @@ namespace MachinePortal.Controllers.AuxiliarClasses
                 throw new ArgumentNullException("extension");
             }
 
-            if (!extension.StartsWith("."))
+            if (!extension.StartsWith(".") && !extension.Contains("."))
             {
                 extension = "." + extension;
+            }
+            else if(!extension.StartsWith(".") && extension.Contains("."))
+            {
+                extension = extension.Substring(extension.LastIndexOf('.'), extension.Length - (extension.LastIndexOf('.')));
             }
 
             string mime;

@@ -2,8 +2,31 @@
 @inject IViewLocalizer Localizer
 @model MachinePortal.Models.Device
 
+@* Form Data Variable *@
+<script type="text/javascript">
+    var formdata = new FormData();
+    var Mfiles = [];
+    var DRemove = [];
+</script>
+
 @* Machine Photo Button and Preview *@
 <script type="text/javascript">
+
+    //Remove Document
+    function RemoveDocument(ID) {
+        if (confirm("Do you confirm remove this document?")) {
+            DRemove.push(ID)
+            var table = document.getElementById("tDocuments");
+            for (var i = 0, row; row = table.rows[i]; i++) {
+                for (var j = 0, col; col = row.cells[j]; j++) {
+                    if (row.cells[j].innerText == ID) {
+                        table.rows[i].remove();
+                    }
+                }
+            }
+        }
+    }
+
     $(document).ready(function () {
         //Button triggers the photo file input
         document.getElementById('openPhoto').addEventListener('click', () => {
@@ -37,12 +60,74 @@
                 alert("This browser does not support HTML5.");
             }
         });
+
+        function DeleteFile(Fileid, FileName) {
+            formdata.delete(FileName)
+            $("#" + Fileid).remove();
+            //chkatchtbl();
+        }
+
+        document.getElementById('openInputDocument').addEventListener('click', () => {
+            document.getElementById('iDocuments').click()
+        });
+
+        $("#iDocuments").on("change", function () {
+            var fileInput = document.getElementById('iDocuments');
+            for (i = 0; i < fileInput.files.length; i++) {
+                var sfilename = fileInput.files[i].name;
+                document.getElementById("documentFilePath").value = sfilename;
+            }
+        });
+
+        $("#insertDocument").on("click", function () {
+            var fileInput;
+            var sfilename;
+            fileInput = document.getElementById('iDocuments');
+            sfilename = fileInput.value;
+            var sName = document.getElementById('documentName').value;
+            var iCategory = document.getElementById('documentCategory').value;
+            var sCategory = document.getElementById('documentCategory').options[document.getElementById('documentCategory').selectedIndex].text;
+            let srandomid = Math.random().toString(36).substring(7);
+            var doc = { Name: sName, Category: iCategory, ID: srandomid, Type: "Document", FileName: sfilename };
+            formdata.append("document", fileInput.files[0]);
+            Mfiles.push(doc);
+            // Binding the file name
+            var markup = "<tr id='" + srandomid + "'><td>" + srandomid + "</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+                "\")'><span>Delete</span></a></td></tr>";
+            $("#tDocuments").append(markup);
+            //chkatchtbl();
+            $('#iDocuments').val('');
+        });
+
+        $("form").submit(function (event) {
+            event.preventDefault();
+            var data = new FormData($('#form')[0]);
+            for (var pair of formdata.entries()) {
+                data.append(pair[0], pair[1]);
+            }
+            data.append('files', JSON.stringify(Mfiles));
+            data.append('DRemove', JSON.stringify(DRemove));
+            $('.theme-loader').show();
+            $.ajax({
+                url: '@Url.Content("~/")' + "Devices/Edit",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                data: data,
+                success: function () {
+                    window.location.href = "/Devices/Index";
+                },
+                error: function () {
+                    $('.theme-loader').hide();
+                }
+            });
+        });
     });
 </script>
 
 <div class="row">
     <div class="col-md-10">
-        <form asp-action="Edit" enctype="multipart/form-data" asp-controller="Devices">
+        <form asp-action="Edit" id="form" class="form" method="post" enctype="multipart/form-data" asp-controller="Devices">
             <div class="card fb-card c-vitesco-green-03">
                 <div class="card-header c-vitesco-green-03">
                     <i style="vertical-align:middle" class="ti-harddrives c-vitesco-green-03"></i>
@@ -63,6 +148,10 @@
                             </span>
                         </div>
                         <input type="file" id="photo" name="image" accept="image/*" style="display:none" />
+                    </div>
+                    @* Save Machine ID *@
+                    <div class="form-group">
+                        <input asp-for="ID" style="display:none" />
                     </div>
                     <div class="form-group">
                         <label asp-for="Name" class="control-label"></label>
@@ -106,11 +195,89 @@
                     </div>
                 </div>
             </div>
+            <div class="card fb-card c-vitesco-green-03">
+                <div class="card-header c-vitesco-green-03">
+                    <div class="d-inline-block">
+                        <h2 style="color:white">@Localizer["Documents"].Value</h2>
+                    </div>
+                </div>
+                <div class="card-block card-padding">
+                    <input id="iDocuments" type="file" style="display:none" />
+                    <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalDocuments">@Localizer["Add Documents"].Value</button>
+                    <br /><br />
+                          <table class="table table-bordered table-vitesco" id="tDocuments">
+                              <tr class="thead-vitesco">
+                                  <th>
+                                      @Localizer["ID"].Value
+                                  </th>
+                                  <th>
+                                      @Localizer["Name"].Value
+                                  </th>
+                                  <th>
+                                      @Localizer["Category"].Value
+                                  </th>
+                                  <th>
+                                      @Localizer["File Name"].Value
+                                  </th>
+                                  <th>
+                                      @Localizer["Delete"].Value
+                                  </th>
+                              </tr>
+                              @foreach (var item in Model.Documents)
+                              {
+                                  <tr>
+                                      <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                                      <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                      <td>@Html.DisplayFor(modelItem => item.Path)</td>
+                                      <td>
+                                          <a style="color:white" class="btn btn-danger" onclick="RemoveDocument(@item.ID)">@Localizer["Delete"].Value</a>
+                                      </td>
+                                  </tr>
+                              }
+                          </table>
+                </div>
+            </div>
             <div class="form-group">
                 <a style="width:120px;" class="btn btn-primary" asp-action="Index">@Localizer["Back to List"].Value</a>
                 <input style="width:120px;float:right;" type="submit" id="submit" value="@Localizer["Edit"].Value" class="btn btn-success" />
             </div>
         </form>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDocuments" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add New Document</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Name:</label>
+                    <input id="documentName" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Category:</label>
+                    <select id="documentCategory" class="form-control" asp-items="@(new SelectList(@ViewBag.ListCategories,"ID","Name"))"></select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">File:</label>
+                    <div class="input-group">
+                        <span id="DGroup" class="input-group-btn">
+                            <button id="openInputDocument" class="btn btn-default" type="button">
+                                Open File
+                            </button>
+                        </span>
+                        <input id="documentFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="insertDocument" class="btn btn-success">Insert</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
     </div>
 </div>
 

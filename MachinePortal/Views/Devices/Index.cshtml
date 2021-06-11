@@ -2,6 +2,19 @@
 @inject IViewLocalizer Localizer
 @model IEnumerable<MachinePortal.Models.Device>
 
+<script>
+    function renderPartialDelete(ID) {
+        $.ajax({
+            url: '@Url.Action("AddPartialDelete", "Devices")',
+            data: { id: ID},
+            type: "POST",
+            success: function(data) {
+                $('#modalDelete').html(data);
+            }
+        });
+    }
+</script>
+
 <div class="card fb-card c-vitesco-green-03">
     <div class="card-header c-vitesco-green-03">
         <i style="vertical-align:middle;" class="ti-harddrives c-vitesco-green-03"></i>
@@ -49,11 +62,14 @@
                         <td>
                             <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">@Localizer["Open"].Value</a>
                             <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.ID">@Localizer["Edit"].Value</a>
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID">@Localizer["Delete"].Value</a>
+                            <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+</div>
+
+<div class="modal" id="modalDelete" role="dialog">
 </div>
