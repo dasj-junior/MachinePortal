@@ -10,8 +10,8 @@
 
 <div style="display:inline-block">
     <form id="selectLanguage" asp-controller="Home" asp-action="SetLanguage" asp-route-returnUrl="@returnUrl" method="post" class="form-horizontal" role="form">
-        <a style="display:block; margin:3px" onclick="document.getElementById('selLang').value = 'en-US'; document.getElementById('selectLanguage').submit();"><img src="~/resources/General/en-US.png" style="height:16px; width:30px" /></a>
-        <a style="display:block; margin:3px" onclick="document.getElementById('selLang').value = 'pt-BR';document.getElementById('selectLanguage').submit();"><img src="~/resources/General/pt-BR.png" style="height:16px; width:30px" /></a>
+        <a style="display:block; margin:3px" onclick="document.getElementById('selLang').value = 'en-US'; document.getElementById('selectLanguage').submit();"><img src="~/resources/General/en-US.png" style="height: 16px; width: 30px; object-fit: cover;" /></a>
+        <a style="display:block; margin:3px" onclick="document.getElementById('selLang').value = 'pt-BR';document.getElementById('selectLanguage').submit();"><img src="~/resources/General/pt-BR.png" style="height: 16px; width: 30px; object-fit: cover;" /></a>
         <input name="culture" id="selLang" style="display:none" asp-for="@requestCulture.RequestCulture.UICulture.Name" />
     </form>
 </div>

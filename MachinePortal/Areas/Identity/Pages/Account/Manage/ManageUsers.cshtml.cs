@@ -14,17 +14,21 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace MachinePortal.Areas.Identity.Pages.Account
+namespace MachinePortal.Areas.Identity.Pages.Account.Manage
 {
-    public class LocalUser
-    {
-        public string ID { get; set; }
-        public string UserName { get; set; }
-        public string FullName { get; set; }
-    }
-
+    
     public class ManageUsersModel : PageModel
     {
+        public class InputModel
+        {
+            [Display(Name = "ID")]
+            public string ID { get; set; }
+            [Display(Name = "User Name")]
+            public string UserName { get; set; }
+            [Display(Name = "Full Name")]
+            public string FullName { get; set; }
+        }
+
         private readonly IdentityContext _context;
 
         public ManageUsersModel(IdentityContext context)
@@ -32,14 +36,14 @@ namespace MachinePortal.Areas.Identity.Pages.Account
             _context = context;
         }
 
-        public List<LocalUser> Users = new List<LocalUser>();
+        public List<InputModel> Users = new List<InputModel>();
        
         public void OnGet()
         {
             List<MachinePortalUser> AppUsers = _context.Users.ToList();
             foreach (MachinePortalUser U in AppUsers)
             {
-                LocalUser X = new LocalUser
+                InputModel X = new InputModel
                 {
                     ID = U.Id,
                     UserName = U.UserName,

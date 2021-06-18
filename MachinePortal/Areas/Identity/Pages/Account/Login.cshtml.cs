@@ -18,11 +18,13 @@ namespace MachinePortal.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<MachinePortalUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly UserManager<MachinePortalUser> _userManager;
 
-        public LoginModel(SignInManager<MachinePortalUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<MachinePortalUser> signInManager, ILogger<LoginModel> logger, UserManager<MachinePortalUser> userManager)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -38,15 +40,18 @@ namespace MachinePortal.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
+            [Display(Name = "UserName")]
             public string UserName { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
+            [Display(Name = "Password")]
             public string Password { get; set; }
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
 
+            [Display(Name = "Photo")]
             public string PhotoPath { get; set; }
         }
 
@@ -73,9 +78,16 @@ namespace MachinePortal.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                MachinePortalUser user;
+                if (Input.UserName.Contains("@"))
+                    user = await _userManager.FindByEmailAsync(Input.UserName);
+                else
+                    user = await _userManager.FindByNameAsync(Input.UserName);
+
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+                var result = await _signInManager.PasswordSignInAsync(user, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+                
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
@@ -88,8 +100,25 @@ namespace MachinePortal.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return Page();
+                    if(user != null)
+                    {
+                        var valid = await _signInManager.UserManager.IsEmailConfirmedAsync(user);
+                        if (valid == true)
+                        {
+                            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                            return Page();
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Email not yet confirmed.");
+                            return RedirectToPage("./WaitingConfirmation");
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Email not yet confirmed.");
+                        return RedirectToPage("./WaitingConfirmation");
+                    }    
                 }
             }
 

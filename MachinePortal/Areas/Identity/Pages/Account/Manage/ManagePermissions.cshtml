@@ -52,10 +52,17 @@
                                 @Localizer["User Photo"].Value
                             </dt>
                             <dd>
-                                <img src="@Html.DisplayFor(model => model.user.PhotoPath)" width="200" />
+                                @if (Model.user.PhotoPath != null)
+                                {
+                                    <img src="@Html.DisplayFor(model => model.user.PhotoPath)" height="200" class="img-thumbnail" />
+                                }
+                                else
+                                {
+                                    <img src="~/resources/General/NoImage.jpg" height="200" class="img-thumbnail" />
+                                }
                             </dd>
                             <dt>
-                                @Html.DisplayNameFor(model => model.user.UserName)
+                                @Localizer["User Name"].Value
                             </dt>
                             <dd>
                                 @Html.DisplayFor(model => model.user.UserName)

@@ -381,6 +381,7 @@ public string confirmPageP3 = @""" style=""-webkit-text-size-adjust: none; text-
             public string LastName { get; set; }
 
             [Required]
+            [Display(Name = "UserName")]
             public string UserName { get; set; }
 
             [Required]
@@ -394,8 +395,13 @@ public string confirmPageP3 = @""" style=""-webkit-text-size-adjust: none; text-
             [Display(Name = "Mobile Number")]
             public string Mobile { get; set; }
 
+            [Display(Name = "Department")]
             public string Department { get; set; }
+
+            [Display(Name = "Job Role")]
             public string JobRole { get; set; }
+
+            [Display(Name = "Photo")]
             public string PhotoPath { get; set; }
 
             [Required]
@@ -469,7 +475,7 @@ public string confirmPageP3 = @""" style=""-webkit-text-size-adjust: none; text-
                     await _emailSender.SendEmailAsync(Input.Email, "Machine Portal - Email Confirmation", confirmPageP1 + HtmlEncoder.Default.Encode(callbackUrl) + confirmPageP2 + HtmlEncoder.Default.Encode(callbackUrl) + confirmPageP3);
 
                     //await _signInManager.SignInAsync(user, isPersistent: false);
-                    returnUrl = "/Account/WaitingConfirmation";
+                    returnUrl = "/Identity/Account/WaitingConfirmation";
                     return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)

@@ -136,7 +136,7 @@
     <value>Criar </value>
   </data>
   <data name="Create new machine" xml:space="preserve">
-    <value>Criar nova máquina</value>
+    <value>Criar Máquina</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Deletar</value>
@@ -148,7 +148,7 @@
     <value>Documentos </value>
   </data>
   <data name="File Name" xml:space="preserve">
-    <value>Nome da Arquivo</value>
+    <value>Nome do Arquivo</value>
   </data>
   <data name="Filter" xml:space="preserve">
     <value>Filtro </value>

@@ -74,27 +74,29 @@
                     <button style="float:right;" class="btn btn-primary" type="button" data-toggle="modal" data-target="#modalCreate">@Localizer["Create New Permission"].Value</button>
                 </p>
                 <br />
-                <table class="table table-bordered table-vitesco">
-                    <br />
-                    <thead class="thead-vitesco">
-                        <tr>
-                            <th width="80%">@Html.DisplayNameFor(model => model.Permissions[0].PermissionName)</th>
-                            <th width="20%" class="text-center">@Localizer["Options"].Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Permissions)
-                        {
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered table-vitesco">
+                        <br />
+                        <thead class="thead-vitesco">
                             <tr>
-                                <td>@Html.DisplayFor(modelItem => item.PermissionName)</td>
-                                <td class="text-center">
-                                    <button class="btn btn-primary" type="button" onclick="document.getElementById('editName').value = '@item.PermissionName'; document.getElementById('editID').value = '@item.ID'" data-toggle="modal" data-target="#modalEdit">@Localizer["Edit"].Value</button>
-                                    <button class="btn btn-danger" type="button" onclick="document.getElementById('removeName').value = '@item.PermissionName'; document.getElementById('removeID').value = '@item.ID'" data-toggle="modal" data-target="#modalRemove">@Localizer["Remove"].Value</button>
-                                </td>
+                                <th width="80%">@Html.DisplayNameFor(model => model.Permissions[0].PermissionName)</th>
+                                <th width="20%" class="text-center">@Localizer["Options"].Value</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Permissions)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.PermissionName)</td>
+                                    <td class="text-center ws-nowrap">
+                                        <button class="btn btn-primary" type="button" onclick="document.getElementById('editName').value = '@item.PermissionName'; document.getElementById('editID').value = '@item.ID'" data-toggle="modal" data-target="#modalEdit">@Localizer["Edit"].Value</button>
+                                        <button class="btn btn-danger" type="button" onclick="document.getElementById('removeName').value = '@item.PermissionName'; document.getElementById('removeID').value = '@item.ID'" data-toggle="modal" data-target="#modalRemove">@Localizer["Remove"].Value</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -110,13 +112,15 @@
                     <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">@Localizer["Close"].Value</span></button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-horizontal">
-                        <label asp-for="Permission.PermissionName"></label>
-                        <input asp-for="Permission.PermissionName" class="form-control" />
+                    <div style="padding:10px;" class="form-horizontal">
+                        <div class="form-group">
+                            <label asp-for="Permission.PermissionName"></label>
+                            <input asp-for="Permission.PermissionName" class="form-control" />
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input style="width:120px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-danger mr-auto" data-dismiss="modal" />
+                    <input style="width:150px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-danger mr-auto" data-dismiss="modal" />
                     <input type="submit" style="width:120px;float:right;" value="@Localizer["Create"].Value" class="btn btn-primary" />
                 </div>
             </form>
@@ -134,14 +138,16 @@
                     <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">@Localizer["Close"].Value</span></button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-horizontal">
-                        <label asp-for="Permission.PermissionName"></label>
-                        <input id="editName" asp-for="Permission.PermissionName" class="form-control" />
-                        <input id="editID" style="display:none" asp-for="Permission.ID" class="form-control" />
+                    <div style="padding:10px;" class="form-horizontal">
+                        <div class="form-group">
+                            <label asp-for="Permission.PermissionName"></label>
+                            <input id="editName" asp-for="Permission.PermissionName" class="form-control" />
+                            <input id="editID" style="display:none" asp-for="Permission.ID" class="form-control" />
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input style="width:120px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-danger mr-auto" data-dismiss="modal" />
+                    <input style="width:150px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-danger mr-auto" data-dismiss="modal" />
                     <input type="submit" style="width:120px;float:right;" value="@Localizer["Update"].Value" class="btn btn-primary" />
                 </div>
             </form>
@@ -159,14 +165,16 @@
                     <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">@Localizer["Close"].Value</span></button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-horizontal">
-                        <label asp-for="Permission.PermissionName"></label>
-                        <input id="removeName" readonly asp-for="Permission.PermissionName" class="form-control" />
-                        <input id="removeID" style="display:none" asp-for="Permission.ID" class="form-control" />
+                    <div style="padding:10px;" class="form-horizontal">
+                        <div class="form-group">
+                            <label asp-for="Permission.PermissionName"></label>
+                            <input id="removeName" readonly asp-for="Permission.PermissionName" class="form-control" />
+                            <input id="removeID" style="display:none" asp-for="Permission.ID" class="form-control" />
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input style="width:120px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-danger mr-auto" data-dismiss="modal" />
+                    <input style="width:150px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-danger mr-auto" data-dismiss="modal" />
                     <input type="submit" style="width:120px;float:right;" value="@Localizer["Remove"].Value" class="btn btn-danger" />
                 </div>
             </form>

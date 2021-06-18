@@ -50,39 +50,41 @@
     </div>
     <div class="card-block card-padding">
         <div>
-            <table style="table-layout:auto;" class="table table-bordered table-vitesco">
-                <thead class="thead-vitesco">
-                    <tr>
-                        <th width="20%">@Html.DisplayNameFor(model => model.ImagePath)</th>
-                        <th width="60%">@Html.DisplayNameFor(model => model.Name)</th>
-                        <th width="20%">@Localizer["Options"].Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
+            <div class="table-responsive">
+                <table style="table-layout:auto;" class="table table-hover table-bordered table-vitesco">
+                    <thead class="thead-vitesco">
                         <tr>
-                            @if (item.ImagePath != null)
-                            {
-                                <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" height="100"/></td>
-                            }
-                            else
-                            {
-                                <td><img class="img-thumbnail" src="~/resources/General/NoImage.jpg" height="100"/></td>
-                            }
-                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                            <td>
-                                <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">@Localizer["Open"].Value</a>
-                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
-                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
-                            </td>
+                            <th width="15%">@Html.DisplayNameFor(model => model.ImagePath)</th>
+                            <th width="65%">@Html.DisplayNameFor(model => model.Name)</th>
+                            <th width="20%" class="text-center">@Localizer["Options"].Value</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                @if (item.ImagePath != null)
+                                {
+                                    <td class="text-center"><img src="@Html.DisplayFor(modelItem => item.ImagePath)" width="100" /></td>
+                                }
+                                else
+                                {
+                                    <td class="text-center"><img src="~/resources/General/NoImage.jpg" width="100" /></td>
+                                }
+                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                <td class="text-center ws-nowrap">
+                                    <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">@Localizer["Open"].Value</a>
+                                    <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
+                                    <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
         <br />
-        <a style="width:120px;" class="btn btn-primary" asp-controller="Areas" asp-action="Index">@Localizer["Back"].Value</a>
+        <a style="width:150px;" class="btn btn-primary" asp-controller="Areas" asp-action="Index">@Localizer["Back"].Value</a>
     </div>
 </div>
 

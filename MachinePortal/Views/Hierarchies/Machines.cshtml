@@ -10,17 +10,17 @@
                 <div class="card fb-card c-vitesco-blue-03">
                     <div style="text-align:center" class="card-header c-vitesco-blue-03">
                         <div class="d-inline-block">
-                            <h2 style="color:white">@Html.DisplayFor(modelItem => item.Name)</h2>
+                            <h3 style="color:white">@Html.DisplayFor(modelItem => item.Name)</h3>
                         </div>
                     </div>
                     <div style="text-align:center" class="card-block card-padding">
                         @if (item.ImagePath != null)
                         {
-                            <img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" width="300" />
+                            <img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" width="250" />
                         }
                         else
                         {
-                            <img class="img-thumbnail" src="~/resources/General/NoImage.jpg" width="300" />
+                            <img class="img-thumbnail" src="~/resources/General/NoImage.jpg" width="250" />
                         }
                     </div>
                 </div>

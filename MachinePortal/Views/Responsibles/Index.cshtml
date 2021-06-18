@@ -6,8 +6,10 @@
     function renderPartialDetails(ID) {
         $.ajax({
             url: '@Url.Action("AddPartialDetails", "Responsibles")',
-            data: { id: ID},
-            type: "POST",
+            data: { id: ID },
+            dataType: "html",
+            contentType: 'application/json; charset=utf-8',
+            type: "GET",
             success: function(data) {
                 $('#modalDetails').html(data);
             }
@@ -18,9 +20,14 @@
         $.ajax({
             url: '@Url.Action("AddPartialEdit", "Responsibles")',
             data: { id: ID},
-            type: "POST",
-            success: function(data) {
+            type: "GET",
+            dataType: "html",
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
                 $('#modalEdit').html(data);
+            },
+            error: function (data) {
+
             }
         });
     }
@@ -28,8 +35,10 @@
     function renderPartialDelete(ID) {
         $.ajax({
             url: '@Url.Action("AddPartialDelete", "Responsibles")',
-            data: { id: ID},
-            type: "POST",
+            data: { id: ID },
+            dataType: "html",
+            contentType: 'application/json; charset=utf-8',
+            type: "GET",
             success: function(data) {
                 $('#modalDelete').html(data);
             }
@@ -48,46 +57,48 @@
         <p>
             <button class="btn btn-primary btn-create" data-toggle="modal" data-target="#modalCreate">@Localizer["Create New Responsible"].Value</button>
         </p>
-        <table class="table table-bordered table-vitesco">
-            <thead class="thead-vitesco">
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.PhotoPath)</th>
-                    <th>@Html.DisplayNameFor(model => model.FirstName)</th>
-                    <th>@Html.DisplayNameFor(model => model.LastName)</th>
-                    <th>@Html.DisplayNameFor(model => model.Department.Name)</th>
-                    <th>@Html.DisplayNameFor(model => model.PhoneNumber)</th>
-                    <th>@Html.DisplayNameFor(model => model.Mobile)</th>
-                    <th>@Html.DisplayNameFor(model => model.Email)</th>
-                    <th width="20%">@Localizer["Options"].Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+        <div class="table-responsive">
+            <table class="table table-hover table-bordered table-vitesco">
+                <thead class="thead-vitesco">
                     <tr>
-                        @if (item.PhotoPath != null)
-                        {
-                            <td><img src="@Html.DisplayFor(modelItem => item.PhotoPath)" width="100" /></td>
-                        }
-                        else
-                        {
-                            <td><img src="~/resources/General/NoImage.jpg" width="100" /></td>
-                        }
-                        <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.LastName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Department.Name)</td>
-                        <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Mobile)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                        <td>
-                            <button class="btn btn-success" data-toggle="modal" onclick="renderPartialDetails(@item.ID)" data-target="#modalDetails">@Localizer["Open"].Value</button>
-                            <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
-                            <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
-                        </td>
+                        <th>@Html.DisplayNameFor(model => model.PhotoPath)</th>
+                        <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+                        <th>@Html.DisplayNameFor(model => model.LastName)</th>
+                        <th>@Localizer["Department"].Value</th>
+                        <th>@Html.DisplayNameFor(model => model.PhoneNumber)</th>
+                        <th>@Html.DisplayNameFor(model => model.Mobile)</th>
+                        <th>@Html.DisplayNameFor(model => model.Email)</th>
+                        <th width="20%" class="text-center">@Localizer["Options"].Value</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            @if (item.PhotoPath != null)
+                            {
+                                <td><img src="@Html.DisplayFor(modelItem => item.PhotoPath)" width="100" /></td>
+                            }
+                            else
+                            {
+                                <td><img src="~/resources/General/NoImage.jpg" width="100" /></td>
+                            }
+                            <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Department.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Mobile)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                            <td class="text-center ws-nowrap">
+                                <button class="btn btn-success" data-toggle="modal" onclick="renderPartialDetails(@item.ID)" data-target="#modalDetails">@Localizer["Open"].Value</button>
+                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
+                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

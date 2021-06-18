@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 
 namespace MachinePortal.Areas.Identity.Pages.Account.Manage
 {
@@ -51,6 +50,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
         public class InputModel
         {
             [Required]
+            [Display(Name = "User Name")]
             public string UserName { get; set; }
 
             [Display(Name = "First Name")]
@@ -61,6 +61,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
 
             [Required]
             [EmailAddress]
+            [Display(Name = "Email")]
             public string Email { get; set; }
 
             [Phone]
@@ -71,8 +72,13 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Mobile Number")]
             public string Mobile { get; set; }
 
+            [Display(Name = "Department")]
             public string Department { get; set; }
+
+            [Display(Name = "Job Role")]
             public string JobRole { get; set; }
+
+            [Display(Name = "Photo")]
             public string PhotoPath { get; set; }
         }
 

@@ -127,7 +127,7 @@
     <value>Criar</value>
   </data>
   <data name="Create New Permission" xml:space="preserve">
-    <value>Criar Nova Permissão</value>
+    <value>Criar Permissão</value>
   </data>
   <data name="Create Permission" xml:space="preserve">
     <value>Criar Permissão</value>
@@ -145,10 +145,10 @@
     <value>Permissões</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remover</value>
+    <value>Apagar</value>
   </data>
   <data name="Remove Permission" xml:space="preserve">
-    <value>Remover Permissão</value>
+    <value>Apagar Permissão</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Atualizar</value>

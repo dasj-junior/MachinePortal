@@ -2,52 +2,38 @@
 @inject IViewLocalizer Localizer
 @model MachinePortal.Models.Area
 
-@* Machine Photo Button and Preview *@
-<script type="text/javascript">
-    $(document).ready(function () {
-        //Modal Close
-        $("#closeModal01").on("click", function () {
-            document.getElementById("divImageMediaPreview").innerHTML = "";
-            document.getElementById("NameInput").value = "";
-            document.getElementById("photo").value = "";
-            document.getElementById("photoFilePath").value = "";
-        });
-
-        $("#closeModal02").on("click", function () {
-            document.getElementById("divImageMediaPreview").innerHTML = "";
-            document.getElementById("NameInput").value = "";
-            document.getElementById("photo").value = "";
-            document.getElementById("photoFilePath").value = "";
-        });
-
+<script>
+    $(document).ajaxComplete(function (event, xhr, settings) {
         //Button triggers the photo file input
-        document.getElementById('openPhoto').addEventListener('click', () => {
-            document.getElementById('photo').click()
+        document.getElementById('openPhotoEdit').addEventListener('click', () => {
+            document.getElementById('photoEdit').click()
         });
 
-        $("#photo").change(function () {
+        $("#photoEdit").change(function () {
             //Get file name and put it into input
-            var fileInput = document.getElementById('photo');
+            var fileInput = document.getElementById('photoEdit');
             for (i = 0; i < fileInput.files.length; i++) {
                 var sfilename = fileInput.files[i].name;
-                document.getElementById("photoFilePath").value = sfilename;
+                document.getElementById("photoFilePathEdit").value = sfilename;
             }
             //Load file and show the preview
             if (typeof (FileReader) != "undefined") {
-                var dvPreview = $("#divImageMediaPreview");
+                var dvPreview = $("#divImageMediaPreviewEdit");
                 dvPreview.html("");
-                $($(this)[0].files).each(function () {
-                    var file = $(this);
+                var formData = new FormData();
+                var filesLength = document.getElementById('photoEdit').files.length;
+                for (var i = 0; i < filesLength; i++) {
+                    var file = document.getElementById('photoEdit').files[i];
                     var reader = new FileReader();
                     reader.onload = function (e) {
                         var img = $("<img />");
-                        img.attr("style", "height:200px; padding: 10px;");
+                        img.attr("style", "height:200px; margin: 10px;");
                         img.attr("src", e.target.result);
                         img.attr("class", "img-thumbnail");
                         dvPreview.append(img);
                     }
-                    reader.readAsDataURL(file[0]);
-                });
+                    reader.readAsDataURL(file);
+                }
             } else {
                 alert("This browser does not support HTML5.");
             }
@@ -66,17 +52,21 @@
             <div class="modal-body">
                 <div style="padding:10px;" class="form-horizontal">
                     <div class="form-group">
-                        <div style="margin-bottom:10px;" id="divImageMediaPreview"></div>
-                        <label class="control-label">Photo</label>
+                        <div id="divImageMediaPreviewEdit"></div>
+                        <label class="control-label">@Localizer["Photo"].Value</label>
                         <div class="input-group">
-                            <input id="photoFilePath" type="text" class="form-control" placeholder="@Localizer["No file chosen"].Value" readonly />
-                            <span style="float:right;" class="input-group-append input-group-button">
-                                <button id="openPhoto" class="btn btn-default" type="button">
+                            <input id="photoFilePathEdit" type="text" class="form-control" placeholder="@Localizer["No file chosen"].Value" readonly />
+                            <span class="input-group-append input-group-button">
+                                <button id="openPhotoEdit" class="btn btn-default" type="button">
                                     @Localizer["Open Photo"].Value
                                 </button>
                             </span>
                         </div>
-                        <input type="file" id="photo" name="image" accept="image/*" style="display:none" />
+                        <input type="file" id="photoEdit" name="image" accept="image/*" style="display:none" />
+                    </div>
+                    @* Save Area ID *@
+                    <div class="form-group">
+                        <input asp-for="ID" style="display:none" />
                     </div>
                     <div class="form-group">
                         <label asp-for="Name" class="control-label"></label>
@@ -92,7 +82,7 @@
             </div>
             <div class="modal-footer">
                 <input id="closeModal02" style="width:120px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-primary mr-auto" data-dismiss="modal" />
-                <input style="width:120px;float:right;" type="submit" value="@Localizer["Edit"].Value" class="btn btn-success" />
+                <input style="width:150px;float:right;" type="submit" value="@Localizer["Edit"].Value" class="btn btn-success" />
             </div>
         </form>
     </div>

@@ -214,7 +214,7 @@
             var doc = { Name: sName, Category: iCategory, ID: srandomid, Type: "Document", FileName: sfilename, Location: sLocation};
             Mfiles.push(doc);
             // Binding the file name
-            var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+            var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td class='text-center ws - nowrap'><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
                 "\")'><span>Delete</span></a></td></tr>";
             $("#tDocuments").append(markup);
             //chkatchtbl();
@@ -241,7 +241,7 @@
             var img = { Name: sName, Category: iCategory, ID: srandomid, Type: "Image", FileName: sfilename, Location: sLocation};
             Mfiles.push(img);
             // Binding the file name
-            var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+            var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td class='text-center ws - nowrap'><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
                 "\")'><span>Delete</span></a></td></tr>";
             $("#tImages").append(markup);
             //chkatchtbl();
@@ -268,7 +268,7 @@
             var vid = { Name: sName, Category: iCategory, ID: srandomid, Type: "Video", FileName: sfilename, Location: sLocation };
             Mfiles.push(vid);
             // Binding the file name
-            var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+            var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td class='text-center ws - nowrap'><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
                 "\")'><span>Delete</span></a></td></tr>";
             $("#tVideos").append(markup);
             //chkatchtbl();
@@ -499,25 +499,29 @@
                     <input id="iDocuments" type="file" style="display:none" />
                     <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalDocuments">@Localizer["Add Documents"].Value</button>
                     <br /><br />
-                    <table class="table table-bordered table-vitesco" id="tDocuments">
-                        <tr class="thead-vitesco">
-                            <th>
-                                @Localizer["ID"].Value
-                            </th>
-                            <th>
-                                @Localizer["Name"].Value
-                            </th>
-                            <th>
-                                @Localizer["Category"].Value
-                            </th>
-                            <th>
-                                @Localizer["File Name"].Value
-                            </th>
-                            <th>
-                                @Localizer["Delete"].Value
-                            </th>
-                        </tr>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered table-vitesco" id="tDocuments">
+                            <thead>
+                                <tr class="thead-vitesco">
+                                    <th>
+                                        @Localizer["ID"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["Name"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["Category"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["File Name"].Value
+                                    </th>
+                                    <th class="text-center">
+                                        @Localizer["Delete"].Value
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -531,25 +535,29 @@
                     <input id="iImages" type="file" style="display:none" />
                     <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalImages">@Localizer["Add Images"].Value</button>
                     <br /><br />
-                    <table class="table table-bordered table-vitesco" id="tImages">
-                        <tr class="thead-vitesco">
-                            <th>
-                                @Localizer["ID"].Value
-                            </th>
-                            <th>
-                                @Localizer["Name"].Value
-                            </th>
-                            <th>
-                                @Localizer["Category"].Value
-                            </th>
-                            <th>
-                                @Localizer["File Name"].Value
-                            </th>
-                            <th>
-                                @Localizer["Delete"].Value
-                            </th>
-                        </tr>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered table-vitesco" id="tImages">
+                            <thead>
+                                <tr class="thead-vitesco">
+                                    <th>
+                                        @Localizer["ID"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["Name"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["Category"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["File Name"].Value
+                                    </th>
+                                    <th class="text-center">
+                                        @Localizer["Delete"].Value
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -563,25 +571,29 @@
                     <input id="iVideos" type="file" style="display:none" />
                     <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalVideos">@Localizer["Add Videos"].Value</button>
                     <br /><br />
-                    <table class="table table-bordered table-vitesco" id="tVideos">
-                        <tr class="thead-vitesco">
-                            <th>
-                                @Localizer["ID"].Value
-                            </th>
-                            <th>
-                                @Localizer["Name"].Value
-                            </th>
-                            <th>
-                                @Localizer["Category"].Value
-                            </th>
-                            <th>
-                                @Localizer["File Name"].Value
-                            </th>
-                            <th>
-                                @Localizer["Delete"].Value
-                            </th>
-                        </tr>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered table-vitesco" id="tVideos">
+                            <thead>
+                                <tr class="thead-vitesco">
+                                    <th>
+                                        @Localizer["ID"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["Name"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["Category"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["File Name"].Value
+                                    </th>
+                                    <th class="text-center">
+                                        @Localizer["Delete"].Value
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -692,8 +704,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <a style="width:120px;" class="btn btn-primary" asp-action="Index">@Localizer["Back to List"].Value</a>
-                <input style="width:120px;float:right;" type="submit" id="submit" value="@Localizer["Create"].Value" class="btn btn-success" />
+                <a style="width:150px;" class="btn btn-primary" asp-action="Index">@Localizer["Back to List"].Value</a>
+                <input style="width:150px;float:right;" type="submit" id="submit" value="@Localizer["Create"].Value" class="btn btn-success" />
             </div>
         </form>
     </div>

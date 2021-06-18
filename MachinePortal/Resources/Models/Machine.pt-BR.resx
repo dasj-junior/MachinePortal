@@ -136,7 +136,7 @@
     <value>ID</value>
   </data>
   <data name="Last Preventive Maintenance Date" xml:space="preserve">
-    <value>Última Data de Manutenção Preventiva</value>
+    <value>Data da última manutenção preventiva</value>
   </data>
   <data name="Line" xml:space="preserve">
     <value>Linha</value>
@@ -145,28 +145,28 @@
     <value>ID da linha</value>
   </data>
   <data name="Machine Comments" xml:space="preserve">
-    <value>Comentarios da Máquina </value>
+    <value>Comentarios da máquina </value>
   </data>
   <data name="Machine Devices" xml:space="preserve">
-    <value>Dispositivos da Máquina</value>
+    <value>Dispositivos da máquina</value>
   </data>
   <data name="Machine Documents" xml:space="preserve">
-    <value>Documentos da Máquina</value>
+    <value>Documentos da máquina</value>
   </data>
   <data name="Machine Images" xml:space="preserve">
-    <value>Imagens da Máquina</value>
+    <value>Imagens da máquina</value>
   </data>
   <data name="Machine Responsibles" xml:space="preserve">
-    <value>Responsável da Máquina</value>
+    <value>Responsável da máquina</value>
   </data>
   <data name="Machine Videos" xml:space="preserve">
-    <value>Vídeos da Máquina</value>
+    <value>Vídeos da máquina</value>
   </data>
   <data name="Manufactured Date" xml:space="preserve">
     <value>Data de fabricação</value>
   </data>
   <data name="MES Name" xml:space="preserve">
-    <value>Nome do MES</value>
+    <value>Nome no MES</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
@@ -178,7 +178,7 @@
     <value>Foto</value>
   </data>
   <data name="SAP Name" xml:space="preserve">
-    <value>Nome do SAP</value>
+    <value>Nome no SAP</value>
   </data>
   <data name="Sector" xml:space="preserve">
     <value>Setor</value>
@@ -188,5 +188,8 @@
   </data>
   <data name="Server Path" xml:space="preserve">
     <value>Caminho do servidor</value>
+  </data>
+  <data name="Work Center" xml:space="preserve">
+    <value>Centro de trabalho</value>
   </data>
 </root>

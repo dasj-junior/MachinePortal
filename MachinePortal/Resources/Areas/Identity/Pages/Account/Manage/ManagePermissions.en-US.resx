@@ -129,6 +129,9 @@
   <data name="User Department" xml:space="preserve">
     <value>User Department</value>
   </data>
+  <data name="User Name" xml:space="preserve">
+    <value>User Name</value>
+  </data>
   <data name="User Permissions" xml:space="preserve">
     <value>User Permissions</value>
   </data>

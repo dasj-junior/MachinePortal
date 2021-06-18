@@ -121,7 +121,7 @@
     <value>Categoria</value>
   </data>
   <data name="Category ID" xml:space="preserve">
-    <value>ID da Categoria</value>
+    <value>ID da categoria</value>
   </data>
   <data name="Extension" xml:space="preserve">
     <value>Extensões </value>
@@ -139,7 +139,7 @@
     <value>Máquina</value>
   </data>
   <data name="Machine ID" xml:space="preserve">
-    <value>ID da Máquina</value>
+    <value>ID da máquina</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Nome </value>

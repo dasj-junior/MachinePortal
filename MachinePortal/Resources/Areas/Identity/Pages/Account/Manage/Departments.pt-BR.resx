@@ -127,16 +127,19 @@
     <value>Criar</value>
   </data>
   <data name="Create New Department" xml:space="preserve">
-    <value>Criar Novo Departamento</value>
+    <value>Criar Departamento</value>
   </data>
   <data name="Departments" xml:space="preserve">
-    <value>Deparatamentos</value>
+    <value>Departamentos</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Editar</value>
   </data>
+  <data name="Options" xml:space="preserve">
+    <value>Opções</value>
+  </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remover</value>
+    <value>Apagar</value>
   </data>
   <data name="Update" xml:space="preserve">
     <value>Atualizar</value>

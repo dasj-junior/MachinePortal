@@ -7,6 +7,7 @@ using MachinePortal.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Localization;
 
 namespace MachinePortal.Areas.Identity.Pages.Account.Manage
 {

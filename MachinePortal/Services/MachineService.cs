@@ -126,6 +126,7 @@ namespace MachinePortal.Services
                                         .ThenInclude(dev => dev.Device)
                                         .Include(Mres => Mres.MachineResponsibles)
                                         .ThenInclude(res => res.Responsible)
+                                        .ThenInclude(dep => dep.Department)
                                         .FirstOrDefaultAsync(obj => obj.ID == ID);
         }
 
@@ -215,6 +216,21 @@ namespace MachinePortal.Services
             {
                 var obj = await _context.MachineComment.FindAsync(ID);
                 _context.MachineComment.Remove(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException e)
+            {
+                throw new IntegrityException(e.Message);
+            }
+        }
+
+        public async Task UpdatePreventiveDate(DateTime date, int ID)
+        {
+            try
+            {
+                Machine machine = new Machine { ID = ID , LastPreventiveMaintenance = date };
+                _context.Machine.Attach(machine);
+                _context.Entry(machine).Property(x => x.LastPreventiveMaintenance).IsModified = true;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException e)

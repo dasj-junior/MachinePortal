@@ -124,15 +124,18 @@
     <value>Salvar</value>
   </data>
   <data name="User Data" xml:space="preserve">
-    <value>Dados do usuário</value>
+    <value>Dados do Usuário</value>
   </data>
   <data name="User Department" xml:space="preserve">
-    <value>Departamento do usuário</value>
+    <value>Departamento do Usuário</value>
+  </data>
+  <data name="User Name" xml:space="preserve">
+    <value>Usuário</value>
   </data>
   <data name="User Permissions" xml:space="preserve">
-    <value>Perissões do usuario</value>
+    <value>Permissões do Usuario</value>
   </data>
   <data name="User Photo" xml:space="preserve">
-    <value>Foto do usuário</value>
+    <value>Foto do Usuário</value>
   </data>
 </root>

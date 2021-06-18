@@ -261,7 +261,7 @@
             let srandomid = Math.random().toString(36).substring(7);
             var doc = { Name: sName, Category: iCategory, ID: srandomid, Type: "Document", FileName: sfilename, Location: sLocation };
             Mfiles.push(doc);
-            var markup = "<tr id='" + srandomid + "'><td>" + srandomid + "</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+            var markup = "<tr id='" + srandomid + "'><td>" + srandomid + "</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td class='text-center ws - nowrap'><td><a href='#' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
                 "\")'><span>Delete</span></a></td></tr>"; // Binding the file name
             $("#tDocuments").append(markup);
             //chkatchtbl();
@@ -288,7 +288,7 @@
             var img = { Name: sName, Category: iCategory, ID: srandomid, Type: "Image", FileName: sfilename, Location: sLocation };
             Mfiles.push(img);
 
-            var markup = "<tr id='" + srandomid + "'><td>" + srandomid + "</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+            var markup = "<tr id='" + srandomid + "'><td>" + srandomid + "</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td class='text-center ws - nowrap'><a href='#' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
                 "\")'><span>Delete</span></a></td></tr>"; // Binding the file name
             $("#tImages").append(markup);
             //chkatchtbl();
@@ -314,7 +314,7 @@
             let srandomid = Math.random().toString(36).substring(7);
             var vid = { Name: sName, Category: iCategory, ID: srandomid, Type: "Video", FileName: sfilename, Location: sLocation };
             Mfiles.push(vid);
-            var markup = "<tr id='" + srandomid + "'><td>" + srandomid + "</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td><a href='#' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+            var markup = "<tr id='" + srandomid + "'><td>" + srandomid + "</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td class='text-center ws - nowrap'><a href='#' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
                 "\")'><span>Delete</span></a></td></tr>"; // Binding the file name
             $("#tVideos").append(markup);
             //chkatchtbl();
@@ -552,37 +552,41 @@
                     <input id="iDocuments" type="file" style="display:none" />
                     <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalDocuments">@Localizer["Add Documents"].Value</button>
                     <br /><br />
-                    <table class="table table-bordered table-vitesco" id="tDocuments">
-                        <tr class="thead-vitesco">
-                            <th>
-                                @Localizer["ID"].Value
-                            </th>
-                            <th>
-                                @Localizer["Name"].Value
-                            </th>
-                            <th>
-                                @Localizer["Category"].Value
-                            </th>
-                            <th>
-                                @Localizer["File Name"].Value
-                            </th>
-                            <th>
-                                @Localizer["Delete"].Value
-                            </th>
-                        </tr>
-                        @foreach (var item in Model.Machine.MachineDocuments)
-                        {
-                            <tr>
-                                <td>@Html.DisplayFor(modelItem => item.ID)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
-                                <td>@Html.DisplayFor(modelItem => item.FileName)</td>
-                                <td>
-                                    <a style="color:white" class="btn btn-danger" onclick="RemoveDocument(@item.ID)">@Localizer["Delete"].Value</a>
-                                </td>
-                            </tr>
-                        }
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered table-vitesco" id="tDocuments">
+                            <thead>
+                                <tr class="thead-vitesco">
+                                    <th>
+                                        @Localizer["ID"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["Name"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["Category"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["File Name"].Value
+                                    </th>
+                                    <th class="text-center">
+                                        @Localizer["Delete"].Value
+                                    </th>
+                                </tr>
+                            </thead>
+                            @foreach (var item in Model.Machine.MachineDocuments)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.FileName)</td>
+                                    <td class="text-center ws-nowrap">
+                                        <a style="color:white" class="btn btn-danger" onclick="RemoveDocument(@item.ID)">@Localizer["Delete"].Value</a>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -596,37 +600,41 @@
                     <input id="iImages" type="file" style="display:none" />
                     <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalImages">@Localizer["Add Images"].Value</button>
                     <br /><br />
-                    <table class="table table-bordered table-vitesco" id="tImages">
-                        <tr class="thead-vitesco">
-                            <th>
-                                @Localizer["ID"].Value
-                            </th>
-                            <th>
-                                @Localizer["Name"].Value
-                            </th>
-                            <th>
-                                @Localizer["Category"].Value
-                            </th>
-                            <th>
-                                @Localizer["File Name"].Value
-                            </th>
-                            <th>
-                                @Localizer["Delete"].Value
-                            </th>
-                        </tr>
-                        @foreach (var item in Model.Machine.MachineImages)
-                        {
-                            <tr>
-                                <td>@Html.DisplayFor(modelItem => item.ID)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
-                                <td>@Html.DisplayFor(modelItem => item.FileName)</td>
-                                <td>
-                                    <a style="color:white" class="btn btn-danger" onclick="RemoveImage(@item.ID)">@Localizer["Delete"].Value</a>
-                                </td>
-                            </tr>
-                        }
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered table-vitesco" id="tImages">
+                            <thead>
+                                <tr class="thead-vitesco">
+                                    <th>
+                                        @Localizer["ID"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["Name"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["Category"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["File Name"].Value
+                                    </th>
+                                    <th class="text-center">
+                                        @Localizer["Delete"].Value
+                                    </th>
+                                </tr>
+                            </thead>
+                            @foreach (var item in Model.Machine.MachineImages)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.FileName)</td>
+                                    <td class="text-center ws-nowrap">
+                                        <a style="color:white" class="btn btn-danger" onclick="RemoveImage(@item.ID)">@Localizer["Delete"].Value</a>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -640,37 +648,41 @@
                     <input id="iVideos" type="file" style="display:none" />
                     <button style="float:right" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalVideos">@Localizer["Add Videos"].Value</button>
                     <br /><br />
-                    <table class="table table-bordered table-vitesco" id="tVideos">
-                        <tr class="thead-vitesco">
-                            <th>
-                                @Localizer["ID"].Value
-                            </th>
-                            <th>
-                                @Localizer["Name"].Value
-                            </th>
-                            <th>
-                                @Localizer["Category"].Value
-                            </th>
-                            <th>
-                                @Localizer["File Name"].Value
-                            </th>
-                            <th>
-                                @Localizer["Delete"].Value
-                            </th>
-                        </tr>
-                        @foreach (var item in Model.Machine.MachineVideos)
-                        {
-                            <tr>
-                                <td>@Html.DisplayFor(modelItem => item.ID)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
-                                <td>@Html.DisplayFor(modelItem => item.FileName)</td>
-                                <td>
-                                    <a style="color:white" class="btn btn-danger" onclick="RemoveVideo(@item.ID)">@Localizer["Delete"].Value</a>
-                                </td>
-                            </tr>
-                        }
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-hover table-bordered table-vitesco" id="tVideos">
+                            <thead>
+                                <tr class="thead-vitesco">
+                                    <th>
+                                        @Localizer["ID"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["Name"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["Category"].Value
+                                    </th>
+                                    <th>
+                                        @Localizer["File Name"].Value
+                                    </th>
+                                    <th class="text-center">
+                                        @Localizer["Delete"].Value
+                                    </th>
+                                </tr>
+                            </thead>
+                            @foreach (var item in Model.Machine.MachineVideos)
+                            {
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.FileName)</td>
+                                    <td class="text-center ws-nowrap">
+                                        <a style="color:white" class="btn btn-danger" onclick="RemoveVideo(@item.ID)">@Localizer["Delete"].Value</a>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -780,8 +792,8 @@
                 </div>
             </div>
             <div class="form-group">
-                <a style="width:120px;" class="btn btn-primary" asp-action="Index">@Localizer["Back to List"].Value</a>
-                <input style="width:120px;float:right;" type="submit" id="submit" value="@Localizer["Edit"].Value" class="btn btn-success" />
+                <a style="width:150px;" class="btn btn-primary" asp-action="Index">@Localizer["Back to List"].Value</a>
+                <input style="width:150px;float:right;" type="submit" id="submit" value="@Localizer["Edit"].Value" class="btn btn-success" />
             </div>
         </form>
     </div>
@@ -869,7 +881,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="insertDocument" class="btn btn-success">@Localizer["Insert"].Value</button>
+                <button type="button" id="insertImage" class="btn btn-success">@Localizer["Insert"].Value</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">@Localizer["Close"].Value</button>
             </div>
         </div>
@@ -913,7 +925,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="insertDocument" class="btn btn-success">@Localizer["Insert"].Value</button>
+                <button type="button" id="insertVideo" class="btn btn-success">@Localizer["Insert"].Value</button>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">@Localizer["Close"].Value</button>
             </div>
         </div>

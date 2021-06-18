@@ -66,28 +66,30 @@
     </div>
     <div class="card-block card-padding">
         <dl class="dl-horizontal">
-            <table style="table-layout:fixed" class="table table-bordered table-vitesco02">
-                <button class="btn btn-success" style="float:right; margin-bottom: 20px" data-toggle="modal" data-target="#modalComments">@Localizer["Add New Comment"].Value</button>
-                <thead class="thead-vitesco02">
-                    <tr>
-                        <th width="62%">@Html.DisplayNameFor(model => model.MachineComments.First().Comment)</th>
-                        <th width="15%">@Localizer["User Name"].Value</th>
-                        <th width="15%">@Html.DisplayNameFor(model => model.MachineComments.First().Date)</th>
-                        <th width="8%">@Localizer["Delete"].Value</th>
-                    </tr>
-                </thead>
-                <tbody id="tComments">
-                    @foreach (var item in Model.MachineComments)
-                    {
+            <div class="table-responsive">
+                <table style="table-layout:fixed" class="table table-hover table-bordered table-vitesco02">
+                    <button class="btn btn-success" style="float:right; margin-bottom: 20px" data-toggle="modal" data-target="#modalComments">@Localizer["Add New Comment"].Value</button>
+                    <thead class="thead-vitesco02">
                         <tr>
-                            <td style="word-wrap:break-word;">@Html.DisplayFor(modelItem => item.Comment)</td>
-                            <td>@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Date)</td>
-                            <td><button class="btn btn-danger" onclick="removeComment(@item.ID)">@Localizer["Delete"].Value</button></td>
+                            <th width="62%">@Html.DisplayNameFor(model => model.MachineComments.First().Comment)</th>
+                            <th width="15%">@Localizer["User Name"].Value</th>
+                            <th width="15%">@Html.DisplayNameFor(model => model.MachineComments.First().Date)</th>
+                            <th width="8%" class="text-center">@Localizer["Delete"].Value</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody id="tComments">
+                        @foreach (var item in Model.MachineComments)
+                        {
+                            <tr>
+                                <td style="word-wrap:break-word;">@Html.DisplayFor(modelItem => item.Comment)</td>
+                                <td>@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                                <td class="text-center ws-nowrap"><button class="btn btn-danger" onclick="removeComment(@item.ID)">@Localizer["Delete"].Value</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </dl>
     </div>
 </div>

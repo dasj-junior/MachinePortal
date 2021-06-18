@@ -121,25 +121,25 @@
     <value>Departamento</value>
   </data>
   <data name="Department ID" xml:space="preserve">
-    <value>ID do Departamento</value>
+    <value>ID do departamento</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
   </data>
   <data name="First Name" xml:space="preserve">
-    <value>Primeiro Nome</value>
+    <value>Nome</value>
   </data>
   <data name="Full Name" xml:space="preserve">
-    <value>Nome </value>
+    <value>Nome Completo</value>
   </data>
   <data name="ID" xml:space="preserve">
     <value>ID</value>
   </data>
   <data name="Job Role" xml:space="preserve">
-    <value>Cargo de Trabalho</value>
+    <value>Cargo</value>
   </data>
   <data name="Last Name" xml:space="preserve">
-    <value>Último Nome</value>
+    <value>Sobrenome</value>
   </data>
   <data name="Mobile" xml:space="preserve">
     <value>Celular</value>

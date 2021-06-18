@@ -51,8 +51,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\Areas\Identity\Data\" />
-    <Folder Include="Resources\Areas\Identity\Pages\Account\Manage\" />
     <Folder Include="Resources\Views\Hierarchies\" />
     <Folder Include="wwwroot\resources\Areas\Images\" />
     <Folder Include="wwwroot\resources\Assets\Images\" />
@@ -213,6 +211,9 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Sectors\Index.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Home\AccessDenied.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="wwwroot\assets\css\jquery.mCustomScrollbar.css">

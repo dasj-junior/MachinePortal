@@ -39,6 +39,8 @@ namespace MachinePortal.Controllers
         public IActionResult Create()
         {
             Permissions();
+            List<Department> departments = _identityContext.Department.ToList();
+            ViewBag.ListDepartments = departments;
             return View();
         }
 
@@ -69,8 +71,10 @@ namespace MachinePortal.Controllers
                 }
             }
 
+            responsible.DepartmentID = responsible.Department.ID;
+            responsible.Department = null;
             responsible.FullName = responsible.FirstName + " " + responsible.LastName;
-
+            
             await _responsibleService.InsertAsync(responsible);
 
             return RedirectToAction(nameof(Index));
@@ -136,6 +140,8 @@ namespace MachinePortal.Controllers
             {
                 return NotFound();
             }
+            List<Department> departments = _identityContext.Department.ToList();
+            ViewBag.ListDepartments = departments;
             var obj = await _responsibleService.FindByIDAsync(ID.Value);
             if (obj == null)
             {
@@ -177,13 +183,15 @@ namespace MachinePortal.Controllers
             }
 
             responsible.FullName = responsible.FirstName + " " + responsible.LastName;
+            responsible.DepartmentID = responsible.Department.ID;
+            responsible.Department = null;
 
             await _responsibleService.UpdateAsync(responsible);
 
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<PartialViewResult> AddPartialDetails(string id)
         {
             int ID = int.Parse(id);
@@ -192,7 +200,7 @@ namespace MachinePortal.Controllers
             return partial;
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<PartialViewResult> AddPartialEdit(string id)
         {
             List<Department> departments = _identityContext.Department.ToList();
@@ -203,7 +211,7 @@ namespace MachinePortal.Controllers
             return partial;
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<PartialViewResult> AddPartialDelete(string id)
         {
             int ID = int.Parse(id);

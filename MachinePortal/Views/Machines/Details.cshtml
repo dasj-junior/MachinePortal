@@ -9,6 +9,92 @@
     int Qty = 0;
 }
 
+<link rel="stylesheet" href="~/assets/calendar/mc-calendar.min.css" />
+<script src="~/assets/calendar/mc-calendar.min.js"></script>
+
+@* Calendar for update date of last preventive maintenance *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        const PreventiveMaintenanceDatePicker = MCDatepicker.create({
+            el: '#LastPreMaiInput',
+            dateFormat: 'DD/MM/YYYY',
+            customWeekDays: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+            customMonths: [
+                'Janeiro',
+                'Fevereiro',
+                'Março',
+                'Abril',
+                'Maio',
+                'Junho',
+                'Julho',
+                'Agosto',
+                'Setembro',
+                'Outubro',
+                'Novembro',
+                'Dezembro'
+            ],
+            /*selectedDate: new date()*/
+        })
+
+        $("#LastPreMaiUpdate").on("click", function () {
+            $("#LastPreMaiDiv").addClass("d-none");
+            $("#LastPreMaiDiv").removeClass("d-inline");
+
+            $("#LastPreMaiInputGroup").removeClass("d-none");
+
+            $("#LastPreMaiUpdate").addClass("d-none");
+            $("#LastPreMaiUpdate").removeClass("d-inline");
+
+            $("#LastPreMaiSave").removeClass("d-none");
+            $("#LastPreMaiSave").addClass("d-inline");
+        });
+
+        $("#LastPreMaiInpBtn").on("click", function () {
+            PreventiveMaintenanceDatePicker.open();
+        });
+
+        $("#LastPreMaiSave").on("click", function () {
+            var date = document.getElementById("LastPreMaiInput").value;
+            $.ajax({
+                url: '@Url.Action("UpdatePreventiveDate", "Machines")',
+                data: { 'date': date, 'ID': @Model.ID},
+                type: "POST",
+                success: function(data) {
+                    $('#LastPreMaiDiv').html(data);
+
+                    $("#LastPreMaiDiv").removeClass("d-none");
+                    $("#LastPreMaiDiv").addClass("d-inline");
+
+                    $("#LastPreMaiInputGroup").addClass("d-none");
+
+                    $("#LastPreMaiUpdate").removeClass("d-none");
+                    $("#LastPreMaiUpdate").addClass("d-inline");
+
+                    $("#LastPreMaiSave").addClass("d-none");
+                    $("#LastPreMaiSave").removeClass("d-inline");
+
+                    notify('', 'Date update successfuly', 'top', 'right', 'bi-check', 'success', 'animated fadeInRight', 'animated fadeInRight');
+                },
+                error: function (response) {
+                    notify('', response, 'top', 'right', 'bi-error', 'error', 'animated fadeInRight', 'animated fadeInRight');
+
+                    $("#LastPreMaiDiv").removeClass("d-none");
+                    $("#LastPreMaiDiv").addClass("d-inline");
+
+                    $("#LastPreMaiInputGroup").addClass("d-none");
+
+                    $("#LastPreMaiUpdate").removeClass("d-none");
+                    $("#LastPreMaiUpdate").addClass("d-inline");
+
+                    $("#LastPreMaiSave").addClass("d-none");
+                    $("#LastPreMaiSave").removeClass("d-inline");
+                }
+            });
+        });
+    });
+</script>
+
+
 <script>
     function renderPartialEdit(ID) {
         $.ajax({
@@ -169,12 +255,25 @@
             <dd>
                 @Html.DisplayFor(model => model.StartDate)
             </dd>
-            <dt>
-                @Html.DisplayNameFor(model => model.LastPreventiveMaintenance)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.LastPreventiveMaintenance)
-            </dd>
+
+            <div class="row">
+                <div class="col-3">
+                    <strong>@Html.DisplayNameFor(model => model.LastPreventiveMaintenance)</strong>
+                    <div id="LastPreMaiDiv" class="d-inline">
+                        @Html.DisplayFor(model => model.LastPreventiveMaintenance)
+                    </div>
+                    <div id="LastPreMaiInputGroup" class="input-group d-none">
+                        <input id="LastPreMaiInput" style="border-right:0px" type="text" class="text-center" placeholder="@Html.DisplayFor(model => model.LastPreventiveMaintenance)" />
+                        <div class="input-group-append">
+                            <button id="LastPreMaiInpBtn" style="border-radius: 0px 3px 3px 0px; border: 1px solid black" class="btn bi-calendar"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 m-t-15">
+                    <button id="LastPreMaiUpdate" style="width:120px; margin-left:10px;" class="btn btn-primary d-inline">Update Date</button>
+                    <button id="LastPreMaiSave" style="width:120px; margin-left:10px;" class="btn btn-success d-none">Save</button>
+                </div>
+            </div>
         </dl>
     </div>
 </div>
@@ -196,39 +295,40 @@
     </div>
     <div class="card-block card-padding">
         <dl class="dl-horizontal">
-            <table class="table table-bordered table-vitesco02">
-                <thead class="thead-vitesco02">
-                    <tr>
-                        <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().Name)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().Category)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().FileName)</th>
-                        <th>@Localizer["Open"].Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var document in Model.MachineDocuments.Take(10))
-                    {
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-vitesco02">
+                    <thead class="thead-vitesco02">
                         <tr>
-                            <td>@Html.DisplayFor(modelItem => document.Name)</td>
-                            <td>@Html.DisplayFor(modelItem => document.Category.Name)</td>
-                            <td>@Html.DisplayFor(modelItem => document.FileName)</td>
-                            @if (document.Location == "file")
-                            {
-                                <td><a class="btn btn-success" href="@Html.DisplayFor(modelItem => document.Path)@Html.DisplayFor(modelItem => document.FileName)" target="_blank">@Localizer["Open"].Value<a /></td>
-                            }
-                            else if (document.Location == "web")
-                            {
-                                <td><a class="btn btn-success" href="@Html.DisplayFor(modelItem => document.FileName)" target="_blank">@Localizer["Open"].Value<a /></td>
-                            }
-                            else if (document.Location == "path")
-                            {
-                                <td><button class="btn btn-success" onclick="openDocumentPath('@HttpUtility.JavaScriptStringEncode(document.FileName)')">@Localizer["Open"].Value</button></td>
-                                @*<td>@Html.ActionLink("Open", "DownloadPath", new { path = document.FileName }, new { target = "_blank" })</td>*@
-                            }
+                            <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().Name)</th>
+                            <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().Category)</th>
+                            <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().FileName)</th>
+                            <th class="text-center">@Localizer["Open"].Value</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var document in Model.MachineDocuments.Take(10))
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => document.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => document.Category.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => document.FileName)</td>
+                                @if (document.Location == "file")
+                                {
+                                    <td class="text-center ws-nowrap"><a class="btn btn-success" href="@Html.DisplayFor(modelItem => document.Path)@Html.DisplayFor(modelItem => document.FileName)" target="_blank">@Localizer["Open"].Value<a /></td>
+                                }
+                                else if (document.Location == "web")
+                                {
+                                    <td class="text-center ws-nowrap"><a class="btn btn-success" href="@Html.DisplayFor(modelItem => document.FileName)" target="_blank">@Localizer["Open"].Value<a /></td>
+                                }
+                                else if (document.Location == "path")
+                                {
+                                    <td class="text-center ws-nowrap"><button class="btn btn-success" onclick="openDocumentPath('@HttpUtility.JavaScriptStringEncode(document.FileName)')">@Localizer["Open"].Value</button></td>
+                                    @*<td>@Html.ActionLink("Open", "DownloadPath", new { path = document.FileName }, new { target = "_blank" })</td>*@
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
         </dl>
     </div>
 </div>
@@ -252,10 +352,28 @@
         <dl class="dl-horizontal">
             @foreach (var image in Model.MachineImages.Take(5))
             {
-                <a href="@image.Path@image.FileName" target="_blank">
-                    @{string imgFullPath = image.Path + image.FileName;}
-                    <img class="img-thumbnail" style="margin: 10px;" src="@imgFullPath" height="300" />
-                </a>
+                @if (image.Location == "file")
+                {
+                    <a href="@image.Path@image.FileName" target="_blank">
+                        @{string imgFullPath = image.Path + image.FileName;}
+                        <img class="img-thumbnail" style="margin: 10px;" src="@imgFullPath" height="300" />
+                    </a>
+                }
+                else if (image.Location == "path")
+                {
+
+                    <a href="@Url.Action("DownloadPath","Machines", new { path = image.FileName })" target="_blank">
+                        <img class="img-thumbnail" style="margin: 10px;" src="@Url.Action("DownloadPath","Machines", new { path = image.FileName })" height="300" />
+                    </a>
+                }
+                else if (image.Location == "web")
+                {
+                    <a href="@image.FileName" target="_blank">
+                        @{string imgFullPath = image.FileName;}
+                        <img class="img-thumbnail" style="margin: 10px;" src="@imgFullPath" height="300" />
+                    </a>
+                }
+
             }
         </dl>
     </div>
@@ -314,39 +432,40 @@
     </div>
     <div class="card-block card-padding">
         <dl class="dl-horizontal">
-            <table class="table table-bordered table-vitesco02">
-                <thead class="thead-vitesco02">
-                    <tr>
-                        <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.ImagePath)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Name)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Brand)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Model)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.PartNumber)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Description)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Price)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Supplier)</th>
-                        <th>@Localizer["Details"].Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.MachineDevices.Take(5))
-                    {
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-vitesco02">
+                    <thead class="thead-vitesco02">
                         <tr>
-                            <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.Device.ImagePath)" width="100" /></td>
-                            <td>@Html.DisplayFor(modelItem => item.Device.Name)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Device.Brand)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Device.Model)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Device.PartNumber)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Device.Description)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Device.Price)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Device.Supplier)</td>
-                            <td>
-                                <a class="btn btn-primary" asp-controller="Devices" asp-action="Details" asp-route-id="@item.Device.ID">@Localizer["Details"].Value</a>
-                            </td>
+                            <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.ImagePath)</th>
+                            <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Name)</th>
+                            <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Brand)</th>
+                            <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Model)</th>
+                            <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.PartNumber)</th>
+                            <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Description)</th>
+                            <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Price)</th>
+                            <th>@Html.DisplayNameFor(model => model.MachineDevices.First().Device.Supplier)</th>
+                            <th class="text-center">@Localizer["Details"].Value</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.MachineDevices.Take(5))
+                        {
+                            <tr>
+                                <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.Device.ImagePath)" width="100" /></td>
+                                <td>@Html.DisplayFor(modelItem => item.Device.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Device.Brand)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Device.Model)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Device.PartNumber)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Device.Description)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Device.Price)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Device.Supplier)</td>
+                                <td class="text-center ws-nowrap">
+                                    <a class="btn btn-primary" asp-controller="Devices" asp-action="Details" asp-route-id="@item.Device.ID">@Localizer["Details"].Value</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
         </dl>
     </div>
 </div>
@@ -359,33 +478,35 @@
     </div>
     <div class="card-block card-padding">
         <dl class="dl-horizontal">
-            <table class="table table-bordered table-vitesco02">
-                <thead class="thead-vitesco02">
-                    <tr>
-                        <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.PhotoPath)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.FirstName)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.LastName)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.Department)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.Email)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.PhoneNumber)</th>
-                        <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.Mobile)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.MachineResponsibles)
-                    {
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-vitesco02">
+                    <thead class="thead-vitesco02">
                         <tr>
-                            <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.Responsible.PhotoPath)" width="75" /></td>
-                            <td>@Html.DisplayFor(modelItem => item.Responsible.FirstName)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Responsible.LastName)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Responsible.Department)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Responsible.Email)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Responsible.PhoneNumber)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Responsible.Mobile)</td>
+                            <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.PhotoPath)</th>
+                            <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.FirstName)</th>
+                            <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.LastName)</th>
+                            <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.Department)</th>
+                            <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.Email)</th>
+                            <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.PhoneNumber)</th>
+                            <th>@Html.DisplayNameFor(model => model.MachineResponsibles.First().Responsible.Mobile)</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.MachineResponsibles)
+                        {
+                            <tr>
+                                <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.Responsible.PhotoPath)" width="75" /></td>
+                                <td>@Html.DisplayFor(modelItem => item.Responsible.FirstName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Responsible.LastName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Responsible.Department.Name)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Responsible.Email)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Responsible.PhoneNumber)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Responsible.Mobile)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </dl>
     </div>
 </div>
@@ -407,31 +528,33 @@
     </div>
     <div class="card-block card-padding">
         <dl class="dl-horizontal">
-            <table style="table-layout:fixed" class="table table-bordered table-vitesco02">
-                @if (LoggedUserID != null && LoggedUserID != "")
-                {
-                    <button class="btn btn-success" style="float:right; margin-bottom: 20px" data-toggle="modal" data-target="#modalComments">Add New Comment</button>
-                }
-                <thead class="thead-vitesco02">
-                    <tr>
-                        <th width="62%">@Html.DisplayNameFor(model => model.MachineComments.First().Comment)</th>
-                        <th width="15%">@Localizer["User Name"].Value</th>
-                        <th width="15%">@Html.DisplayNameFor(model => model.MachineComments.First().Date)</th>
-                        <th width="8%">@Localizer["Delete"].Value</th>
-                    </tr>
-                </thead>
-                <tbody id="tComments">
-                    @foreach (var item in Model.MachineComments.Take(5))
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-vitesco02">
+                    @if (LoggedUserID != null && LoggedUserID != "")
                     {
-                        <tr>
-                            <td style="word-wrap:break-word;">@Html.DisplayFor(modelItem => item.Comment)</td>
-                            <td>@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Date)</td>
-                            <td><button class="btn btn-danger" onclick="removeComment(@item.ID)">@Localizer["Delete"].Value</button></td>
-                        </tr>
+                        <button class="btn btn-success" style="float:right; margin-bottom: 20px" data-toggle="modal" data-target="#modalComments">Add New Comment</button>
                     }
-                </tbody>
-            </table>
+                    <thead class="thead-vitesco02">
+                        <tr>
+                            <th width="62%">@Html.DisplayNameFor(model => model.MachineComments.First().Comment)</th>
+                            <th width="15%">@Localizer["User Name"].Value</th>
+                            <th width="15%">@Html.DisplayNameFor(model => model.MachineComments.First().Date)</th>
+                            <th width="8%" class="text-center">@Localizer["Delete"].Value</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tComments">
+                        @foreach (var item in Model.MachineComments.Take(5))
+                        {
+                            <tr>
+                                <td style="word-wrap:break-word;">@Html.DisplayFor(modelItem => item.Comment)</td>
+                                <td>@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                                <td class="text-center ws-nowrap"><button class="btn btn-danger" onclick="removeComment(@item.ID)">@Localizer["Delete"].Value</button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </dl>
     </div>
 </div>
@@ -453,41 +576,43 @@
     </div>
     <div class="card-block card-padding">
         <dl class="dl-horizontal">
-            <table style="table-layout:fixed; word-wrap:break-word" class="table table-bordered table-vitesco02">
-                <p>
-                    <button class="btn btn-success btn-create" data-toggle="modal" data-target="#modalCreatePassword">@Localizer["Create New Password"].Value</button>
-                </p>
-                <thead class="thead-vitesco02">
-                    <tr>
-                        @*<th>@Html.DisplayNameFor(model => model.Passwords.First().ID)</th>*@
-                        <th>@Html.DisplayNameFor(model => model.Passwords.First().EquipmentName)</th>
-                        <th>@Html.DisplayNameFor(model => model.Passwords.First().EquipmentDescription)</th>
-                        <th>@Html.DisplayNameFor(model => model.Passwords.First().Level)</th>
-                        <th>@Html.DisplayNameFor(model => model.Passwords.First().DepartmentName)</th>
-                        <th>@Html.DisplayNameFor(model => model.Passwords.First().User)</th>
-                        <th>@Html.DisplayNameFor(model => model.Passwords.First().Pass)</th>
-                        <th>@Localizer["Options"].Value</th>
-                    </tr>
-                </thead>
-                <tbody id="tPasswords">
-                    @foreach (var item in Model.Passwords.Take(10))
-                    {
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-vitesco02">
+                    <p>
+                        <button class="btn btn-success btn-create" data-toggle="modal" data-target="#modalCreatePassword">@Localizer["Create New Password"].Value</button>
+                    </p>
+                    <thead class="thead-vitesco02">
                         <tr>
-                            @*<td>@Html.DisplayFor(modelItem => item.ID)</td>*@
-                            <td>@Html.DisplayFor(modelItem => item.EquipmentName)</td>
-                            <td>@Html.DisplayFor(modelItem => item.EquipmentDescription)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Level)</td>
-                            <td>@Html.DisplayFor(modelItem => item.DepartmentName)</td>
-                            <td>@Html.DisplayFor(modelItem => item.User)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Pass)</td>
-                            <td>
-                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEditPassword">@Localizer["Edit"].Value</button>
-                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDeletePassword">@Localizer["Delete"].Value</button>
-                            </td>
+                            @*<th>@Html.DisplayNameFor(model => model.Passwords.First().ID)</th>*@
+                            <th>@Html.DisplayNameFor(model => model.Passwords.First().EquipmentName)</th>
+                            <th>@Html.DisplayNameFor(model => model.Passwords.First().EquipmentDescription)</th>
+                            <th>@Html.DisplayNameFor(model => model.Passwords.First().Level)</th>
+                            <th>@Html.DisplayNameFor(model => model.Passwords.First().DepartmentName)</th>
+                            <th>@Html.DisplayNameFor(model => model.Passwords.First().User)</th>
+                            <th>@Html.DisplayNameFor(model => model.Passwords.First().Pass)</th>
+                            <th class="text-center">@Localizer["Options"].Value</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody id="tPasswords">
+                        @foreach (var item in Model.Passwords.Take(10))
+                        {
+                            <tr>
+                                @*<td>@Html.DisplayFor(modelItem => item.ID)</td>*@
+                                <td>@Html.DisplayFor(modelItem => item.EquipmentName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.EquipmentDescription)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Level)</td>
+                                <td>@Html.DisplayFor(modelItem => item.DepartmentName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.User)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Pass)</td>
+                                <td class="text-center ws-nowrap">
+                                    <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEditPassword">@Localizer["Edit"].Value</button>
+                                    <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDeletePassword">@Localizer["Delete"].Value</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </dl>
     </div>
 </div>

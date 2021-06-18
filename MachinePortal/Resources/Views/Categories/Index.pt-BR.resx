@@ -121,10 +121,10 @@
     <value>Categorias </value>
   </data>
   <data name="Create New Category" xml:space="preserve">
-    <value>Criar Nova Categoria</value>
+    <value>Criar Categoria</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Deletar</value>
+    <value>Apagar</value>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Editar </value>

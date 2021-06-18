@@ -13,43 +13,45 @@
                 </div>
             </div>
             <div class="card-block card-padding">
-                <table class="table table-bordered table-vitesco">
-                    <thead class="thead-vitesco">
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Users[0].ID)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Users[0].UserName)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Users[0].FullName)
-                            </th>
-                            <th class="text-center">
-                                @Localizer["Options"].Value
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Users)
-                        {
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered table-vitesco">
+                        <thead class="thead-vitesco">
                             <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.ID)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.UserName)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.FullName)
-                                </td>
-                                <td class="text-center">
-                                    <a class="btn btn-primary" asp-page="./ManagePermissions" asp-route-id="@item.ID">@Localizer["Edit"].Value</a>
-                                </td>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Users[0].ID)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Users[0].UserName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Users[0].FullName)
+                                </th>
+                                <th class="text-center">
+                                    @Localizer["Options"].Value
+                                </th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Users)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ID)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.UserName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.FullName)
+                                    </td>
+                                    <td class="text-center ws-nowrap">
+                                        <a class="btn btn-primary" asp-page="./ManagePermissions" asp-route-id="@item.ID">@Localizer["Edit"].Value</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

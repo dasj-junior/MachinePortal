@@ -121,6 +121,6 @@
     <value>Logout</value>
   </data>
   <data name="You have successfully logged out of the application." xml:space="preserve">
-    <value>Você se foi desconectado com sucesso do aplicativo.</value>
+    <value>Você se foi desconectado com sucesso do sistema.</value>
   </data>
 </root>

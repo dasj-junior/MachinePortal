@@ -35,7 +35,7 @@
                     @Html.DisplayFor(model => model.LastName)
                 </dd>
                 <dt>
-                    @Html.DisplayNameFor(model => model.Department.Name)
+                    @Localizer["Department"].Value
                 </dt>
                 <dd>
                     @Html.DisplayFor(model => model.Department.Name)
@@ -61,8 +61,8 @@
             </dl>
         </div>
         <div class="modal-footer">
-            <input style="width:120px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-danger mr-auto" data-dismiss="modal" />
-            <input style="width:120px;float:right;" type="submit" value="@Localizer["Edit"].Value" class="btn btn-primary" />
+            <input style="width:150px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-danger mr-auto" data-dismiss="modal" />
+            <input style="width:150px;float:right;" type="submit" value="@Localizer["Edit"].Value" class="btn btn-primary" />
         </div>
     </div>
 </div>

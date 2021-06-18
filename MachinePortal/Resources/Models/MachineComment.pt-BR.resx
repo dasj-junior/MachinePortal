@@ -130,12 +130,12 @@
     <value>Máquina</value>
   </data>
   <data name="Machine ID" xml:space="preserve">
-    <value>ID da Máquina</value>
+    <value>ID da máquina</value>
   </data>
   <data name="User" xml:space="preserve">
     <value>Usuário</value>
   </data>
   <data name="User ID" xml:space="preserve">
-    <value>ID do Usuário</value>
+    <value>ID do usuário</value>
   </data>
 </root>

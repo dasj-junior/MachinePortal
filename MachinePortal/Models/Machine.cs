@@ -31,6 +31,8 @@ namespace MachinePortal.Models
         
         [Display(Name = "SAP Name")]
         public string SAP_Name { get; set; }
+
+        [Display(Name = "Work Center")]
         public string WorkCenter { get; set; }
         
         [Display(Name = "Cost Center")]
@@ -40,9 +42,11 @@ namespace MachinePortal.Models
         public string ServerPath { get; set; }
         
         [Display(Name = "Last Preventive Maintenance Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime LastPreventiveMaintenance { get; set; }
         
         [Display(Name = "Manufactured Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime StartDate { get; set; }
 
         [Display(Name = "Area ID")]

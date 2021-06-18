@@ -1108,5 +1108,21 @@ namespace MachinePortal.Controllers
             PartialViewResult partial = PartialView("PasswordDelete", password);
             return partial;
         }
+
+        [HttpPost]
+        public async Task<string> UpdatePreventiveDate(string date, int ID)
+        {
+            string updatedDate = "";
+            try
+            {
+                DateTime UpdDate = DateTime.Parse(date);
+                await _machineService.UpdatePreventiveDate(UpdDate,ID);
+                updatedDate = UpdDate.ToString("dd/MM/yyyy");
+            }
+            catch
+            {
+            }
+            return updatedDate;
+        }
     }
 }

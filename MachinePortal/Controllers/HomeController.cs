@@ -55,6 +55,11 @@ namespace MachinePortal.Controllers
             return View();
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<bool> ValidateMachineID(int MachineID)
         {

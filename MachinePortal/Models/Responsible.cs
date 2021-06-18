@@ -37,10 +37,11 @@ namespace MachinePortal.Models
         [Display(Name = "Photo")]
         public string PhotoPath { get; set; }
 
-        [Display(Name = "Department ID")]
-        public int DepartmentID { get; set; }
         [Display(Name = "Department")]
         public Department Department { get; set; }
+        [Display(Name = "Department ID")]
+        public int DepartmentID { get; set; }
+        
 
         public Responsible()
         {

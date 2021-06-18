@@ -145,10 +145,10 @@
     <value>Carregando</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Entrar</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
+    <value>Sair</value>
   </data>
   <data name="Machine Portal" xml:space="preserve">
     <value>Portal De Maquinas</value>

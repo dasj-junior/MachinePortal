@@ -121,7 +121,7 @@
     <value>Area</value>
   </data>
   <data name="Area ID" xml:space="preserve">
-    <value>Area ID</value>
+    <value>Area</value>
   </data>
   <data name="Asset Number" xml:space="preserve">
     <value>Asset Number</value>
@@ -142,7 +142,7 @@
     <value>Line</value>
   </data>
   <data name="Line ID" xml:space="preserve">
-    <value>Line ID</value>
+    <value>Line</value>
   </data>
   <data name="Machine Comments" xml:space="preserve">
     <value>Machine Comments</value>
@@ -184,9 +184,12 @@
     <value>Sector</value>
   </data>
   <data name="Sector ID" xml:space="preserve">
-    <value>Sector ID</value>
+    <value>Sector</value>
   </data>
   <data name="Server Path" xml:space="preserve">
     <value>Server Path</value>
+  </data>
+  <data name="Work Center" xml:space="preserve">
+    <value>Work Center</value>
   </data>
 </root>

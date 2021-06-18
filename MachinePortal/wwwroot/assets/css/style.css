@@ -12533,7 +12533,7 @@ div.DTFC_RightWrapper table.dataTable {
 
 th,
 td {
-    white-space: nowrap;
+    white-space: normal;
 }
 
 /*===== Fixed-header data-table ===== */
@@ -20951,4 +20951,12 @@ b-logout {
 .c-m-btn {
     font-size: 35px;
     vertical-align: middle;
+}
+
+.ws-nowrap {
+    white-space: nowrap;
+}
+
+img {
+    object-fit: contain;
 }

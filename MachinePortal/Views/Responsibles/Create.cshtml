@@ -2,7 +2,7 @@
 @inject IViewLocalizer Localizer
 @model MachinePortal.Models.Responsible
 
-@* Machine Photo Button and Preview *@
+@* Responsible Photo Button and Preview *@
 <script type="text/javascript">
     $(document).ready(function () {
         //Button triggers the photo file input
@@ -21,7 +21,7 @@
             if (typeof (FileReader) != "undefined") {
                 var dvPreview = $("#divImageMediaPreview");
                 dvPreview.html("");
-                $($(this)[0].files).each(function () {
+                $(this)[0].files.each(function () {
                     var file = $(this);
                     var reader = new FileReader();
                     reader.onload = function (e) {
@@ -75,7 +75,7 @@
                     </div>
                     <div class="form-group">
                         <label>@Localizer["Department"].Value</label>
-                        <select asp-for="Department.ID" class="form-control" asp-items="@(new SelectList(ViewBag.ListDepartments,"ID","Name"))"></select>
+                        <select asp-for="Department.ID" class="form-control" asp-items="@(new SelectList(@ViewBag.ListDepartments,"ID","Name"))"></select>
                         <span asp-validation-for="Department" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -96,8 +96,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <input style="width:120px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-dan mr-auto" data-dismiss="modal" />
-                <input style="width:120px;float:right;" type="submit" value="@Localizer["Create"].Value" class="btn btn-success" />
+                <input style="width:150px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-dan mr-auto" data-dismiss="modal" />
+                <input style="width:150px;float:right;" type="submit" value="@Localizer["Create"].Value" class="btn btn-success" />
             </div>
         </form>
     </div>

@@ -27,37 +27,39 @@
         <p>
             <a class="btn btn-primary btn-create" asp-action="Create">@Localizer["Create New Machine"].Value</a>
         </p>
-        <table style="table-layout:auto; padding-top:20px" class="table table-bordered table-vitesco">
-            <thead class="thead-vitesco">
-                <tr>
-                    <th width="10%">@Html.DisplayNameFor(model => model.ImagePath)</th>
-                    <th width="30%">@Html.DisplayNameFor(model => model.Name)</th>
-                    <th width="40%">@Html.DisplayNameFor(model => model.Description)</th>
-                    <th width="20%">@Localizer["Options"].Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+        <div class="table-responsive">
+            <table style="table-layout:auto; padding-top:20px" class="table table-hover table-bordered table-vitesco">
+                <thead class="thead-vitesco">
+                    <tr>
+                        <th width="10%">@Html.DisplayNameFor(model => model.ImagePath)</th>
+                        <th width="30%">@Html.DisplayNameFor(model => model.Name)</th>
+                        <th width="40%">@Html.DisplayNameFor(model => model.Description)</th>
+                        <th width="20%" class="text-center">@Localizer["Options"].Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
                     <tr>
                         @if (item.ImagePath != null)
                         {
-                            <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.ImagePath)" width="100" /></td>
+                            <td><img src="@Html.DisplayFor(modelItem => item.ImagePath)" width="100" /></td>
                         }
                         else
                         {
-                            <td><img class="img-thumbnail" src="~/resources/General/NoImage.jpg" width="100" /></td>
+                            <td><img src="~/resources/General/NoImage.jpg" width="100" /></td>
                         }
                         <td>@Html.DisplayFor(modelItem => item.Name)</td>
                         <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                        <td>
+                        <td class="text-center ws-nowrap">
                             <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">@Localizer["Open"].Value</a>
                             <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.ID">@Localizer["Edit"].Value</a>
                             <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID">@Localizer["Delete"].Value</a>
                         </td>
                     </tr>
-                }
-            </tbody>
-        </table>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
