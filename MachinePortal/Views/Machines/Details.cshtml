@@ -2,6 +2,21 @@
 @using System.Web;
 @inject IViewLocalizer Localizer
 @model MachinePortal.Models.Machine
+@* Check User Permissions *@
+@using Microsoft.AspNetCore.Identity
+@using MachinePortal.Areas.Identity.Data
+@using Microsoft.EntityFrameworkCore
+@inject UserManager<MachinePortalUser> UserManager
+@inject IdentityContext identityContext
+@{
+    var user = await UserManager.GetUserAsync(User);
+    List<string> permissions = new List<string>();
+    if (user != null) { permissions = ((from obj in identityContext.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == user.Id).ToList()).Select(p => p.Permission.PermissionName).ToList(); };
+    if (!permissions.Contains("PageMachines")) { Context.Response.Redirect("/Home/AccessDenied"); };
+}
+
+<link rel="stylesheet" href="~/assets/calendar/mc-calendar.min.css" />
+<script src="~/assets/calendar/mc-calendar.min.js"></script>
 
 @{
     var LoggedUserName = ViewData["UserName"];
@@ -9,170 +24,168 @@
     int Qty = 0;
 }
 
-<link rel="stylesheet" href="~/assets/calendar/mc-calendar.min.css" />
-<script src="~/assets/calendar/mc-calendar.min.js"></script>
-
 @* Calendar for update date of last preventive maintenance *@
 <script type="text/javascript">
-    $(document).ready(function () {
-        const PreventiveMaintenanceDatePicker = MCDatepicker.create({
-            el: '#LastPreMaiInput',
-            dateFormat: 'DD/MM/YYYY',
-            customWeekDays: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-            customMonths: [
-                'Janeiro',
-                'Fevereiro',
-                'Março',
-                'Abril',
-                'Maio',
-                'Junho',
-                'Julho',
-                'Agosto',
-                'Setembro',
-                'Outubro',
-                'Novembro',
-                'Dezembro'
-            ],
-            /*selectedDate: new date()*/
-        })
+$(document).ready(function () {
+    const LastPreMaiDatePicker = MCDatepicker.create({
+        el: '#LastPreMaiInput',
+        dateFormat: 'DD/MM/YYYY',
+        customWeekDays: ['@Html.Raw(Localizer["Sunday"].Value)', '@Html.Raw(Localizer["Monday"].Value)', '@Html.Raw(Localizer["Tuesday"].Value)', '@Html.Raw(Localizer["Wednesday"].Value)', '@Html.Raw(Localizer["Thursday"].Value)', '@Html.Raw(Localizer["Friday"].Value)', '@Html.Raw(Localizer["Saturday"].Value)'],
+        customMonths: [
+            '@Html.Raw(Localizer["January"].Value)',
+            '@Html.Raw(Localizer["February"].Value)',
+            '@Html.Raw(Localizer["March"].Value)',
+            '@Html.Raw(Localizer["April"].Value)',
+            '@Html.Raw(Localizer["May"].Value)',
+            '@Html.Raw(Localizer["June"].Value)',
+            '@Html.Raw(Localizer["July"].Value)',
+            '@Html.Raw(Localizer["August"].Value)',
+            '@Html.Raw(Localizer["September"].Value)',
+            '@Html.Raw(Localizer["October"].Value)',
+            '@Html.Raw(Localizer["November"].Value)',
+            '@Html.Raw(Localizer["December"].Value)'],
+        defaultDate: new Date('@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")'),
+        customClearBTN: "",
+        customCancelBTN: '@Localizer["CANCEL"].Value'
+    })
 
-        $("#LastPreMaiUpdate").on("click", function () {
-            $("#LastPreMaiDiv").addClass("d-none");
-            $("#LastPreMaiDiv").removeClass("d-inline");
+    $("#LastPreMaiUpdate").on("click", function () {
+        $("#LastPreMaiDiv").addClass("d-none");
+        $("#LastPreMaiDiv").removeClass("d-inline");
 
-            $("#LastPreMaiInputGroup").removeClass("d-none");
+        $("#LastPreMaiInputGroup").removeClass("d-none");
 
-            $("#LastPreMaiUpdate").addClass("d-none");
-            $("#LastPreMaiUpdate").removeClass("d-inline");
+        $("#LastPreMaiUpdate").addClass("d-none");
+        $("#LastPreMaiUpdate").removeClass("d-inline");
 
-            $("#LastPreMaiSave").removeClass("d-none");
-            $("#LastPreMaiSave").addClass("d-inline");
-        });
+        $("#LastPreMaiSave").removeClass("d-none");
+        $("#LastPreMaiSave").addClass("d-inline");
+    });
 
-        $("#LastPreMaiInpBtn").on("click", function () {
-            PreventiveMaintenanceDatePicker.open();
-        });
+    $("#LastPreMaiInpBtn").on("click", function () {
+        LastPreMaiDatePicker.open();
+    });
 
-        $("#LastPreMaiSave").on("click", function () {
-            var date = document.getElementById("LastPreMaiInput").value;
-            $.ajax({
-                url: '@Url.Action("UpdatePreventiveDate", "Machines")',
-                data: { 'date': date, 'ID': @Model.ID},
-                type: "POST",
-                success: function(data) {
-                    $('#LastPreMaiDiv').html(data);
+    $("#LastPreMaiSave").on("click", function () {
+        var date = document.getElementById("LastPreMaiInput").value;
+        $.ajax({
+            url: '@Url.Action("UpdatePreventiveDate", "Machines")',
+            data: { 'date': date, 'ID': @Model.ID},
+            type: "POST",
+            success: function(data) {
+                $('#LastPreMaiDiv').html(data);
 
-                    $("#LastPreMaiDiv").removeClass("d-none");
-                    $("#LastPreMaiDiv").addClass("d-inline");
+                $("#LastPreMaiDiv").removeClass("d-none");
+                $("#LastPreMaiDiv").addClass("d-inline");
 
-                    $("#LastPreMaiInputGroup").addClass("d-none");
+                $("#LastPreMaiInputGroup").addClass("d-none");
 
-                    $("#LastPreMaiUpdate").removeClass("d-none");
-                    $("#LastPreMaiUpdate").addClass("d-inline");
+                $("#LastPreMaiUpdate").removeClass("d-none");
+                $("#LastPreMaiUpdate").addClass("d-inline");
 
-                    $("#LastPreMaiSave").addClass("d-none");
-                    $("#LastPreMaiSave").removeClass("d-inline");
+                $("#LastPreMaiSave").addClass("d-none");
+                $("#LastPreMaiSave").removeClass("d-inline");
 
-                    notify('', 'Date update successfuly', 'top', 'right', 'bi-check', 'success', 'animated fadeInRight', 'animated fadeInRight');
-                },
-                error: function (response) {
-                    notify('', response, 'top', 'right', 'bi-error', 'error', 'animated fadeInRight', 'animated fadeInRight');
+                notify('', 'Date update successfuly', 'top', 'right', 'bi-check', 'success', 'animated fadeInRight', 'animated fadeInRight');
+            },
+            error: function (response) {
+                notify('', response, 'top', 'right', 'bi-error', 'error', 'animated fadeInRight', 'animated fadeInRight');
 
-                    $("#LastPreMaiDiv").removeClass("d-none");
-                    $("#LastPreMaiDiv").addClass("d-inline");
+                $("#LastPreMaiDiv").removeClass("d-none");
+                $("#LastPreMaiDiv").addClass("d-inline");
 
-                    $("#LastPreMaiInputGroup").addClass("d-none");
+                $("#LastPreMaiInputGroup").addClass("d-none");
 
-                    $("#LastPreMaiUpdate").removeClass("d-none");
-                    $("#LastPreMaiUpdate").addClass("d-inline");
+                $("#LastPreMaiUpdate").removeClass("d-none");
+                $("#LastPreMaiUpdate").addClass("d-inline");
 
-                    $("#LastPreMaiSave").addClass("d-none");
-                    $("#LastPreMaiSave").removeClass("d-inline");
-                }
-            });
+                $("#LastPreMaiSave").addClass("d-none");
+                $("#LastPreMaiSave").removeClass("d-inline");
+            }
         });
     });
+});
 </script>
 
 
 <script>
-    function renderPartialEdit(ID) {
-        $.ajax({
-            url: '@Url.Action("AddPartialEditPassword", "Machines")',
-            data: { 'ID': ID, 'MachineName': '@Model.Name', 'MachineID': @Model.ID},
-           type: "POST",
-            success: function(data) {
-                $('#modalEditPassword').html(data);
-            },
-            error: function (response, xhr, data) {
-                $('#modalEditPassword').html(response);
-            }
-        });
-    }
-
-    function renderPartialDelete(ID) {
-        $.ajax({
-            url: '@Url.Action("AddPartialDeletePassword", "Machines")',
-            data: { 'ID': ID, 'MachineName': '@Model.Name', 'MachineID': @Model.ID},
-            type: "POST",
-            success: function(data) {
-                $('#modalDeletePassword').html(data);
-            },
-            error: function (response, xhr, data) {
-                $('#modalDeletePassword').html(response);
-            }
-        });
-    }
-
-    function openDocumentPath(path) {
-        $('.theme-loader').show();
-        $.ajax({
-            type: "POST",
-            url: '@Url.Content("~/")' + "Machines/DownloadPath",
-            data: { path },
-            xhrFields: { responseType: 'blob' },
-            success: function (data) {
-                $('.theme-loader').hide();
-                var url = window.URL.createObjectURL(data);
-                var newWindow = window.open(url, "_blank");
-            }
-        });
-    };
-</script>
-
-<script type="text/javascript">
-    function removeComment(ID) {
-        if (confirm("Do you want to remove comment?")) {
-             $.ajax({
-                type: 'POST',
-                url: '@Url.Content("~/")' + "Machines/RemoveComment",
-                data: { CommentID: ID , MachineID: document.getElementById('MachineID').value },
-                success: function (data) {
-                    $('#tComments').html(data)
-                },
-                async: true
-             });
+function renderPartialEdit(ID) {
+    $.ajax({
+        url: '@Url.Action("AddPartialEditPassword", "Machines")',
+        data: { 'ID': ID, 'MachineName': '@Model.Name', 'MachineID': @Model.ID},
+        type: "POST",
+        success: function(data) {
+            $('#modalEditPassword').html(data);
+        },
+        error: function (response, xhr, data) {
+            $('#modalEditPassword').html(response);
         }
-    };
+    });
+}
+
+function renderPartialDelete(ID) {
+    $.ajax({
+        url: '@Url.Action("AddPartialDeletePassword", "Machines")',
+        data: { 'ID': ID, 'MachineName': '@Model.Name', 'MachineID': @Model.ID},
+        type: "POST",
+        success: function(data) {
+            $('#modalDeletePassword').html(data);
+        },
+        error: function (response, xhr, data) {
+            $('#modalDeletePassword').html(response);
+        }
+    });
+}
+
+function openDocumentPath(path) {
+    $('.theme-loader').show();
+    $.ajax({
+        type: "POST",
+        url: '@Url.Content("~/")' + "Machines/DownloadPath",
+        data: { path },
+        xhrFields: { responseType: 'blob' },
+        success: function (data) {
+            $('.theme-loader').hide();
+            var url = window.URL.createObjectURL(data);
+            var newWindow = window.open(url, "_blank");
+        }
+    });
+};
 </script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $("#insertComment").on("click", function () {
+function removeComment(ID) {
+    if (confirm("Do you want to remove comment?")) {
             $.ajax({
-                type: 'POST',
-                url: '@Url.Content("~/")' + "Machines/AddComment",
-                data: { UserID: document.getElementById('commentUserID').value, Comment: document.getElementById('commentComment').value, MachineID: document.getElementById('MachineID').value },
-                success: function (data) {
-                    $('#tComments').html(data)
-                    //document.getElementById('commentAuthor').value = "";
-                    document.getElementById('commentComment').value = "";
-                    $('#modalComments').modal('hide');
-                },
-                async: true
+            type: 'POST',
+            url: '@Url.Content("~/")' + "Machines/RemoveComment",
+            data: { CommentID: ID , MachineID: document.getElementById('MachineID').value },
+            success: function (data) {
+                $('#tComments').html(data)
+            },
+            async: true
             });
+    }
+};
+</script>
+
+<script type="text/javascript">
+$(document).ready(function () {
+    $("#insertComment").on("click", function () {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Content("~/")' + "Machines/AddComment",
+            data: { UserID: document.getElementById('commentUserID').value, Comment: document.getElementById('commentComment').value, MachineID: document.getElementById('MachineID').value },
+            success: function (data) {
+                $('#tComments').html(data)
+                //document.getElementById('commentAuthor').value = "";
+                document.getElementById('commentComment').value = "";
+                $('#modalComments').modal('hide');
+            },
+            async: true
         });
     });
+});
 </script>
 
 <div class="card fb-card c-vitesco-gray">
@@ -263,7 +276,7 @@
                         @Html.DisplayFor(model => model.LastPreventiveMaintenance)
                     </div>
                     <div id="LastPreMaiInputGroup" class="input-group d-none">
-                        <input id="LastPreMaiInput" style="border-right:0px" type="text" class="text-center" placeholder="@Html.DisplayFor(model => model.LastPreventiveMaintenance)" />
+                        <input id="LastPreMaiInput" style="border-right:0px" type="text" class="text-center" value="@Html.DisplayFor(model => model.LastPreventiveMaintenance)" />
                         <div class="input-group-append">
                             <button id="LastPreMaiInpBtn" style="border-radius: 0px 3px 3px 0px; border: 1px solid black" class="btn bi-calendar"></button>
                         </div>
@@ -322,7 +335,7 @@
                                 }
                                 else if (document.Location == "path")
                                 {
-                                    <td class="text-center ws-nowrap"><button class="btn btn-success" onclick="openDocumentPath('@HttpUtility.JavaScriptStringEncode(document.FileName)')">@Localizer["Open"].Value</button></td>
+                                    <td class="text-center ws-nowrap"><button class="btn btn-success" onclick="openDocumentPath('@Html.Raw(document.FileName)')">@Localizer["Open"].Value</button></td>
                                     @*<td>@Html.ActionLink("Open", "DownloadPath", new { path = document.FileName }, new { target = "_blank" })</td>*@
                                 }
                             </tr>
@@ -532,7 +545,10 @@
                 <table class="table table-hover table-bordered table-vitesco02">
                     @if (LoggedUserID != null && LoggedUserID != "")
                     {
-                        <button class="btn btn-success" style="float:right; margin-bottom: 20px" data-toggle="modal" data-target="#modalComments">Add New Comment</button>
+                        @if (permissions.Contains("MachinesAddComments"))
+                        {
+                            <button class="btn btn-success" style="float:right; margin-bottom: 20px" data-toggle="modal" data-target="#modalComments">Add New Comment</button>
+                        }
                     }
                     <thead class="thead-vitesco02">
                         <tr>
@@ -549,7 +565,10 @@
                                 <td style="word-wrap:break-word;">@Html.DisplayFor(modelItem => item.Comment)</td>
                                 <td>@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</td>
                                 <td>@Html.DisplayFor(modelItem => item.Date)</td>
-                                <td class="text-center ws-nowrap"><button class="btn btn-danger" onclick="removeComment(@item.ID)">@Localizer["Delete"].Value</button></td>
+                                @if ((item.UserID == user.Id && permissions.Contains("MachinesRemoveOwnComments")) || (item.UserID != user.Id && permissions.Contains("MachinesRemoveOtherComments")))
+                                {
+                                    <td class="text-center ws-nowrap"><button class="btn btn-danger" onclick="removeComment(@item.ID)">@Localizer["Delete"].Value</button></td>
+                                }
                             </tr>
                         }
                     </tbody>
@@ -578,9 +597,12 @@
         <dl class="dl-horizontal">
             <div class="table-responsive">
                 <table class="table table-hover table-bordered table-vitesco02">
-                    <p>
-                        <button class="btn btn-success btn-create" data-toggle="modal" data-target="#modalCreatePassword">@Localizer["Create New Password"].Value</button>
-                    </p>
+                    @if (permissions.Contains("MachinesAddPasswords"))
+                    {
+                        <p>
+                            <button class="btn btn-success btn-create" data-toggle="modal" data-target="#modalCreatePassword">@Localizer["Create New Password"].Value</button>
+                        </p>
+                    }
                     <thead class="thead-vitesco02">
                         <tr>
                             @*<th>@Html.DisplayNameFor(model => model.Passwords.First().ID)</th>*@
@@ -596,19 +618,28 @@
                     <tbody id="tPasswords">
                         @foreach (var item in Model.Passwords.Take(10))
                         {
-                            <tr>
-                                @*<td>@Html.DisplayFor(modelItem => item.ID)</td>*@
-                                <td>@Html.DisplayFor(modelItem => item.EquipmentName)</td>
-                                <td>@Html.DisplayFor(modelItem => item.EquipmentDescription)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Level)</td>
-                                <td>@Html.DisplayFor(modelItem => item.DepartmentName)</td>
-                                <td>@Html.DisplayFor(modelItem => item.User)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Pass)</td>
-                                <td class="text-center ws-nowrap">
-                                    <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEditPassword">@Localizer["Edit"].Value</button>
-                                    <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDeletePassword">@Localizer["Delete"].Value</button>
-                                </td>
-                            </tr>
+                            @if ((item.DepartmentID == user.Department.ID && permissions.Contains("MachinesViewOwnDepartmentPassword")) || (item.DepartmentID == user.Department.ID && permissions.Contains("MachinesViewOtherDepartmentPassword")))
+                            {
+                                <tr>
+                                    @*<td>@Html.DisplayFor(modelItem => item.ID)</td>*@
+                                    <td>@Html.DisplayFor(modelItem => item.EquipmentName)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.EquipmentDescription)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Level)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.DepartmentName)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.User)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Pass)</td>
+                                    <td class="text-center ws-nowrap">
+                                        @if ((item.DepartmentID == user.Department.ID && permissions.Contains("MachinesEditOwnDepartmentPassword")) || (item.DepartmentID == user.Department.ID && permissions.Contains("MachinesEditOtherDepartmentPassword")))
+                                        {
+                                            <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEditPassword">@Localizer["Edit"].Value</button>
+                                        }
+                                        @if ((item.DepartmentID == user.Department.ID && permissions.Contains("MachinesDeleteOwnDepartmentPassword")) || (item.DepartmentID == user.Department.ID && permissions.Contains("MachinesDeleteOtherDepartmentPassword")))
+                                        {
+                                            <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDeletePassword">@Localizer["Delete"].Value</button>
+                                        }
+                                    </td>
+                                </tr>
+                            }
                         }
                     </tbody>
                 </table>
@@ -621,7 +652,10 @@
 <div>
     <input type="hidden" asp-for="ID" />
     <button style="width:120px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">@Localizer["Back"].Value</button>
-    <a style="width:120px; font-weight:700; float:right;" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ID">@Localizer["Edit"].Value</a>
+    @if (permissions.Contains("MachinesEdit"))
+    {
+        <a style="width:120px; font-weight:700; float:right;" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ID">@Localizer["Edit"].Value</a>
+    }
 </div>
 
 <div class="modal fade" id="modalComments" role="dialog">

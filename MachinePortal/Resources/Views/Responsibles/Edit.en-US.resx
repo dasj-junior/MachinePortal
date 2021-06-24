@@ -120,6 +120,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="CelFormat" xml:space="preserve">
+    <value>(000) 000-000-0000</value>
+  </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
   </data>
@@ -134,5 +137,8 @@
   </data>
   <data name="Open Photo" xml:space="preserve">
     <value>Open Photo</value>
+  </data>
+  <data name="PhoFormat" xml:space="preserve">
+    <value>(000) 000-000-0000</value>
   </data>
 </root>

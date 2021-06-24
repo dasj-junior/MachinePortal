@@ -1,5 +1,16 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
+@* Check User Permissions *@
+@using Microsoft.AspNetCore.Identity
+@using MachinePortal.Areas.Identity.Data
+@using Microsoft.EntityFrameworkCore
+@inject UserManager<MachinePortalUser> UserManager
+@inject IdentityContext identityContext
+@{
+    var user = await UserManager.GetUserAsync(User);
+    List<string> permissions = new List<string>();
+    if (user != null) { permissions = ((from obj in identityContext.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == user.Id).ToList()).Select(p => p.Permission.PermissionName).ToList(); };
+}
 
 <!-- Scripts JQuery and WebCodeCam -->
 <script src="~/webcodecamjs/js/jquery.js"></script>
@@ -100,70 +111,75 @@
 <body>
     <div>
         <div class="row">
-            <div class="col-4">
-                <div class="card widget-card-1">
-                    <div class="card-block-big">
-                        <span class="bg-c-blue card1-icon" style="font-size: 28px;">123</span>
-                        <br />
-                        <h4 style="text-align: center;">
-                            @Localizer["Search By Machine ID"].Value
-                        </h4>
-                        <div>
-                            <span class="f-left" style=" width: 100%;">
-                                <div class="pcoded-search-box" style="text-align:center; padding-top:20px;">
-                                    <input id="InputID" placeholder="@Localizer["Type Machine ID"].Value" type="text" style="width: 200px; text-align:center">
-                                    <a id="SearchByID" style="color: black; font-size: 15px; font-weight:700;" class="btn btn-success">@Localizer["Search"].Value</a>
-                                </div>
-                            </span>
+            @if (permissions.Contains("HomeSearchByMachineID"))
+            {
+                <div class="col-4">
+                    <div class="card widget-card-1">
+                        <div class="card-block-big">
+                            <span class="bg-c-blue card1-icon" style="font-size: 28px;">123</span>
+                            <br />
+                            <h4 style="text-align: center;">
+                                @Localizer["Search By Machine ID"].Value
+                            </h4>
+                            <div>
+                                <span class="f-left" style=" width: 100%;">
+                                    <div class="pcoded-search-box" style="text-align:center; padding-top:20px;">
+                                        <input id="InputID" placeholder="@Localizer["Type Machine ID"].Value" type="text" style="width: 200px; text-align:center">
+                                        <a id="SearchByID" style="color: black; font-size: 15px; font-weight:700;" class="btn btn-success">@Localizer["Search"].Value</a>
+                                    </div>
+                                </span>
+                            </div>
+                            <br />
+                            <br />
+                            <br />
                         </div>
-                        <br />
-                        <br />
-                        <br />
                     </div>
                 </div>
-
-            </div>
-
-
-            <div class="col-4">
-                <div class="card widget-card-1">
-                    <div class="card-block-big">
-                        <i class="icofont icofont-qr-code bg-c-green card1-icon"></i>
-                        <br />
-                        <h4 style="text-align: center;">
-                            @Localizer["Search By QR Code"].Value
-                        </h4>
-                        <br />
-                        <div>
-                            <span class="f-left" style="text-align:center; width: 100%;">
-                                <button id="SearchByQR" style="width:100%; height:40px; color: black; font-size: 15px; font-weight:700;" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalQR">@Localizer["Search"].Value</button>
-                            </span>
+            }
+            @if (permissions.Contains("HomeSearchByQRCode"))
+            {
+                <div class="col-4">
+                    <div class="card widget-card-1">
+                        <div class="card-block-big">
+                            <i class="icofont icofont-qr-code bg-c-green card1-icon"></i>
+                            <br />
+                            <h4 style="text-align: center;">
+                                @Localizer["Search By QR Code"].Value
+                            </h4>
+                            <br />
+                            <div>
+                                <span class="f-left" style="text-align:center; width: 100%;">
+                                    <button id="SearchByQR" style="width:100%; height:40px; color: black; font-size: 15px; font-weight:700;" class="btn btn-success" type="button" data-toggle="modal" data-target="#modalQR">@Localizer["Search"].Value</button>
+                                </span>
+                            </div>
+                            <br />
+                            <br />
                         </div>
-                        <br />
-                        <br />
                     </div>
                 </div>
-            </div>
-
-            <div class="col-4">
-                <div class="card widget-card-1">
-                    <div class="card-block-big">
-                        <i class="ti-layout-list-thumb bg-c-orenge card1-icon"></i>
-                        <br />
-                        <h4 style="text-align: center; font-size: 22px">
-                            @Localizer["Search Machine By Hierarchies"].Value
-                        </h4>
-                        <br />
-                        <div>
-                            <span class="f-left" style="text-align:center; width: 100%;">
-                                <button id="SearchByHierarchies" style="width:100%; height:40px; color: black; font-size: 15px; font-weight:700;" class="btn btn-success">@Localizer["Search"].Value</button>
-                            </span>
+            }
+            @if (permissions.Contains("HomeSearchByHierarchies"))
+            {
+                <div class="col-4">
+                    <div class="card widget-card-1">
+                        <div class="card-block-big">
+                            <i class="ti-layout-list-thumb bg-c-orenge card1-icon"></i>
+                            <br />
+                            <h4 style="text-align: center; font-size: 22px">
+                                @Localizer["Search Machine By Hierarchies"].Value
+                            </h4>
+                            <br />
+                            <div>
+                                <span class="f-left" style="text-align:center; width: 100%;">
+                                    <button id="SearchByHierarchies" style="width:100%; height:40px; color: black; font-size: 15px; font-weight:700;" class="btn btn-success">@Localizer["Search"].Value</button>
+                                </span>
+                            </div>
+                            <br />
+                            <br />
                         </div>
-                        <br />
-                        <br />
                     </div>
                 </div>
-            </div>
+            }
         </div>
     </div>
 </body>
@@ -193,7 +209,7 @@
                 <script>
                     var decoder = $("canvas").WebCodeCamJQuery(arg).data().plugin_WebCodeCamJQuery;
                     decoder.buildSelectMenu("select");
-                                                                                                                                                                                                                                                                                                                                                                                                                    //decoder.play();
+                                                                                                                                                                                                                                                                                                                                                                                                                                                    //decoder.play();
                 </script>
             </div>
         </div>

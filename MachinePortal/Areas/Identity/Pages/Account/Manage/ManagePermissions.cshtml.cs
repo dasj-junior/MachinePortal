@@ -22,6 +22,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<MachinePortalUser> _userManager;
         private readonly IdentityContext _context;
+        private List<string> permissions = new List<string>();
         public SelectList SlAvailablePermissions { get; set; }
         public SelectList SlCurrentPermissions { get; set; }
         public SelectList SlDepartments { get; set; }
@@ -32,14 +33,23 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
         [BindProperty]
         public int SelectedDepartment { get; set; }
 
-        public ManagePermissionsModel(IdentityContext context)
+        public ManagePermissionsModel(IdentityContext context, UserManager<MachinePortalUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         [HttpGet]
-        public IActionResult OnGet(string ID)
+        public async Task<IActionResult> OnGet(string ID)
         {
+            //Verify Permissions
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null) { permissions = ((from obj in _context.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == user.Id).ToList()).Select(p => p.Permission.PermissionName).ToList(); };
+            if (!permissions.Contains("PageManagePermissions"))
+            {
+                return RedirectToPage(@"./../AccessDenied");
+            };
+
             user = _context.Users.FirstOrDefault(obj => obj.Id == ID);
             if (user == null)
             {

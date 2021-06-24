@@ -117,19 +117,79 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="April" xml:space="preserve">
+    <value>Abril</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>Agosto</value>
+  </data>
+  <data name="CANCEL" xml:space="preserve">
+    <value>CANCELAR</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>Dezembro</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Editar</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>Fevereiro</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Sexta</value>
   </data>
   <data name="General Data" xml:space="preserve">
     <value>Dados Gerais</value>
   </data>
+  <data name="January" xml:space="preserve">
+    <value>Janeiro</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>Julho</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>Junho</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>Março</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>Maio</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Segunda</value>
+  </data>
   <data name="No file chosen" xml:space="preserve">
     <value>Nenhum arquivo selecionado</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>Novembro</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>Outubro</value>
   </data>
   <data name="Open Photo" xml:space="preserve">
     <value>Abrir Foto</value>
   </data>
   <data name="Photo" xml:space="preserve">
     <value>Foto </value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Sábado</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>Setembro</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Domingo</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Quinta</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Terça</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Quarta</value>
   </data>
 </root>

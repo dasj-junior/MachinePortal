@@ -1,6 +1,18 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @model MachinePortal.Models.Responsible
+    
+@* Check User Permissions *@
+@using Microsoft.AspNetCore.Identity
+@using MachinePortal.Areas.Identity.Data
+@using Microsoft.EntityFrameworkCore
+@inject UserManager<MachinePortalUser> UserManager
+@inject IdentityContext identityContext
+@{
+    var user = await UserManager.GetUserAsync(User);
+    List<string> permissions = new List<string>();
+    if (user != null) { permissions = ((from obj in identityContext.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == user.Id).ToList()).Select(p => p.Permission.PermissionName).ToList(); };
+}
 
 <div class="modal-dialog">
     <div class="modal-content">
@@ -62,7 +74,10 @@
         </div>
         <div class="modal-footer">
             <input style="width:150px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-danger mr-auto" data-dismiss="modal" />
-            <input style="width:150px;float:right;" type="submit" value="@Localizer["Edit"].Value" class="btn btn-primary" />
+            @if (permissions.Contains("ResponsiblesEdit"))
+            {
+                <input style="width:150px;float:right;" type="submit" value="@Localizer["Edit"].Value" class="btn btn-primary" />
+            }
         </div>
     </div>
 </div>

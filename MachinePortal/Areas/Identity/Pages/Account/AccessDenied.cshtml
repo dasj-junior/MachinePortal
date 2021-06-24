@@ -3,19 +3,23 @@
 @using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 
-<div class="row justify-content-center">
+<div class="row justify-content-around">
     <div class="col-6">
-        <div class="card fb-card">
-            <div style="background-color:#dc3545" class="card-header">
-                <i style="vertical-align:middle; background-color:#dc3545; font-size:40px;" class="bi-x-circle-fill"></i>
-                <div class="d-inline-block">
-                    <h2 style="vertical-align: middle; color: white">@Localizer["Access denied"].Value</h2>
-                </div>
+        <div class="card fb-card c-vitesco-green-02">
+            <div class="card-header bg-danger">
+                <i style="float: left; font-size: 40px; margin-right: 0px; padding: 10px 0px 0px 0px;" class="bi-exclamation-diamond .bg-danger"></i>
+                <h3 style="color: white; text-align:center; margin:5px 30px 0px 0px;">@Localizer["ACCESS DENIED!"].Value</h3>
             </div>
-            <div class="card-block card-padding">
+            <div style="text-align:center" class="card-block card-padding">
+                <h1 style="font-size:35px">@Localizer["ACCESS DENIED!"].Value</h1>
+                @*<i class="bi-check-circle" style="font-size:80px"></i>*@
+                <img src="~/resources/General/AccessDenied.jpg" width="200" />
+                <br /><br />
+                <h5>@Localizer["Please check your access rights"].Value</h5>
+                <br /><br />
+                <h5>@Localizer["You don't have access rights to this page, please contact your system administrator or return to home page."].Value</h5>
                 <br />
-                <h4 style="font-weight:700;">@Localizer["You do not have access to this resource."].Value</h4>
-                <br />
+                <p style="font-size:18px">@Localizer["click"].Value <a style="font-size:18px" href="/">@Localizer["here"].Value</a> @Localizer["to return to the home page."].Value</p>
             </div>
         </div>
     </div>

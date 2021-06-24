@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace MachinePortal.Areas.Identity.Pages.Account.Manage
 {
@@ -30,16 +31,27 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
         }
 
         private readonly IdentityContext _context;
+        private readonly UserManager<MachinePortalUser> _userManager;
+        public List<string> permissions = new List<string>();
 
-        public ManageUsersModel(IdentityContext context)
+        public ManageUsersModel(IdentityContext context, UserManager<MachinePortalUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public List<InputModel> Users = new List<InputModel>();
        
-        public void OnGet()
+        public async Task<IActionResult> OnGet()
         {
+            //Verify Permissions
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null) { permissions = ((from obj in _context.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == user.Id).ToList()).Select(p => p.Permission.PermissionName).ToList(); };
+            if (!permissions.Contains("PageManageUsers"))
+            {
+                return RedirectToPage(@"./../AccessDenied");
+            };
+
             List<MachinePortalUser> AppUsers = _context.Users.ToList();
             foreach (MachinePortalUser U in AppUsers)
             {
@@ -51,6 +63,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
                 };
                 Users.Add(X);
             }
+            return Page();
         }
 
     }

@@ -404,6 +404,8 @@ namespace MachinePortal.Controllers
             machineOLD.WorkCenter = machineNEW.Machine.WorkCenter;
             machineOLD.CostCenter = machineNEW.Machine.CostCenter;
             machineOLD.ServerPath = machineNEW.Machine.ServerPath;
+            machineOLD.LastPreventiveMaintenance = machineNEW.Machine.LastPreventiveMaintenance;
+            machineOLD.StartDate = machineNEW.Machine.StartDate;
 
             //Generate list of documents from the update page
             List<IFormFile> documents = new List<IFormFile>();

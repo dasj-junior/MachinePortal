@@ -117,13 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name=".NET Version:" xml:space="preserve">
+    <value>.NET Version:</value>
+  </data>
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
-  <data name="Message" xml:space="preserve">
-    <value>Message</value>
+  <data name="Developed by:" xml:space="preserve">
+    <value>Developed by:</value>
   </data>
-  <data name="Use this area to provide additional information." xml:space="preserve">
-    <value>Use this area to provide additional information.</value>
+  <data name="Developer:" xml:space="preserve">
+    <value>Developer:</value>
+  </data>
+  <data name="Development:" xml:space="preserve">
+    <value>Development:</value>
+  </data>
+  <data name="IDE Information" xml:space="preserve">
+    <value>IDE Information</value>
+  </data>
+  <data name="Location:" xml:space="preserve">
+    <value>Location:</value>
+  </data>
+  <data name="Machine Portal System" xml:space="preserve">
+    <value>Machine Portal System</value>
+  </data>
+  <data name="Machine Portal Version:" xml:space="preserve">
+    <value>Machine Portal Version:</value>
+  </data>
+  <data name="Version:" xml:space="preserve">
+    <value>Version:</value>
   </data>
 </root>

@@ -120,6 +120,9 @@
   <data name="Back" xml:space="preserve">
     <value>Voltar</value>
   </data>
+  <data name="Create New Line" xml:space="preserve">
+    <value>Criar Nova Linha</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Apagar</value>
   </data>

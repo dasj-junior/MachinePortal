@@ -2,6 +2,19 @@
 @inject IViewLocalizer Localizer
 @model IEnumerable<MachinePortal.Models.Responsible>
 
+@* Check User Permissions *@
+@using Microsoft.AspNetCore.Identity
+@using MachinePortal.Areas.Identity.Data
+@using Microsoft.EntityFrameworkCore
+@inject UserManager<MachinePortalUser> UserManager
+@inject IdentityContext identityContext
+@{
+    var user = await UserManager.GetUserAsync(User);
+    List<string> permissions = new List<string>();
+    if (user != null) { permissions = ((from obj in identityContext.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == user.Id).ToList()).Select(p => p.Permission.PermissionName).ToList(); };
+    if (!permissions.Contains("PageResponsibles")) { Context.Response.Redirect("/Home/AccessDenied"); };
+}
+
 <script>
     function renderPartialDetails(ID) {
         $.ajax({
@@ -54,9 +67,12 @@
         </div>
     </div>
     <div class="card-block card-padding">
-        <p>
-            <button class="btn btn-primary btn-create" data-toggle="modal" data-target="#modalCreate">@Localizer["Create New Responsible"].Value</button>
-        </p>
+        @if (permissions.Contains("ResponsiblesCreate"))
+        {
+            <p>
+                <button class="btn btn-primary btn-create" data-toggle="modal" data-target="#modalCreate">@Localizer["Create New Responsible"].Value</button>
+            </p>
+        }
         <div class="table-responsive">
             <table class="table table-hover table-bordered table-vitesco">
                 <thead class="thead-vitesco">
@@ -91,8 +107,14 @@
                             <td>@Html.DisplayFor(modelItem => item.Email)</td>
                             <td class="text-center ws-nowrap">
                                 <button class="btn btn-success" data-toggle="modal" onclick="renderPartialDetails(@item.ID)" data-target="#modalDetails">@Localizer["Open"].Value</button>
-                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
-                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
+                                @if (permissions.Contains("ResponsiblesEdit"))
+                                {
+                                    <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
+                                }
+                                @if (permissions.Contains("ResponsiblesDelete"))
+                                {
+                                    <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
+                                }
                             </td>
                         </tr>
                     }

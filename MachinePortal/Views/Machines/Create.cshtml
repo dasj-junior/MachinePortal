@@ -1,11 +1,71 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using System.Web;
 @inject IViewLocalizer Localizer
 @model MachinePortal.Models.ViewModels.MachineFormViewModel
+
+@* Check User Permissions *@
+@using Microsoft.AspNetCore.Identity
+@using MachinePortal.Areas.Identity.Data
+@using Microsoft.EntityFrameworkCore
+@inject UserManager<MachinePortalUser> UserManager
+@inject IdentityContext identityContext
+@{
+    var user = await UserManager.GetUserAsync(User);
+    List<string> permissions = new List<string>();
+    if (user != null) { permissions = ((from obj in identityContext.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == user.Id).ToList()).Select(p => p.Permission.PermissionName).ToList(); };
+    if (!permissions.Contains("PageMachines")) { Context.Response.Redirect("/Home/AccessDenied"); };
+}
+
+<link rel="stylesheet" href="~/assets/calendar/mc-calendar.min.css" />
+<script src="~/assets/calendar/mc-calendar.min.js"></script>
 
 @{
     var LoggedUserName = ViewData["UserName"];
     var LoggedUserID = ViewData["UserID"];
 }
+
+@* Validation of path *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#documentFilePath").on("focusout", function () {
+            var type = $("#documentLocation option:selected").text();
+            var value = document.getElementById('documentFilePath').value;
+            if (type == 'Network File') {
+                if (value.substring(0, 2) != '\\\\' || !value.includes('.')) {
+                    $("#valDocument").html('Path must start with \\\\ and contains an extension (.pdf)');
+                }
+            }
+            else if (type == 'Web Link') {
+                if (!(value.substring(0, 7) == 'http://' || value.substring(0, 8) == 'https://' || value.substring(0, 4) == 'www.')) {
+                    $("#valDocument").html('Web link must start with http://// or https:///// or www');
+                }
+            }
+        });
+
+        $("#imageFilePath").on("focusout", function () {
+            var type = $("#imageLocation option:selected").text();
+            var value = document.getElementById('imageFilePath').value;
+            if (type == 'Network File') {
+                if (value.substring(0, 2) != '\\\\' || !value.includes('.')) {
+                    $("#valImage").html('Path must start with \\\\ and contains an extension (.pdf)');
+                }
+            }
+            else if (type == 'Web Link') {
+                if (!(value.substring(0, 7) == 'http://' || value.substring(0, 8) == 'https://' || value.substring(0, 4) == 'www.')) {
+                    $("#valImage").html('Web link must start with http://// or https:///// or www');
+                }
+            }
+        });
+
+        $("#documentFilePath").on("focusin", function () {
+            $("#valDocument").html('');
+        });
+
+        $("#imageFilePath").on("focusin", function () {
+            $("#valImage").html('');
+        });
+    });
+</script>
 
 @* Input with embebedd icon *@
 <style>
@@ -24,6 +84,62 @@
         min-width: 40px;
     }
 </style>
+
+@* Calendar for update date of last preventive maintenance *@
+<script type="text/javascript">
+$(document).ready(function () {
+    const LastPreMaiDatePicker = MCDatepicker.create({
+        el: '#LastPreMaiInput',
+        dateFormat: 'DD/MM/YYYY',
+        customWeekDays: ['@Html.Raw(Localizer["Sunday"].Value)', '@Html.Raw(Localizer["Monday"].Value)', '@Html.Raw(Localizer["Tuesday"].Value)', '@Html.Raw(Localizer["Wednesday"].Value)', '@Html.Raw(Localizer["Thursday"].Value)', '@Html.Raw(Localizer["Friday"].Value)', '@Html.Raw(Localizer["Saturday"].Value)'],
+        customMonths: [
+            '@Html.Raw(Localizer["January"].Value)',
+            '@Html.Raw(Localizer["February"].Value)',
+            '@Html.Raw(Localizer["March"].Value)',
+            '@Html.Raw(Localizer["April"].Value)',
+            '@Html.Raw(Localizer["May"].Value)',
+            '@Html.Raw(Localizer["June"].Value)',
+            '@Html.Raw(Localizer["July"].Value)',
+            '@Html.Raw(Localizer["August"].Value)',
+            '@Html.Raw(Localizer["September"].Value)',
+            '@Html.Raw(Localizer["October"].Value)',
+            '@Html.Raw(Localizer["November"].Value)',
+            '@Html.Raw(Localizer["December"].Value)'],
+        defaultDate: new Date('@DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss")'),
+        customClearBTN: "",
+        customCancelBTN: '@Localizer["CANCEL"].Value'
+    })
+
+    const ManufDatePicker = MCDatepicker.create({
+        el: '#LastPreMaiInput',
+        dateFormat: 'DD/MM/YYYY',
+        customWeekDays: ['@Html.Raw(Localizer["Sunday"].Value)', '@Html.Raw(Localizer["Monday"].Value)', '@Html.Raw(Localizer["Tuesday"].Value)', '@Html.Raw(Localizer["Wednesday"].Value)', '@Html.Raw(Localizer["Thursday"].Value)', '@Html.Raw(Localizer["Friday"].Value)', '@Html.Raw(Localizer["Saturday"].Value)'],
+        customMonths: [
+            '@Html.Raw(Localizer["January"].Value)',
+            '@Html.Raw(Localizer["February"].Value)',
+            '@Html.Raw(Localizer["March"].Value)',
+            '@Html.Raw(Localizer["April"].Value)',
+            '@Html.Raw(Localizer["May"].Value)',
+            '@Html.Raw(Localizer["June"].Value)',
+            '@Html.Raw(Localizer["July"].Value)',
+            '@Html.Raw(Localizer["August"].Value)',
+            '@Html.Raw(Localizer["September"].Value)',
+            '@Html.Raw(Localizer["October"].Value)',
+            '@Html.Raw(Localizer["November"].Value)',
+            '@Html.Raw(Localizer["December"].Value)'],
+        customClearBTN: "",
+        customCancelBTN: '@Localizer["CANCEL"].Value'
+    })
+
+    $("#LastPreMaiInpBtn").on("click", function () {
+        LastPreMaiDatePicker.open();
+    });
+
+    $("#ManufDateInpBtn").on("click", function () {
+        ManufDatePicker.open();
+    });
+});
+</script>
 
 @* Selection Filters *@
 <script>
@@ -131,172 +247,166 @@
 @* Send files through AJAX *@
 <script type="text/javascript">
 
-    function DeleteFile(Fileid, FileName) {
-        formdata.delete(FileName)
-        $("#" + Fileid).remove();
+function DeleteFile(Fileid, FileName) {
+    formdata.delete(FileName)
+    $("#" + Fileid).remove();
+    //chkatchtbl();
+}
+
+//Hide table head when there's no data
+//function chkatchtbl() {
+//    if ($('#tDocuments tr').length > 1) {
+//        $("#tDocuments").css("visibility", "visible");
+//    } else {
+//        $("#tDocuments").css("visibility", "hidden");
+//    }
+//    if ($('#tImages tr').length > 1) {
+//        $("#tImages").css("visibility", "visible");
+//    } else {
+//        $("#tImages").css("visibility", "hidden");
+//    }
+//    if ($('#tVideos tr').length > 1) {
+//        $("#tVideos").css("visibility", "visible");
+//    } else {
+//        $("#tVideos").css("visibility", "hidden");
+//    }
+//}
+
+$(document).ready(function () {
+
+    document.getElementById('openInputDocument').addEventListener('click', () => {
+        document.getElementById('iDocuments').click()
+    });
+
+    document.getElementById('openInputImage').addEventListener('click', () => {
+        document.getElementById('iImages').click()
+    });
+
+    document.getElementById('openInputVideo').addEventListener('click', () => {
+        document.getElementById('iVideos').click()
+    });
+
+    $("#iDocuments").on("change", function () {
+        var fileInput = document.getElementById('iDocuments');
+        for (i = 0; i < fileInput.files.length; i++) {
+            var sfilename = fileInput.files[i].name;
+            document.getElementById("documentFilePath").value = sfilename;
+        }
+    });
+
+    $("#iImages").on("change", function () {
+        var fileInput = document.getElementById('iImages');
+        for (i = 0; i < fileInput.files.length; i++) {
+            var sfilename = fileInput.files[i].name;
+            document.getElementById("imageFilePath").value = sfilename;
+        }
+    });
+
+    $("#iVideos").on("change", function () {
+        var fileInput = document.getElementById('iVideos');
+        for (i = 0; i < fileInput.files.length; i++) {
+            var sfilename = fileInput.files[i].name;
+            document.getElementById("videoFilePath").value = sfilename;
+        }
+    });
+
+    $("#insertDocument").on("click", function () {
+        var dLoc = document.getElementById('documentLocation');
+        var fileInput;
+        var sfilename;
+        if (dLoc.value == 'file') {
+            fileInput = document.getElementById('iDocuments');
+            sfilename = fileInput.files[0].name;
+            formdata.append("document", fileInput.files[0]);
+        } else {
+            fileInput = document.getElementById('documentFilePath');
+            sfilename = fileInput.value;
+        }
+        var sName = document.getElementById('documentName').value;
+        var sLocation = document.getElementById('documentLocation').value;
+        var iCategory = document.getElementById('documentCategory').value;
+        var sCategory = document.getElementById('documentCategory').options[document.getElementById('documentCategory').selectedIndex].text;
+        let srandomid = Math.random().toString(36).substring(7);
+        var doc = { Name: sName, Category: iCategory, ID: srandomid, Type: "Document", FileName: sfilename, Location: sLocation};
+        Mfiles.push(doc);
+        // Binding the file name
+        var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td class='text-center ws - nowrap'><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+            "\")'><span>Delete</span></a></td></tr>";
+        $("#tDocuments").append(markup);
         //chkatchtbl();
-    }
+        $('#iDocuments').val('');
+    });
 
-    //Hide table head when there's no data
-    //function chkatchtbl() {
-    //    if ($('#tDocuments tr').length > 1) {
-    //        $("#tDocuments").css("visibility", "visible");
-    //    } else {
-    //        $("#tDocuments").css("visibility", "hidden");
-    //    }
-    //    if ($('#tImages tr').length > 1) {
-    //        $("#tImages").css("visibility", "visible");
-    //    } else {
-    //        $("#tImages").css("visibility", "hidden");
-    //    }
-    //    if ($('#tVideos tr').length > 1) {
-    //        $("#tVideos").css("visibility", "visible");
-    //    } else {
-    //        $("#tVideos").css("visibility", "hidden");
-    //    }
-    //}
+    $("#insertImage").on("click", function () {
+        var iLoc = document.getElementById('imageLocation');
+        var fileInput;
+        var sfilename;
+        if (iLoc.value == 'file') {
+            fileInput = document.getElementById('iImages');
+            sfilename = fileInput.files[0].name;
+            formdata.append("image", fileInput.files[0]);
+        } else {
+            fileInput = document.getElementById('imageFilePath');
+            sfilename = fileInput.value;
+        }
+        var sName = document.getElementById('imageName').value;
+        var sLocation = document.getElementById('imageLocation').value;
+        var iCategory = document.getElementById('imageCategory').value;
+        var sCategory = document.getElementById('imageCategory').options[document.getElementById('imageCategory').selectedIndex].text;
+        let srandomid = Math.random().toString(36).substring(7);
+        var img = { Name: sName, Category: iCategory, ID: srandomid, Type: "Image", FileName: sfilename, Location: sLocation};
+        Mfiles.push(img);
+        // Binding the file name
+        var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td class='text-center ws - nowrap'><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+            "\")'><span>Delete</span></a></td></tr>";
+        $("#tImages").append(markup);
+        //chkatchtbl();
+        $('#iImages').val('');
+    });
 
-    $(document).ready(function () {
+    $("#insertVideo").on("click", function () {
+        var fileInput;
+        var sfilename;
+        fileInput = document.getElementById('iVideos');
+        sfilename = fileInput.files[0].name;
+        formdata.append("video", fileInput.files[0]);
+        var sName = document.getElementById('videoName').value;
+        var sLocation = 'file';
+        var iCategory = document.getElementById('videoCategory').value;
+        var sCategory = document.getElementById('videoCategory').options[document.getElementById('videoCategory').selectedIndex].text;
+        let srandomid = Math.random().toString(36).substring(7);
+        var vid = { Name: sName, Category: iCategory, ID: srandomid, Type: "Video", FileName: sfilename, Location: sLocation };
+        Mfiles.push(vid);
+        // Binding the file name
+        var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td class='text-center ws - nowrap'><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+            "\")'><span>Delete</span></a></td></tr>";
+        $("#tVideos").append(markup);
+        //chkatchtbl();
+        $('#iVideos').val('');
+    });
 
-        document.getElementById('openInputDocument').addEventListener('click', () => {
-            document.getElementById('iDocuments').click()
-        });
-
-        document.getElementById('openInputImage').addEventListener('click', () => {
-            document.getElementById('iImages').click()
-        });
-
-        document.getElementById('openInputVideo').addEventListener('click', () => {
-            document.getElementById('iVideos').click()
-        });
-
-        $("#iDocuments").on("change", function () {
-            var fileInput = document.getElementById('iDocuments');
-            for (i = 0; i < fileInput.files.length; i++) {
-                var sfilename = fileInput.files[i].name;
-                document.getElementById("documentFilePath").value = sfilename;
+    $("form").submit(function (event) {
+        var data = new FormData($('#form')[0]);
+        for (var pair of formdata.entries()) {
+            data.append(pair[0], pair[1]);
+        }
+        data.append('files', JSON.stringify(Mfiles));
+        $('.theme-loader').show();
+        $.ajax({
+            url: '@Url.Content("~/")' + "Machines/Create",
+            type: "POST",
+            processData: false,
+            contentType: false,
+            data: data,
+            success: function () {
+                window.location.href = "/Machines/Index";
+            },
+            error: function () {
+                $('.theme-loader').hide();
             }
-        });
-
-        $("#iImages").on("change", function () {
-            var fileInput = document.getElementById('iImages');
-            for (i = 0; i < fileInput.files.length; i++) {
-                var sfilename = fileInput.files[i].name;
-                document.getElementById("imageFilePath").value = sfilename;
-            }
-        });
-
-        $("#iVideos").on("change", function () {
-            var fileInput = document.getElementById('iVideos');
-            for (i = 0; i < fileInput.files.length; i++) {
-                var sfilename = fileInput.files[i].name;
-                document.getElementById("videoFilePath").value = sfilename;
-            }
-        });
-
-        $("#insertDocument").on("click", function () {
-            var dLoc = document.getElementById('documentLocation');
-            var fileInput;
-            var sfilename;
-            if (dLoc.value == 'file') {
-                fileInput = document.getElementById('iDocuments');
-                sfilename = fileInput.files[0].name;
-                formdata.append("document", fileInput.files[0]);
-            } else {
-                fileInput = document.getElementById('documentFilePath');
-                sfilename = fileInput.value;
-            }
-            var sName = document.getElementById('documentName').value;
-            var sLocation = document.getElementById('documentLocation').value;
-            var iCategory = document.getElementById('documentCategory').value;
-            var sCategory = document.getElementById('documentCategory').options[document.getElementById('documentCategory').selectedIndex].text;
-            let srandomid = Math.random().toString(36).substring(7);
-            var doc = { Name: sName, Category: iCategory, ID: srandomid, Type: "Document", FileName: sfilename, Location: sLocation};
-            Mfiles.push(doc);
-            // Binding the file name
-            var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td class='text-center ws - nowrap'><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
-                "\")'><span>Delete</span></a></td></tr>";
-            $("#tDocuments").append(markup);
-            //chkatchtbl();
-            $('#iDocuments').val('');
-        });
-
-        $("#insertImage").on("click", function () {
-            var iLoc = document.getElementById('imageLocation');
-            var fileInput;
-            var sfilename;
-            if (iLoc.value == 'file') {
-                fileInput = document.getElementById('iImages');
-                sfilename = fileInput.files[0].name;
-                formdata.append("image", fileInput.files[0]);
-            } else {
-                fileInput = document.getElementById('imageFilePath');
-                sfilename = fileInput.value;
-            }
-            var sName = document.getElementById('imageName').value;
-            var sLocation = document.getElementById('imageLocation').value;
-            var iCategory = document.getElementById('imageCategory').value;
-            var sCategory = document.getElementById('imageCategory').options[document.getElementById('imageCategory').selectedIndex].text;
-            let srandomid = Math.random().toString(36).substring(7);
-            var img = { Name: sName, Category: iCategory, ID: srandomid, Type: "Image", FileName: sfilename, Location: sLocation};
-            Mfiles.push(img);
-            // Binding the file name
-            var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td class='text-center ws - nowrap'><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
-                "\")'><span>Delete</span></a></td></tr>";
-            $("#tImages").append(markup);
-            //chkatchtbl();
-            $('#iImages').val('');
-        });
-
-        $("#insertVideo").on("click", function () {
-            var vLoc = document.getElementById('videoLocation');
-            var fileInput;
-            var sfilename;
-            if (vLoc.value == 'file') {
-                fileInput = document.getElementById('iVideos');
-                sfilename = fileInput.files[0].name;
-                formdata.append("video", fileInput.files[0]);
-            } else {
-                fileInput = document.getElementById('videoFilePath');
-                sfilename = fileInput.value;
-            }
-            var sName = document.getElementById('videoName').value;
-            var sLocation = document.getElementById('imageLocation').value;
-            var iCategory = document.getElementById('videoCategory').value;
-            var sCategory = document.getElementById('videoCategory').options[document.getElementById('videoCategory').selectedIndex].text;
-            let srandomid = Math.random().toString(36).substring(7);
-            var vid = { Name: sName, Category: iCategory, ID: srandomid, Type: "Video", FileName: sfilename, Location: sLocation };
-            Mfiles.push(vid);
-            // Binding the file name
-            var markup = "<tr id='" + srandomid + "'><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td class='text-center ws - nowrap'><a href='#' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
-                "\")'><span>Delete</span></a></td></tr>";
-            $("#tVideos").append(markup);
-            //chkatchtbl();
-            $('#iVideos').val('');
-        });
-
-        $("form").submit(function (event) {
-            var data = new FormData($('#form')[0]);
-            for (var pair of formdata.entries()) {
-                data.append(pair[0], pair[1]);
-            }
-            data.append('files', JSON.stringify(Mfiles));
-            $('.theme-loader').show();
-            $.ajax({
-                url: '@Url.Content("~/")' + "Machines/Create",
-                type: "POST",
-                processData: false,
-                contentType: false,
-                data: data,
-                success: function () {
-                    window.location.href = "/Machines/Index";
-                },
-                error: function () {
-                    $('.theme-loader').hide();
-                }
-            });
         });
     });
+});
 </script>
 
 @* Select all elements of "Select" on rigth side *@
@@ -372,40 +482,40 @@
 
 @* Hierarchies Control *@
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('#AreaID').prepend("<option value='-1'>Select</option>");
-        $('#AreaID option:contains(Select)').prop({ selected: true });
-        $('#SectorID').append("<option value='-1'>Select</option>");
-        $('#LineID').append("<option value='-1'>Select</option>");
+$(document).ready(function () {
+    $('#AreaID').prepend("<option value='-1'>Select</option>");
+    $('#AreaID option:contains(Select)').prop({ selected: true });
+    $('#SectorID').append("<option value='-1'>Select</option>");
+    $('#LineID').append("<option value='-1'>Select</option>");
 
-        $('#AreaID').on('change', function() {
-            var url = '@Url.Content("~/")' + "Machines/GetSector";
-            $.getJSON(url, { AreaID: $("#AreaID :selected").val() }, function (data) {
-                var items = '';
-                $('#SectorID').html(items);
-                $.each(data, function (i, sector) {
-                    items += "<option value='" + sector.value + "'>" + sector.text + "</option>";
-                });
-                $('#SectorID').append("<option value='-1'>Select</option>");
-                $('#SectorID').append(items);
-                $('#LineID').html("");
-                $('#LineID').append("<option value='-1'>Select</option>");
+    $('#AreaID').on('change', function() {
+        var url = '@Url.Content("~/")' + "Machines/GetSector";
+        $.getJSON(url, { AreaID: $("#AreaID :selected").val() }, function (data) {
+            var items = '';
+            $('#SectorID').html(items);
+            $.each(data, function (i, sector) {
+                items += "<option value='" + sector.value + "'>" + sector.text + "</option>";
             });
-        });
-
-        $('#SectorID').on('change', function() {
-            var url = '@Url.Content("~/")' + "Machines/GetLine";
-            $.getJSON(url, { SectorID: $("#SectorID :selected").val() }, function (data) {
-                var items = '';
-                $('#LineID').html(items);
-                $.each(data, function (i, line) {
-                    items += "<option value='" + line.value + "'>" + line.text + "</option>";
-                });
-                $('#LineID').append("<option value='-1'>Select</option>");
-                $('#LineID').append(items);
-            });
+            $('#SectorID').append("<option value='-1'>Select</option>");
+            $('#SectorID').append(items);
+            $('#LineID').html("");
+            $('#LineID').append("<option value='-1'>Select</option>");
         });
     });
+
+    $('#SectorID').on('change', function() {
+        var url = '@Url.Content("~/")' + "Machines/GetLine";
+        $.getJSON(url, { SectorID: $("#SectorID :selected").val() }, function (data) {
+            var items = '';
+            $('#LineID').html(items);
+            $.each(data, function (i, line) {
+                items += "<option value='" + line.value + "'>" + line.text + "</option>";
+            });
+            $('#LineID').append("<option value='-1'>Select</option>");
+            $('#LineID').append(items);
+        });
+    });
+});
 </script>
 
 <div class="row">
@@ -478,12 +588,24 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="Machine.StartDate" class="control-label"></label>
-                        <input type="datetime" asp-for="Machine.StartDate" placeholder="@DateTime.Now.ToString("dd/MM/yyyy")" class="form-control" />
+                        @*<input type="datetime" asp-for="Machine.StartDate" placeholder="@DateTime.Now.ToString("dd/MM/yyyy")" class="form-control" />*@
+                        <div id="ManufDateInputGroup" class="input-group">
+                            <input id="ManufDateInput" asp-for="Machine.StartDate" style="border-right:0px" type="text" class="text-center" value="@DateTime.Now.ToString("dd/MM/yyyy")" />
+                            <div class="input-group-append">
+                                <button id="ManufDateInpBtn" style="border-radius: 0px 3px 3px 0px; border: 1px solid black" class="btn bi-calendar" type="button"></button>
+                            </div>
+                        </div>
                         <span asp-validation-for="Machine.StartDate" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Machine.LastPreventiveMaintenance" class="control-label"></label>
-                        <input type="datetime" asp-for="Machine.LastPreventiveMaintenance" placeholder="@DateTime.Now.ToString("dd/MM/yyyy")" class="form-control" />
+                        @*<input type="datetime" asp-for="Machine.LastPreventiveMaintenance" placeholder="@DateTime.Now.ToString("dd/MM/yyyy")" class="form-control" />*@
+                        <div id="LastPreMaiInputGroup" class="input-group">
+                            <input id="LastPreMaiInput" asp-for="Machine.LastPreventiveMaintenance" style="border-right:0px" type="text" class="text-center" value="@DateTime.Now.ToString("dd/MM/yyyy")" />
+                            <div class="input-group-append">
+                                <button id="LastPreMaiInpBtn" style="border-radius: 0px 3px 3px 0px; border: 1px solid black" class="btn bi-calendar" type="button"></button>
+                            </div>
+                        </div>
                         <span asp-validation-for="Machine.LastPreventiveMaintenance" class="text-danger"></span>
                     </div>
                 </div>
@@ -740,7 +862,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">File:</label>
-                    <div class="input-group">
+                    <div style="margin-bottom:1px;" class="input-group">
                         <span id="DGroup" class="input-group-btn">
                             <button id="openInputDocument" class="btn btn-default" type="button">
                                 Open File
@@ -748,6 +870,7 @@
                         </span>
                         <input id="documentFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
                     </div>
+                    <span id="valDocument" class="text-danger"></span>
                 </div>
             </div>
             <div class="modal-footer">
@@ -785,7 +908,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">File:</label>
-                    <div class="input-group">
+                    <div style="margin-bottom:1px;" class="input-group">
                         <span id="IGroup" class="input-group-btn">
                             <button id="openInputImage" class="btn btn-default" type="button">
                                 Open File
@@ -793,6 +916,7 @@
                         </span>
                         <input id="imageFilePath" type="text" class="form-control" placeholder="No file chosen" readonly />
                     </div>
+                    <span id="valImage" class="text-danger"></span>
                 </div>
             </div>
             <div class="modal-footer">
@@ -818,15 +942,7 @@
                 <div class="form-group">
                     <label class="control-label">Category:</label>
                     <select id="videoCategory" class="form-control" asp-items="@(new SelectList(@ViewBag.ListCategories,"ID","Name"))"></select>
-                    @*<input id="videoCategory" class="form-control" />*@
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Type:</label>
-                    <select id="videoLocation" class="form-control">
-                        <option value="file">File</option>
-                        <option value="path">Network File</option>
-                        <option value="web">Web Link</option>
-                    </select>
+                    <input id="videoCategory" class="form-control" />
                 </div>
                 <div class="form-group">
                     <label class="control-label">File:</label>

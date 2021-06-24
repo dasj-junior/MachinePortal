@@ -55,6 +55,7 @@ namespace MachinePortal
                 .AddRazorPagesOptions(options =>
                 {
                     options.Conventions
+                        .AuthorizePage("/Home/AccessDenied")
                         .AddPageApplicationModelConvention("/Create",
                             model =>
                             {

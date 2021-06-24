@@ -368,10 +368,6 @@ public string confirmPageP3 = @""" style=""-webkit-text-size-adjust: none; text-
 
         public string ReturnUrl { get; set; }
 
-        [BindProperty]
-        public int SelectedDepartment { get; set; }
-        public SelectList SlDepartments { get; set; }
-
         public class InputModel
         {
             [Display(Name = "First Name")]
@@ -418,8 +414,6 @@ public string confirmPageP3 = @""" style=""-webkit-text-size-adjust: none; text-
 
         public void OnGet(string returnUrl = null)
         {
-            List<Department> AllDepts = _context.Department.ToList();
-            SlDepartments = new SelectList(AllDepts, "ID", "Name");
             ReturnUrl = returnUrl;
         }
 
@@ -428,7 +422,7 @@ public string confirmPageP3 = @""" style=""-webkit-text-size-adjust: none; text-
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var dpt = _context.Department.FirstOrDefault(d => d.ID == SelectedDepartment);
+                var dpt = _context.Department.FirstOrDefault(d => d.Name == "User");
                 var user = new MachinePortalUser { UserName = Input.UserName,
                                                     FirstName = Input.FirstName,
                                                     LastName = Input.LastName,

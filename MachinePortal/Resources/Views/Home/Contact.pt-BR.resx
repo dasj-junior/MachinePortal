@@ -117,19 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Address:" xml:space="preserve">
+    <value>Endereço:</value>
+  </data>
   <data name="Contact" xml:space="preserve">
     <value>Contato</value>
   </data>
-  <data name="Marketing:" xml:space="preserve">
-    <value>Marketing:</value>
+  <data name="Department:" xml:space="preserve">
+    <value>Departamento:</value>
+  </data>
+  <data name="Developer" xml:space="preserve">
+    <value>Desenvolvedor</value>
+  </data>
+  <data name="Engineering:" xml:space="preserve">
+    <value>Engenharia:</value>
   </data>
   <data name="Message" xml:space="preserve">
-    <value>Mensagem </value>
+    <value>Mensagem</value>
   </data>
-  <data name="One Microsoft Way" xml:space="preserve">
-    <value>One Microsoft Way</value>
+  <data name="Mobile:" xml:space="preserve">
+    <value>Celular:</value>
+  </data>
+  <data name="Phone:" xml:space="preserve">
+    <value>Telefone:</value>
   </data>
   <data name="Support:" xml:space="preserve">
     <value>Suporte:</value>
+  </data>
+  <data name="Zip Code:" xml:space="preserve">
+    <value>CEP:</value>
   </data>
 </root>

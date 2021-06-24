@@ -126,8 +126,17 @@
   <data name="Add Videos" xml:space="preserve">
     <value>Adicionar Vídeos </value>
   </data>
+  <data name="April" xml:space="preserve">
+    <value>Abril</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>Agosto</value>
+  </data>
   <data name="Back to List" xml:space="preserve">
     <value>Voltar a Lista</value>
+  </data>
+  <data name="CANCEL" xml:space="preserve">
+    <value>CANCELAR</value>
   </data>
   <data name="Category" xml:space="preserve">
     <value>Categoria</value>
@@ -138,6 +147,9 @@
   <data name="Create new machine" xml:space="preserve">
     <value>Criar Máquina</value>
   </data>
+  <data name="December" xml:space="preserve">
+    <value>Dezembro</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Deletar</value>
   </data>
@@ -147,11 +159,17 @@
   <data name="Documents" xml:space="preserve">
     <value>Documentos </value>
   </data>
+  <data name="February" xml:space="preserve">
+    <value>Fevereiro</value>
+  </data>
   <data name="File Name" xml:space="preserve">
     <value>Nome do Arquivo</value>
   </data>
   <data name="Filter" xml:space="preserve">
     <value>Filtro </value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Sexta</value>
   </data>
   <data name="General Data" xml:space="preserve">
     <value>Dados Geraiss</value>
@@ -162,11 +180,35 @@
   <data name="Images" xml:space="preserve">
     <value>Imagens </value>
   </data>
+  <data name="January" xml:space="preserve">
+    <value>Janeiro</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>Julho</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>Junho</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>Março</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>Maio</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Segunda</value>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
   </data>
   <data name="No file chosen" xml:space="preserve">
     <value>Nenhum arquivo selecionado</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>Novembro</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>Outubro</value>
   </data>
   <data name="Open Photo" xml:space="preserve">
     <value>Abrir Foto</value>
@@ -177,7 +219,25 @@
   <data name="Responsibles" xml:space="preserve">
     <value>Responsáveis</value>
   </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Sábado</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>Setembro</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Domingo</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Quinta</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Terça</value>
+  </data>
   <data name="Videos" xml:space="preserve">
     <value>Vídeos</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Quarta</value>
   </data>
 </root>

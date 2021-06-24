@@ -5,6 +5,10 @@
 @* Responsible Photo Button and Preview *@
 <script type="text/javascript">
     $(document).ready(function () {
+        //Mask
+        $('.phone_with_ddd').mask('@Localizer["PhoFormat"].Value');
+        $('.cell_with_ddd').mask('@Localizer["CelFormat"].Value');
+
         //Button triggers the photo file input
         document.getElementById('openPhoto').addEventListener('click', () => {
             document.getElementById('photo').click()
@@ -80,12 +84,12 @@
                     </div>
                     <div class="form-group">
                         <label asp-for="PhoneNumber" class="control-label"></label>
-                        <input asp-for="PhoneNumber" class="form-control" />
+                        <input asp-for="PhoneNumber" class="form-control phone_with_ddd" maxlength="14"/>
                         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Mobile" class="control-label"></label>
-                        <input asp-for="Mobile" class="form-control" />
+                        <input asp-for="Mobile" class="form-control cell_with_ddd" maxlength="14"/>
                         <span asp-validation-for="Mobile" class="text-danger"></span>
                     </div>
                     <div class="form-group">

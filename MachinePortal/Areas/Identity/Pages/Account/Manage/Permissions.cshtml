@@ -70,9 +70,12 @@
                 </div>
             </div>
             <div class="card-block card-padding">
-                <p>
-                    <button style="float:right;" class="btn btn-primary" type="button" data-toggle="modal" data-target="#modalCreate">@Localizer["Create New Permission"].Value</button>
-                </p>
+                @if (Model.permissions.Contains("PermissionsCreate"))
+                {
+                    <p>
+                        <button style="float:right;" class="btn btn-primary" type="button" data-toggle="modal" data-target="#modalCreate">@Localizer["Create New Permission"].Value</button>
+                    </p>
+                }
                 <br />
                 <div class="table-responsive">
                     <table class="table table-hover table-bordered table-vitesco">
@@ -89,8 +92,14 @@
                                 <tr>
                                     <td>@Html.DisplayFor(modelItem => item.PermissionName)</td>
                                     <td class="text-center ws-nowrap">
-                                        <button class="btn btn-primary" type="button" onclick="document.getElementById('editName').value = '@item.PermissionName'; document.getElementById('editID').value = '@item.ID'" data-toggle="modal" data-target="#modalEdit">@Localizer["Edit"].Value</button>
-                                        <button class="btn btn-danger" type="button" onclick="document.getElementById('removeName').value = '@item.PermissionName'; document.getElementById('removeID').value = '@item.ID'" data-toggle="modal" data-target="#modalRemove">@Localizer["Remove"].Value</button>
+                                        @if (Model.permissions.Contains("PermissionsEdit"))
+                                        {
+                                            <button class="btn btn-primary" type="button" onclick="document.getElementById('editName').value = '@item.PermissionName'; document.getElementById('editID').value = '@item.ID'" data-toggle="modal" data-target="#modalEdit">@Localizer["Edit"].Value</button>
+                                        }
+                                        @*@if (!Model.permissions.Contains("PermissionsDelete"))
+                                        {
+                                            <button class="btn btn-danger" type="button" onclick="document.getElementById('removeName').value = '@item.PermissionName'; document.getElementById('removeID').value = '@item.ID'" data-toggle="modal" data-target="#modalRemove">@Localizer["Remove"].Value</button>
+                                        }*@
                                     </td>
                                 </tr>
                             }

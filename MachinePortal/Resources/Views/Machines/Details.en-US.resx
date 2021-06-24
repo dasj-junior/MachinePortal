@@ -120,8 +120,17 @@
   <data name="Add New Comment" xml:space="preserve">
     <value>Add New Comment</value>
   </data>
+  <data name="April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>August</value>
+  </data>
   <data name="Back" xml:space="preserve">
     <value>Back</value>
+  </data>
+  <data name="CANCEL" xml:space="preserve">
+    <value>CANCEL</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Close</value>
@@ -131,6 +140,9 @@
   </data>
   <data name="Create New Password" xml:space="preserve">
     <value>Create New Password</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>December</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
@@ -147,6 +159,12 @@
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
+  <data name="February" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Friday</value>
+  </data>
   <data name="General Data" xml:space="preserve">
     <value>General Data</value>
   </data>
@@ -156,8 +174,32 @@
   <data name="Insert" xml:space="preserve">
     <value>Insert</value>
   </data>
+  <data name="January" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>June</value>
+  </data>
   <data name="Machine Photo" xml:space="preserve">
     <value>Machine Photo</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Monday</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>October</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Open</value>
@@ -171,13 +213,31 @@
   <data name="Responsibles" xml:space="preserve">
     <value>Responsibles</value>
   </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>September</value>
+  </data>
   <data name="Show All" xml:space="preserve">
     <value>Show All</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Thursday</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Tuesday</value>
   </data>
   <data name="User Name" xml:space="preserve">
     <value>User Name</value>
   </data>
   <data name="Videos" xml:space="preserve">
     <value>Videos</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Wednesday</value>
   </data>
 </root>

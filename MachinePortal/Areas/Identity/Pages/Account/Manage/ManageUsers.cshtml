@@ -45,7 +45,10 @@
                                         @Html.DisplayFor(modelItem => item.FullName)
                                     </td>
                                     <td class="text-center ws-nowrap">
-                                        <a class="btn btn-primary" asp-page="./ManagePermissions" asp-route-id="@item.ID">@Localizer["Edit"].Value</a>
+                                        @if (Model.permissions.Contains("ManageUsersEdit") && item.UserName != "admin")
+                                        {
+                                            <a class="btn btn-primary" asp-page="./ManagePermissions" asp-route-id="@item.ID">@Localizer["Edit"].Value</a>
+                                        }
                                     </td>
                                 </tr>
                             }

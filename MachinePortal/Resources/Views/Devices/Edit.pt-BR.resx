@@ -132,4 +132,7 @@
   <data name="Photo" xml:space="preserve">
     <value>Foto </value>
   </data>
+  <data name="US$" xml:space="preserve">
+    <value>R$</value>
+  </data>
 </root>

@@ -117,40 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancelar</value>
+  <data name="ACCESS DENIED!" xml:space="preserve">
+    <value>ACCESS DENIED!</value>
   </data>
-  <data name="Close" xml:space="preserve">
-    <value>Fechar</value>
+  <data name="click" xml:space="preserve">
+    <value>click</value>
   </data>
-  <data name="Create" xml:space="preserve">
-    <value>Criar</value>
+  <data name="here" xml:space="preserve">
+    <value>here</value>
   </data>
-  <data name="Create New Permission" xml:space="preserve">
-    <value>Criar Nova Permissão</value>
+  <data name="Please check your access rights" xml:space="preserve">
+    <value>Please check your access rights</value>
   </data>
-  <data name="Create Permission" xml:space="preserve">
-    <value>Criar Permissão</value>
+  <data name="to return to the home page." xml:space="preserve">
+    <value>to return to the home page.</value>
   </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Editar </value>
-  </data>
-  <data name="Edit Permission" xml:space="preserve">
-    <value>Editar Permissão</value>
-  </data>
-  <data name="Options" xml:space="preserve">
-    <value>Opções</value>
-  </data>
-  <data name="Permissions" xml:space="preserve">
-    <value>Permissões</value>
-  </data>
-  <data name="Remove" xml:space="preserve">
-    <value>Apagar</value>
-  </data>
-  <data name="Remove Permission" xml:space="preserve">
-    <value>Apagar Permissão</value>
-  </data>
-  <data name="Update" xml:space="preserve">
-    <value>Atualizar</value>
+  <data name="You don't have access rights to this page, please contact your system administrator or return to home page." xml:space="preserve">
+    <value>You don't have access rights to this page, please contact your system administrator or return to home page.</value>
   </data>
 </root>

@@ -5,12 +5,16 @@ using MachinePortal.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MachinePortal.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace MachinePortal.Areas.Identity.Pages.Account.Manage
 {
     public class DepartmentsModel : PageModel
     {
         public readonly IdentityContext _context;
+        private readonly UserManager<MachinePortalUser> _userManager;
+        public List<string> permissions = new List<string>();
 
         [BindProperty]
         public List<Department> departments { get; set; }
@@ -18,14 +22,23 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
         [BindProperty]
         public Department department { get; set; }
 
-        public DepartmentsModel(IdentityContext context)
+        public DepartmentsModel(IdentityContext context, UserManager<MachinePortalUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        public void OnGet()
+        public async Task<IActionResult> OnGet()
         {
+            //Verify Permissions
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null) { permissions = ((from obj in _context.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == user.Id).ToList()).Select(p => p.Permission.PermissionName).ToList(); };
+            if (!permissions.Contains("PageDepartments")) 
+            { 
+               return RedirectToPage(@"./../AccessDenied"); 
+            };
             departments = _context.Department.ToList();
+            return Page();
         }
 
         [HttpPost]
