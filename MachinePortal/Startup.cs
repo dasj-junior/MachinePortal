@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc.Razor;
 using MachinePortal.Areas.Identity.Services;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Pomelo.EntityFrameworkCore.MySql.Internal;
 
 namespace MachinePortal
 {
@@ -73,8 +75,13 @@ namespace MachinePortal
                     .AddSupportedUICultures(supportedCultures);
             });
 
-            services.AddDbContext<MachinePortalContext>(options =>
-                    options.UseMySql(Configuration.GetConnectionString("MachinePortalContext"), builder => builder.MigrationsAssembly("MachinePortal")).EnableSensitiveDataLogging());
+            services.AddDbContext<MachinePortalContext>(
+                options => options
+                
+                .UseMySql(
+                        Configuration.GetConnectionString("MachinePortalContext"),
+                        builder => builder.MigrationsAssembly("MachinePortal"))
+                .EnableSensitiveDataLogging());
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -89,7 +96,7 @@ namespace MachinePortal
                 options.Password.RequireLowercase = true;
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireUppercase = true;
-                options.Password.RequiredLength = 9;
+                options.Password.RequiredLength = 8;
 
                 // Lockout settings.
                 options.Lockout.MaxFailedAccessAttempts = 999;

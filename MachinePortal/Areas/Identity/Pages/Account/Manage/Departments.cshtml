@@ -80,11 +80,11 @@
                                 <tr>
                                     <td>@Html.DisplayFor(modelItem => item.Name)</td>
                                     <td class="text-center ws-nowrap">
-                                        @if (Model.permissions.Contains("DepartmentsEdit") && item.Name != "Administration" && item.Name != "User") 
+                                        @if (Model.permissions.Contains("DepartmentsEdit") && item.Name != "Administration" && item.Name != "DefaultUser") 
                                         {
                                             <button class="btn btn-primary" type="button" onclick="document.getElementById('editName').value = '@item.Name'; document.getElementById('editID').value = '@item.ID'" data-toggle="modal" data-target="#modalEdit">@Localizer["Edit"].Value</button>
                                         }
-                                        @if (Model.permissions.Contains("DepartmentsDelete") && item.Name != "Administration" && item.Name != "User")
+                                        @if (Model.permissions.Contains("DepartmentsDelete") && item.Name != "Administration" && item.Name != "DefaultUser")
                                         {
                                             <button class="btn btn-danger" type="button" onclick="document.getElementById('removeName').value = '@item.Name'; document.getElementById('removeID').value = '@item.ID'" data-toggle="modal" data-target="#modalRemove">@Localizer["Remove"].Value</button>
                                         }

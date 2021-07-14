@@ -121,7 +121,7 @@ namespace MachinePortal.Services
                                         .Include(Mcom => Mcom.MachineComments)
                                         .ThenInclude(com => com.User)
                                         .Include(Mpas => Mpas.Passwords)
-                                        //.ThenInclude(Mpas => Mpas.Department)
+                                        .ThenInclude(Mpas => Mpas.Department)
                                         .Include(Mdev => Mdev.MachineDevices)
                                         .ThenInclude(dev => dev.Device)
                                         .Include(Mres => Mres.MachineResponsibles)

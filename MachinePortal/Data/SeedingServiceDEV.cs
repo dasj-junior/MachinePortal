@@ -67,7 +67,7 @@ namespace MachinePortal.Services
             //Category
             Machine machine01 = new Machine { ID = 1, AreaID = 1, SectorID = 1, LineID = 1,
                                               Name = "Leakage Test", Description = "ECU Line Leakage Test Locally Developed in 2010",
-                                              AssetNumber = 123123, MES_Name = "523LKT11", CostCenter = 60427,
+                                              AssetNumber = "123123", MES_Name = "523LKT11", CostCenter = "60427",
                                               SAP_Name = "523LKT", WorkCenter = "523", ServerPath = @"\\sltm105a\dide2781\MachinePortal\ES\ECU\P110_EST",
                                               LastPreventiveMaintenance = DateTime.Now, StartDate = DateTime.Now};
 

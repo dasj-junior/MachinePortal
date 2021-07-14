@@ -24,7 +24,7 @@ namespace MachinePortal.Models
         public string ImagePath { get; set; }
         
         [Display(Name = "Asset Number")]
-        public int AssetNumber { get; set; }
+        public string AssetNumber { get; set; }
         
         [Display(Name = "MES Name")]
         public string MES_Name { get; set; }
@@ -36,7 +36,7 @@ namespace MachinePortal.Models
         public string WorkCenter { get; set; }
         
         [Display(Name = "Cost Center")]
-        public int CostCenter { get; set; }
+        public string CostCenter { get; set; }
         
         [Display(Name = "Server Path")]
         public string ServerPath { get; set; }

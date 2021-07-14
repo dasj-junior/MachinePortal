@@ -15,6 +15,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace MachinePortal.Areas.Identity.Pages.Account
 {
@@ -455,21 +456,40 @@ public string confirmPageP3 = @""" style=""-webkit-text-size-adjust: none; text-
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+                    MachinePortalUser defaultUser = _context.Users.Include(up => up.UserPermissions).ThenInclude(p => p.Permission).FirstOrDefault(u => u.UserName == "user");
 
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Page(
-                        "/Account/ConfirmEmail",
-                        pageHandler: null,
-                        values: new { userId = user.Id, code },
-                        protocol: Request.Scheme);
+                    foreach (Permission p in defaultUser.UserPermissions.Select(x => x.Permission).ToList())
+                    {
+                        UserPermission UP = new UserPermission { UserID = user.Id, Permission = p, PermissionID = p.ID, MachinePortalUser = user };
+                        await _context.UserPermission.AddAsync(UP);
+                    }
+                    await _context.SaveChangesAsync();
 
-                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    MachinePortalUser newUser = _context.Users.Include(up => up.UserPermissions).ThenInclude(p => p.Permission).FirstOrDefault(u => u.Id == user.Id);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Machine Portal - Email Confirmation", confirmPageP1 + HtmlEncoder.Default.Encode(callbackUrl) + confirmPageP2 + HtmlEncoder.Default.Encode(callbackUrl) + confirmPageP3);
+                    try
+                    {
+                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                        var callbackUrl = Url.Page(
+                            "/Account/ConfirmEmail",
+                            pageHandler: null,
+                            values: new { userId = user.Id, code },
+                            protocol: Request.Scheme);
 
-                    //await _signInManager.SignInAsync(user, isPersistent: false);
-                    returnUrl = "/Identity/Account/WaitingConfirmation";
+                        //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                        //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                        await _emailSender.SendEmailAsync(Input.Email, "Machine Portal - Email Confirmation", confirmPageP1 + HtmlEncoder.Default.Encode(callbackUrl) + confirmPageP2 + HtmlEncoder.Default.Encode(callbackUrl) + confirmPageP3);
+
+                        //await _signInManager.SignInAsync(user, isPersistent: false);
+                        returnUrl = "/Identity/Account/WaitingConfirmation";
+                    }
+                    catch(Exception e)
+                    {
+                        ModelState.AddModelError(string.Empty, e.Message);
+                        returnUrl = "/";
+                    }
+                    
                     return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)

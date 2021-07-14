@@ -172,6 +172,8 @@ namespace MachinePortal.Migrations
                     b.Property<string>("Brand")
                         .HasMaxLength(100);
 
+                    b.Property<double>("Currency");
+
                     b.Property<string>("Description")
                         .HasMaxLength(200);
 
@@ -249,9 +251,9 @@ namespace MachinePortal.Migrations
 
                     b.Property<int>("AreaID");
 
-                    b.Property<int>("AssetNumber");
+                    b.Property<string>("AssetNumber");
 
-                    b.Property<int>("CostCenter");
+                    b.Property<string>("CostCenter");
 
                     b.Property<string>("Description")
                         .HasMaxLength(200);
@@ -440,8 +442,6 @@ namespace MachinePortal.Migrations
 
                     b.Property<int>("DepartmentID");
 
-                    b.Property<string>("DepartmentName");
-
                     b.Property<string>("EquipmentDescription");
 
                     b.Property<string>("EquipmentName");
@@ -450,13 +450,13 @@ namespace MachinePortal.Migrations
 
                     b.Property<int>("MachineID");
 
-                    b.Property<string>("MachineName");
-
                     b.Property<string>("Pass");
 
                     b.Property<string>("User");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("DepartmentID");
 
                     b.HasIndex("MachineID");
 
@@ -765,7 +765,12 @@ namespace MachinePortal.Migrations
 
             modelBuilder.Entity("MachinePortal.Models.Password", b =>
                 {
-                    b.HasOne("MachinePortal.Models.Machine")
+                    b.HasOne("MachinePortal.Areas.Identity.Data.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("MachinePortal.Models.Machine", "Machine")
                         .WithMany("Passwords")
                         .HasForeignKey("MachineID")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -774,7 +779,7 @@ namespace MachinePortal.Migrations
             modelBuilder.Entity("MachinePortal.Models.Responsible", b =>
                 {
                     b.HasOne("MachinePortal.Areas.Identity.Data.Department", "Department")
-                        .WithMany()
+                        .WithMany("Responsibles")
                         .HasForeignKey("DepartmentID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

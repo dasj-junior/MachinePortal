@@ -27,8 +27,8 @@ namespace MachinePortal.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    Name = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(maxLength: 256, nullable: true),
+                    Name = table.Column<string>(maxLength: 200, nullable: true),
+                    NormalizedName = table.Column<string>(maxLength: 200, nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -73,6 +73,7 @@ namespace MachinePortal.Migrations
                     Model = table.Column<string>(maxLength: 100, nullable: true),
                     PartNumber = table.Column<string>(maxLength: 100, nullable: true),
                     Description = table.Column<string>(maxLength: 200, nullable: true),
+                    Currency = table.Column<double>(nullable: false),
                     Price = table.Column<double>(nullable: false),
                     Supplier = table.Column<string>(maxLength: 100, nullable: true),
                     StockLocation = table.Column<string>(maxLength: 100, nullable: true),
@@ -143,10 +144,10 @@ namespace MachinePortal.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    UserName = table.Column<string>(maxLength: 200, nullable: true),
+                    NormalizedUserName = table.Column<string>(maxLength: 200, nullable: true),
+                    Email = table.Column<string>(maxLength: 200, nullable: true),
+                    NormalizedEmail = table.Column<string>(maxLength: 200, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
                     PasswordHash = table.Column<string>(nullable: true),
                     SecurityStamp = table.Column<string>(nullable: true),
@@ -199,7 +200,7 @@ namespace MachinePortal.Migrations
                         column: x => x.DepartmentID,
                         principalTable: "Department",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -221,7 +222,7 @@ namespace MachinePortal.Migrations
                         column: x => x.DeviceID,
                         principalTable: "Device",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -240,7 +241,7 @@ namespace MachinePortal.Migrations
                         column: x => x.defaultPermissionID,
                         principalTable: "Permission",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -365,7 +366,7 @@ namespace MachinePortal.Migrations
                         column: x => x.MachinePortalUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_UserPermission_Permission_PermissionID",
                         column: x => x.PermissionID,
@@ -383,11 +384,11 @@ namespace MachinePortal.Migrations
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     Description = table.Column<string>(maxLength: 200, nullable: true),
                     ImagePath = table.Column<string>(nullable: true),
-                    AssetNumber = table.Column<int>(nullable: false),
+                    AssetNumber = table.Column<string>(nullable: true),
                     MES_Name = table.Column<string>(nullable: true),
                     SAP_Name = table.Column<string>(nullable: true),
                     WorkCenter = table.Column<string>(nullable: true),
-                    CostCenter = table.Column<int>(nullable: false),
+                    CostCenter = table.Column<string>(nullable: true),
                     ServerPath = table.Column<string>(nullable: true),
                     LastPreventiveMaintenance = table.Column<DateTime>(nullable: false),
                     StartDate = table.Column<DateTime>(nullable: false),
@@ -403,19 +404,19 @@ namespace MachinePortal.Migrations
                         column: x => x.AreaID,
                         principalTable: "Area",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Machine_Line_LineID",
                         column: x => x.LineID,
                         principalTable: "Line",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Machine_Sector_SectorID",
                         column: x => x.SectorID,
                         principalTable: "Sector",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -443,7 +444,7 @@ namespace MachinePortal.Migrations
                         column: x => x.UserID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -493,13 +494,13 @@ namespace MachinePortal.Migrations
                         column: x => x.CategoryID,
                         principalTable: "Category",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_MachineDocument_Machine_MachineID",
                         column: x => x.MachineID,
                         principalTable: "Machine",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -525,13 +526,13 @@ namespace MachinePortal.Migrations
                         column: x => x.CategoryID,
                         principalTable: "Category",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_MachineImage_Machine_MachineID",
                         column: x => x.MachineID,
                         principalTable: "Machine",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -549,7 +550,7 @@ namespace MachinePortal.Migrations
                         column: x => x.MachineID,
                         principalTable: "Machine",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_MachineResponsible_Responsible_ResponsibleID",
                         column: x => x.ResponsibleID,
@@ -581,13 +582,13 @@ namespace MachinePortal.Migrations
                         column: x => x.CategoryID,
                         principalTable: "Category",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_MachineVideo_Machine_MachineID",
                         column: x => x.MachineID,
                         principalTable: "Machine",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -602,13 +603,17 @@ namespace MachinePortal.Migrations
                     Pass = table.Column<string>(nullable: true),
                     Level = table.Column<string>(nullable: true),
                     DepartmentID = table.Column<int>(nullable: false),
-                    DepartmentName = table.Column<string>(nullable: true),
-                    MachineID = table.Column<int>(nullable: false),
-                    MachineName = table.Column<string>(nullable: true)
+                    MachineID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Password", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Password_Department_DepartmentID",
+                        column: x => x.DepartmentID,
+                        principalTable: "Department",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Password_Machine_MachineID",
                         column: x => x.MachineID,
@@ -738,6 +743,11 @@ namespace MachinePortal.Migrations
                 name: "IX_MachineVideo_MachineID",
                 table: "MachineVideo",
                 column: "MachineID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Password_DepartmentID",
+                table: "Password",
+                column: "DepartmentID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Password_MachineID",

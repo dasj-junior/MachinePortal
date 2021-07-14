@@ -25,12 +25,12 @@
             if (typeof (FileReader) != "undefined") {
                 var dvPreview = $("#divImageMediaPreview");
                 dvPreview.html("");
-                $(this)[0].files.each(function () {
+                $($(this)[0].files).each(function () {
                     var file = $(this);
                     var reader = new FileReader();
                     reader.onload = function (e) {
                         var img = $("<img />");
-                        img.attr("style", "height:200px; margin: 10px;");
+                        img.attr("style", "height:200px; padding: 10px;");
                         img.attr("src", e.target.result);
                         img.attr("class", "img-thumbnail");
                         dvPreview.append(img);
@@ -55,8 +55,8 @@
             <div class="modal-body">
                 <div style="padding:10px;" class="form-horizontal">
                     <div class="form-group">
-                        <label class="control-label">@Localizer["Photo"].Value</label>
                         <div id="divImageMediaPreview"></div>
+                        <label class="control-label">@Localizer["Photo"].Value</label>
                         <div class="input-group">
                             <input id="photoFilePath" type="text" class="form-control" placeholder="@Localizer["No file chosen"].Value" readonly />
                             <span class="input-group-append input-group-button">
@@ -65,7 +65,7 @@
                                 </button>
                             </span>
                         </div>
-                        <input type="file" id="photo" name="photo" accept="image/*" style="display:none" />
+                        <input type="file" id="photo" name="image" accept="image/*" style="display:none" />
                     </div>
                     <div class="form-group">
                         <label asp-for="FirstName" class="control-label"></label>

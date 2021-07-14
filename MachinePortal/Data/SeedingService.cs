@@ -88,9 +88,9 @@ namespace MachinePortal.Services
             Permission perm41 = new Permission { ID = 41, PermissionName = "ResponsiblesEdit" };
             Permission perm42 = new Permission { ID = 42, PermissionName = "ResponsiblesDelete" };
 
-            Permission perm43 = new Permission { ID = 43, PermissionName = "ResponsiblesCreate" };
-            Permission perm44 = new Permission { ID = 44, PermissionName = "ResponsiblesEdit" };
-            Permission perm45 = new Permission { ID = 45, PermissionName = "ResponsiblesDelete" };
+            Permission perm43 = new Permission { ID = 43, PermissionName = "HomeSearchByMachineID" };
+            Permission perm44 = new Permission { ID = 44, PermissionName = "HomeSearchByQRCode" };
+            Permission perm45 = new Permission { ID = 45, PermissionName = "HomeSearchByHierarchies" };
 
             //User
             MachinePortalUser user01 = new MachinePortalUser
@@ -100,7 +100,7 @@ namespace MachinePortal.Services
                 LastName = "Administrator",
                 UserName = "admin",
                 NormalizedUserName = "ADMIN",
-                Email = "xxx@xxx.com.br",
+                Email = "administrator@machineportal.com",
                 EmailConfirmed = true,
                 TwoFactorEnabled = false
             };
@@ -113,7 +113,7 @@ namespace MachinePortal.Services
                 LastName = "User",
                 UserName = "user",
                 NormalizedUserName = "USER",
-                Email = "xxx@xxx.com.br",
+                Email = "user@machineportal.com",
                 EmailConfirmed = true,
                 TwoFactorEnabled = false
             };
@@ -126,8 +126,11 @@ namespace MachinePortal.Services
                                           perm31, perm32, perm33, perm34, perm35, perm36, perm37, perm38, perm39, perm40,
                                           perm41, perm42, perm43, perm44, perm45);
 
-            var result = _userManager.CreateAsync(user01, "VitescoAdmin1*").GetAwaiter().GetResult();
-            user01 = _Icontext.Users.FirstOrDefault();
+            var result01 = _userManager.CreateAsync(user01, "MPAdmin1*").GetAwaiter().GetResult();
+            var result02 = _userManager.CreateAsync(user02, "MPUser1*").GetAwaiter().GetResult();
+
+            user01 = _Icontext.Users.FirstOrDefault(u => u.UserName == "admin");
+            user02 = _Icontext.Users.FirstOrDefault(u => u.UserName == "user");
 
             //User Permissions User 01
             UserPermission up01 = new UserPermission { MachinePortalUser = user01, Permission = perm01, PermissionID = perm01.ID, UserID = user01.Id };

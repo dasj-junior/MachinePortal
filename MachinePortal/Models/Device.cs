@@ -31,7 +31,10 @@ namespace MachinePortal.Models
         [StringLength(200, MinimumLength = 3)]
         [Display(Name = "Description")]
         public string Description { get; set; }
-        
+
+        [Display(Name = "Currency")]
+        public double Currency { get; set; }
+
         [DataType(DataType.Currency)]
         [Display(Name = "Price")]
         public double Price { get; set; }

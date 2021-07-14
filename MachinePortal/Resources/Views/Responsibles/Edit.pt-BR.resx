@@ -117,14 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="(000) 000-000-0000" xml:space="preserve">
-    <value>(00) 0000-0000</value>
-  </data>
-  <data name="C(000) 000-000-0000" xml:space="preserve">
-    <value>(00) 00000-0000</value>
-  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancelar</value>
+  </data>
+  <data name="CelFormat" xml:space="preserve">
+    <value>(00) 00000-0000</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Fechar</value>
@@ -143,5 +140,8 @@
   </data>
   <data name="Open Photo" xml:space="preserve">
     <value>Abrir Foto</value>
+  </data>
+  <data name="PhoFormat" xml:space="preserve">
+    <value>(00) 0000-0000</value>
   </data>
 </root>

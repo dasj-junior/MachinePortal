@@ -1071,6 +1071,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePassword(Password Password)
         {
+            Password.Department = null;
             await _passwordService.InsertAsync(Password);
             return RedirectToAction("Details/" + Password.MachineID, "Machines");
         }
@@ -1079,6 +1080,7 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPassword(Password Password)
         {
+            Password.Department = null;
             await _passwordService.UpdateAsync(Password);
             return RedirectToAction("Details/" +  Password.MachineID, "Machines");
         }

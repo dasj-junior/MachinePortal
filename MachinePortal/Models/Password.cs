@@ -27,12 +27,12 @@ namespace MachinePortal.Models
         [Display(Name = "Department ID")]
         public int DepartmentID { get; set; }
         [Display(Name = "Department")]
-        public string DepartmentName { get; set; }
+        public Department Department { get; set; }
 
         [Display(Name = "Machine ID")]
         public int MachineID { get; set; }
         [Display(Name = "Machine")]
-        public string MachineName { get; set; }
+        public Machine Machine { get; set; }
 
         public Password()
         {
@@ -46,8 +46,6 @@ namespace MachinePortal.Models
             User = user;
             Pass = pass;
             Level = level;
-            DepartmentID = departmentID;
-            MachineID = machineID;
         }
     }
 }
