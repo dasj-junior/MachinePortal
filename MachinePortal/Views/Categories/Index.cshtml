@@ -14,6 +14,20 @@
     if (!permissions.Contains("PageCategories")) { Context.Response.Redirect("/Home/AccessDenied"); };
 }
 
+@{
+    string notMessage = (TempData["notificationMessage"] != null) ? TempData["notificationMessage"].ToString() : "";
+    string notIcon = (TempData["notificationIcon"] != null) ? TempData["notificationIcon"].ToString() : "";
+    string notType = (TempData["notificationType"] != null) ? TempData["notificationType"].ToString() : "";
+}
+
+<script>
+    $(document).ready(function () {
+        if ('@notMessage' != '') {
+            notify('', '@notMessage', 'top', 'right', '@notIcon', '@notType', 'fadeInRight', 'fadeInRight');
+        };
+    });
+</script>
+
 <script>
     function renderPartialEdit(ID) {
         $.ajax({

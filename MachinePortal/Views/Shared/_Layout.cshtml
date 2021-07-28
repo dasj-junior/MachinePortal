@@ -39,7 +39,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1, minimal-ui">
     <title>MachinePortal</title>
     <!-- Style.css -->
     <link rel="stylesheet" type="text/css" href="~/assets/css/style.css">
@@ -116,14 +116,14 @@
                             </div>
                             <div class="col-8" style="text-align:center">
                                 <div class="d-inline-block" style="margin-top:18px; margin-top:-5px;">
-                                    <h1 style="font-family:'Beast Machines'; font-size:2rem">Machine Portal</h1>
+                                    <h1 style="font-family:'Beast Machines'; font-size:1.8rem">Machine Portal</h1>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div style="width:218px" class="d-inline nav-right">
                                     <div style="position:relative; padding:1.25rem">
-                                        <img class="d-none d-sm-none d-md-none d-lg-inline d-xl-inline" src="~/assets/images/vitesco.svg" style="width:116px; overflow:hidden; margin-top:-23px;" />
-                                        <div class="d-none d-sm-none d-md-none d-lg-inline d-xl-inline">
+                                        <img id="logo" class="d-none d-sm-none d-md-inline d-lg-inline d-xl-inline" src="~/assets/images/vitesco.svg" style="width:116px; overflow:hidden; margin-top:-23px;" />
+                                        <div class="d-none d-sm-none d-md-inline d-lg-inline d-xl-inline">
                                             @await Html.PartialAsync("_SelectLanguagePartial")
                                         </div>
                                     </div>
@@ -157,6 +157,7 @@
                                             <li class="more-details">
                                                 <a asp-area="Identity" asp-page="/Account/Manage/Index"><i class="ti-user"></i>@Localizer["Profile"].Value</a>
                                                 <a id="change-password" asp-area="Identity" asp-page="/Account/Manage/ChangePassword"><i class="ti-key"></i>@Localizer["Password"].Value</a>
+                                                <a asp-area="Identity" asp-page="/Account/Manage/DeletePersonalData"><i class="bi-x"></i>@Localizer["Delete Account"].Value</a>
                                                 <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm">
                                                     <button id="BtnLogoutSubmit" type="submit" style="display:none"></button>
                                                     <a id="aLogoutSubmit" onclick="LogoutSubmit()" href=""><i class="ti-layout-sidebar-left"></i>@Localizer["Logout"].Value</a>
@@ -407,6 +408,17 @@
         }
         else {
             nav.removeClass('active');
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        if (screen.width > 720 && screen.width < 960) {
+            document.getElementById('logo').style.opacity = 0;
+        }
+        else {
+            document.getElementById('logo').style.opacity = 100;
         }
     });
 </script>

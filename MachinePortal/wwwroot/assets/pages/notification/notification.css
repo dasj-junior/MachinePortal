@@ -209,7 +209,7 @@
 @media (min-width: 1200px) {
     .rt-container {
         float: right;
-        width: 1170px;
+        width: 30%;
     }
 
     .col-rt-1 {

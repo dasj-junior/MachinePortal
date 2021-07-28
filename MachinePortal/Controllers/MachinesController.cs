@@ -108,7 +108,7 @@ namespace MachinePortal.Controllers
         [HttpPost]
         [DisableRequestSizeLimit]
         [ValidateAntiForgeryToken]
-        public async Task<String> Create(MachineFormViewModel machineFVM, IFormFile photo)
+        public async Task<IActionResult> Create(MachineFormViewModel machineFVM, IFormFile photo)
         {
             Permissions();
             List<IFormFile> documents = new List<IFormFile>();
@@ -121,8 +121,12 @@ namespace MachinePortal.Controllers
                 if (file.Name == "video") { videos.Add(file); }
             }
 
-            List<MachineFile> MFiles = JsonConvert.DeserializeObject<List<MachineFile>>(Request.Form["files"]);
-
+            List<MachineFile> MFiles = new List<MachineFile>();
+            if (Request.Form["files"].Count>0)
+            {
+                MFiles = JsonConvert.DeserializeObject<List<MachineFile>>(Request.Form["files"]);
+            }
+            
             machineFVM.Machine.Area = await _areaService.FindByIDAsync(machineFVM.Machine.AreaID);
             machineFVM.Machine.Sector = await _sectorService.FindByIDAsync(machineFVM.Machine.SectorID);
             machineFVM.Machine.Line = await _lineService.FindByIDAsync(machineFVM.Machine.LineID);
@@ -134,7 +138,7 @@ namespace MachinePortal.Controllers
 
                 if (photo == null || photo.Length == 0)
                 {
-                    return ("Error: Invalid path - Machine Photo");
+                    //return ("Error: Invalid path - Machine Photo");
                 }
 
                 string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -157,7 +161,7 @@ namespace MachinePortal.Controllers
 
                 if (document == null || document.Length == 0)
                 {
-                    return ("Error: Invalid path - Machine Document");
+                    //return ("Error: Invalid path - Machine Document");
                 }
 
                 string fileName = document.FileName.Substring(0, document.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
@@ -197,7 +201,7 @@ namespace MachinePortal.Controllers
 
                 if (image == null || image.Length == 0)
                 {
-                    return ("Error: Invalid path - Machine Images");
+                    //return ("Error: Invalid path - Machine Images");
                 }
 
                 string fileName = image.FileName.Substring(0, image.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
@@ -234,7 +238,7 @@ namespace MachinePortal.Controllers
 
                 if (video == null || video.Length == 0)
                 {
-                    return ("Error: Invalid path - Machine Videos");
+                    //return ("Error: Invalid path - Machine Videos");
                 }
 
                 string fileName = video.FileName.Substring(0, video.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
@@ -339,7 +343,7 @@ namespace MachinePortal.Controllers
                 }
             }
 
-            return ("Machine created successfuly");
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Edit(int? ID)
@@ -419,7 +423,11 @@ namespace MachinePortal.Controllers
             }
 
             //Get list of files to be removed
-            List<MachineFile> MFiles = JsonConvert.DeserializeObject<List<MachineFile>>(Request.Form["files"]);
+            List<MachineFile> MFiles = new List<MachineFile>();
+            if (Request.Form["files"].Count > 0)
+            {
+                MFiles = JsonConvert.DeserializeObject<List<MachineFile>>(Request.Form["files"]);
+            }
             int[] DRemove = JsonConvert.DeserializeObject<int[]>(Request.Form["DRemove"]);
             int[] IRemove = JsonConvert.DeserializeObject<int[]>(Request.Form["IRemove"]);
             int[] VRemove = JsonConvert.DeserializeObject<int[]>(Request.Form["VRemove"]);
@@ -519,6 +527,7 @@ namespace MachinePortal.Controllers
                         doc.Name = file.Name;
                         doc.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
                         doc.CategoryID = doc.Category.ID;
+                        doc.Location = file.Location;
                     }
                 }
                 doc.FileName = fileName;
@@ -558,6 +567,7 @@ namespace MachinePortal.Controllers
                         img.Name = file.Name;
                         img.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
                         img.CategoryID = img.Category.ID;
+                        img.Location = file.Location;
                     }
                 }
                 img.FileName = fileName;
@@ -565,6 +575,7 @@ namespace MachinePortal.Controllers
                 img.Extension = image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
                 img.Machine = machineNEW.Machine;
                 img.MachineID = machineNEW.Machine.ID;
+
                 await _machineService.InsertMachineImageAsync(img);
                 machineOLD.AddImage(img);
 
@@ -596,6 +607,7 @@ namespace MachinePortal.Controllers
                         vid.Name = file.Name;
                         vid.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
                         vid.CategoryID = vid.Category.ID;
+                        vid.Location = file.Location;
                     }
                 }
                 vid.FileName = fileName;
@@ -603,6 +615,7 @@ namespace MachinePortal.Controllers
                 vid.Extension = video.FileName.Substring(video.FileName.LastIndexOf("."), (video.FileName.Length - video.FileName.LastIndexOf(".")));
                 vid.Machine = machineNEW.Machine;
                 vid.MachineID = machineNEW.Machine.ID;
+
                 await _machineService.InsertMachineVideoAsync(vid);
                 machineOLD.AddVideo(vid);
 
@@ -900,6 +913,7 @@ namespace MachinePortal.Controllers
             return View(obj);
         }
 
+        //Documents Pages
         public async Task<IActionResult> MachineComments(int? ID)
         {
             Permissions();
@@ -980,6 +994,8 @@ namespace MachinePortal.Controllers
             return View(obj);
         }
 
+
+        //Areas
         public async Task<JsonResult> GetSector(int AreaID)
         {
             List<Sector> SectorList;
@@ -994,6 +1010,7 @@ namespace MachinePortal.Controllers
             return Json(new SelectList(LineList, "ID", "Name"));
         }
 
+        //Upload and Download
         [HttpPost]
         public IActionResult UploadFiles()
         {
@@ -1032,6 +1049,8 @@ namespace MachinePortal.Controllers
             return File(FileResult.FileContents, type, name);
         }
 
+
+        //Comments
         [HttpPost]
         public async Task<string> AddComment(string UserID, string Comment, int MachineID)
         {
@@ -1067,6 +1086,8 @@ namespace MachinePortal.Controllers
             return data;
         }
 
+
+        //Password
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePassword(Password Password)
@@ -1093,6 +1114,8 @@ namespace MachinePortal.Controllers
             return RedirectToAction("Details/" + Password.MachineID, "Machines");
         }
 
+        
+        //Passwords
         public async Task<PartialViewResult> AddPartialEditPassword(int ID, string MachineName, int MachineID)
         {
             List<Department> departments = _identityContext.Department.ToList();
@@ -1113,6 +1136,8 @@ namespace MachinePortal.Controllers
             return partial;
         }
 
+
+        //Preventive Maintenance
         [HttpPost]
         public async Task<string> UpdatePreventiveDate(string date, int ID)
         {
@@ -1127,6 +1152,16 @@ namespace MachinePortal.Controllers
             {
             }
             return updatedDate;
+        }
+
+        //Delete Partial
+        [HttpGet]
+        public async Task<PartialViewResult> AddPartialDelete(string id)
+        {
+            int ID = int.Parse(id);
+            Machine machine = await _machineService.FindByIDAsync(ID);
+            PartialViewResult partial = PartialView("Delete", machine);
+            return partial;
         }
     }
 }

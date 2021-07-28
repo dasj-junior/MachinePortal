@@ -27,8 +27,8 @@ function notify(title, message, from, align, icon, type, animIn, animOut) {
             exit: animOut
         },
         icon_type: 'class',
-        template: '<div data-growl="rt-container" role="alert">' +
-            '<div class="col-rt-10">' +
+        template: '<div style="width:30%;" data-growl="rt-container" role="alert">' +
+            '<div class="col-rt-6">' +
             '<div class="flag note note--' + type + '">' +
             '<div class="flag__image note__icon">' +
                 '<i class="' + icon + '"></i>' +

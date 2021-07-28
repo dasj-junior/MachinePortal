@@ -450,11 +450,12 @@ $("form").submit(function (event) {
         processData: false,
         contentType: false,
         data: data,
-        success: function () {
-                window.location.href = "/Machines/Index";
+        success: function (m) {
+            if (m == 'success') { window.location.href = "/Lines/Index"; };
         },
-        error: function() {
+        error: function (e) {
             $('.theme-loader').hide();
+            notify('', 'AJAX Request Error: ' + e.statusText, 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight');
         }
     });
 });
@@ -526,7 +527,7 @@ $("form").submit(function (event) {
                     reader.readAsDataURL(file[0]);
                 });
             } else {
-                alert("This browser does not support HTML5.");
+                notify('', 'Error: This browser does not support HTML5' + e.statusText, 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight');
             }
         });
     });
@@ -571,7 +572,7 @@ $('#SectorID').on('change', function() {
 
 <div class="row">
     <div class="col-md-10">
-        <form asp-action="Create" id="form" class="form" method="post" enctype="multipart/form-data" asp-controller="Machines">
+        <form asp-action="Edit" id="form" class="form" method="post" enctype="multipart/form-data" asp-controller="Machines">
             <div class="card fb-card c-vitesco-gray">
                 <div class="card-header c-vitesco-gray">
                     <i style="vertical-align:middle" class="ti-desktop c-vitesco-gray"></i>

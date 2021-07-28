@@ -1,0 +1,12 @@
+﻿@model NewErrorViewModel
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+@if (Model.notificationMessage != "" && Model.notificationMessage != null)
+{
+<script>
+        $(document).ready(function () {
+                notify('', '@Model.notificationMessage', 'top', 'right', '@Model.notificationIcon', '@Model.notificationType', 'fadeInRight', 'fadeInRight');
+        });
+</script>
+}

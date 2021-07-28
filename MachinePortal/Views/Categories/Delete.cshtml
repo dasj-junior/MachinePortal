@@ -2,9 +2,31 @@
 @inject IViewLocalizer Localizer
 @model MachinePortal.Models.Category
 
+@* Send form through AJAX *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("form").submit(function (event) {
+            event.preventDefault()
+            var ID = document.getElementById('ID').value;
+            $.ajax({
+                url: '@Url.Content("~/")' + "Categories/Delete",
+                type: "POST",
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                data: { ID : ID },
+                success: function (m) {
+                    if (m == 'success') { window.location.href = "/Categories/Index"; };
+                },
+                error: function (e) {
+                    alert(e.responseText);
+                }
+            });
+        });
+    });
+</script>
+
 <div class="modal-dialog">
     <div class="modal-content">
-        <form asp-action="Delete" asp-controller="Categories">
+        <form id="form" asp-controller="Categories" asp-action="Delete" class="form" method="post">
             <div style="background-color: #dc3545;" class="modal-header">
                 <i style="color:white;font-size:30px;background-color:#dc3545;" class="bi-x-circle"></i>
                 <h3 style="color:white;text-align:center;" class="modal-title">@Localizer["Remove Category"].Value</h3>

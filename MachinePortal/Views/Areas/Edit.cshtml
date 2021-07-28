@@ -35,15 +35,40 @@
                     reader.readAsDataURL(file);
                 }
             } else {
-                alert("This browser does not support HTML5.");
+                notify('', 'Error: This browser does not support HTML5' + e.statusText, 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight');
             }
+        });
+    });
+</script>
+
+@* Send form through AJAX *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("form").submit(function (event) {
+            event.preventDefault()
+            $('.theme-loader').show();
+            $.ajax({
+                url: '@Url.Content("~/")' + "Areas/Edit",
+                type: "POST",
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                processData: false,
+                contentType: false,
+                data: new FormData(this),
+                success: function (m) {
+                    if (m == 'success') { window.location.href = "/Areas/Index"; };
+                },
+                error: function (e) {
+                    $('.theme-loader').hide();
+                    notify('', 'AJAX Request Error: ' + e.statusText, 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight');
+                }
+            });
         });
     });
 </script>
 
 <div class="modal-dialog">
     <div class="modal-content">
-        <form asp-action="Edit" enctype="multipart/form-data" asp-controller="Areas">
+        <form id="form" asp-controller="Areas" asp-action="Edit" class="form" method="post" enctype="multipart/form-data">
             <div class="modal-header c-vitesco-blue-03">
                 <i style="color:white;font-size:30px;" class="bi-pencil c-vitesco-blue-03"></i>
                 <h3 style="color:white;text-align:center;" class="modal-title">@Localizer["Edit"].Value: @Model.Name</h3>

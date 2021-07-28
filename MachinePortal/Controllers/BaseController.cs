@@ -31,5 +31,6 @@ namespace MachinePortal.Controllers
                 ViewData["UserID"] = user.Id;
             }
         }
+
     }
 }

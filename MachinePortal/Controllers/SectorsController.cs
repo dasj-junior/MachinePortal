@@ -90,59 +90,6 @@ namespace MachinePortal.Controllers
             return RedirectToAction(@"Details/" + Sector.AreaID, "Areas");
         }
 
-        public async Task<IActionResult> Delete(int? ID)
-        {
-            Permissions();
-            if (ID == null)
-            {
-                return NotFound();
-            }
-            var obj = await _SectorService.FindByIDAsync(ID.Value);
-            if (obj == null)
-            {
-                return NotFound();
-            }
-
-            return View(obj);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int ID)
-        {
-            Permissions();
-            var Sector = await _SectorService.FindByIDAsync(ID);
-            try
-            {
-                if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + Sector.ImagePath))
-                {
-                    System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + Sector.ImagePath);
-                }
-            }
-            catch
-            {
-
-            }
-            await _SectorService.RemoveAsync(ID);
-            return RedirectToAction(@"Details/" + Sector.AreaID, "Areas");
-        }
-
-        public async Task<IActionResult> Details(int? ID)
-        {
-            Permissions();
-            if (ID == null)
-            {
-                return NotFound();
-            }
-            var obj = await _SectorService.FindByIDAsync(ID.Value);
-            if (obj == null)
-            {
-                return NotFound();
-            }
-
-            return View(obj);
-        }
-
         public async Task<IActionResult> Edit(int? ID)
         {
             Permissions();
@@ -196,6 +143,61 @@ namespace MachinePortal.Controllers
             return RedirectToAction(@"Details/" + Sector.AreaID, "Areas");
         }
 
+        public async Task<IActionResult> Delete(int? ID)
+        {
+            Permissions();
+            if (ID == null)
+            {
+                return NotFound();
+            }
+            var obj = await _SectorService.FindByIDAsync(ID.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int ID)
+        {
+            Permissions();
+            var Sector = await _SectorService.FindByIDAsync(ID);
+            try
+            {
+                if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + Sector.ImagePath))
+                {
+                    System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + Sector.ImagePath);
+                }
+            }
+            catch
+            {
+
+            }
+            await _SectorService.RemoveAsync(ID);
+            return RedirectToAction(@"Details/" + Sector.AreaID, "Areas");
+        }
+
+        public async Task<IActionResult> Details(int? ID)
+        {
+            Permissions();
+            if (ID == null)
+            {
+                return NotFound();
+            }
+            var obj = await _SectorService.FindByIDAsync(ID.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        
+        //Partials 
         [HttpPost]
         public async Task<PartialViewResult> AddPartialEdit(string id)
         {

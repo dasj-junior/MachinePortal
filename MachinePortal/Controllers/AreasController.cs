@@ -1,4 +1,5 @@
 ﻿using System;
+
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -41,34 +42,118 @@ namespace MachinePortal.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Area Area, IFormFile image)
+        public async Task<IActionResult> Create(Area area, IFormFile image)
         {
-            Permissions();
-            if (image != null)
+            try
             {
-                long filesSize = image.Length;
-                var filePath = Path.GetTempFileName();
-
-                if (image == null || image.Length == 0)
+                if (image != null)
                 {
-                    ViewData["Error"] = "Error: No file selected";
-                    return View(ViewData);
-                }
+                    long filesSize = image.Length;
+                    var filePath = Path.GetTempFileName();
 
-                string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Areas\\Images\\" + fileName;
-                Area.ImagePath = @"/resources/Areas/Images/" + fileName;
+                    if (image == null || image.Length == 0)
+                    {
+                        return Content(@"notify('', '" + "Error: File corrupted or invalid" + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                    }
 
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
+                    string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Areas\\Images\\" + fileName;
+                    area.ImagePath = @"/resources/Areas/Images/" + fileName;
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
                 }
             }
+            catch(Exception e)
+            {
+                return Content(@"notify('', '" + "Error on saving image, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+            
+            try
+            {
+                await _AreaService.InsertAsync(area);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error updating database, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
 
-            await _AreaService.InsertAsync(Area);
+            TempData["notificationMessage"] = "Area add successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
+        }
 
-            return RedirectToAction(nameof(Index));
+        public async Task<IActionResult> Edit(int? ID)
+        {
+            Permissions();
+            if (ID == null)
+            {
+                return NotFound();
+            }
+            var obj = await _AreaService.FindByIDAsync(ID.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Area area, IFormFile image)
+        {
+            try
+            {
+                if (image != null)
+                {
+                    if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + area.ImagePath))
+                    {
+                        System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + area.ImagePath);
+                    }
+
+                    long filesSize = image.Length;
+                    var filePath = Path.GetTempFileName();
+
+                    if (image == null || image.Length == 0)
+                    {
+                        return Content(@"notify('', '" + "Error: File corrupted or invalid" + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                    }
+
+                    string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Areas\\Images\\" + fileName;
+                    area.ImagePath = @"/resources/Areas/Images/" + fileName;
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error updating image, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            try
+            {
+                await _AreaService.UpdateAsync(area);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error updating area on database, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            TempData["notificationMessage"] = "Area updated successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
         public async Task<IActionResult> Delete(int? ID)
@@ -91,8 +176,12 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int ID)
         {
-            Permissions();
             var Area = await _AreaService.FindByIDAsync(ID);
+            if(Area == null)
+            {
+                return Content(@"notify('', 'Error: ID not found', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
             try
             {
                 if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + Area.ImagePath))
@@ -100,12 +189,24 @@ namespace MachinePortal.Controllers
                     System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + Area.ImagePath);
                 }
             }
-            catch
+            catch (Exception e)
             {
-
+                return Content(@"notify('', '" + "Error deleting image on server, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
-            await _AreaService.RemoveAsync(ID);
-            return RedirectToAction(nameof(Index));
+
+            try
+            {
+                await _AreaService.RemoveAsync(ID);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error deleting area on database, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            TempData["notificationMessage"] = "Area deleted successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
         public async Task<IActionResult> Details(int? ID)
@@ -122,59 +223,6 @@ namespace MachinePortal.Controllers
             }
 
             return View(obj);
-        }
-
-        public async Task<IActionResult> Edit(int? ID)
-        {
-            Permissions();
-            if (ID == null)
-            {
-                return NotFound();
-            }
-            var obj = await _AreaService.FindByIDAsync(ID.Value);
-            if (obj == null)
-            {
-                return NotFound();
-            }
-
-            return View(obj);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Area Area, IFormFile image)
-        {
-            Permissions();
-            if (image != null)
-            {
-                if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + Area.ImagePath))
-                {
-                    System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + Area.ImagePath);
-                }
-
-                long filesSize = image.Length;
-                var filePath = Path.GetTempFileName();
-
-                if (image == null || image.Length == 0)
-                {
-                    ViewData["Error"] = "Error: No file selected";
-                    return View(ViewData);
-                }
-
-                string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Areas\\Images\\" + fileName;
-                Area.ImagePath = @"/resources/Areas/Images/" + fileName;
-
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
-                }
-            }
-
-            await _AreaService.UpdateAsync(Area);
-
-            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
@@ -194,5 +242,6 @@ namespace MachinePortal.Controllers
             PartialViewResult partial = PartialView("Delete", area);
             return partial;
         }
+
     }
 }

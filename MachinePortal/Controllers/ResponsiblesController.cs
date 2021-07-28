@@ -80,59 +80,6 @@ namespace MachinePortal.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Delete(int? ID)
-        {
-            Permissions();
-            if (ID == null)
-            {
-                return NotFound();
-            }
-            var obj = await _responsibleService.FindByIDAsync(ID.Value);
-            if (obj == null)
-            {
-                return NotFound();
-            }
-
-            return View(obj);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int ID)
-        {
-            Permissions();
-            var responsible = await _responsibleService.FindByIDAsync(ID);
-            try
-            {
-                if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + responsible.PhotoPath))
-                {
-                    System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + responsible.PhotoPath);
-                }
-            }
-            catch
-            {
-
-            }
-            await _responsibleService.RemoveAsync(ID);
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> Details(int? ID)
-        {
-            Permissions();
-            if (ID == null)
-            {
-                return NotFound();
-            }
-            var obj = await _responsibleService.FindByIDAsync(ID.Value);
-            if (obj == null)
-            {
-                return NotFound();
-            }
-
-            return View(obj);
-        }
-
         public async Task<IActionResult> Edit(int? ID)
         {
             Permissions();
@@ -191,6 +138,61 @@ namespace MachinePortal.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Delete(int? ID)
+        {
+            Permissions();
+            if (ID == null)
+            {
+                return NotFound();
+            }
+            var obj = await _responsibleService.FindByIDAsync(ID.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int ID)
+        {
+            Permissions();
+            var responsible = await _responsibleService.FindByIDAsync(ID);
+            try
+            {
+                if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + responsible.PhotoPath))
+                {
+                    System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + responsible.PhotoPath);
+                }
+            }
+            catch
+            {
+
+            }
+            await _responsibleService.RemoveAsync(ID);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Details(int? ID)
+        {
+            Permissions();
+            if (ID == null)
+            {
+                return NotFound();
+            }
+            var obj = await _responsibleService.FindByIDAsync(ID.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        
+        //Partials
         [HttpGet]
         public async Task<PartialViewResult> AddPartialDetails(string id)
         {

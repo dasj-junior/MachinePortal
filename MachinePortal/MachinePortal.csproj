@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\resources\Assets\**" />
+    <Content Remove="wwwroot\resources\Assets\**" />
+    <EmbeddedResource Remove="wwwroot\resources\Assets\**" />
+    <None Remove="wwwroot\resources\Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="web.config" />
     <Content Remove="wwwroot\assets\js\popper.js\popper.min.js_OLD" />
     <Content Remove="wwwroot\resources\Devices\Documents\20201228155207.jpg" />
     <Content Remove="wwwroot\resources\Devices\Documents\20201228155245.jpg" />
@@ -53,7 +61,6 @@
   <ItemGroup>
     <Folder Include="Resources\Views\Hierarchies\" />
     <Folder Include="wwwroot\resources\Areas\Images\" />
-    <Folder Include="wwwroot\resources\Assets\Images\" />
     <Folder Include="wwwroot\resources\Devices\Images\" />
     <Folder Include="wwwroot\resources\Devices\Documents\" />
     <Folder Include="wwwroot\resources\Lines\Images\" />
@@ -67,6 +74,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="web.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="wwwroot\assets\icon\bootstrap-icons\fonts\bootstrap-icons.woff2" />
     <None Include="wwwroot\assets\icon\icofont\fonts\icofont.svg" />
     <None Include="wwwroot\assets\icon\themify-icons\fonts\themify.svg" />

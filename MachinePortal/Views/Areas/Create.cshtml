@@ -1,7 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @model MachinePortal.Models.Area
-
 @* Machine Photo Button and Preview *@
 <script type="text/javascript">
     $(document).ready(function () {
@@ -49,15 +48,40 @@
                     reader.readAsDataURL(file[0]);
                 });
             } else {
-                alert("This browser does not support HTML5.");
+                notify('', 'Error: This browser does not support HTML5' + e.statusText, 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight');
             }
+        });
+    });
+</script>
+
+@* Send form through AJAX *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("form").submit(function (event) {
+            event.preventDefault()
+            $('.theme-loader').show();
+            $.ajax({
+                url: '@Url.Content("~/")' + "Areas/Create",
+                type: "POST",
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                processData: false,
+                contentType: false,
+                data: new FormData(this),
+                success: function (m) {
+                    if (m == 'success') { window.location.href = "/Areas/Index"; };
+                },
+                error: function (e) {
+                    $('.theme-loader').hide();
+                    notify('', 'AJAX Request Error: ' + e.statusText, 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight');
+                }
+            });
         });
     });
 </script>
 
 <div class="modal-dialog">
     <div class="modal-content">
-        <form asp-action="Create" enctype="multipart/form-data" asp-controller="Areas">
+        <form id="form" asp-controller="Areas" asp-action="Create" class="form" method="post" enctype="multipart/form-data">
             <div class="modal-header c-vitesco-green-03">
                 <i style="color:white;font-size:30px;" class="bi-plus-circle c-vitesco-green-03"></i>
                 <h3 style="color:white;text-align:center;" class="modal-title">@Localizer["Create Area"].Value</h3>

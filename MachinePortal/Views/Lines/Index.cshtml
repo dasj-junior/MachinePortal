@@ -1,7 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @model IEnumerable<MachinePortal.Models.Line>
-
 @* Check User Permissions *@
 @using Microsoft.AspNetCore.Identity
 @using MachinePortal.Areas.Identity.Data
@@ -14,6 +13,20 @@
     if (user != null) { permissions = ((from obj in identityContext.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == user.Id).ToList()).Select(p => p.Permission.PermissionName).ToList(); };
     if (!permissions.Contains("PageHierarchies")) { Context.Response.Redirect("/Home/AccessDenied"); };
 }
+
+@{
+    string notMessage = (TempData["notificationMessage"] != null) ? TempData["notificationMessage"].ToString() : "";
+    string notIcon = (TempData["notificationIcon"] != null) ? TempData["notificationIcon"].ToString() : "";
+    string notType = (TempData["notificationType"] != null) ? TempData["notificationType"].ToString() : "";
+}
+
+<script>
+    $(document).ready(function () {
+        if ('@notMessage' != '') {
+            notify('', '@notMessage', 'top', 'right', '@notIcon', '@notType', 'fadeInRight', 'fadeInRight');
+        };
+    });
+</script>
 
 <script>
     function renderPartialEdit(ID) {

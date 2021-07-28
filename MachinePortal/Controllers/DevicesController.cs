@@ -56,128 +56,99 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Device device, IFormFile image)
         {
-            Permissions();
-
             //Generate list of documents from the update page
             List<IFormFile> documents = new List<IFormFile>();
-            foreach (var file in Request.Form.Files)
-            {
-                if (file.Name == "document") { documents.Add(file); }
-            }
-
-            if (image != null)
-            {
-                long filesSize = image.Length;
-                var filePath = Path.GetTempFileName();
-
-                if (image == null || image.Length == 0)
-                {
-                    ViewData["Error"] = "Error: No file selected";
-                    return View(ViewData);
-                }
-
-                string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Devices\\Images\\" + fileName;
-                device.ImagePath = @"/resources/Devices/Images/" + fileName;
-
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
-                }
-            }
-
-            await _deviceService.InsertAsync(device);
-
-            foreach (IFormFile document in documents)
-            {
-                long filesSize = document.Length;
-                var filePath = Path.GetTempFileName();
-
-                if (document == null || document.Length == 0)
-                {
-                    ViewData["Error"] = "Error: No file selected";
-                    return View(ViewData);
-                }
-
-                string fileName = document.FileName.Substring(0,document.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
-                fileName += document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Devices\\Documents\\" + fileName;
-                DeviceDocument doc = new DeviceDocument
-                {
-                    Name = fileName,
-                    Path = @"/resources/Devices/Documents/",
-                    Extension = document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf("."))),
-                    Device = device
-                };
-                await _documentService.InsertAsync(doc);
-                device.AddDocument(doc);
-
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await document.CopyToAsync(stream);
-                }
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> Delete(int? ID)
-        {
-            Permissions();
-            if (ID == null)
-            {
-                return NotFound();
-            }
-            var obj = await _deviceService.FindByIDAsync(ID.Value);
-            if (obj == null)
-            {
-                return NotFound();
-            }
-
-            return View(obj);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int ID)
-        {
-            Permissions();
-            var device = await _deviceService.FindByIDAsync(ID);
             try
             {
-                if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + device.ImagePath))
+                foreach (var file in Request.Form.Files)
                 {
-                    System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + device.ImagePath);
-                }
-                foreach (DeviceDocument document in device.Documents)
-                {
-                    System.IO.File.Delete(_appEnvironment.WebRootPath + document.Path + document.Name);
-                    //await _documentService.RemoveAsync(document);
+                    if (file.Name == "document") { documents.Add(file); }
                 }
             }
-            catch
+            catch (Exception e)
             {
+                return Content(@"notify('', '" + "Erro getting files from page, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+            
+            try
+            {
+                if (image != null)
+                {
+                    long filesSize = image.Length;
+                    var filePath = Path.GetTempFileName();
 
+                    if (image == null || image.Length == 0)
+                    {
+                        ViewData["Error"] = "Error: No file selected";
+                        return View(ViewData);
+                    }
+
+                    string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Devices\\Images\\" + fileName;
+                    device.ImagePath = @"/resources/Devices/Images/" + fileName;
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
+                }
             }
-            await _deviceService.RemoveAsync(ID);
-            return RedirectToAction(nameof(Index));
-        }
-        
-        public async Task<IActionResult> Details(int? ID)
-        {
-            Permissions();
-            if (ID == null)
+            catch (Exception e)
             {
-                return NotFound();
-            }
-            var obj = await _deviceService.FindByIDAsync(ID.Value);
-            if (obj == null)
-            {
-                return NotFound();
+                return Content(@"notify('', '" + "Error saving device image, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
-            return View(obj);
+            try
+            {
+                await _deviceService.InsertAsync(device);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error adding device, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            try
+            {
+                foreach (IFormFile document in documents)
+                {
+                    long filesSize = document.Length;
+                    var filePath = Path.GetTempFileName();
+
+                    if (document == null || document.Length == 0)
+                    {
+                        ViewData["Error"] = "Error: No file selected";
+                        return View(ViewData);
+                    }
+
+                    string fileName = document.FileName.Substring(0, document.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
+                    fileName += document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Devices\\Documents\\" + fileName;
+                    DeviceDocument doc = new DeviceDocument
+                    {
+                        Name = fileName,
+                        Path = @"/resources/Devices/Documents/",
+                        Extension = document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf("."))),
+                        Device = device
+                    };
+                    await _documentService.InsertAsync(doc);
+                    device.AddDocument(doc);
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await document.CopyToAsync(stream);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error saving device documents, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            TempData["notificationMessage"] = "Device inserted successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
         public async Task<IActionResult> Edit(int? ID)
@@ -204,87 +175,107 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Device device, IFormFile image)
         {
-            Permissions();
-
-            //List of files to delete
             List<DeviceDocument> RemoveDocumets = new List<DeviceDocument>();
-            int[] DRemove = JsonConvert.DeserializeObject<int[]>(Request.Form["DRemove"]);
-            foreach (int ID in DRemove)
-            {
-                RemoveDocumets.Add(await _documentService.FindByIDAsync(ID));
-            }
-
-            //Generate list of documents to be added
             List<IFormFile> documents = new List<IFormFile>();
-            foreach (var file in Request.Form.Files)
-            {
-                if (file.Name == "document") { documents.Add(file); }
-            }
 
-            //Update photo
-            if (image != null)
+            try
             {
-                if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + device.ImagePath))
+                //List of files to delete
+                int[] DRemove = JsonConvert.DeserializeObject<int[]>(Request.Form["DRemove"]);
+                foreach (int ID in DRemove)
                 {
-                    System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + device.ImagePath);
+                    RemoveDocumets.Add(await _documentService.FindByIDAsync(ID));
                 }
 
-                long filesSize = image.Length;
-                var filePath = Path.GetTempFileName();
-
-                if (image == null || image.Length == 0)
+                //Generate list of documents to be added
+                foreach (var file in Request.Form.Files)
                 {
-                    ViewData["Error"] = "Error: No file selected";
-                    return View(ViewData);
-                }
-
-                string fileName = DateTime.Now.ToString("yyyyMMddHHmmssfffffff");
-                fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Devices\\Images\\" + fileName;
-                device.ImagePath = @"/resources/Devices/Images/" + fileName;
-
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
+                    if (file.Name == "document") { documents.Add(file); }
                 }
             }
-
-            //Add documents
-            foreach (IFormFile document in documents)
+            catch (Exception e)
             {
-                long filesSize = document.Length;
-                var filePath = Path.GetTempFileName();
-
-                if (document == null || document.Length == 0)
+                return Content(@"notify('', '" + "Erro getting data from page, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+            
+            try
+            {
+                //Update photo
+                if (image != null)
                 {
-                    ViewData["Error"] = "Error: No file selected";
-                    return View(ViewData);
-                }
+                    if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + device.ImagePath))
+                    {
+                        System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + device.ImagePath);
+                    }
 
-                string fileName = document.FileName.Substring(0, document.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
-                fileName += document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Devices\\Documents\\" + fileName;
-                DeviceDocument doc = new DeviceDocument
-                {
-                    Name = fileName,
-                    Path = @"/resources/Devices/Documents/",
-                    Extension = document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf("."))),
-                    Device = device,
-                    DeviceID = device.ID
-                };
-                await _documentService.InsertAsync(doc);
-                device.AddDocument(doc);
+                    long filesSize = image.Length;
+                    var filePath = Path.GetTempFileName();
 
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await document.CopyToAsync(stream);
+                    if (image == null || image.Length == 0)
+                    {
+                        ViewData["Error"] = "Error: No file selected";
+                        return View(ViewData);
+                    }
+
+                    string fileName = DateTime.Now.ToString("yyyyMMddHHmmssfffffff");
+                    fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Devices\\Images\\" + fileName;
+                    device.ImagePath = @"/resources/Devices/Images/" + fileName;
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
                 }
             }
-
-            //Remove documents
-            foreach (DeviceDocument document in RemoveDocumets)
+            catch (Exception e)
             {
-                try
+                return Content(@"notify('', '" + "Erro updating image, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            try
+            {
+                //Add documents
+                foreach (IFormFile document in documents)
+                {
+                    long filesSize = document.Length;
+                    var filePath = Path.GetTempFileName();
+
+                    if (document == null || document.Length == 0)
+                    {
+                        ViewData["Error"] = "Error: No file selected";
+                        return View(ViewData);
+                    }
+
+                    string fileName = document.FileName.Substring(0, document.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
+                    fileName += document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Devices\\Documents\\" + fileName;
+                    DeviceDocument doc = new DeviceDocument
+                    {
+                        Name = fileName,
+                        Path = @"/resources/Devices/Documents/",
+                        Extension = document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf("."))),
+                        Device = device,
+                        DeviceID = device.ID
+                    };
+                    await _documentService.InsertAsync(doc);
+                    device.AddDocument(doc);
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await document.CopyToAsync(stream);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Erro adding documents, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            try
+            {
+                //Remove documents
+                foreach (DeviceDocument document in RemoveDocumets)
                 {
                     await _documentService.RemoveAsync(document);
                     device.RemoveDocument(document);
@@ -293,16 +284,101 @@ namespace MachinePortal.Controllers
                         System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + document.Path + document.Name);
                     }
                 }
-                catch
-                {
-                }
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error removing documents, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
-            await _deviceService.UpdateAsync(device);
+            try
+            {
+                await _deviceService.UpdateAsync(device);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error updating device, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
 
-            return RedirectToAction(nameof(Index));
+            TempData["notificationMessage"] = "Device updated successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
+        public async Task<IActionResult> Delete(int? ID)
+        {
+            Permissions();
+            if (ID == null)
+            {
+                return NotFound();
+            }
+            var obj = await _deviceService.FindByIDAsync(ID.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int ID)
+        {
+            var device = await _deviceService.FindByIDAsync(ID);
+            if (device == null)
+            {
+                return Content(@"notify('', 'Erro: ID not found', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+            
+            try
+            {
+                if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + device.ImagePath))
+                {
+                    System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + device.ImagePath);
+                }
+                foreach (DeviceDocument document in device.Documents)
+                {
+                    System.IO.File.Delete(_appEnvironment.WebRootPath + document.Path + document.Name);
+                    await _documentService.RemoveAsync(document);
+                }
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error deleting device documents, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            try
+            {
+                await _deviceService.RemoveAsync(ID);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error deleting device, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            TempData["notificationMessage"] = "Device removed successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
+        }
+        
+        public async Task<IActionResult> Details(int? ID)
+        {
+            Permissions();
+            if (ID == null)
+            {
+                return NotFound();
+            }
+            var obj = await _deviceService.FindByIDAsync(ID.Value);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+
+            return View(obj);
+        }
+        
         public FileResult Download(string filePath, string fileName, string extension)
         {
             IFileProvider provider = new PhysicalFileProvider(_appEnvironment.WebRootPath +  filePath);

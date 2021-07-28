@@ -2,7 +2,6 @@
 @using System.Web;
 @inject IViewLocalizer Localizer
 @model MachinePortal.Models.ViewModels.MachineFormViewModel
-
 @* Check User Permissions *@
 @using Microsoft.AspNetCore.Identity
 @using MachinePortal.Areas.Identity.Data
@@ -250,27 +249,7 @@ $(document).ready(function () {
 function DeleteFile(Fileid, FileName) {
     formdata.delete(FileName)
     $("#" + Fileid).remove();
-    //chkatchtbl();
 }
-
-//Hide table head when there's no data
-//function chkatchtbl() {
-//    if ($('#tDocuments tr').length > 1) {
-//        $("#tDocuments").css("visibility", "visible");
-//    } else {
-//        $("#tDocuments").css("visibility", "hidden");
-//    }
-//    if ($('#tImages tr').length > 1) {
-//        $("#tImages").css("visibility", "visible");
-//    } else {
-//        $("#tImages").css("visibility", "hidden");
-//    }
-//    if ($('#tVideos tr').length > 1) {
-//        $("#tVideos").css("visibility", "visible");
-//    } else {
-//        $("#tVideos").css("visibility", "hidden");
-//    }
-//}
 
 $(document).ready(function () {
 
@@ -386,6 +365,7 @@ $(document).ready(function () {
     });
 
     $("form").submit(function (event) {
+        event.preventDefault()
         var data = new FormData($('#form')[0]);
         for (var pair of formdata.entries()) {
             data.append(pair[0], pair[1]);
@@ -398,16 +378,18 @@ $(document).ready(function () {
             processData: false,
             contentType: false,
             data: data,
-            success: function () {
-                window.location.href = "/Machines/Index";
+            success: function (m) {
+                if (m == 'success') { window.location.href = "/Areas/Index"; };
             },
-            error: function () {
+            error: function (e) {
                 $('.theme-loader').hide();
+                notify('', 'AJAX Request Error: ' + e.statusText, 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight');
             }
         });
     });
 });
 </script>
+
 
 @* Select all elements of "Select" on rigth side *@
 <script type="text/javascript">
@@ -474,7 +456,7 @@ $(document).ready(function () {
                     reader.readAsDataURL(file[0]);
                 });
             } else {
-                alert("This browser does not support HTML5.");
+                notify('', 'Error: This browser does not support HTML5' + e.statusText, 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight');
             }
         });
     });

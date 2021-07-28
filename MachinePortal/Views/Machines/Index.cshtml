@@ -8,6 +8,7 @@
 @inject UserManager<MachinePortalUser> UserManager
 @inject IdentityContext identityContext
 @{
+
     var user = await UserManager.GetUserAsync(User);
     List<string> permissions = new List<string>();
     if (user != null) { permissions = ((from obj in identityContext.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == user.Id).ToList()).Select(p => p.Permission.PermissionName).ToList(); };
@@ -15,17 +16,32 @@
 }
 
 @{
-    string notMessage = (ViewData["notificationMessage"] != null) ? ViewData["notificationMessage"].ToString() : "";
-    string notIcon = (ViewData["notificationIcon"] != null) ? ViewData["notificationIcon"].ToString() : "";
-    string notType = (ViewData["notificationType"] != null) ? ViewData["notificationType"].ToString() : "";
+    string notMessage = (TempData["notificationMessage"] != null) ? TempData["notificationMessage"].ToString() : "";
+    string notIcon = (TempData["notificationIcon"] != null) ? TempData["notificationIcon"].ToString() : "";
+    string notType = (TempData["notificationType"] != null) ? TempData["notificationType"].ToString() : "";
 }
 
 <script>
     $(document).ready(function () {
         if ('@notMessage' != '') {
-            notify('', '@notMessage', 'top', 'right', '@notIcon', '@notType', 'animated fadeInRight', 'animated fadeInRight');
+            notify('', '@notMessage', 'top', 'right', '@notIcon', '@notType', 'fadeInRight', 'fadeInRight');
         };
     });
+</script>
+
+<script>
+    function renderPartialDelete(ID) {
+        $.ajax({
+            url: '@Url.Action("AddPartialDelete", "Machines")',
+            data: { id: ID },
+            dataType: "html",
+            contentType: 'application/json; charset=utf-8',
+            type: "GET",
+            success: function(data) {
+                $('#modalDelete').html(data);
+            }
+        });
+    }
 </script>
 
 <div class="card dribble-card c-vitesco-gray">
@@ -74,7 +90,7 @@
                                 }
                                 @if (permissions.Contains("MachinesDelete"))
                                 {
-                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID">@Localizer["Delete"].Value</a>
+                                    <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
                                 }
                             </td>
                         </tr>
@@ -83,4 +99,7 @@
             </table>
         </div>
     </div>
+</div>
+
+<div class="modal" id="modalDelete" role="dialog">
 </div>

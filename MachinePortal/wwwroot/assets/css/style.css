@@ -20960,3 +20960,8 @@ b-logout {
 img {
     object-fit: contain;
 }
+
+@font-face {
+    font-family: 'Beast Machines';
+    src: url('../fonts/Beast_Machines.TTF');
+}

@@ -2,38 +2,66 @@
 @inject IViewLocalizer Localizer
 @model MachinePortal.Models.Machine
 
-<div class="row">
-    <div class="col-6">
-        <div class="card fb-card">
-            <div style="background-color:#d9534f;" class="card-header">
-                <i style="background-color:#d9534f;vertical-align:middle" class="ti-close"></i>
-                <div class="d-inline-block">
-                    <h2 style="color:white">@Localizer["Delete"].Value</h2>
-                </div>
+@* Send form through AJAX *@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("form").submit(function (event) {
+            event.preventDefault()
+            var ID = document.getElementById('ID').value;
+            $.ajax({
+                url: '@Url.Content("~/")' + "Machines/Delete",
+                type: "POST",
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                data: { ID : ID },
+                success: function (m) {
+                    if (m == 'success') { window.location.href = "/Machines/Index"; };
+                },
+                error: function (e) {
+                    alert(e.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <form id="form" asp-controller="Machines" asp-action="Delete" class="form" method="post">
+            <div style="background-color: #dc3545;" class="modal-header">
+                <i style="color:white;font-size:30px;background-color:#dc3545;" class="bi-x-circle"></i>
+                <h3 style="color:white;text-align:center;" class="modal-title">@Localizer["Remove Machine"].Value</h3>
+                <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">@Localizer["Close"].Value</span></button>
             </div>
-            <div style="padding-left:50px" class="card-block card-padding text-center">
-                <h4>@Html.DisplayFor(model => model.Name)</h4>
-                <hr />
-                <dl>
+            <div class="modal-body text-center">
+                <div style="padding-left:50px" class="card-block card-padding text-center">
+                    <h4>@Html.DisplayFor(model => model.Name)</h4>
+                    <hr />
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </dt>
                     <dd>
-                        @if (Model.ImagePath != null)
-                        {
-                            <img class="img img-thumbnail" src="@Html.DisplayFor(model => model.ImagePath)" width="200" />
-                        }
-                        else
-                        {
-                            <img class="img img-thumbnail" src="~/resources/General/NoImage.jpg" width="200" />
-                        }
+                        @Html.DisplayFor(model => model.Description)
                     </dd>
                     <br />
-                </dl>
-                <hr />
-                <form asp-action="Delete">
-                    <input type="hidden" asp-for="ID" />
-                    <a style="float:left;" class="btn btn-primary" asp-action="Index">@Localizer["Back to List"].Value</a>
-                    <input style="float:right;" type="submit" value="@Localizer["Delete"].Value" class="btn btn-danger" />
-                </form>
+                    <dl>
+                        <dd>
+                            @if (Model.ImagePath != null)
+                            {
+                                <img class="img img-thumbnail" src="@Html.DisplayFor(model => model.ImagePath)" width="200" />
+                            }
+                            else
+                            {
+                                <img class="img img-thumbnail" src="~/resources/General/NoImage.jpg" width="200" />
+                            }
+                        </dd>
+                    </dl>
+                </div>
             </div>
-        </div>
+            <div class="modal-footer">
+                <input type="hidden" asp-for="ID" />
+                <input style="width:120px;" type="button" value="@Localizer["Cancel"].Value" class="btn btn-primary mr-auto" data-dismiss="modal" />
+                <input style="width:120px;float:right;" type="submit" value="@Localizer["Delete"].Value" class="btn btn-danger" />
+            </div>
+        </form>
     </div>
 </div>

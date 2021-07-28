@@ -18,34 +18,30 @@ namespace MachinePortal.Services
             _context = context;
         }
 
-
         public async Task InsertAsync(Area obj)
         {
-            _context.Add(obj);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<Area> FindByIDAsync(int ID)
-        {
-            return await _context.Area.Include(s => s.Sectors).FirstOrDefaultAsync(obj => obj.ID == ID);
-        }
-
-        public async Task<List<Area>> FindAllAsync()
-        {
-            return await _context.Area.Include(s => s.Sectors).OrderBy(x => x.Name).ToListAsync();
+            try
+            {
+                _context.Add(obj);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e) { throw new Exception(e.Message); }
         }
 
         public async Task UpdateAsync(Area obj)
         {
+            bool hasAny = await _context.Area.AnyAsync(x => x.ID == obj.ID);
+            if (!hasAny)
+            {
+                throw new NotFoundException("ID not found");
+            }
             try
             {
                 _context.Area.Update(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException e)
-            {
-                throw new IntegrityException(e.Message);
-            }
+            catch (DbConcurrencyException e) { throw new DbConcurrencyException(e.Message); }
+            catch (Exception e) { throw new Exception(e.Message); }
         }
 
         public async Task RemoveAsync(int ID)
@@ -56,10 +52,26 @@ namespace MachinePortal.Services
                 _context.Area.Remove(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException e)
+            catch (DbUpdateException e) { throw new IntegrityException(e.Message); }
+            catch (Exception e) { throw new Exception(e.Message); }
+        }
+
+        public async Task<Area> FindByIDAsync(int ID)
+        {
+            try
             {
-                throw new IntegrityException(e.Message);
+                return await _context.Area.Include(s => s.Sectors).FirstOrDefaultAsync(obj => obj.ID == ID);
             }
+            catch (Exception e) { throw new Exception(e.Message); };
+        }
+
+        public async Task<List<Area>> FindAllAsync()
+        {
+            try
+            {
+                return await _context.Area.Include(s => s.Sectors).OrderBy(x => x.Name).ToListAsync();
+            }
+            catch (Exception e) { throw new Exception(e.Message); };
         }
 
     }
