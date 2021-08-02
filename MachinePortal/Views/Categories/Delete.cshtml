@@ -14,6 +14,7 @@
                 headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
                 data: { ID : ID },
                 success: function (m) {
+                    $('.theme-loader').hide();
                     if (m == 'success') { window.location.href = "/Categories/Index"; };
                 },
                 error: function (e) {

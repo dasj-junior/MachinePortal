@@ -157,7 +157,10 @@
                                             <li class="more-details">
                                                 <a asp-area="Identity" asp-page="/Account/Manage/Index"><i class="ti-user"></i>@Localizer["Profile"].Value</a>
                                                 <a id="change-password" asp-area="Identity" asp-page="/Account/Manage/ChangePassword"><i class="ti-key"></i>@Localizer["Password"].Value</a>
-                                                <a asp-area="Identity" asp-page="/Account/Manage/DeletePersonalData"><i class="bi-x"></i>@Localizer["Delete Account"].Value</a>
+                                                @if (user.UserName != "admin" && user.UserName != "user")
+                                                {
+                                                    <a asp-area="Identity" asp-page="/Account/Manage/DeletePersonalData"><i class="bi-x"></i>@Localizer["Delete Account"].Value</a>
+                                                }
                                                 <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm">
                                                     <button id="BtnLogoutSubmit" type="submit" style="display:none"></button>
                                                     <a id="aLogoutSubmit" onclick="LogoutSubmit()" href=""><i class="ti-layout-sidebar-left"></i>@Localizer["Logout"].Value</a>

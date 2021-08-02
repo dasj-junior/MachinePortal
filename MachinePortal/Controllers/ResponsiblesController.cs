@@ -48,36 +48,50 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Responsible responsible, IFormFile image)
         {
-            Permissions();
-            if (image != null)
+            try
             {
-                long filesSize = image.Length;
-                var filePath = Path.GetTempFileName();
-
-                if (image == null || image.Length == 0)
+                if (image != null)
                 {
-                    ViewData["Error"] = "Error: No file selected";
-                    return View(ViewData);
-                }
+                    long filesSize = image.Length;
+                    var filePath = Path.GetTempFileName();
 
-                string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Responsibles\\Images\\" + fileName;
-                responsible.PhotoPath = @"/resources/Responsibles/Images/" + fileName;
+                    if (image == null || image.Length == 0)
+                    {
+                        return Content(@"notify('', 'Error: file corrupted or not found', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                    }
 
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
+                    string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Responsibles\\Images\\" + fileName;
+                    responsible.PhotoPath = @"/resources/Responsibles/Images/" + fileName;
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error saving image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
 
-            responsible.DepartmentID = responsible.Department.ID;
-            responsible.Department = null;
-            responsible.FullName = responsible.FirstName + " " + responsible.LastName;
-            
-            await _responsibleService.InsertAsync(responsible);
+            try
+            {
+                responsible.DepartmentID = responsible.Department.ID;
+                responsible.Department = null;
+                responsible.FullName = responsible.FirstName + " " + responsible.LastName;
+                await _responsibleService.InsertAsync(responsible);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error adding responsible, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
 
-            return RedirectToAction(nameof(Index));
+            TempData["notificationMessage"] = "Responsible created successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
         public async Task<IActionResult> Edit(int? ID)
@@ -101,41 +115,56 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Responsible responsible, IFormFile image)
         {
-            Permissions();
-            if (image != null)
+            try
             {
-                if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + responsible.PhotoPath))
+                if (image != null)
                 {
-                    System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + responsible.PhotoPath);
-                }
+                    if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + responsible.PhotoPath))
+                    {
+                        System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + responsible.PhotoPath);
+                    }
 
-                long filesSize = image.Length;
-                var filePath = Path.GetTempFileName();
+                    long filesSize = image.Length;
+                    var filePath = Path.GetTempFileName();
 
-                if (image == null || image.Length == 0)
-                {
-                    ViewData["Error"] = "Error: No file selected";
-                    return View(ViewData);
-                }
+                    if (image == null || image.Length == 0)
+                    {
+                        ViewData["Error"] = "Error: No file selected";
+                        return View(ViewData);
+                    }
 
-                string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Responsibles\\Images\\" + fileName;
-                responsible.PhotoPath = @"/resources/Responsibles/Images/" + fileName;
+                    string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Responsibles\\Images\\" + fileName;
+                    responsible.PhotoPath = @"/resources/Responsibles/Images/" + fileName;
 
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error updating image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+            
+            try
+            {
+                responsible.FullName = responsible.FirstName + " " + responsible.LastName;
+                responsible.DepartmentID = responsible.Department.ID;
+                responsible.Department = null;
+                await _responsibleService.UpdateAsync(responsible);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error updating responsible, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
 
-            responsible.FullName = responsible.FirstName + " " + responsible.LastName;
-            responsible.DepartmentID = responsible.Department.ID;
-            responsible.Department = null;
-
-            await _responsibleService.UpdateAsync(responsible);
-
-            return RedirectToAction(nameof(Index));
+            TempData["notificationMessage"] = "Responsible updated successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
         public async Task<IActionResult> Delete(int? ID)
@@ -158,8 +187,12 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int ID)
         {
-            Permissions();
             var responsible = await _responsibleService.FindByIDAsync(ID);
+            if (responsible == null)
+            {
+                return Content(@"notify('', 'ID not found', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
             try
             {
                 if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + responsible.PhotoPath))
@@ -167,12 +200,24 @@ namespace MachinePortal.Controllers
                     System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + responsible.PhotoPath);
                 }
             }
-            catch
+            catch (Exception e)
             {
-
+                return Content(@"notify('', '" + "Error removing image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
-            await _responsibleService.RemoveAsync(ID);
-            return RedirectToAction(nameof(Index));
+
+            try
+            {
+                await _responsibleService.RemoveAsync(ID);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error removing responsible, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            TempData["notificationMessage"] = "Responsible removed successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
         public async Task<IActionResult> Details(int? ID)
@@ -190,8 +235,7 @@ namespace MachinePortal.Controllers
 
             return View(obj);
         }
-
-        
+     
         //Partials
         [HttpGet]
         public async Task<PartialViewResult> AddPartialDetails(string id)

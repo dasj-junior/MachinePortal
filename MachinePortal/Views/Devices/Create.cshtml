@@ -111,6 +111,7 @@
                 contentType: false,
                 data: data,
                 success: function (m) {
+                    $('.theme-loader').hide();
                     if (m == 'success') { window.location.href = "/Areas/Index"; };
                 },
                 error: function (e) {

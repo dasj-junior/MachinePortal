@@ -85,7 +85,7 @@ namespace MachinePortal.Services
         {
             try
             {
-                return await _context.Machine.OrderBy(x => x.ID).Where(m => m.LineID == LineID).ToListAsync();
+                return await _context.Machine.OrderBy(x => x.Name).Where(m => m.LineID == LineID).ToListAsync();
             }
             catch (Exception e) { throw new Exception(e.Message); };
         }
@@ -94,7 +94,7 @@ namespace MachinePortal.Services
         {
             try
             {
-                return await _context.Machine.OrderBy(x => x.ID).ToListAsync();
+                return await _context.Machine.OrderBy(x => x.Name).ToListAsync();
             }
             catch (Exception e) { throw new Exception(e.Message); };
         }

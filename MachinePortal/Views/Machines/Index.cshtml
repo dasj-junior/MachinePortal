@@ -1,21 +1,20 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @model IEnumerable<MachinePortal.Models.Machine>
+
 @* Check User Permissions *@
 @using Microsoft.AspNetCore.Identity
 @using MachinePortal.Areas.Identity.Data
 @using Microsoft.EntityFrameworkCore
 @inject UserManager<MachinePortalUser> UserManager
 @inject IdentityContext identityContext
+
 @{
 
     var user = await UserManager.GetUserAsync(User);
     List<string> permissions = new List<string>();
     if (user != null) { permissions = ((from obj in identityContext.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == user.Id).ToList()).Select(p => p.Permission.PermissionName).ToList(); };
     if (!permissions.Contains("PageMachines")) { Context.Response.Redirect("/Home/AccessDenied"); };
-}
-
-@{
     string notMessage = (TempData["notificationMessage"] != null) ? TempData["notificationMessage"].ToString() : "";
     string notIcon = (TempData["notificationIcon"] != null) ? TempData["notificationIcon"].ToString() : "";
     string notType = (TempData["notificationType"] != null) ? TempData["notificationType"].ToString() : "";

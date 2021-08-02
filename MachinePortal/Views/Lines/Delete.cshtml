@@ -14,7 +14,8 @@
                 headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
                 data: { ID : ID },
                 success: function (m) {
-                    if (m == 'success') { window.location.href = "/Lines/Index"; };
+                    $('.theme-loader').hide();
+                    if (m == 'success') { window.location.href = "/Sectors/Details"; };
                 },
                 error: function (e) {
                     alert(e.responseText);

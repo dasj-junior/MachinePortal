@@ -56,38 +56,54 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Line Line, IFormFile image)
         {
-            Permissions();
+
             if (!ModelState.IsValid)
             {
                 var viewModel = new LineFormViewModel { Line = Line};
                 return View(viewModel);
             }
 
-            if (image != null)
+            try
             {
-                //long filesSize = image.Length;
-                //var filePath = Path.GetTempFileName();
-
-                if (image == null || image.Length == 0)
+                if (image != null)
                 {
-                    ViewData["Error"] = "Error: No file selected";
-                    return View(ViewData);
-                }
+                    //long filesSize = image.Length;
+                    //var filePath = Path.GetTempFileName();
 
-                string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Lines\\Images\\" + fileName;
-                Line.ImagePath = @"/resources/Lines/Images/" + fileName;
+                    if (image == null || image.Length == 0)
+                    {
+                        return Content(@"notify('', 'Error: file corrupted or not found', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                    }
 
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
+                    string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Lines\\Images\\" + fileName;
+                    Line.ImagePath = @"/resources/Lines/Images/" + fileName;
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error saving image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
 
-            await _LineService.InsertAsync(Line);
+            try
+            {
+                await _LineService.InsertAsync(Line);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error adding line, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
 
-            return RedirectToAction(@"Details/" + Line.SectorID, "Sectors");
+            TempData["notificationMessage"] = "Line created successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
         public async Task<IActionResult> Edit(int? ID)
@@ -110,37 +126,54 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Line Line, IFormFile image)
         {
-            Permissions();
-            if (image != null)
+            
+            try
             {
-                if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + Line.ImagePath))
+                if (image != null)
                 {
-                    System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + Line.ImagePath);
-                }
+                    if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + Line.ImagePath))
+                    {
+                        System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + Line.ImagePath);
+                    }
 
-                //long filesSize = image.Length;
-                //var filePath = Path.GetTempFileName();
+                    //long filesSize = image.Length;
+                    //var filePath = Path.GetTempFileName();
 
-                if (image == null || image.Length == 0)
-                {
-                    ViewData["Error"] = "Error: No file selected";
-                    return View(ViewData);
-                }
+                    if (image == null || image.Length == 0)
+                    {
+                        ViewData["Error"] = "Error: No file selected";
+                        return View(ViewData);
+                    }
 
-                string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Lines\\Images\\" + fileName;
-                Line.ImagePath = @"/resources/Lines/Images/" + fileName;
+                    string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Lines\\Images\\" + fileName;
+                    Line.ImagePath = @"/resources/Lines/Images/" + fileName;
 
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error updating image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
 
-            await _LineService.UpdateAsync(Line);
+            try
+            {
+                await _LineService.UpdateAsync(Line);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error updating line, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
 
-            return RedirectToAction(@"Details/" + Line.SectorID, "Sectors");
+            TempData["notificationMessage"] = "Line updated successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
         public async Task<IActionResult> Delete(int? ID)
@@ -163,8 +196,12 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int ID)
         {
-            Permissions();
             var Line = await _LineService.FindByIDAsync(ID);
+            if(Line == null)
+            {
+                return Content(@"notify('', 'ID not found', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
             try
             {
                 if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + Line.ImagePath))
@@ -172,12 +209,24 @@ namespace MachinePortal.Controllers
                     System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + Line.ImagePath);
                 }
             }
-            catch
+            catch (Exception e)
             {
-
+                return Content(@"notify('', '" + "Error removing image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
-            await _LineService.RemoveAsync(ID);
-            return RedirectToAction(@"Details/" + Line.SectorID, "Sectors");
+
+            try
+            {
+                await _LineService.RemoveAsync(ID);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error removing line, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            TempData["notificationMessage"] = "Line removed successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
         public async Task<IActionResult> Details(int? ID)

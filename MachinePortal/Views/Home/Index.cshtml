@@ -13,17 +13,10 @@
 }
 
 <!-- Scripts JQuery and WebCodeCam -->
-@*<script src="~/webcodecamjs/js/jquery.js"></script>
-    <script src="~/webcodecamjs/js/qrcodelib.js"></script>
-    <script src="~/webcodecamjs/js/webcodecamjquery.js"></script>*@
 <script src="~/assets/js/html5-qrcode.min.js"></script>
 
 @* Machine Search By Input ID *@
 <script>
-
-    $(document).ready(function () {
-
-    });
 
     $(document).ready(function () {
         $(".note__close").click(function () {
@@ -45,6 +38,7 @@
     $(document).ready(function () {
         $("#SearchByID").on("click", function () {
             var id = $('#InputID').val();
+            $('.theme-loader').show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Content("~/")' + "Home/ValidateMachineID",
@@ -52,9 +46,10 @@
                 success: function (e) {
                     if (e == true) {
                         window.location.href = "Machines/Details/" + id;
+                        $('.theme-loader').hide();
                     }
                     else {
-                        //options "success" "warning" "error" "secondary" "info"
+                        $('.theme-loader').hide();
                         notify(' Error: ', 'Machine Not Found', 'top', 'right', 'bi-x-circle', 'error', 'animated fadeInRight', 'animated fadeInRight')
                     }
                 },
@@ -76,7 +71,7 @@
 <script>
     $(document).ready(function () {
         $("#SearchByQR").on("click", function () {
-            html5QrcodeScanner.s
+            html5QrcodeScanner.render(onScanSuccess);
         });
 
         $('#modalQR').on('hidden.bs.modal', function () {
@@ -88,7 +83,7 @@
 @* QR Code Decoder *@
 <script type="text/javascript">
     function onScanSuccess(decodedText, decodedResult) {
-            // Handle on success condition with the decoded message.
+            $('.theme-loader').show();
             $.ajax({
                 type: "POST",
                 url: '@Url.Content("~/")' + "Home/ValidateMachineID",
@@ -98,6 +93,7 @@
                         window.location.href = "Machines/Details/" + decodedText;
                     }
                     else {
+                        $('.theme-loader').hide();
                         alert("Machine Not Found");
                     }
                 },
@@ -203,7 +199,6 @@
             </div>
             <script>
                 var html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: 250 });
-                html5QrcodeScanner.render(onScanSuccess);
             </script>
 
         </div>

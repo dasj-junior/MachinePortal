@@ -55,7 +55,8 @@
                 contentType: false,
                 data: new FormData(this),
                 success: function (m) {
-                    if (m == 'success') { window.location.href = "/Lines/Index"; };
+                    $('.theme-loader').hide();
+                    if (m == 'success') { window.location.href = "/Sectors/Details/" @Model.SectorID; };
                 },
                 error: function (e) {
                     $('.theme-loader').hide();
@@ -98,7 +99,7 @@
                         <input asp-for="Name" class="form-control" />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
-                    <input style="display:none" asp-for="ID" />
+                    <input style="display:none" asp-for="SectorID" />
                 </div>
             </div>
             <div class="modal-footer">

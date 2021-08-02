@@ -56,38 +56,54 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Sector Sector, IFormFile image)
         {
-            Permissions();
             if (!ModelState.IsValid)
             {
                 var viewModel = new SectorFormViewModel { Sector = Sector };
                 return View(viewModel);
             }
 
-            if (image != null)
+            try
             {
-                //long filesSize = image.Length;
-                //var filePath = Path.GetTempFileName();
-
-                if (image == null || image.Length == 0)
+                if (image != null)
                 {
-                    ViewData["Error"] = "Error: No file selected";
-                    return View(ViewData);
-                }
+                    //long filesSize = image.Length;
+                    //var filePath = Path.GetTempFileName();
 
-                string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Sectors\\Images\\" + fileName;
-                Sector.ImagePath = @"/resources/Sectors/Images/" + fileName;
+                    if (image == null || image.Length == 0)
+                    {
+                        ViewData["Error"] = "Error: No file selected";
+                        return View(ViewData);
+                    }
 
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
+                    string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Sectors\\Images\\" + fileName;
+                    Sector.ImagePath = @"/resources/Sectors/Images/" + fileName;
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error saving image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
 
-            await _SectorService.InsertAsync(Sector);
+            try
+            {
+                await _SectorService.InsertAsync(Sector);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error adding sector, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
 
-            return RedirectToAction(@"Details/" + Sector.AreaID, "Areas");
+            TempData["notificationMessage"] = "Sector created successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
         public async Task<IActionResult> Edit(int? ID)
@@ -110,37 +126,53 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Sector Sector, IFormFile image)
         {
-            Permissions();
-            if (image != null)
+            try
             {
-                if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + Sector.ImagePath))
+                if (image != null)
                 {
-                    System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + Sector.ImagePath);
-                }
+                    if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + Sector.ImagePath))
+                    {
+                        System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + Sector.ImagePath);
+                    }
 
-                //long filesSize = image.Length;
-                //var filePath = Path.GetTempFileName();
+                    //long filesSize = image.Length;
+                    //var filePath = Path.GetTempFileName();
 
-                if (image == null || image.Length == 0)
-                {
-                    ViewData["Error"] = "Error: No file selected";
-                    return View(ViewData);
-                }
+                    if (image == null || image.Length == 0)
+                    {
+                        ViewData["Error"] = "Error: No file selected";
+                        return View(ViewData);
+                    }
 
-                string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Sectors\\Images\\" + fileName;
-                Sector.ImagePath = @"/resources/Sectors/Images/" + fileName;
+                    string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Sectors\\Images\\" + fileName;
+                    Sector.ImagePath = @"/resources/Sectors/Images/" + fileName;
 
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error updating image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+            
+            try
+            {
+                await _SectorService.UpdateAsync(Sector);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error updating sector, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
 
-            await _SectorService.UpdateAsync(Sector);
-
-            return RedirectToAction(@"Details/" + Sector.AreaID, "Areas");
+            TempData["notificationMessage"] = "Sector updated successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
         public async Task<IActionResult> Delete(int? ID)
@@ -163,8 +195,12 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int ID)
         {
-            Permissions();
             var Sector = await _SectorService.FindByIDAsync(ID);
+            if (Sector == null)
+            {
+                return Content(@"notify('', 'ID not found', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
             try
             {
                 if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + Sector.ImagePath))
@@ -172,12 +208,24 @@ namespace MachinePortal.Controllers
                     System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + Sector.ImagePath);
                 }
             }
-            catch
+            catch (Exception e)
             {
-
+                return Content(@"notify('', '" + "Error removing image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
-            await _SectorService.RemoveAsync(ID);
-            return RedirectToAction(@"Details/" + Sector.AreaID, "Areas");
+
+            try
+            {
+                await _SectorService.RemoveAsync(ID);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error removing sector, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            TempData["notificationMessage"] = "Sector removed successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
         public async Task<IActionResult> Details(int? ID)
@@ -196,7 +244,6 @@ namespace MachinePortal.Controllers
             return View(obj);
         }
 
-        
         //Partials 
         [HttpPost]
         public async Task<PartialViewResult> AddPartialEdit(string id)

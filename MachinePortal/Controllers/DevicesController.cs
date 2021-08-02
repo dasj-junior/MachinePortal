@@ -67,7 +67,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Erro getting files from page, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Erro getting files from page, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
             
             try
@@ -96,7 +96,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error saving device image, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error saving device image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -105,7 +105,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error adding device, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error adding device, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -142,7 +142,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error saving device documents, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error saving device documents, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             TempData["notificationMessage"] = "Device inserted successfuly";
@@ -195,7 +195,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Erro getting data from page, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Erro getting data from page, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
             
             try
@@ -230,7 +230,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Erro updating image, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Erro updating image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -269,7 +269,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Erro adding documents, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Erro adding documents, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -287,7 +287,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error removing documents, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error removing documents, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -296,7 +296,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error updating device, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error updating device, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             TempData["notificationMessage"] = "Device updated successfuly";
@@ -345,7 +345,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error deleting device documents, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error deleting device documents, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -354,7 +354,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error deleting device, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error deleting device, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             TempData["notificationMessage"] = "Device removed successfuly";

@@ -69,7 +69,7 @@ namespace MachinePortal.Controllers
             }
             catch(Exception e)
             {
-                return Content(@"notify('', '" + "Error on saving image, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error on saving image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
             
             try
@@ -78,7 +78,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error updating database, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error updating database, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             TempData["notificationMessage"] = "Area add successfuly";
@@ -121,7 +121,7 @@ namespace MachinePortal.Controllers
 
                     if (image == null || image.Length == 0)
                     {
-                        return Content(@"notify('', '" + "Error: File corrupted or invalid" + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                        return Content(@"notify('', '" + "Error: File corrupted or invalid" + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
                     }
 
                     string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -138,7 +138,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error updating image, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error updating image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -147,7 +147,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error updating area on database, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error updating area on database, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             TempData["notificationMessage"] = "Area updated successfuly";
@@ -191,7 +191,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error deleting image on server, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error deleting image on server, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -200,7 +200,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error deleting area on database, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error deleting area on database, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             TempData["notificationMessage"] = "Area deleted successfuly";

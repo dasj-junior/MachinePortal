@@ -55,7 +55,8 @@
                 contentType: false,
                 data: new FormData(this),
                 success: function (m) {
-                    if (m == 'success') { window.location.href = "/Lines/Index"; };
+                    $('.theme-loader').hide();
+                    if (m == 'success') { window.location.href = "/Areas/Details/" + @Model.AreaID; };
                 },
                 error: function (e) {
                     $('.theme-loader').hide();
@@ -102,7 +103,7 @@
                         <label asp-for="Lines" class="control-label"></label>
                         <select asp-for="Lines" asp-items="@(new SelectList(Model.Lines,"ID","Name"))" class="form-control" multiple></select>
                     </div>
-                    <input style="display:none" asp-for="ID" />
+                    <input style="display:none" asp-for="AreaID" />
                 </div>
             </div>
             <div class="modal-footer">

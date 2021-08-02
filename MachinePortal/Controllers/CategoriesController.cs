@@ -50,7 +50,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Erro adding category, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Erro adding category, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
             
         }
@@ -87,7 +87,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Erro editing category, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Erro editing category, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             } 
         }
 
@@ -124,7 +124,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Erro deleting category on server, description: " + e.Message + @", 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Erro deleting category on server, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             } 
         }
 

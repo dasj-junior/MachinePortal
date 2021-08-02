@@ -7,6 +7,7 @@
     $(document).ready(function () {
         $("form").submit(function (event) {
             event.preventDefault()
+            $('.theme-loader').show();
             var ID = document.getElementById('ID').value;
             $.ajax({
                 url: '@Url.Content("~/")' + "Responsibles/Delete",
@@ -14,9 +15,11 @@
                 headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
                 data: { ID : ID },
                 success: function (m) {
+                    $('.theme-loader').hide();
                     if (m == 'success') { window.location.href = "/Responsibles/Index"; };
                 },
                 error: function (e) {
+                    $('.theme-loader').hide();
                     alert(e.responseText);
                 }
             });

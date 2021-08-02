@@ -435,6 +435,7 @@ $("#insertVideo").on("click", function () {
 
 $("form").submit(function (event) {
     event.preventDefault();
+    $('.theme-loader').show();
     var data = new FormData($('#form')[0]);
     for (var pair of formdata.entries()) {
         data.append(pair[0], pair[1]);
@@ -443,7 +444,6 @@ $("form").submit(function (event) {
     data.append('DRemove', JSON.stringify(DRemove));
     data.append('IRemove', JSON.stringify(IRemove));
     data.append('VRemove', JSON.stringify(VRemove));
-    $('.theme-loader').show();
     $.ajax({
         url: '@Url.Content("~/")' + "Machines/Edit",
         type: "POST",
@@ -451,7 +451,8 @@ $("form").submit(function (event) {
         contentType: false,
         data: data,
         success: function (m) {
-            if (m == 'success') { window.location.href = "/Lines/Index"; };
+            $('.theme-loader').hide();
+            if (m == 'success') { window.location.href = "/Machines/Index"; };
         },
         error: function (e) {
             $('.theme-loader').hide();
@@ -837,14 +838,14 @@ $('#SectorID').on('change', function() {
                         </div>
                         <div class="row">
                             <div class="col-md-5 col-sm-5">
-                                <select id="DevicesSelect" asp-items="@ViewBag.ListSelectDevices" class="form-control" multiple></select>
+                                <select id="DevicesSelect" style="height:200px;" asp-items="@ViewBag.ListSelectDevices" class="form-control" multiple></select>
                             </div>
                             <div class="col-md-2 col-sm-2">
-                                <button type="button" id="rightDevices" class="btn btn-success btn-block bi-arrow-right"></button>
-                                <button type="button" id="leftDevices" class="btn btn-success btn-block btn-danger bi-arrow-left"></button>
+                                <button type="button" style="height:50px;" id="rightDevices" class="btn btn-success btn-block bi-arrow-right"></button>
+                                <button type="button" style="height:50px;" id="leftDevices" class="btn btn-success btn-block btn-danger bi-arrow-left"></button>
                             </div>
                             <div class="col-md-5 col-sm-5">
-                                <select id="DevicesSelected" asp-items="@ViewBag.ListSelectedDevices" asp-for="SelectedDevices" class="form-control" multiple></select>
+                                <select id="DevicesSelected" style="height:200px;" asp-items="@ViewBag.ListSelectedDevices" asp-for="SelectedDevices" class="form-control" multiple></select>
                             </div>
                         </div>
                     </div>
@@ -879,14 +880,14 @@ $('#SectorID').on('change', function() {
                         </div>
                         <div class="row">
                             <div class="col-md-5 col-sm-5">
-                                <select id="ResponsiblesSelect" asp-items="@ViewBag.ListSelectResponsibles" class="form-control" multiple></select>
+                                <select id="ResponsiblesSelect" style="height:200px;" asp-items="@ViewBag.ListSelectResponsibles" class="form-control" multiple></select>
                             </div>
                             <div class="col-md-2 col-sm-2">
-                                <button type="button" id="rightResponsibles" class="btn btn-success btn-block bi-arrow-right"></button>
-                                <button type="button" id="leftResponsibles" class="btn btn-success btn-block btn-danger bi-arrow-left"></button>
+                                <button type="button" style="height:50px;" id="rightResponsibles" class="btn btn-success btn-block bi-arrow-right"></button>
+                                <button type="button" style="height:50px;" id="leftResponsibles" class="btn btn-success btn-block btn-danger bi-arrow-left"></button>
                             </div>
                             <div class="col-md-5 col-sm-5">
-                                <select id="ResponsiblesSelected" asp-items="@ViewBag.ListSelectedResponsibles" asp-for="SelectedResponsibles" class="form-control" multiple></select>
+                                <select id="ResponsiblesSelected" style="height:200px;" asp-items="@ViewBag.ListSelectedResponsibles" asp-for="SelectedResponsibles" class="form-control" multiple></select>
                             </div>
                         </div>
                     </div>

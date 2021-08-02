@@ -28,7 +28,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
         public SelectList SlDepartments { get; set; }
         public int[] SelectPermissions { get; set; }
         public int[] SelectedPermissions { get; set; }
-        public MachinePortalUser user = new MachinePortalUser();
+        public MachinePortalUser user { get; set; }
         public string ReturnUrl { get; set; }
         [BindProperty]
         public int SelectedDepartment { get; set; }
@@ -43,14 +43,14 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnGet(string ID)
         {
             //Verify Permissions
-            var user = await _userManager.GetUserAsync(User);
+            user = await _userManager.GetUserAsync(User);
             if (user != null) { permissions = ((from obj in _context.UserPermission select obj).Include(p => p.Permission).Where(x => x.UserID == user.Id).ToList()).Select(p => p.Permission.PermissionName).ToList(); };
             if (!permissions.Contains("PageManagePermissions"))
             {
                 return RedirectToPage(@"./../AccessDenied");
             };
 
-            user = _context.Users.FirstOrDefault(obj => obj.Id == ID);
+            //user = _context.Users.FirstOrDefault(obj => obj.Id == ID);
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");

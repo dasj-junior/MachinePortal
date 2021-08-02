@@ -69,15 +69,6 @@ namespace MachinePortal.Controllers
         public async Task<IActionResult> Index()
         {
             Permissions();
-
-            ViewData["notificationMessage"] = HttpContext.Session.GetString("notificationMessage");
-            ViewData["notificationIcon"] = HttpContext.Session.GetString("notificationIcon");
-            ViewData["notificationType"] = HttpContext.Session.GetString("notificationType");
-
-            HttpContext.Session.SetString("notificationMessage", "");
-            HttpContext.Session.SetString("notificationIcon", "");
-            HttpContext.Session.SetString("notificationType", "");
-
             List<Machine> machines = await _machineService.FindAllAsync();
             return View(machines);
         }
@@ -102,7 +93,6 @@ namespace MachinePortal.Controllers
 
             var viewModel = new MachineFormViewModel { Responsibles = responsibles, Devices = devices };
             return View(viewModel);
-
         }
 
         [HttpPost]
@@ -110,7 +100,6 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MachineFormViewModel machineFVM, IFormFile photo)
         {
-            Permissions();
             List<IFormFile> documents = new List<IFormFile>();
             List<IFormFile> images = new List<IFormFile>();
             List<IFormFile> videos = new List<IFormFile>();
@@ -343,7 +332,10 @@ namespace MachinePortal.Controllers
                 }
             }
 
-            return RedirectToAction("Index");
+            TempData["notificationMessage"] = "Machine created successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
         public async Task<IActionResult> Edit(int? ID)
@@ -393,10 +385,8 @@ namespace MachinePortal.Controllers
         [HttpPost]
         [DisableRequestSizeLimit]
         [ValidateAntiForgeryToken]
-        public async Task Edit(MachineFormViewModel machineNEW, IFormFile photo)
+        public async Task<IActionResult> Edit(MachineFormViewModel machineNEW, IFormFile photo)
         {
-            Permissions();
-
             //Get data from original machine
             Machine machineOLD = await _machineService.FindByIDAsync(machineNEW.Machine.ID);
 
@@ -829,9 +819,10 @@ namespace MachinePortal.Controllers
 
             await _machineService.UpdateAsync(machineOLD);
 
-            HttpContext.Session.SetString("notificationMessage", "Maquina atualizada com sucesso");
-            HttpContext.Session.SetString("notificationIcon", "bi-check-circle");
-            HttpContext.Session.SetString("notificationType", "success");
+            TempData["notificationMessage"] = "Machine updated successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
         public async Task<IActionResult> Delete(int? ID)
@@ -854,8 +845,11 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int ID)
         {
-            Permissions();
             var machine = await _machineService.FindByIDAsync(ID);
+            if (machine == null)
+            {
+                return Content(@"notify('', 'ID not found', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
             try
             {
                 if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + machine.ImagePath))
@@ -884,12 +878,24 @@ namespace MachinePortal.Controllers
                     }
                 }
             }
-            catch
+            catch (Exception e)
             {
-
+                return Content(@"notify('', '" + "Error removing files, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
-            await _machineService.RemoveAsync(ID);
-            return RedirectToAction(nameof(Index));
+
+            try
+            {
+                await _machineService.RemoveAsync(ID);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error removing machine, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            TempData["notificationMessage"] = "Machine removed successfuly";
+            TempData["notificationIcon"] = "bi-check-circle";
+            TempData["notificationType"] = "success";
+            return Content("success");
         }
 
         public async Task<IActionResult> Details(int? ID)

@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="web.config" />
     <Content Remove="wwwroot\assets\js\popper.js\popper.min.js_OLD" />
     <Content Remove="wwwroot\resources\Devices\Documents\20201228155207.jpg" />
     <Content Remove="wwwroot\resources\Devices\Documents\20201228155245.jpg" />
@@ -74,9 +73,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="web.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="wwwroot\assets\icon\bootstrap-icons\fonts\bootstrap-icons.woff2" />
     <None Include="wwwroot\assets\icon\icofont\fonts\icofont.svg" />
     <None Include="wwwroot\assets\icon\themify-icons\fonts\themify.svg" />
@@ -134,14 +130,6 @@
     <None Include="wwwroot\assets\pages\widget\amchart\serial.min.js" />
     <None Include="wwwroot\assets\pages\widget\amchart\worldLow.js" />
     <None Include="wwwroot\assets\pages\widget\amchart\worldLow.min.js" />
-    <None Include="wwwroot\webcodecamjs\js\DecoderWorker.js" />
-    <None Include="wwwroot\webcodecamjs\js\filereader.js" />
-    <None Include="wwwroot\webcodecamjs\js\jquery.js" />
-    <None Include="wwwroot\webcodecamjs\js\main.js" />
-    <None Include="wwwroot\webcodecamjs\js\mainjquery.js" />
-    <None Include="wwwroot\webcodecamjs\js\qrcodelib.js" />
-    <None Include="wwwroot\webcodecamjs\js\webcodecamjquery.js" />
-    <None Include="wwwroot\webcodecamjs\js\webcodecamjs.js" />
   </ItemGroup>
 
   <ItemGroup>

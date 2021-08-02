@@ -68,7 +68,8 @@
                 contentType: false,
                 data: new FormData(this),
                 success: function (m) {
-                    if (m == 'success') { window.location.href = "/Lines/Index"; };
+                    $('.theme-loader').hide();
+                    if (m == 'success') { window.location.href = "/Areas/Details"; };
                 },
                 error: function (e) {
                     $('.theme-loader').hide();

@@ -19,7 +19,18 @@
 @{
     var AreaID = Model.AreaID;
     var SectorID = Model.ID;
+    string notMessage = (TempData["notificationMessage"] != null) ? TempData["notificationMessage"].ToString() : "";
+    string notIcon = (TempData["notificationIcon"] != null) ? TempData["notificationIcon"].ToString() : "";
+    string notType = (TempData["notificationType"] != null) ? TempData["notificationType"].ToString() : "";
 }
+
+<script>
+    $(document).ready(function () {
+        if ('@notMessage' != '') {
+            notify('', '@notMessage', 'top', 'right', '@notIcon', '@notType', 'fadeInRight', 'fadeInRight');
+        };
+    });
+</script>
 
 <script>
     function renderPartialEdit(ID) {
@@ -71,9 +82,9 @@
         <div>
             @if (permissions.Contains("HierarchiesCreate"))
             {
-                <p>
-                    <button class="btn btn-primary btn-create" data-toggle="modal" data-target="#modalCreate">@Localizer["Create New Line"].Value</button>
-                </p>
+            <p>
+                <button class="btn btn-primary btn-create" data-toggle="modal" data-target="#modalCreate">@Localizer["Create New Line"].Value</button>
+            </p>
             }
             <div class="table-responsive">
                 <table style="table-layout:auto;" class="table table-hover table-bordered table-vitesco">
@@ -87,27 +98,27 @@
                     <tbody>
                         @foreach (var item in Model.Lines)
                         {
-                            <tr>
-                                @if (item.ImagePath != null)
+                        <tr>
+                            @if (item.ImagePath != null)
                                 {
-                                    <td class="text-center"><img src="@Html.DisplayFor(modelItem => item.ImagePath)" width="100" /></td>
+                            <td class="text-center"><img src="@Html.DisplayFor(modelItem => item.ImagePath)" width="100" /></td>
                                 }
                                 else
                                 {
-                                    <td class="text-center"><img src="~/resources/General/NoImage.jpg" width="100" /></td>
+                            <td class="text-center"><img src="~/resources/General/NoImage.jpg" width="100" /></td>
                                 }
-                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                                <td class="text-center ws-nowrap">
-                                    @if (permissions.Contains("HierarchiesEdit"))
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td class="text-center ws-nowrap">
+                                @if (permissions.Contains("HierarchiesEdit"))
                                     {
-                                        <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
+                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
                                     }
-                                    @if (permissions.Contains("HierarchiesDelete"))
+                                @if (permissions.Contains("HierarchiesDelete"))
                                     {
-                                        <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
+                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
                                     }
-                                </td>
-                            </tr>
+                            </td>
+                        </tr>
                         }
                     </tbody>
                 </table>
