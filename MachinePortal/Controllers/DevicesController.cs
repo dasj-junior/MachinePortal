@@ -13,6 +13,7 @@ using Microsoft.Extensions.FileProviders;
 using System.Security.Claims;
 using MachinePortal.Areas.Identity.Data;
 using Newtonsoft.Json;
+using System.Web;
 
 namespace MachinePortal.Controllers
 {
@@ -57,7 +58,7 @@ namespace MachinePortal.Controllers
         public async Task<IActionResult> Create(Device device, IFormFile image)
         {
             //Generate list of documents from the update page
-            List<IFormFile> documents = new List<IFormFile>();
+            List<IFormFile> documents = new List<IFormFile>(); 
             try
             {
                 foreach (var file in Request.Form.Files)
@@ -67,7 +68,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Erro getting files from page, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Erro getting files from page, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
             
             try
@@ -79,8 +80,7 @@ namespace MachinePortal.Controllers
 
                     if (image == null || image.Length == 0)
                     {
-                        ViewData["Error"] = "Error: No file selected";
-                        return View(ViewData);
+                        return Content(@"notify('', 'Error: No file selected', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
                     }
 
                     string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -96,7 +96,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error saving device image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error saving device image, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -105,7 +105,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error adding device, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error adding device, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -117,8 +117,7 @@ namespace MachinePortal.Controllers
 
                     if (document == null || document.Length == 0)
                     {
-                        ViewData["Error"] = "Error: No file selected";
-                        return View(ViewData);
+                        return Content(@"notify('', 'Error: No file selected', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
                     }
 
                     string fileName = document.FileName.Substring(0, document.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
@@ -142,7 +141,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error saving device documents, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error saving device documents, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             TempData["notificationMessage"] = "Device inserted successfuly";
@@ -195,7 +194,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Erro getting data from page, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Erro getting data from page, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
             
             try
@@ -213,8 +212,7 @@ namespace MachinePortal.Controllers
 
                     if (image == null || image.Length == 0)
                     {
-                        ViewData["Error"] = "Error: No file selected";
-                        return View(ViewData);
+                        return Content(@"notify('', 'Error: No file selected', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
                     }
 
                     string fileName = DateTime.Now.ToString("yyyyMMddHHmmssfffffff");
@@ -230,7 +228,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Erro updating image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Erro updating image, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -243,8 +241,7 @@ namespace MachinePortal.Controllers
 
                     if (document == null || document.Length == 0)
                     {
-                        ViewData["Error"] = "Error: No file selected";
-                        return View(ViewData);
+                        return Content(@"notify('', 'Error: No file selected', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
                     }
 
                     string fileName = document.FileName.Substring(0, document.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
@@ -269,7 +266,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Erro adding documents, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Erro adding documents, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -287,7 +284,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error removing documents, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error removing documents, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -296,7 +293,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error updating device, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error updating device, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             TempData["notificationMessage"] = "Device updated successfuly";
@@ -345,7 +342,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error deleting device documents, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error deleting device documents, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -354,7 +351,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error deleting device, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error deleting device, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             TempData["notificationMessage"] = "Device removed successfuly";

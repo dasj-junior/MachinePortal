@@ -189,7 +189,7 @@ $(document).ready(function () {
 </script>
 
 <div class="row">
-    <div class="col-12">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-10">
         <div class="card fb-card c-vitesco-gray">
             <div class="card-header c-vitesco-gray">
                 <i style="vertical-align:middle" class="ti-desktop c-vitesco-gray"></i>
@@ -209,11 +209,11 @@ $(document).ready(function () {
                     <dd>
                         @if (Model.ImagePath != null)
                         {
-                            <img src="@Html.DisplayFor(model => model.ImagePath)" height="300" class="img-thumbnail" />
+                        <img src="@Html.DisplayFor(model => model.ImagePath)" height="300" class="img-thumbnail" />
                         }
                         else
                         {
-                            <img src="~/resources/General/NoImage.jpg" height="300" class="img-thumbnail" />
+                        <img src="~/resources/General/NoImage.jpg" height="300" class="img-thumbnail" />
                         }
                     </dd>
                     <dt>
@@ -307,7 +307,7 @@ $(document).ready(function () {
                 @if (Model.MachineDocuments.Count > 10)
                 {
                     Qty = 10;
-                    <a asp-action="MachineDocuments" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
+                <a asp-action="MachineDocuments" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
                 }
                 else
                 {
@@ -329,24 +329,24 @@ $(document).ready(function () {
                             <tbody>
                                 @foreach (var document in Model.MachineDocuments.Take(10))
                                 {
-                                    <tr>
-                                        <td>@Html.DisplayFor(modelItem => document.Name)</td>
-                                        <td>@Html.DisplayFor(modelItem => document.Category.Name)</td>
-                                        <td>@Html.DisplayFor(modelItem => document.FileName)</td>
-                                        @if (document.Location == "file")
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => document.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => document.Category.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => document.FileName)</td>
+                                    @if (document.Location == "file")
                                         {
-                                            <td class="text-center ws-nowrap"><a class="btn btn-success" href="@Html.DisplayFor(modelItem => document.Path)@Html.DisplayFor(modelItem => document.FileName)" target="_blank">@Localizer["Open"].Value<a /></td>
+                                    <td class="text-center ws-nowrap"><a class="btn btn-success" href="@Html.DisplayFor(modelItem => document.Path)@Html.DisplayFor(modelItem => document.FileName)" target="_blank">@Localizer["Open"].Value<a /></td>
                                         }
                                         else if (document.Location == "web")
                                         {
-                                            <td class="text-center ws-nowrap"><a class="btn btn-success" href="@Html.DisplayFor(modelItem => document.FileName)" target="_blank">@Localizer["Open"].Value<a /></td>
+                                    <td class="text-center ws-nowrap"><a class="btn btn-success" href="@Html.DisplayFor(modelItem => document.FileName)" target="_blank">@Localizer["Open"].Value<a /></td>
                                         }
                                         else if (document.Location == "path")
                                         {
-                                            <td class="text-center ws-nowrap"><button class="btn btn-success" onclick="openDocumentPath('@Html.Raw(document.FileName)')">@Localizer["Open"].Value</button></td>
-                                            @*<td>@Html.ActionLink("Open", "DownloadPath", new { path = document.FileName }, new { target = "_blank" })</td>*@
+                                    <td class="text-center ws-nowrap"><button class="btn btn-success" onclick="openDocumentPath('@Html.Raw(document.FileName)')">@Localizer["Open"].Value</button></td>
+                                    @*<td>@Html.ActionLink("Open", "DownloadPath", new { path = document.FileName }, new { target = "_blank" })</td>*@
                                         }
-                                    </tr>
+                                </tr>
                                 }
                             </tbody>
                         </table>
@@ -362,7 +362,7 @@ $(document).ready(function () {
                 @if (Model.MachineImages.Count > 5)
                 {
                     Qty = 5;
-                    <a asp-controller="Machines" asp-action="MachineImages" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
+                <a asp-controller="Machines" asp-action="MachineImages" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
                 }
                 else
                 {
@@ -373,26 +373,26 @@ $(document).ready(function () {
                 <dl class="dl-horizontal">
                     @foreach (var image in Model.MachineImages.Take(5))
                     {
-                        @if (image.Location == "file")
+                    @if (image.Location == "file")
                         {
-                            <a href="@image.Path@image.FileName" target="_blank">
-                                @{string imgFullPath = image.Path + image.FileName;}
-                                <img class="img-thumbnail" style="margin: 10px;" src="@imgFullPath" height="300" />
-                            </a>
+                    <a href="@image.Path@image.FileName" target="_blank">
+                        @{string imgFullPath = image.Path + image.FileName;}
+                        <img class="img-thumbnail" style="margin: 10px;" src="@imgFullPath" height="300" />
+                    </a>
                         }
                         else if (image.Location == "path")
                         {
 
-                            <a href="@Url.Action("DownloadPath","Machines", new { path = image.FileName })" target="_blank">
-                                <img class="img-thumbnail" style="margin: 10px;" src="@Url.Action("DownloadPath","Machines", new { path = image.FileName })" height="300" />
-                            </a>
+                    <a href="@Url.Action("DownloadPath","Machines", new { path = image.FileName })" target="_blank">
+                        <img class="img-thumbnail" style="margin: 10px;" src="@Url.Action("DownloadPath","Machines", new { path = image.FileName })" height="300" />
+                    </a>
                         }
                         else if (image.Location == "web")
                         {
-                            <a href="@image.FileName" target="_blank">
-                                @{string imgFullPath = image.FileName;}
-                                <img class="img-thumbnail" style="margin: 10px;" src="@imgFullPath" height="300" />
-                            </a>
+                    <a href="@image.FileName" target="_blank">
+                        @{string imgFullPath = image.FileName;}
+                        <img class="img-thumbnail" style="margin: 10px;" src="@imgFullPath" height="300" />
+                    </a>
                         }
 
                     }
@@ -408,7 +408,7 @@ $(document).ready(function () {
                 @if (Model.MachineVideos.Count > 1)
                 {
                     Qty = 1;
-                    <a asp-action="MachineVideos" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
+                <a asp-action="MachineVideos" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
                 }
                 else
                 {
@@ -419,18 +419,18 @@ $(document).ready(function () {
                 <dl class="dl-horizontal">
                     @foreach (MachineVideo video in Model.MachineVideos.Take(1))
                     {
-                        <dt>
-                            Name: <h5>@video.Name</h5>
-                        </dt>
-                        <dt>
-                            Category: <h5>@video.Category.Name</h5>
-                        </dt>
-                        <dd>
-                            @{string vidFullPath = video.Path + video.FileName;}
-                            <video src="@Url.Content(vidFullPath)" controls="controls" width="640" height="360" loop>
-                                <a href="@Url.Content(vidFullPath)" download>@Localizer["Download"].Value</a>
-                            </video>
-                        </dd>
+                    <dt>
+                        Name: <h5>@video.Name</h5>
+                    </dt>
+                    <dt>
+                        Category: <h5>@video.Category.Name</h5>
+                    </dt>
+                    <dd>
+                        @{string vidFullPath = video.Path + video.FileName;}
+                        <video src="@Url.Content(vidFullPath)" controls="controls" width="640" height="360" loop>
+                            <a href="@Url.Content(vidFullPath)" download>@Localizer["Download"].Value</a>
+                        </video>
+                    </dd>
                     }
                 </dl>
             </div>
@@ -444,7 +444,7 @@ $(document).ready(function () {
                 @if (Model.MachineDevices.Count > 5)
                 {
                     Qty = 5;
-                    <a asp-action="MachineDevices" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
+                <a asp-action="MachineDevices" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
                 }
                 else
                 {
@@ -471,19 +471,19 @@ $(document).ready(function () {
                             <tbody>
                                 @foreach (var item in Model.MachineDevices.Take(5))
                                 {
-                                    <tr>
-                                        <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.Device.ImagePath)" width="100" /></td>
-                                        <td>@Html.DisplayFor(modelItem => item.Device.Name)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Device.Brand)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Device.Model)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Device.PartNumber)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Device.Description)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Device.Price)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Device.Supplier)</td>
-                                        <td class="text-center ws-nowrap">
-                                            <a class="btn btn-primary" asp-controller="Devices" asp-action="Details" asp-route-id="@item.Device.ID">@Localizer["Details"].Value</a>
-                                        </td>
-                                    </tr>
+                                <tr>
+                                    <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.Device.ImagePath)" width="100" /></td>
+                                    <td>@Html.DisplayFor(modelItem => item.Device.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Device.Brand)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Device.Model)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Device.PartNumber)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Device.Description)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Device.Price)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Device.Supplier)</td>
+                                    <td class="text-center ws-nowrap">
+                                        <a class="btn btn-primary" asp-controller="Devices" asp-action="Details" asp-route-id="@item.Device.ID">@Localizer["Details"].Value</a>
+                                    </td>
+                                </tr>
                                 }
                             </tbody>
                         </table>
@@ -515,15 +515,15 @@ $(document).ready(function () {
                             <tbody>
                                 @foreach (var item in Model.MachineResponsibles)
                                 {
-                                    <tr>
-                                        <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.Responsible.PhotoPath)" width="75" /></td>
-                                        <td>@Html.DisplayFor(modelItem => item.Responsible.FirstName)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Responsible.LastName)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Responsible.Department.Name)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Responsible.Email)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Responsible.PhoneNumber)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Responsible.Mobile)</td>
-                                    </tr>
+                                <tr>
+                                    <td><img class="img-thumbnail" src="@Html.DisplayFor(modelItem => item.Responsible.PhotoPath)" width="75" /></td>
+                                    <td>@Html.DisplayFor(modelItem => item.Responsible.FirstName)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Responsible.LastName)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Responsible.Department.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Responsible.Email)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Responsible.PhoneNumber)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Responsible.Mobile)</td>
+                                </tr>
                                 }
                             </tbody>
                         </table>
@@ -540,7 +540,7 @@ $(document).ready(function () {
                 @if (Model.MachineComments.Count > 5)
                 {
                     Qty = 5;
-                    <a asp-action="MachineComments" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">Show All</a>
+                <a asp-action="MachineComments" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">Show All</a>
                 }
                 else
                 {
@@ -553,9 +553,9 @@ $(document).ready(function () {
                         <table class="table table-hover table-bordered table-vitesco02">
                             @if (LoggedUserID != null && LoggedUserID != "")
                             {
-                                @if (permissions.Contains("MachinesAddComments"))
+                            @if (permissions.Contains("MachinesAddComments"))
                                 {
-                                    <button class="btn btn-success" style="float:right; margin-bottom: 20px" data-toggle="modal" data-target="#modalComments">Add New Comment</button>
+                            <button class="btn btn-success" style="float:right; margin-bottom: 20px" data-toggle="modal" data-target="#modalComments">Add New Comment</button>
                                 }
                             }
                             <thead class="thead-vitesco02">
@@ -569,15 +569,15 @@ $(document).ready(function () {
                             <tbody id="tComments">
                                 @foreach (var item in Model.MachineComments.Take(5))
                                 {
-                                    <tr>
-                                        <td style="word-wrap:break-word;">@Html.DisplayFor(modelItem => item.Comment)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</td>
-                                        <td>@Html.DisplayFor(modelItem => item.Date)</td>
-                                        @if ((item.UserID == user.Id && permissions.Contains("MachinesRemoveOwnComments")) || (item.UserID != user.Id && permissions.Contains("MachinesRemoveOtherComments")))
+                                <tr>
+                                    <td style="word-wrap:break-word;">@Html.DisplayFor(modelItem => item.Comment)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.User.FirstName) @Html.DisplayFor(modelItem => item.User.LastName)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                                    @if ((item.UserID == user.Id && permissions.Contains("MachinesRemoveOwnComments")) || (item.UserID != user.Id && permissions.Contains("MachinesRemoveOtherComments")))
                                         {
-                                            <td class="text-center ws-nowrap"><button class="btn btn-danger" onclick="removeComment(@item.ID)">@Localizer["Delete"].Value</button></td>
+                                    <td class="text-center ws-nowrap"><button class="btn btn-danger" onclick="removeComment(@item.ID)">@Localizer["Delete"].Value</button></td>
                                         }
-                                    </tr>
+                                </tr>
                                 }
                             </tbody>
                         </table>
@@ -594,7 +594,7 @@ $(document).ready(function () {
                 @if (Model.Passwords.Count > 10)
                 {
                     Qty = 5;
-                    <a asp-action="MachinePasswords" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
+                <a asp-action="MachinePasswords" asp-route-id="@Model.ID" style="float:right;" class="btn btn-primary">@Localizer["Show All"].Value</a>
                 }
                 else
                 {
@@ -607,9 +607,9 @@ $(document).ready(function () {
                         <table class="table table-hover table-bordered table-vitesco02">
                             @if (permissions.Contains("MachinesAddPasswords"))
                             {
-                                <p>
-                                    <button class="btn btn-success btn-create" data-toggle="modal" data-target="#modalCreatePassword">@Localizer["Create New Password"].Value</button>
-                                </p>
+                            <p>
+                                <button class="btn btn-success btn-create" data-toggle="modal" data-target="#modalCreatePassword">@Localizer["Create New Password"].Value</button>
+                            </p>
                             }
                             <thead class="thead-vitesco02">
                                 <tr>
@@ -626,27 +626,27 @@ $(document).ready(function () {
                             <tbody id="tPasswords">
                                 @foreach (var item in Model.Passwords.Take(10))
                                 {
-                                    @if ((item.DepartmentID == user.Department.ID && permissions.Contains("MachinesViewOwnDepartmentPassword")) || (item.DepartmentID == user.Department.ID && permissions.Contains("MachinesViewOtherDepartmentPassword")))
+                                @if ((item.DepartmentID == user.Department.ID && permissions.Contains("MachinesViewOwnDepartmentPassword")) || (item.DepartmentID == user.Department.ID && permissions.Contains("MachinesViewOtherDepartmentPassword")))
                                     {
-                                        <tr>
-                                            @*<td>@Html.DisplayFor(modelItem => item.ID)</td>*@
-                                            <td>@Html.DisplayFor(modelItem => item.EquipmentName)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.EquipmentDescription)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Level)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Department.Name)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.User)</td>
-                                            <td>@Html.DisplayFor(modelItem => item.Pass)</td>
-                                            <td class="text-center ws-nowrap">
-                                                @if ((item.DepartmentID == user.Department.ID && permissions.Contains("MachinesEditOwnDepartmentPassword")) || (item.DepartmentID == user.Department.ID && permissions.Contains("MachinesEditOtherDepartmentPassword")))
+                                <tr>
+                                    @*<td>@Html.DisplayFor(modelItem => item.ID)</td>*@
+                                    <td>@Html.DisplayFor(modelItem => item.EquipmentName)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.EquipmentDescription)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Level)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Department.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.User)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Pass)</td>
+                                    <td class="text-center ws-nowrap">
+                                        @if ((item.DepartmentID == user.Department.ID && permissions.Contains("MachinesEditOwnDepartmentPassword")) || (item.DepartmentID == user.Department.ID && permissions.Contains("MachinesEditOtherDepartmentPassword")))
                                                 {
-                                                    <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEditPassword">@Localizer["Edit"].Value</button>
+                                        <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEditPassword">@Localizer["Edit"].Value</button>
                                                 }
-                                                @if ((item.DepartmentID == user.Department.ID && permissions.Contains("MachinesDeleteOwnDepartmentPassword")) || (item.DepartmentID == user.Department.ID && permissions.Contains("MachinesDeleteOtherDepartmentPassword")))
+                                        @if ((item.DepartmentID == user.Department.ID && permissions.Contains("MachinesDeleteOwnDepartmentPassword")) || (item.DepartmentID == user.Department.ID && permissions.Contains("MachinesDeleteOtherDepartmentPassword")))
                                                 {
-                                                    <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDeletePassword">@Localizer["Delete"].Value</button>
+                                        <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDeletePassword">@Localizer["Delete"].Value</button>
                                                 }
-                                            </td>
-                                        </tr>
+                                    </td>
+                                </tr>
                                     }
                                 }
                             </tbody>
@@ -655,17 +655,18 @@ $(document).ready(function () {
                 </dl>
             </div>
         </div>
+        <div>
+            <input type="hidden" asp-for="ID" />
+            <button style="width:120px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">@Localizer["Back"].Value</button>
+            @if (permissions.Contains("MachinesEdit"))
+            {
+                <a style="width:120px; font-weight:700; float:right;" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ID">@Localizer["Edit"].Value</a>
+            }
+        </div>
     </div>
 </div>
 
-<div>
-    <input type="hidden" asp-for="ID" />
-    <button style="width:120px; font-weight:700;" class="btn btn-primary" action="action" onclick="history.go(-1);">@Localizer["Back"].Value</button>
-    @if (permissions.Contains("MachinesEdit"))
-    {
-        <a style="width:120px; font-weight:700; float:right;" class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ID">@Localizer["Edit"].Value</a>
-    }
-</div>
+
 
 <div class="modal fade" id="modalComments" role="dialog">
     <div style="border-radius:8px; overflow:hidden;" class="modal-dialog">

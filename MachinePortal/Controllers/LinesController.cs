@@ -11,6 +11,7 @@ using MachinePortal.Services;
 using MachinePortal.Models.ViewModels;
 using System.Security.Claims;
 using MachinePortal.Areas.Identity.Data;
+using System.Web;
 
 namespace MachinePortal.Controllers
 {
@@ -56,7 +57,6 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Line Line, IFormFile image)
         {
-
             if (!ModelState.IsValid)
             {
                 var viewModel = new LineFormViewModel { Line = Line};
@@ -88,7 +88,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error saving image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error saving image, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -97,7 +97,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error adding line, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error adding line, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             TempData["notificationMessage"] = "Line created successfuly";
@@ -126,7 +126,6 @@ namespace MachinePortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Line Line, IFormFile image)
         {
-            
             try
             {
                 if (image != null)
@@ -141,8 +140,7 @@ namespace MachinePortal.Controllers
 
                     if (image == null || image.Length == 0)
                     {
-                        ViewData["Error"] = "Error: No file selected";
-                        return View(ViewData);
+                        return Content(@"notify('', 'Error: No file selected', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
                     }
 
                     string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -158,7 +156,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error updating image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error updating image, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -167,7 +165,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error updating line, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error updating line, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             TempData["notificationMessage"] = "Line updated successfuly";
@@ -211,7 +209,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error removing image, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error removing image, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -220,7 +218,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error removing line, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error removing line, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             TempData["notificationMessage"] = "Line removed successfuly";

@@ -86,14 +86,5 @@ namespace MachinePortal.Areas.Identity.Pages.Account.Manage
             _context.SaveChanges();
             return RedirectToPage("/");
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> OnPostTeste()
-        {
-            await _emailSender.SendEmailAsync("dasj.junior@gmail.com", "Confirm your email",$"Please confirm your account by");
-            return RedirectToPage("/");
-        }
-
     }
 }

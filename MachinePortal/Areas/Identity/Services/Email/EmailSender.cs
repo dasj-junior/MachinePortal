@@ -41,7 +41,7 @@ namespace MachinePortal.Areas.Identity.Services
                 };
 
                 mail.To.Add(new MailAddress(toEmail));
-                if(_emailSettings.CcEmail != null)
+                if(_emailSettings.CcEmail.Contains("@"))
                 {
                    mail.CC.Add(new MailAddress(_emailSettings.CcEmail));
                 }

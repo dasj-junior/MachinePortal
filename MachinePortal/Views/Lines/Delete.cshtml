@@ -15,7 +15,7 @@
                 data: { ID : ID },
                 success: function (m) {
                     $('.theme-loader').hide();
-                    if (m == 'success') { window.location.href = "/Sectors/Details"; };
+                    if (m == 'success') { window.location.href = "/Sectors/Details/" + @Model.SectorID; };
                 },
                 error: function (e) {
                     alert(e.responseText);

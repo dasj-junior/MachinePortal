@@ -52,60 +52,64 @@
     }
 </script>
 
-<div class="card fb-card c-vitesco-green-05">
-    <div class="card-header c-vitesco-green-05">
-        <i style="vertical-align:middle" class="ti-layout-list-thumb c-vitesco-green-05"></i>
-        <div class="d-inline-block">
-            <h2 style="color:white;">@Localizer["Hierarchies"].Value</h2>
-        </div>
-        <hr style="border:1px solid white" />
-        <div class="d-inline-block">
-            <h2 style="color:white">@Localizer["Lines"].Value</h2>
-        </div>
-    </div>
-    <div class="card-block card-padding">
-        <div class="table-responsive">
-            <div class="table-responsive">
-                <table style="table-layout:auto;" class="table table-hover table-bordered table-vitesco">
-                    <thead class="thead-vitesco">
-                        <tr>
-                            <th width="15%">@Html.DisplayNameFor(model => model.ImagePath)</th>
-                            <th width="65%">@Html.DisplayNameFor(model => model.Name)</th>
-                            <th width="20%" class="text-center">Options</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                @if (item.ImagePath != null)
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-10">
+        <div class="card fb-card c-vitesco-green-05">
+            <div class="card-header c-vitesco-green-05">
+                <i style="vertical-align:middle" class="ti-layout-list-thumb c-vitesco-green-05"></i>
+                <div class="d-inline-block">
+                    <h2 style="color:white;">@Localizer["Hierarchies"].Value</h2>
+                </div>
+                <hr style="border:1px solid white" />
+                <div class="d-inline-block">
+                    <h2 style="color:white">@Localizer["Lines"].Value</h2>
+                </div>
+            </div>
+            <div class="card-block card-padding">
+                <div class="table-responsive">
+                    <div class="table-responsive">
+                        <table style="table-layout:auto;" class="table table-hover table-bordered table-vitesco">
+                            <thead class="thead-vitesco">
+                                <tr>
+                                    <th width="15%">@Html.DisplayNameFor(model => model.ImagePath)</th>
+                                    <th width="65%">@Html.DisplayNameFor(model => model.Name)</th>
+                                    <th width="20%" class="text-center">Options</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
                                 {
-                                    <td class="text-center"><img src="@Html.DisplayFor(modelItem => item.ImagePath)" width="100" /></td>
+                                    <tr>
+                                        @if (item.ImagePath != null)
+                                        {
+                                            <td class="text-center"><img src="@Html.DisplayFor(modelItem => item.ImagePath)" width="100" /></td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center"><img src="~/resources/General/NoImage.jpg" width="100" /></td>
+                                        }
+                                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                        <td class="text-center ws-nowrap">
+                                            <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">@Localizer["Open"].Value</a>
+                                            @if (permissions.Contains("HierarchiesEdit"))
+                                            {
+                                                <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
+                                            }
+                                            @if (permissions.Contains("HierarchiesDelete"))
+                                            {
+                                                <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
+                                            }
+                                        </td>
+                                    </tr>
                                 }
-                                else
-                                {
-                                    <td class="text-center"><img src="~/resources/General/NoImage.jpg" width="100" /></td>
-                                }
-                                <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                                <td class="text-center ws-nowrap">
-                                    <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">@Localizer["Open"].Value</a>
-                                    @if (permissions.Contains("HierarchiesEdit"))
-                                    {
-                                        <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
-                                    }
-                                    @if (permissions.Contains("HierarchiesDelete"))
-                                    {
-                                        <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br />
+                <a style="width:150px;" class="btn btn-primary" asp-controller="Lines" asp-action="Index">@Localizer["Back"].Value</a>
             </div>
         </div>
-        <br />
-        <a style="width:150px;" class="btn btn-primary" asp-controller="Lines" asp-action="Index">@Localizer["Back"].Value</a>
     </div>
 </div>
 

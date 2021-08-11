@@ -110,11 +110,11 @@
                 processData: false,
                 contentType: false,
                 data: data,
-                success: function (m) {
+                success: function () {
                     $('.theme-loader').hide();
-                    if (m == 'success') { window.location.href = "/Areas/Index"; };
+                    window.location.href = "/Devices/Index";
                 },
-                error: function (e) {
+                error: function () {
                     $('.theme-loader').hide();
                     notify('', 'AJAX Request Error: ' + e.statusText, 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight');
                 }

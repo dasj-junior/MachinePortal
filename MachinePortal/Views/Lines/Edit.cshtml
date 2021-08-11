@@ -46,21 +46,19 @@
     $(document).ready(function () {
         $("form").submit(function (event) {
             event.preventDefault()
-            $('.theme-loader').show();
             $.ajax({
                 url: '@Url.Content("~/")' + "Lines/Edit",
-                type: "POST",
                 headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                type: "POST",
+                data: new FormData(this),
                 processData: false,
                 contentType: false,
-                data: new FormData(this),
                 success: function (m) {
                     $('.theme-loader').hide();
-                    if (m == 'success') { window.location.href = "/Sectors/Details/" @Model.SectorID; };
+                    if (m == 'success') { window.location.href = "/Sectors/Details/" + @Model.SectorID; };
                 },
                 error: function (e) {
-                    $('.theme-loader').hide();
-                    notify('', 'AJAX Request Error: ' + e.statusText, 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight');
+                    alert(e.responseText);
                 }
             });
         });

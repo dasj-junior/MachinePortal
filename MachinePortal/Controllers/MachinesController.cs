@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using System.Security.Claims;
 using MachinePortal.Areas.Identity.Data;
 using SimpleImpersonation;
+using System.Web;
 
 namespace MachinePortal.Controllers
 
@@ -103,233 +104,281 @@ namespace MachinePortal.Controllers
             List<IFormFile> documents = new List<IFormFile>();
             List<IFormFile> images = new List<IFormFile>();
             List<IFormFile> videos = new List<IFormFile>();
-            foreach (var file in Request.Form.Files)
-            {
-                if (file.Name == "document") { documents.Add(file); }
-                if (file.Name == "image") { images.Add(file); }
-                if (file.Name == "video") { videos.Add(file); }
-            }
-
             List<MachineFile> MFiles = new List<MachineFile>();
-            if (Request.Form["files"].Count>0)
+
+            try
             {
-                MFiles = JsonConvert.DeserializeObject<List<MachineFile>>(Request.Form["files"]);
+                foreach (var file in Request.Form.Files)
+                {
+                    if (file.Name == "document") { documents.Add(file); }
+                    if (file.Name == "image") { images.Add(file); }
+                    if (file.Name == "video") { videos.Add(file); }
+                }
+
+                if (Request.Form["files"].Count > 0)
+                {
+                    MFiles = JsonConvert.DeserializeObject<List<MachineFile>>(Request.Form["files"]);
+                }
+
+                machineFVM.Machine.Area = await _areaService.FindByIDAsync(machineFVM.Machine.AreaID);
+                machineFVM.Machine.Sector = await _sectorService.FindByIDAsync(machineFVM.Machine.SectorID);
+                machineFVM.Machine.Line = await _lineService.FindByIDAsync(machineFVM.Machine.LineID);
             }
-            
-            machineFVM.Machine.Area = await _areaService.FindByIDAsync(machineFVM.Machine.AreaID);
-            machineFVM.Machine.Sector = await _sectorService.FindByIDAsync(machineFVM.Machine.SectorID);
-            machineFVM.Machine.Line = await _lineService.FindByIDAsync(machineFVM.Machine.LineID);
-
-            if (photo != null)
+            catch (Exception e)
             {
-                //long filesSize = photo.Length;
-                //var filePath = Path.GetTempFileName();
-
-                if (photo == null || photo.Length == 0)
-                {
-                    //return ("Error: Invalid path - Machine Photo");
-                }
-
-                string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                fileName += photo.FileName.Substring(photo.FileName.LastIndexOf("."), (photo.FileName.Length - photo.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Photo\\" + fileName;
-                machineFVM.Machine.ImagePath = @"/resources/Machines/Photo/" + fileName;
-
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await photo.CopyToAsync(stream);
-                }
+                return Content(@"notify('', '" + "Error on getting files from page, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
-            await _machineService.InsertAsync(machineFVM.Machine);
-
-            foreach (IFormFile document in documents)
+            try
             {
-                long filesSize = document.Length;
-                var filePath = Path.GetTempFileName();
-
-                if (document == null || document.Length == 0)
+                if (photo != null)
                 {
-                    //return ("Error: Invalid path - Machine Document");
-                }
-
-                string fileName = document.FileName.Substring(0, document.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
-                fileName += document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Documents\\" + fileName;
-                MachineDocument doc = new MachineDocument();
-                foreach (MachineFile file in MFiles)
-                {
-                    if (file.FileName == document.FileName && file.Type == "Document")
+                    if (photo == null || photo.Length == 0)
                     {
-                        doc.Name = file.Name;
-                        doc.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
-                        doc.CategoryID = doc.Category.ID;
-                        doc.Location = file.Location;
+                        return Content(@"notify('', '" + "Error: File corrupted or invalid" + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                    }
+
+                    string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    fileName += photo.FileName.Substring(photo.FileName.LastIndexOf("."), (photo.FileName.Length - photo.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Photo\\" + fileName;
+                    machineFVM.Machine.ImagePath = @"/resources/Machines/Photo/" + fileName;
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await photo.CopyToAsync(stream);
                     }
                 }
-                doc.FileName = fileName;
-                doc.Path = @"/resources/Machines/Documents/";
-                doc.Extension = document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
-                doc.Machine = machineFVM.Machine;
-                doc.MachineID = machineFVM.Machine.ID;
-
-                await _machineService.InsertMachineDocumentAsync(doc);
-
-                machineFVM.Machine.AddDocument(doc);
-
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await document.CopyToAsync(stream);
-                }
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error on saving photo, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
-            foreach (IFormFile image in images)
+            try
             {
-                long filesSize = image.Length;
-                var filePath = Path.GetTempFileName();
+                await _machineService.InsertAsync(machineFVM.Machine);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error updating database, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            } 
 
-                if (image == null || image.Length == 0)
+            try
+            {
+                foreach (IFormFile document in documents)
                 {
-                    //return ("Error: Invalid path - Machine Images");
-                }
+                    long filesSize = document.Length;
+                    var filePath = Path.GetTempFileName();
 
-                string fileName = image.FileName.Substring(0, image.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
-                fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Images\\" + fileName;
-                MachineImage img = new MachineImage();
-                foreach (MachineFile file in MFiles)
-                {
-                    if (file.FileName == image.FileName && file.Type == "Image")
+                    if (document == null || document.Length == 0)
                     {
-                        img.Name = file.Name;
-                        img.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
-                        img.CategoryID = img.Category.ID;
+                        //return ("Error: Invalid path - Machine Document");
                     }
-                }
-                img.FileName = fileName;
-                img.Path = @"/resources/Machines/Images/";
-                img.Extension = image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                img.Machine = machineFVM.Machine;
-                img.MachineID = machineFVM.Machine.ID;
-                await _machineService.InsertMachineImageAsync(img);
-                machineFVM.Machine.AddImage(img);
 
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
-                }
-            }
-
-            foreach (IFormFile video in videos)
-            {
-                long filesSize = video.Length;
-                var filePath = Path.GetTempFileName();
-
-                if (video == null || video.Length == 0)
-                {
-                    //return ("Error: Invalid path - Machine Videos");
-                }
-
-                string fileName = video.FileName.Substring(0, video.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
-                fileName += video.FileName.Substring(video.FileName.LastIndexOf("."), (video.FileName.Length - video.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Videos\\" + fileName;
-                MachineVideo vid = new MachineVideo();
-                foreach (MachineFile file in MFiles)
-                {
-                    if (file.FileName == video.FileName && file.Type == "Video")
+                    string fileName = document.FileName.Substring(0, document.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
+                    fileName += document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Documents\\" + fileName;
+                    MachineDocument doc = new MachineDocument();
+                    foreach (MachineFile file in MFiles)
                     {
-                        vid.Name = file.Name;
-                        vid.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
-                        vid.CategoryID = vid.Category.ID;
+                        if (file.FileName == document.FileName && file.Type == "Document")
+                        {
+                            doc.Name = file.Name;
+                            doc.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                            doc.CategoryID = doc.Category.ID;
+                            doc.Location = file.Location;
+                        }
                     }
-                }
-                vid.FileName = fileName;
-                vid.Path = @"/resources/Machines/Videos/";
-                vid.Extension = video.FileName.Substring(video.FileName.LastIndexOf("."), (video.FileName.Length - video.FileName.LastIndexOf(".")));
-                vid.Machine = machineFVM.Machine;
-                vid.MachineID = machineFVM.Machine.ID;
-                await _machineService.InsertMachineVideoAsync(vid);
-                machineFVM.Machine.AddVideo(vid);
+                    doc.FileName = fileName;
+                    doc.Path = @"/resources/Machines/Documents/";
+                    doc.Extension = document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
+                    doc.Machine = machineFVM.Machine;
+                    doc.MachineID = machineFVM.Machine.ID;
 
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await video.CopyToAsync(stream);
-                }
-            }
-
-            //Files with location path and web
-            foreach (MachineFile file in MFiles)
-            {
-                if (file.Type == "Document" && (file.Location == "path" || file.Location == "web"))
-                {                  
-                    Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
-                    MachineDocument doc = new MachineDocument 
-                    { 
-                        Name = file.Name,
-                        FileName = file.FileName,
-                        Category = Category,
-                        CategoryID = Category.ID,
-                        Location = file.Location,
-                        Machine = machineFVM.Machine,
-                        MachineID = machineFVM.Machine.ID
-                    };
                     await _machineService.InsertMachineDocumentAsync(doc);
+
                     machineFVM.Machine.AddDocument(doc);
-                }
-                if (file.Type == "Image" && (file.Location == "path" || file.Location == "web"))
-                {
-                    Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
-                    MachineImage img = new MachineImage
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
                     {
-                        Name = file.Name,
-                        FileName = file.FileName,
-                        Category = Category,
-                        CategoryID = Category.ID,
-                        Location = file.Location,
-                        Machine = machineFVM.Machine,
-                        MachineID = machineFVM.Machine.ID
-                    };
+                        await document.CopyToAsync(stream);
+                    }
+                }
+
+                foreach (IFormFile image in images)
+                {
+                    long filesSize = image.Length;
+                    var filePath = Path.GetTempFileName();
+
+                    if (image == null || image.Length == 0)
+                    {
+                        //return ("Error: Invalid path - Machine Images");
+                    }
+
+                    string fileName = image.FileName.Substring(0, image.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
+                    fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Images\\" + fileName;
+                    MachineImage img = new MachineImage();
+                    foreach (MachineFile file in MFiles)
+                    {
+                        if (file.FileName == image.FileName && file.Type == "Image")
+                        {
+                            img.Name = file.Name;
+                            img.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                            img.CategoryID = img.Category.ID;
+                        }
+                    }
+                    img.FileName = fileName;
+                    img.Path = @"/resources/Machines/Images/";
+                    img.Extension = image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
+                    img.Machine = machineFVM.Machine;
+                    img.MachineID = machineFVM.Machine.ID;
                     await _machineService.InsertMachineImageAsync(img);
                     machineFVM.Machine.AddImage(img);
-                }
-                if (file.Type == "Video" && (file.Location == "path" || file.Location == "web"))
-                {
-                    Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
-                    MachineVideo vid = new MachineVideo
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
                     {
-                        Name = file.Name,
-                        FileName = file.FileName,
-                        Category = Category,
-                        CategoryID = Category.ID,
-                        Location = file.Location,
-                        Machine = machineFVM.Machine,
-                        MachineID = machineFVM.Machine.ID
-                    };
+                        await image.CopyToAsync(stream);
+                    }
+                }
+
+                foreach (IFormFile video in videos)
+                {
+                    long filesSize = video.Length;
+                    var filePath = Path.GetTempFileName();
+
+                    if (video == null || video.Length == 0)
+                    {
+                        //return ("Error: Invalid path - Machine Videos");
+                    }
+
+                    string fileName = video.FileName.Substring(0, video.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
+                    fileName += video.FileName.Substring(video.FileName.LastIndexOf("."), (video.FileName.Length - video.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Videos\\" + fileName;
+                    MachineVideo vid = new MachineVideo();
+                    foreach (MachineFile file in MFiles)
+                    {
+                        if (file.FileName == video.FileName && file.Type == "Video")
+                        {
+                            vid.Name = file.Name;
+                            vid.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                            vid.CategoryID = vid.Category.ID;
+                        }
+                    }
+                    vid.FileName = fileName;
+                    vid.Path = @"/resources/Machines/Videos/";
+                    vid.Extension = video.FileName.Substring(video.FileName.LastIndexOf("."), (video.FileName.Length - video.FileName.LastIndexOf(".")));
+                    vid.Machine = machineFVM.Machine;
+                    vid.MachineID = machineFVM.Machine.ID;
                     await _machineService.InsertMachineVideoAsync(vid);
                     machineFVM.Machine.AddVideo(vid);
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await video.CopyToAsync(stream);
+                    }
                 }
             }
-
-            if (machineFVM.SelectedResponsibles != null)
+            catch (Exception e)
             {
-                foreach (int id in machineFVM.SelectedResponsibles)
-                {
-                    Responsible responsible = await _responsibleService.FindByIDAsync(id);
-                    MachineResponsible machineResponsible = new MachineResponsible { Machine = machineFVM.Machine, MachineID = machineFVM.Machine.ID, Responsible = responsible, ResponsibleID = responsible.ID };
-                    await _machineService.InsertMachineResponsibleAsync(machineResponsible);
-                    machineFVM.Machine.MachineResponsibles.Add(machineResponsible);
-                }
+                return Content(@"notify('', '" + "Error saving machine documents, images and videos, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
-            if (machineFVM.SelectedDevices != null)
+            try
             {
-                foreach (int id in machineFVM.SelectedDevices)
+                //Files with location path and web
+                foreach (MachineFile file in MFiles)
                 {
-                    Device device = await _deviceService.FindByIDAsync(id);
-                    MachineDevice machineDevice = new MachineDevice { Machine = machineFVM.Machine, MachineID = machineFVM.Machine.ID, Device = device, DeviceID = device.ID };
-                    await _machineService.InsertMachineDeviceAsync(machineDevice);
-                    machineFVM.Machine.MachineDevices.Add(machineDevice);
+                    if (file.Type == "Document" && (file.Location == "path" || file.Location == "web"))
+                    {
+                        Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                        MachineDocument doc = new MachineDocument
+                        {
+                            Name = file.Name,
+                            FileName = file.FileName,
+                            Category = Category,
+                            CategoryID = Category.ID,
+                            Location = file.Location,
+                            Machine = machineFVM.Machine,
+                            MachineID = machineFVM.Machine.ID
+                        };
+                        await _machineService.InsertMachineDocumentAsync(doc);
+                        machineFVM.Machine.AddDocument(doc);
+                    }
+                    if (file.Type == "Image" && (file.Location == "path" || file.Location == "web"))
+                    {
+                        Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                        MachineImage img = new MachineImage
+                        {
+                            Name = file.Name,
+                            FileName = file.FileName,
+                            Category = Category,
+                            CategoryID = Category.ID,
+                            Location = file.Location,
+                            Machine = machineFVM.Machine,
+                            MachineID = machineFVM.Machine.ID
+                        };
+                        await _machineService.InsertMachineImageAsync(img);
+                        machineFVM.Machine.AddImage(img);
+                    }
+                    if (file.Type == "Video" && (file.Location == "path" || file.Location == "web"))
+                    {
+                        Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                        MachineVideo vid = new MachineVideo
+                        {
+                            Name = file.Name,
+                            FileName = file.FileName,
+                            Category = Category,
+                            CategoryID = Category.ID,
+                            Location = file.Location,
+                            Machine = machineFVM.Machine,
+                            MachineID = machineFVM.Machine.ID
+                        };
+                        await _machineService.InsertMachineVideoAsync(vid);
+                        machineFVM.Machine.AddVideo(vid);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error saving files with path and web, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            try
+            {
+                if (machineFVM.SelectedResponsibles != null)
+                {
+                    foreach (int id in machineFVM.SelectedResponsibles)
+                    {
+                        Responsible responsible = await _responsibleService.FindByIDAsync(id);
+                        MachineResponsible machineResponsible = new MachineResponsible { Machine = machineFVM.Machine, MachineID = machineFVM.Machine.ID, Responsible = responsible, ResponsibleID = responsible.ID };
+                        await _machineService.InsertMachineResponsibleAsync(machineResponsible);
+                        machineFVM.Machine.MachineResponsibles.Add(machineResponsible);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error saving responsibles, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+
+            try
+            {
+                if (machineFVM.SelectedDevices != null)
+                {
+                    foreach (int id in machineFVM.SelectedDevices)
+                    {
+                        Device device = await _deviceService.FindByIDAsync(id);
+                        MachineDevice machineDevice = new MachineDevice { Machine = machineFVM.Machine, MachineID = machineFVM.Machine.ID, Device = device, DeviceID = device.ID };
+                        await _machineService.InsertMachineDeviceAsync(machineDevice);
+                        machineFVM.Machine.MachineDevices.Add(machineDevice);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Error saving devices, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             TempData["notificationMessage"] = "Machine created successfuly";
@@ -389,6 +438,22 @@ namespace MachinePortal.Controllers
         {
             //Get data from original machine
             Machine machineOLD = await _machineService.FindByIDAsync(machineNEW.Machine.ID);
+            if (machineOLD == null)
+            {
+                return Content(@"notify('', 'Error: ID not found', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            //Variable creation
+            List<IFormFile> documents = new List<IFormFile>();
+            List<IFormFile> images = new List<IFormFile>();
+            List<IFormFile> videos = new List<IFormFile>();
+            List<MachineFile> MFiles = new List<MachineFile>();
+            List<MachineDocument> RemoveDocumets = new List<MachineDocument>();
+            List<MachineImage> RemoveImages = new List<MachineImage>();
+            List<MachineVideo> RemoveVideos = new List<MachineVideo>();
+            int[] DRemove;
+            int[] IRemove;
+            int[] VRemove;
 
             machineOLD.Name = machineNEW.Machine.Name;
             machineOLD.Description = machineNEW.Machine.Description;
@@ -401,423 +466,475 @@ namespace MachinePortal.Controllers
             machineOLD.LastPreventiveMaintenance = machineNEW.Machine.LastPreventiveMaintenance;
             machineOLD.StartDate = machineNEW.Machine.StartDate;
 
-            //Generate list of documents from the update page
-            List<IFormFile> documents = new List<IFormFile>();
-            List<IFormFile> images = new List<IFormFile>();
-            List<IFormFile> videos = new List<IFormFile>();
-            foreach (var file in Request.Form.Files)
+            try
             {
-                if (file.Name == "document") { documents.Add(file); }
-                if (file.Name == "image") { images.Add(file); }
-                if (file.Name == "video") { videos.Add(file); }
+                foreach (var file in Request.Form.Files)
+                {
+                    if (file.Name == "document") { documents.Add(file); }
+                    if (file.Name == "image") { images.Add(file); }
+                    if (file.Name == "video") { videos.Add(file); }
+                }
+
+                //Get list of files to be removed
+                if (Request.Form["files"].Count > 0)
+                {
+                    MFiles = JsonConvert.DeserializeObject<List<MachineFile>>(Request.Form["files"]);
+                }
+                DRemove = JsonConvert.DeserializeObject<int[]>(Request.Form["DRemove"]);
+                IRemove = JsonConvert.DeserializeObject<int[]>(Request.Form["IRemove"]);
+                VRemove = JsonConvert.DeserializeObject<int[]>(Request.Form["VRemove"]);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Erro getting files from page, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
-            //Get list of files to be removed
-            List<MachineFile> MFiles = new List<MachineFile>();
-            if (Request.Form["files"].Count > 0)
-            {
-                MFiles = JsonConvert.DeserializeObject<List<MachineFile>>(Request.Form["files"]);
-            }
-            int[] DRemove = JsonConvert.DeserializeObject<int[]>(Request.Form["DRemove"]);
-            int[] IRemove = JsonConvert.DeserializeObject<int[]>(Request.Form["IRemove"]);
-            int[] VRemove = JsonConvert.DeserializeObject<int[]>(Request.Form["VRemove"]);
-
-            List<MachineDocument> RemoveDocumets = new List<MachineDocument>();
             foreach (int ID in DRemove)
             {
                 RemoveDocumets.Add(await _machineService.FindMachineDocumentsByID(machineOLD.ID, ID));
             }
 
-            List<MachineImage> RemoveImages = new List<MachineImage>();
             foreach (int ID in IRemove)
             {
                 RemoveImages.Add(await _machineService.FindMachineImagesByID(machineOLD.ID, ID));
             }
 
-            List<MachineVideo> RemoveVideos = new List<MachineVideo>();
             foreach (int ID in VRemove)
             {
                 RemoveVideos.Add(await _machineService.FindMachineVideosByID(machineOLD.ID, ID));
             }
 
-            //Update Area
-            if (machineNEW.Machine.AreaID != machineOLD.AreaID)
+            try
             {
-                machineOLD.Area = await _areaService.FindByIDAsync(machineNEW.Machine.AreaID);
-                machineOLD.AreaID = machineOLD.Area.ID;
-            }
-
-            //Update Sector
-            if (machineNEW.Machine.SectorID != machineOLD.SectorID)
-            {
-                machineOLD.Sector = await _sectorService.FindByIDAsync(machineNEW.Machine.SectorID);
-                machineOLD.SectorID = machineOLD.Sector.ID;
-            }
-
-            //Update Line
-            if (machineNEW.Machine.LineID != machineOLD.LineID)
-            {
-                machineOLD.Line = await _lineService.FindByIDAsync(machineNEW.Machine.LineID);
-                machineOLD.LineID = machineOLD.Line.ID;
-            }
-
-            //Update Photo
-            if (photo != null)
-            {
-                //Remove OLD Photo
-                try
+                //Update Area
+                if (machineNEW.Machine.AreaID != machineOLD.AreaID)
                 {
-                    if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + machineOLD.ImagePath))
+                    machineOLD.Area = await _areaService.FindByIDAsync(machineNEW.Machine.AreaID);
+                    machineOLD.AreaID = machineOLD.Area.ID;
+                }
+
+                //Update Sector
+                if (machineNEW.Machine.SectorID != machineOLD.SectorID)
+                {
+                    machineOLD.Sector = await _sectorService.FindByIDAsync(machineNEW.Machine.SectorID);
+                    machineOLD.SectorID = machineOLD.Sector.ID;
+                }
+
+                //Update Line
+                if (machineNEW.Machine.LineID != machineOLD.LineID)
+                {
+                    machineOLD.Line = await _lineService.FindByIDAsync(machineNEW.Machine.LineID);
+                    machineOLD.LineID = machineOLD.Line.ID;
+                }
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Erro updating area, sector and line, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            try
+            {
+                //Update Photo
+                if (photo != null)
+                {
+                    //Remove OLD Photo
+                    try
                     {
-                        System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + machineOLD.ImagePath);
+                        if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + machineOLD.ImagePath))
+                        {
+                            System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + machineOLD.ImagePath);
+                        }
+                    }
+                    catch
+                    {
+                    }
+
+                    if (photo == null || photo.Length == 0)
+                    {
+                        //return ("Error: Invalid path - Machine Photo");
+                    }
+
+                    string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
+                    fileName += photo.FileName.Substring(photo.FileName.LastIndexOf("."), (photo.FileName.Length - photo.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Photo\\" + fileName;
+                    machineOLD.ImagePath = @"/resources/Machines/Photo/" + fileName;
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await photo.CopyToAsync(stream);
                     }
                 }
-                catch
-                {
-                }
-
-                //long filesSize = photo.Length;
-                //var filePath = Path.GetTempFileName();
-
-                if (photo == null || photo.Length == 0)
-                {
-                    //return ("Error: Invalid path - Machine Photo");
-                }
-
-                string fileName = DateTime.Now.ToString("yyyyMMddHHmmss");
-                fileName += photo.FileName.Substring(photo.FileName.LastIndexOf("."), (photo.FileName.Length - photo.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Photo\\" + fileName;
-                machineOLD.ImagePath = @"/resources/Machines/Photo/" + fileName;
-
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await photo.CopyToAsync(stream);
-                }
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Erro updating machine photo, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
-            //Add documents
-            foreach (IFormFile document in documents)
+            try
             {
-                long filesSize = document.Length;
-                //var filePath = Path.GetTempFileName();
-
-                if (document == null || document.Length == 0)
+                //Add documents
+                foreach (IFormFile document in documents)
                 {
-                    //return ("Error: Invalid path - Machine Document");
-                }
+                    long filesSize = document.Length;
+                    //var filePath = Path.GetTempFileName();
 
-                string fileName = document.FileName.Substring(0, document.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
-                fileName += document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Documents\\" + fileName;
-                MachineDocument doc = new MachineDocument();
-                foreach (MachineFile file in MFiles)
-                {
-                    if (file.FileName == document.FileName && file.Type == "Document")
+                    if (document == null || document.Length == 0)
                     {
-                        doc.Name = file.Name;
-                        doc.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
-                        doc.CategoryID = doc.Category.ID;
-                        doc.Location = file.Location;
+                        //return ("Error: Invalid path - Machine Document");
                     }
-                }
-                doc.FileName = fileName;
-                doc.Path = @"/resources/Machines/Documents/";
-                doc.Extension = document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
-                doc.Machine = machineNEW.Machine;
-                doc.MachineID = machineNEW.Machine.ID;
 
-                await _machineService.InsertMachineDocumentAsync(doc);
-                machineOLD.AddDocument(doc);
-
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await document.CopyToAsync(stream);
-                }
-            }
-
-            //Add images
-            foreach (IFormFile image in images)
-            {
-                long filesSize = image.Length;
-                var filePath = Path.GetTempFileName();
-
-                if (image == null || image.Length == 0)
-                {
-                    //return ("Error: Invalid path - Machine Images");
-                }
-
-                string fileName = image.FileName.Substring(0, image.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
-                fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Images\\" + fileName;
-                MachineImage img = new MachineImage();
-                foreach (MachineFile file in MFiles)
-                {
-                    if (file.FileName == image.FileName && file.Type == "Image")
+                    string fileName = document.FileName.Substring(0, document.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
+                    fileName += document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Documents\\" + fileName;
+                    MachineDocument doc = new MachineDocument();
+                    foreach (MachineFile file in MFiles)
                     {
-                        img.Name = file.Name;
-                        img.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
-                        img.CategoryID = img.Category.ID;
-                        img.Location = file.Location;
+                        if (file.FileName == document.FileName && file.Type == "Document")
+                        {
+                            doc.Name = file.Name;
+                            doc.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                            doc.CategoryID = doc.Category.ID;
+                            doc.Location = file.Location;
+                        }
                     }
-                }
-                img.FileName = fileName;
-                img.Path = @"/resources/Machines/Images/";
-                img.Extension = image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                img.Machine = machineNEW.Machine;
-                img.MachineID = machineNEW.Machine.ID;
+                    doc.FileName = fileName;
+                    doc.Path = @"/resources/Machines/Documents/";
+                    doc.Extension = document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
+                    doc.Machine = machineNEW.Machine;
+                    doc.MachineID = machineNEW.Machine.ID;
 
-                await _machineService.InsertMachineImageAsync(img);
-                machineOLD.AddImage(img);
-
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
-                }
-            }
-
-            //Add videos
-            foreach (IFormFile video in videos)
-            {
-                long filesSize = video.Length;
-                var filePath = Path.GetTempFileName();
-
-                if (video == null || video.Length == 0)
-                {
-                    //return ("Error: Invalid path - Machine Videos");
-                }
-
-                string fileName = video.FileName.Substring(0, video.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
-                fileName += video.FileName.Substring(video.FileName.LastIndexOf("."), (video.FileName.Length - video.FileName.LastIndexOf(".")));
-                string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Videos\\" + fileName;
-                MachineVideo vid = new MachineVideo();
-                foreach (MachineFile file in MFiles)
-                {
-                    if (file.FileName == video.FileName && file.Type == "Video")
-                    {
-                        vid.Name = file.Name;
-                        vid.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
-                        vid.CategoryID = vid.Category.ID;
-                        vid.Location = file.Location;
-                    }
-                }
-                vid.FileName = fileName;
-                vid.Path = @"/resources/Machines/Videos/";
-                vid.Extension = video.FileName.Substring(video.FileName.LastIndexOf("."), (video.FileName.Length - video.FileName.LastIndexOf(".")));
-                vid.Machine = machineNEW.Machine;
-                vid.MachineID = machineNEW.Machine.ID;
-
-                await _machineService.InsertMachineVideoAsync(vid);
-                machineOLD.AddVideo(vid);
-
-                using (var stream = new FileStream(destinationPath, FileMode.Create))
-                {
-                    await video.CopyToAsync(stream);
-                }
-            }
-
-            //Files with location path and web
-            foreach (MachineFile file in MFiles)
-            {
-                if (file.Type == "Document" && (file.Location == "path" || file.Location == "web"))
-                {
-                    Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
-                    MachineDocument doc = new MachineDocument
-                    {
-                        Name = file.Name,
-                        FileName = file.FileName,
-                        Category = Category,
-                        CategoryID = Category.ID,
-                        Location = file.Location,
-                        Machine = machineOLD,
-                        MachineID = machineOLD.ID
-                    };
                     await _machineService.InsertMachineDocumentAsync(doc);
                     machineOLD.AddDocument(doc);
-                }
-                if (file.Type == "Image" && (file.Location == "path" || file.Location == "web"))
-                {
-                    Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
-                    MachineImage img = new MachineImage
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
                     {
-                        Name = file.Name,
-                        FileName = file.FileName,
-                        Category = Category,
-                        CategoryID = Category.ID,
-                        Location = file.Location,
-                        Machine = machineOLD,
-                        MachineID = machineOLD.ID
-                    };
+                        await document.CopyToAsync(stream);
+                    }
+                }
+
+                //Add images
+                foreach (IFormFile image in images)
+                {
+                    long filesSize = image.Length;
+                    var filePath = Path.GetTempFileName();
+
+                    if (image == null || image.Length == 0)
+                    {
+                        //return ("Error: Invalid path - Machine Images");
+                    }
+
+                    string fileName = image.FileName.Substring(0, image.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
+                    fileName += image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Images\\" + fileName;
+                    MachineImage img = new MachineImage();
+                    foreach (MachineFile file in MFiles)
+                    {
+                        if (file.FileName == image.FileName && file.Type == "Image")
+                        {
+                            img.Name = file.Name;
+                            img.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                            img.CategoryID = img.Category.ID;
+                            img.Location = file.Location;
+                        }
+                    }
+                    img.FileName = fileName;
+                    img.Path = @"/resources/Machines/Images/";
+                    img.Extension = image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
+                    img.Machine = machineNEW.Machine;
+                    img.MachineID = machineNEW.Machine.ID;
+
                     await _machineService.InsertMachineImageAsync(img);
                     machineOLD.AddImage(img);
-                }
-                if (file.Type == "Video" && (file.Location == "path" || file.Location == "web"))
-                {
-                    Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
-                    MachineVideo vid = new MachineVideo
+
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
                     {
-                        Name = file.Name,
-                        FileName = file.FileName,
-                        Category = Category,
-                        CategoryID = Category.ID,
-                        Location = file.Location,
-                        Machine = machineOLD,
-                        MachineID = machineOLD.ID
-                    };
+                        await image.CopyToAsync(stream);
+                    }
+                }
+
+                //Add videos
+                foreach (IFormFile video in videos)
+                {
+                    long filesSize = video.Length;
+                    var filePath = Path.GetTempFileName();
+
+                    if (video == null || video.Length == 0)
+                    {
+                        //return ("Error: Invalid path - Machine Videos");
+                    }
+
+                    string fileName = video.FileName.Substring(0, video.FileName.LastIndexOf(".")) + "_" + DateTime.Now.ToString("yyMMddHHmmssfffffff");
+                    fileName += video.FileName.Substring(video.FileName.LastIndexOf("."), (video.FileName.Length - video.FileName.LastIndexOf(".")));
+                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Machines\\Videos\\" + fileName;
+                    MachineVideo vid = new MachineVideo();
+                    foreach (MachineFile file in MFiles)
+                    {
+                        if (file.FileName == video.FileName && file.Type == "Video")
+                        {
+                            vid.Name = file.Name;
+                            vid.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                            vid.CategoryID = vid.Category.ID;
+                            vid.Location = file.Location;
+                        }
+                    }
+                    vid.FileName = fileName;
+                    vid.Path = @"/resources/Machines/Videos/";
+                    vid.Extension = video.FileName.Substring(video.FileName.LastIndexOf("."), (video.FileName.Length - video.FileName.LastIndexOf(".")));
+                    vid.Machine = machineNEW.Machine;
+                    vid.MachineID = machineNEW.Machine.ID;
+
                     await _machineService.InsertMachineVideoAsync(vid);
                     machineOLD.AddVideo(vid);
-                }
-            }
 
-            //Remove documents
-            foreach (MachineDocument document in RemoveDocumets)
-            {
-                try
-                {
-                    await _machineService.RemoveMachineDocumentAsync(document);
-                    machineOLD.MachineDocuments.Remove(document);
-                    if(document.Location == "file")
+                    using (var stream = new FileStream(destinationPath, FileMode.Create))
                     {
-
-                    }
-                    if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + document.Path + document.FileName))
-                    {
-                        System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + document.Path + document.FileName);
+                        await video.CopyToAsync(stream);
                     }
                 }
-                catch
-                {
-                }
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Erro adding machine documents, images and videos, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
-            //Remove images
-            foreach (MachineImage image in RemoveImages)
+            try
             {
-                try
+                //Files with location path and web
+                foreach (MachineFile file in MFiles)
                 {
-                    await _machineService.RemoveMachineImageAsync(image);
-                    machineOLD.MachineImages.Remove(image);
-                    if (image.Location == "file")
+                    if (file.Type == "Document" && (file.Location == "path" || file.Location == "web"))
                     {
-                        if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + image.Path + image.FileName))
+                        Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                        MachineDocument doc = new MachineDocument
                         {
-                            System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + image.Path + image.FileName);
+                            Name = file.Name,
+                            FileName = file.FileName,
+                            Category = Category,
+                            CategoryID = Category.ID,
+                            Location = file.Location,
+                            Machine = machineOLD,
+                            MachineID = machineOLD.ID
+                        };
+                        await _machineService.InsertMachineDocumentAsync(doc);
+                        machineOLD.AddDocument(doc);
+                    }
+                    if (file.Type == "Image" && (file.Location == "path" || file.Location == "web"))
+                    {
+                        Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                        MachineImage img = new MachineImage
+                        {
+                            Name = file.Name,
+                            FileName = file.FileName,
+                            Category = Category,
+                            CategoryID = Category.ID,
+                            Location = file.Location,
+                            Machine = machineOLD,
+                            MachineID = machineOLD.ID
+                        };
+                        await _machineService.InsertMachineImageAsync(img);
+                        machineOLD.AddImage(img);
+                    }
+                    if (file.Type == "Video" && (file.Location == "path" || file.Location == "web"))
+                    {
+                        Category Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                        MachineVideo vid = new MachineVideo
+                        {
+                            Name = file.Name,
+                            FileName = file.FileName,
+                            Category = Category,
+                            CategoryID = Category.ID,
+                            Location = file.Location,
+                            Machine = machineOLD,
+                            MachineID = machineOLD.ID
+                        };
+                        await _machineService.InsertMachineVideoAsync(vid);
+                        machineOLD.AddVideo(vid);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Erro adding machine files with path and web, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            try
+            {
+                //Remove documents
+                foreach (MachineDocument document in RemoveDocumets)
+                {
+                    try
+                    {
+                        await _machineService.RemoveMachineDocumentAsync(document);
+                        machineOLD.MachineDocuments.Remove(document);
+                        if (document.Location == "file")
+                        {
+
+                        }
+                        if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + document.Path + document.FileName))
+                        {
+                            System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + document.Path + document.FileName);
                         }
                     }
-                }
-                catch
-                {
-                }
-            }
-
-            //Remove videos
-            foreach (MachineVideo video in RemoveVideos)
-            {
-                try
-                {
-                    await _machineService.RemoveMachineVideoAsync(video);
-                    machineOLD.MachineVideos.Remove(video);
-                    if (video.Location == "file")
+                    catch
                     {
-                        if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + video.Path + video.FileName))
+                    }
+                }
+
+                //Remove images
+                foreach (MachineImage image in RemoveImages)
+                {
+                    try
+                    {
+                        await _machineService.RemoveMachineImageAsync(image);
+                        machineOLD.MachineImages.Remove(image);
+                        if (image.Location == "file")
                         {
-                            System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + video.Path + video.FileName);
+                            if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + image.Path + image.FileName))
+                            {
+                                System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + image.Path + image.FileName);
+                            }
                         }
                     }
-                }
-                catch
-                {
-                }
-            }
-
-            //Add Responsibles to machine
-            if(machineNEW.SelectedResponsibles != null)
-            {
-                foreach (int res in machineNEW.SelectedResponsibles)
-                {
-                    bool found = false;
-                    foreach (MachineResponsible resOLD in machineOLD.MachineResponsibles)
+                    catch
                     {
-                        if (resOLD.ResponsibleID == res && resOLD.MachineID == machineOLD.ID)
+                    }
+                }
+
+                //Remove videos
+                foreach (MachineVideo video in RemoveVideos)
+                {
+                    try
+                    {
+                        await _machineService.RemoveMachineVideoAsync(video);
+                        machineOLD.MachineVideos.Remove(video);
+                        if (video.Location == "file")
                         {
-                            found = true;
+                            if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + video.Path + video.FileName))
+                            {
+                                System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + video.Path + video.FileName);
+                            }
                         }
                     }
-                    if (found == false)
+                    catch
                     {
-                        Responsible responsible = await _responsibleService.FindByIDAsync(res);
-                        MachineResponsible machineResponsible = new MachineResponsible { Machine = machineNEW.Machine, MachineID = machineNEW.Machine.ID, Responsible = responsible, ResponsibleID = responsible.ID };
-                        await _machineService.InsertMachineResponsibleAsync(machineResponsible);
-                        machineOLD.MachineResponsibles.Add(machineResponsible);
                     }
                 }
             }
-            
-            //Remove responsibles from machine
-            if (machineOLD.MachineResponsibles != null)
+            catch (Exception e)
             {
-                foreach (MachineResponsible resOLD in machineOLD.MachineResponsibles.ToList())
+                return Content(@"notify('', '" + "Erro removing machine documents, images and videos, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            try
+            {
+                //Add Responsibles to machine
+                if (machineNEW.SelectedResponsibles != null)
                 {
-                    bool found = false;
                     foreach (int res in machineNEW.SelectedResponsibles)
                     {
-                        if (res == resOLD.ResponsibleID && resOLD.MachineID == machineOLD.ID)
+                        bool found = false;
+                        foreach (MachineResponsible resOLD in machineOLD.MachineResponsibles)
                         {
-                            found = true;
+                            if (resOLD.ResponsibleID == res && resOLD.MachineID == machineOLD.ID)
+                            {
+                                found = true;
+                            }
+                        }
+                        if (found == false)
+                        {
+                            Responsible responsible = await _responsibleService.FindByIDAsync(res);
+                            MachineResponsible machineResponsible = new MachineResponsible { Machine = machineNEW.Machine, MachineID = machineNEW.Machine.ID, Responsible = responsible, ResponsibleID = responsible.ID };
+                            await _machineService.InsertMachineResponsibleAsync(machineResponsible);
+                            machineOLD.MachineResponsibles.Add(machineResponsible);
                         }
                     }
-                    if (found == false)
-                    {
-                        await _machineService.RemoveMachineResponsibleAsync(resOLD.MachineID, resOLD.ResponsibleID);
-                        machineOLD.MachineResponsibles.Remove(resOLD);
-                    }
                 }
-            }
 
-            //Add Devices to machine
-            if (machineNEW.SelectedDevices != null)
-            {
-                foreach (int dev in machineNEW.SelectedDevices)
+                //Remove responsibles from machine
+                if (machineOLD.MachineResponsibles != null)
                 {
-                    bool found = false;
-                    foreach (MachineDevice devOLD in machineOLD.MachineDevices)
+                    foreach (MachineResponsible resOLD in machineOLD.MachineResponsibles.ToList())
                     {
-                        if (devOLD.DeviceID == dev && devOLD.MachineID == machineOLD.ID)
+                        bool found = false;
+                        foreach (int res in machineNEW.SelectedResponsibles)
                         {
-                            found = true;
+                            if (res == resOLD.ResponsibleID && resOLD.MachineID == machineOLD.ID)
+                            {
+                                found = true;
+                            }
                         }
-                    }
-                    if (found == false)
-                    {
-                        Device device = await _deviceService.FindByIDAsync(dev);
-                        MachineDevice machineDevice = new MachineDevice { Machine = machineNEW.Machine, MachineID = machineNEW.Machine.ID, Device = device, DeviceID = device.ID };
-                        await _machineService.InsertMachineDeviceAsync(machineDevice);
-                        machineOLD.MachineDevices.Add(machineDevice);
+                        if (found == false)
+                        {
+                            await _machineService.RemoveMachineResponsibleAsync(resOLD.MachineID, resOLD.ResponsibleID);
+                            machineOLD.MachineResponsibles.Remove(resOLD);
+                        }
                     }
                 }
             }
-
-            //Remove devices from machine
-            if (machineOLD.MachineDevices != null)
+            catch (Exception e)
             {
-                foreach (MachineDevice devOLD in machineOLD.MachineDevices.ToList())
+                return Content(@"notify('', '" + "Erro updating machine responsibles, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            try
+            {
+                //Add Devices to machine
+                if (machineNEW.SelectedDevices != null)
                 {
-                    bool found = false;
-                    foreach (int res in machineNEW.SelectedDevices)
+                    foreach (int dev in machineNEW.SelectedDevices)
                     {
-                        if (res == devOLD.DeviceID && devOLD.MachineID == machineOLD.ID)
+                        bool found = false;
+                        foreach (MachineDevice devOLD in machineOLD.MachineDevices)
                         {
-                            found = true;
+                            if (devOLD.DeviceID == dev && devOLD.MachineID == machineOLD.ID)
+                            {
+                                found = true;
+                            }
+                        }
+                        if (found == false)
+                        {
+                            Device device = await _deviceService.FindByIDAsync(dev);
+                            MachineDevice machineDevice = new MachineDevice { Machine = machineNEW.Machine, MachineID = machineNEW.Machine.ID, Device = device, DeviceID = device.ID };
+                            await _machineService.InsertMachineDeviceAsync(machineDevice);
+                            machineOLD.MachineDevices.Add(machineDevice);
                         }
                     }
-                    if (found == false)
+                }
+
+                //Remove devices from machine
+                if (machineOLD.MachineDevices != null)
+                {
+                    foreach (MachineDevice devOLD in machineOLD.MachineDevices.ToList())
                     {
-                        //await _machineService.RemoveMachineResponsibleAsync(devOLD.MachineID, devOLD.DeviceID);
-                        machineOLD.MachineDevices.Remove(devOLD);
+                        bool found = false;
+                        foreach (int res in machineNEW.SelectedDevices)
+                        {
+                            if (res == devOLD.DeviceID && devOLD.MachineID == machineOLD.ID)
+                            {
+                                found = true;
+                            }
+                        }
+                        if (found == false)
+                        {
+                            //await _machineService.RemoveMachineResponsibleAsync(devOLD.MachineID, devOLD.DeviceID);
+                            machineOLD.MachineDevices.Remove(devOLD);
+                        }
                     }
                 }
             }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Erro updating machine devices, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
 
-            await _machineService.UpdateAsync(machineOLD);
+            try
+            {
+                await _machineService.UpdateAsync(machineOLD);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Erro updating machine, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
 
             TempData["notificationMessage"] = "Machine updated successfuly";
             TempData["notificationIcon"] = "bi-check-circle";
@@ -880,7 +997,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error removing files, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error removing files, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             try
@@ -889,7 +1006,7 @@ namespace MachinePortal.Controllers
             }
             catch (Exception e)
             {
-                return Content(@"notify('', '" + "Error removing machine, description: " + e.Message + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                return Content(@"notify('', '" + "Error removing machine, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             TempData["notificationMessage"] = "Machine removed successfuly";

@@ -6,9 +6,14 @@
 <h1 class="text-danger">Error.</h1>
 <h2 class="text-danger">An error occurred while processing your request.</h2>
 
+@Html.ValidationSummary(false)
+
 @if (Model.ShowRequestId)
 {
     <p>
         <strong>@Localizer["Request ID:"].Value</strong> <code>@Model.RequestId</code>
+    </p>
+    <p>
+        <strong>@Localizer["Erro:"].Value</strong> @Html.ValidationMessage("error")
     </p>
 }

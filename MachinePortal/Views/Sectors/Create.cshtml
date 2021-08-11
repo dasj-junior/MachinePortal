@@ -69,7 +69,7 @@
                 data: new FormData(this),
                 success: function (m) {
                     $('.theme-loader').hide();
-                    if (m == 'success') { window.location.href = "/Areas/Details"; };
+                    if (m == 'success') { window.location.href = "/Areas/Details/" + @Model.Sector.AreaID; };
                 },
                 error: function (e) {
                     $('.theme-loader').hide();

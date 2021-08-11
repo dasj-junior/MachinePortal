@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Web;
 
 namespace MachinePortal.Areas.Identity.Pages.Account
 {
@@ -29,13 +30,13 @@ namespace MachinePortal.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly IHostingEnvironment _appEnvironment;
 
-                public RegisterModel(
-            IHostingEnvironment enviroment,
-            UserManager<MachinePortalUser> userManager,
-            SignInManager<MachinePortalUser> signInManager,
-            ILogger<RegisterModel> logger,
-            IdentityContext context,
-            IEmailSender emailSender)
+        public RegisterModel(
+    IHostingEnvironment enviroment,
+    UserManager<MachinePortalUser> userManager,
+    SignInManager<MachinePortalUser> signInManager,
+    ILogger<RegisterModel> logger,
+    IdentityContext context,
+    IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -284,9 +285,9 @@ namespace MachinePortal.Areas.Identity.Pages.Account
 <!--[if mso]><table width=""100%"" cellpadding=""0"" cellspacing=""0"" border=""0"" style=""border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;""><tr><td style=""padding-top: 5px; padding-right: 10px; padding-bottom: 35px; padding-left: 10px"" align=""left""><v:roundrect xmlns:v=""urn:schemas-microsoft-com:vml"" xmlns:w=""urn:schemas-microsoft-com:office:word"" href=""";
 
 
-public string confirmPageP2 = @""" style=""height:31.5pt;width:412.5pt;v-text-anchor:middle;"" arcsize=""120%"" stroke=""false"" fillcolor=""#FFD500""><w:anchorlock/><v:textbox inset=""0,0,0,0""><center style=""color:#132F40; font-family:Arial, sans-serif; font-size:15px""><![endif]--><a href=""";
+        public string confirmPageP2 = @""" style=""height:31.5pt;width:412.5pt;v-text-anchor:middle;"" arcsize=""120%"" stroke=""false"" fillcolor=""#FFD500""><w:anchorlock/><v:textbox inset=""0,0,0,0""><center style=""color:#132F40; font-family:Arial, sans-serif; font-size:15px""><![endif]--><a href=""";
 
-public string confirmPageP3 = @""" style=""-webkit-text-size-adjust: none; text-decoration: none; display: block; color: #132F40; background-color: #FFC300; border-radius: 8px; -webkit-border-radius: 50px; -moz-border-radius: 8px; width: 100%; width: calc(100% - 2px); border-top: 1px solid #FFC300; border-right: 1px solid #FFC300; border-bottom: 1px solid #FFC300; border-left: 1px solid #FFC300; padding-top: 5px; padding-bottom: 5px; font-family: Cabin, Arial, Helvetica Neue, Helvetica, sans-serif; text-align: center; mso-border-alt: none; word-break: keep-all;"" target=""_blank""><span style=""padding-left:20px;padding-right:20px;font-size:15px;display:inline-block;letter-spacing:undefined;""><span style=""font-size: 16px; line-height: 2; word-break: break-word; mso-line-height-alt: 32px;""><span data-mce-style=""font-size: 15px; line-height: 30px;"" style=""font-size: 15px; line-height: 30px;""><strong><span data-mce-style=""line-height: 30px; font-size: 15px;"" style=""line-height: 30px; font-size: 15px;"">ACTIVATE MY ACCOUNT &gt;</span></strong></span></span></span></a>
+        public string confirmPageP3 = @""" style=""-webkit-text-size-adjust: none; text-decoration: none; display: block; color: #132F40; background-color: #FFC300; border-radius: 8px; -webkit-border-radius: 50px; -moz-border-radius: 8px; width: 100%; width: calc(100% - 2px); border-top: 1px solid #FFC300; border-right: 1px solid #FFC300; border-bottom: 1px solid #FFC300; border-left: 1px solid #FFC300; padding-top: 5px; padding-bottom: 5px; font-family: Cabin, Arial, Helvetica Neue, Helvetica, sans-serif; text-align: center; mso-border-alt: none; word-break: keep-all;"" target=""_blank""><span style=""padding-left:20px;padding-right:20px;font-size:15px;display:inline-block;letter-spacing:undefined;""><span style=""font-size: 16px; line-height: 2; word-break: break-word; mso-line-height-alt: 32px;""><span data-mce-style=""font-size: 15px; line-height: 30px;"" style=""font-size: 15px; line-height: 30px;""><strong><span data-mce-style=""line-height: 30px; font-size: 15px;"" style=""line-height: 30px; font-size: 15px;"">ACTIVATE MY ACCOUNT &gt;</span></strong></span></span></span></a>
 <!--[if mso]></center></v:textbox></v:roundrect></td></tr></table><![endif]-->
 </div>
 <!--[if (!mso)&(!IE)]><!-->
@@ -421,80 +422,93 @@ public string confirmPageP3 = @""" style=""-webkit-text-size-adjust: none; text-
         public async Task<IActionResult> OnPostAsync(IFormFile photo, string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
+            string errorMsg = "";
             if (ModelState.IsValid)
             {
-                var dpt = _context.Department.FirstOrDefault(d => d.Name == "User");
-                var user = new MachinePortalUser { UserName = Input.UserName,
-                                                    FirstName = Input.FirstName,
-                                                    LastName = Input.LastName,
-                                                    Email = Input.Email,
-                                                    EmailConfirmed = false,
-                                                    Department = dpt,
-                                                    JobRole = Input.JobRole,
-                                                    Mobile = Input.Mobile,
-                                                    PhoneNumber = Input.PhoneNumber,
-                                                    PhotoPath = Input.PhotoPath,
-                                                  };
-
-                if (photo != null && photo.Length > 0)
+                try
                 {
-                    //long filesSize = photo.Length;
-                    //var filePath = Path.GetTempFileName();
-
-                    string fileName = DateTime.Now.ToString("yyyyMMddHHmmssfffffff");
-                    fileName += photo.FileName.Substring(photo.FileName.LastIndexOf("."), (photo.FileName.Length - photo.FileName.LastIndexOf(".")));
-                    string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Users\\Photos\\" + fileName;
-                    user.PhotoPath = @"/resources/Users/Photos/" + fileName;
-
-                    using (var stream = new FileStream(destinationPath, FileMode.Create))
+                    var dpt = _context.Department.FirstOrDefault(d => d.Name == "User");
+                    var user = new MachinePortalUser
                     {
-                        await photo.CopyToAsync(stream);
+                        UserName = Input.UserName,
+                        FirstName = Input.FirstName,
+                        LastName = Input.LastName,
+                        Email = Input.Email,
+                        EmailConfirmed = false,
+                        Department = dpt,
+                        JobRole = Input.JobRole,
+                        Mobile = Input.Mobile,
+                        PhoneNumber = Input.PhoneNumber,
+                        PhotoPath = Input.PhotoPath,
+                    };
+
+                    if (photo != null && photo.Length > 0)
+                    {
+                        //long filesSize = photo.Length;
+                        //var filePath = Path.GetTempFileName();
+
+                        string fileName = DateTime.Now.ToString("yyyyMMddHHmmssfffffff");
+                        fileName += photo.FileName.Substring(photo.FileName.LastIndexOf("."), (photo.FileName.Length - photo.FileName.LastIndexOf(".")));
+                        string destinationPath = _appEnvironment.WebRootPath + "\\resources\\Users\\Photos\\" + fileName;
+                        user.PhotoPath = @"/resources/Users/Photos/" + fileName;
+
+                        using (var stream = new FileStream(destinationPath, FileMode.Create))
+                        {
+                            await photo.CopyToAsync(stream);
+                        }
+                    }
+
+                    var result = await _userManager.CreateAsync(user, Input.Password);
+                    if (result.Succeeded)
+                    {
+                        _logger.LogInformation("User created a new account with password.");
+                        MachinePortalUser defaultUser = _context.Users.Include(up => up.UserPermissions).ThenInclude(p => p.Permission).FirstOrDefault(u => u.UserName == "user");
+
+                        foreach (Permission p in defaultUser.UserPermissions.Select(x => x.Permission).ToList())
+                        {
+                            UserPermission UP = new UserPermission { UserID = user.Id, Permission = p, PermissionID = p.ID, MachinePortalUser = user };
+                            await _context.UserPermission.AddAsync(UP);
+                        }
+                        await _context.SaveChangesAsync();
+
+                        MachinePortalUser newUser = _context.Users.Include(up => up.UserPermissions).ThenInclude(p => p.Permission).FirstOrDefault(u => u.Id == user.Id);
+
+                        try
+                        {
+                            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                            var callbackUrl = Url.Page(
+                                "/Account/ConfirmEmail",
+                                pageHandler: null,
+                                values: new { userId = user.Id, code },
+                                protocol: Request.Scheme);
+
+                            //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                            //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                            await _emailSender.SendEmailAsync(Input.Email, "Machine Portal - Email Confirmation", confirmPageP1 + HtmlEncoder.Default.Encode(callbackUrl) + confirmPageP2 + HtmlEncoder.Default.Encode(callbackUrl) + confirmPageP3);
+
+                            //await _signInManager.SignInAsync(user, isPersistent: false);
+                            returnUrl = "/Identity/Account/WaitingConfirmation";
+                        }
+                        catch (Exception e)
+                        {
+                            return Content(@"notify('', '" + "Error registering user, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+                        }
+
+                        return LocalRedirect(returnUrl);
+                    }
+                    foreach (var error in result.Errors)
+                    {
+                        errorMsg += error.Description + "\n";
+                    }
+                    if(errorMsg != "")
+                    {
+                        return Content(@"notify('', '" + "Error registering user, description: " + HttpUtility.JavaScriptStringEncode(errorMsg) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
                     }
                 }
-
-                var result = await _userManager.CreateAsync(user, Input.Password);
-                if (result.Succeeded)
+                catch (Exception e)
                 {
-                    _logger.LogInformation("User created a new account with password.");
-                    MachinePortalUser defaultUser = _context.Users.Include(up => up.UserPermissions).ThenInclude(p => p.Permission).FirstOrDefault(u => u.UserName == "user");
-
-                    foreach (Permission p in defaultUser.UserPermissions.Select(x => x.Permission).ToList())
-                    {
-                        UserPermission UP = new UserPermission { UserID = user.Id, Permission = p, PermissionID = p.ID, MachinePortalUser = user };
-                        await _context.UserPermission.AddAsync(UP);
-                    }
-                    await _context.SaveChangesAsync();
-
-                    MachinePortalUser newUser = _context.Users.Include(up => up.UserPermissions).ThenInclude(p => p.Permission).FirstOrDefault(u => u.Id == user.Id);
-
-                    try
-                    {
-                        var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                        var callbackUrl = Url.Page(
-                            "/Account/ConfirmEmail",
-                            pageHandler: null,
-                            values: new { userId = user.Id, code },
-                            protocol: Request.Scheme);
-
-                        //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-                        await _emailSender.SendEmailAsync(Input.Email, "Machine Portal - Email Confirmation", confirmPageP1 + HtmlEncoder.Default.Encode(callbackUrl) + confirmPageP2 + HtmlEncoder.Default.Encode(callbackUrl) + confirmPageP3);
-
-                        //await _signInManager.SignInAsync(user, isPersistent: false);
-                        returnUrl = "/Identity/Account/WaitingConfirmation";
-                    }
-                    catch(Exception e)
-                    {
-                        ModelState.AddModelError(string.Empty, e.Message);
-                        returnUrl = "/";
-                    }
-                    
-                    return LocalRedirect(returnUrl);
-                }
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    return Content(@"notify('', '" + "Error registering user, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
                 }
             }
 

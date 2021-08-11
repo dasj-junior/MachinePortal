@@ -72,67 +72,71 @@
     }
 </script>
 
-<div class="card fb-card c-vitesco-green-02">
-    <div class="card-header c-vitesco-green-02">
-        <i style="vertical-align:middle" class="ti-user c-vitesco-green-02"></i>
-        <div class="d-inline-block">
-            <h2 style="color:white;">@Localizer["Responsibles"].Value</h2>
-        </div>
-    </div>
-    <div class="card-block card-padding">
-        @if (permissions.Contains("ResponsiblesCreate"))
-        {
-            <p>
-                <button class="btn btn-primary btn-create" data-toggle="modal" data-target="#modalCreate">@Localizer["Create New Responsible"].Value</button>
-            </p>
-        }
-        <div class="table-responsive">
-            <table class="table table-hover table-bordered table-vitesco">
-                <thead class="thead-vitesco">
-                    <tr>
-                        <th>@Html.DisplayNameFor(model => model.PhotoPath)</th>
-                        <th>@Html.DisplayNameFor(model => model.FirstName)</th>
-                        <th>@Html.DisplayNameFor(model => model.LastName)</th>
-                        <th>@Localizer["Department"].Value</th>
-                        <th>@Html.DisplayNameFor(model => model.PhoneNumber)</th>
-                        <th>@Html.DisplayNameFor(model => model.Mobile)</th>
-                        <th>@Html.DisplayNameFor(model => model.Email)</th>
-                        <th width="20%" class="text-center">@Localizer["Options"].Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            @if (item.PhotoPath != null)
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-10">
+        <div class="card fb-card c-vitesco-green-02">
+            <div class="card-header c-vitesco-green-02">
+                <i style="vertical-align:middle" class="ti-user c-vitesco-green-02"></i>
+                <div class="d-inline-block">
+                    <h2 style="color:white;">@Localizer["Responsibles"].Value</h2>
+                </div>
+            </div>
+            <div class="card-block card-padding">
+                @if (permissions.Contains("ResponsiblesCreate"))
+                {
+                    <p>
+                        <button class="btn btn-primary btn-create" data-toggle="modal" data-target="#modalCreate">@Localizer["Create New Responsible"].Value</button>
+                    </p>
+                }
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered table-vitesco">
+                        <thead class="thead-vitesco">
+                            <tr>
+                                <th>@Html.DisplayNameFor(model => model.PhotoPath)</th>
+                                <th>@Html.DisplayNameFor(model => model.FirstName)</th>
+                                <th>@Html.DisplayNameFor(model => model.LastName)</th>
+                                <th>@Localizer["Department"].Value</th>
+                                <th>@Html.DisplayNameFor(model => model.PhoneNumber)</th>
+                                <th>@Html.DisplayNameFor(model => model.Mobile)</th>
+                                <th>@Html.DisplayNameFor(model => model.Email)</th>
+                                <th width="20%" class="text-center">@Localizer["Options"].Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
                             {
-                                <td><img src="@Html.DisplayFor(modelItem => item.PhotoPath)" width="100" /></td>
+                                <tr>
+                                    @if (item.PhotoPath != null)
+                                    {
+                                        <td><img src="@Html.DisplayFor(modelItem => item.PhotoPath)" width="100" /></td>
+                                    }
+                                    else
+                                    {
+                                        <td><img src="~/resources/General/NoImage.jpg" width="100" /></td>
+                                    }
+                                    <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Department.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Mobile)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                                    <td class="text-center ws-nowrap">
+                                        <button class="btn btn-success" data-toggle="modal" onclick="renderPartialDetails(@item.ID)" data-target="#modalDetails">@Localizer["Open"].Value</button>
+                                        @if (permissions.Contains("ResponsiblesEdit"))
+                                        {
+                                            <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
+                                        }
+                                        @if (permissions.Contains("ResponsiblesDelete"))
+                                        {
+                                            <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
+                                        }
+                                    </td>
+                                </tr>
                             }
-                            else
-                            {
-                                <td><img src="~/resources/General/NoImage.jpg" width="100" /></td>
-                            }
-                            <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
-                            <td>@Html.DisplayFor(modelItem => item.LastName)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Department.Name)</td>
-                            <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Mobile)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Email)</td>
-                            <td class="text-center ws-nowrap">
-                                <button class="btn btn-success" data-toggle="modal" onclick="renderPartialDetails(@item.ID)" data-target="#modalDetails">@Localizer["Open"].Value</button>
-                                @if (permissions.Contains("ResponsiblesEdit"))
-                                {
-                                    <button class="btn btn-primary" data-toggle="modal" onclick="renderPartialEdit(@item.ID)" data-target="#modalEdit">@Localizer["Edit"].Value</button>
-                                }
-                                @if (permissions.Contains("ResponsiblesDelete"))
-                                {
-                                    <button class="btn btn-danger" data-toggle="modal" onclick="renderPartialDelete(@item.ID)" data-target="#modalDelete">@Localizer["Delete"].Value</button>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>

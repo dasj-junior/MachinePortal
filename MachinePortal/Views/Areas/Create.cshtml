@@ -64,8 +64,6 @@
                 url: '@Url.Content("~/")' + "Areas/Create",
                 type: "POST",
                 headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
-                processData: false,
-                contentType: false,
                 data: new FormData(this),
                 success: function (m) {
                     $('.theme-loader').hide();

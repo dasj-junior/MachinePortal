@@ -1,6 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @model MachinePortal.Models.ViewModels.LineFormViewModel
+
 @* Machine Photo Button and Preview *@
 <script type="text/javascript">
     $(document).ready(function () {
@@ -69,7 +70,7 @@
                 data: new FormData(this),
                 success: function (m) {
                     $('.theme-loader').hide();
-                    if (m == 'success') { window.location.href = "/Sectors/Details"; };
+                    if (m == 'success') { window.location.href = "/Sectors/Details/" + @Model.Line.SectorID; };
                 },
                 error: function (e) {
                     $('.theme-loader').hide();

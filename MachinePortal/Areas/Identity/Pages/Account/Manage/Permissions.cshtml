@@ -44,18 +44,6 @@
                     }
                 });
             });
-
-            $("#btnTeste").click(function (event) {
-                $.ajax({
-                    type: "POST",
-                    url: window.location.href + '?handler=Teste',
-                    data: "",
-                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
-                    success: function () {
-                        location = location.href;
-                    }
-                });
-            });
         });
     });
 </script>
@@ -92,14 +80,14 @@
                                 <tr>
                                     <td>@Html.DisplayFor(modelItem => item.PermissionName)</td>
                                     <td class="text-center ws-nowrap">
-                                        @if (Model.permissions.Contains("PermissionsEdit"))
+                                        @if (Model.permissions.Contains("PermissionsEdit") && item.ID > 45)
                                         {
                                             <button class="btn btn-primary" type="button" onclick="document.getElementById('editName').value = '@item.PermissionName'; document.getElementById('editID').value = '@item.ID'" data-toggle="modal" data-target="#modalEdit">@Localizer["Edit"].Value</button>
                                         }
-                                        @*@if (!Model.permissions.Contains("PermissionsDelete"))
+                                        @if (Model.permissions.Contains("PermissionsDelete") && item.ID > 45)
                                         {
                                             <button class="btn btn-danger" type="button" onclick="document.getElementById('removeName').value = '@item.PermissionName'; document.getElementById('removeID').value = '@item.ID'" data-toggle="modal" data-target="#modalRemove">@Localizer["Remove"].Value</button>
-                                        }*@
+                                        }
                                     </td>
                                 </tr>
                             }
