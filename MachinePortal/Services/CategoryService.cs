@@ -59,7 +59,7 @@ namespace MachinePortal.Services
         {
             try
             {
-                return await _context.Category.FirstOrDefaultAsync(obj => obj.ID == ID);
+                return await _context.Category.AsNoTracking().FirstOrDefaultAsync(obj => obj.ID == ID);
             }
             catch (Exception e) { throw new Exception(e.Message); }; 
         }

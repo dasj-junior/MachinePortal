@@ -65,6 +65,8 @@ namespace MachinePortal.Controllers
 
             try
             {
+                Sector oldSector = await _SectorService.FindByIDAsync(Sector.ID);
+
                 if (image != null)
                 {
                     //long filesSize = image.Length;
@@ -84,6 +86,10 @@ namespace MachinePortal.Controllers
                     {
                         await image.CopyToAsync(stream);
                     }
+                }
+                else
+                {
+                    Sector.ImagePath = oldSector.ImagePath;
                 }
             }
             catch (Exception e)

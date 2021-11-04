@@ -172,7 +172,8 @@ namespace MachinePortal.Migrations
                     b.Property<string>("Brand")
                         .HasMaxLength(100);
 
-                    b.Property<double>("Currency");
+                    b.Property<string>("Currency")
+                        .HasMaxLength(10);
 
                     b.Property<string>("Description")
                         .HasMaxLength(200);
@@ -189,7 +190,7 @@ namespace MachinePortal.Migrations
                     b.Property<string>("PartNumber")
                         .HasMaxLength(100);
 
-                    b.Property<double>("Price");
+                    b.Property<float>("Price");
 
                     b.Property<string>("StockLocation")
                         .HasMaxLength(100);

@@ -33,9 +33,8 @@ namespace MachinePortal.Models
         public string Description { get; set; }
 
         [Display(Name = "Currency")]
-        public double Currency { get; set; }
+        public string Currency { get; set; }
 
-        [DataType(DataType.Currency)]
         [Display(Name = "Price")]
         public double Price { get; set; }
         
@@ -56,7 +55,7 @@ namespace MachinePortal.Models
         {
         }
 
-        public Device(int Id, string name, string brand, string model, string partNumber, string description, double price, string supplier, string imagePath)
+        public Device(int Id, string name, string brand, string model, string partNumber, string description, float price, string supplier, string imagePath)
         {
             ID = Id;
             Name = name;

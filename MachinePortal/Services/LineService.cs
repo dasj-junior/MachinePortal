@@ -58,7 +58,7 @@ namespace MachinePortal.Services
 
         public async Task<Line> FindByIDAsync(int ID)
         {
-            return await _context.Line.Include(s => s.Sector).Include(a => a.Sector.Area).FirstOrDefaultAsync(obj => obj.ID == ID);
+            return await _context.Line.Include(s => s.Sector).Include(a => a.Sector.Area).AsNoTracking().FirstOrDefaultAsync(obj => obj.ID == ID);
         }
 
         public async Task<List<Line>> FindBySectorIDAsync(int ID)

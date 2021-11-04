@@ -60,6 +60,7 @@ namespace MachinePortal.Services
             try
             {
                 return await _context.Responsible.Include(d => d.Department)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(obj => obj.ID == ID);
             }
             catch (Exception e) { throw new Exception(e.Message); };

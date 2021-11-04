@@ -71,17 +71,19 @@
                             <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().Category)</th>
                             <th>@Html.DisplayNameFor(model => model.MachineDocuments.First().FileName)</th>
                             <th class="text-center">@Localizer["Link"].Value</th>
+                            <th class="text-center">@Localizer["Open"].Value</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var document in Model.MachineDocuments)
                         {
-                            <tr>
-                                <td>@Html.DisplayFor(modelItem => document.Name)</td>
-                                <td>@Html.DisplayFor(modelItem => document.Category)</td>
-                                <td>@Html.DisplayFor(modelItem => document.FileName)</td>
-                                <td class="text-center ws-nowrap">@Html.ActionLink("Download", "Download", new { filePath = document.Path, fileName = document.FileName, extension = document.Extension })</td>
-                            </tr>
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => document.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => document.Category.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => document.FileName)</td>
+                            <td class="text-center ws-nowrap">@Html.ActionLink("Download", "Download", new { filePath = document.Path, fileName = document.FileName, extension = document.Extension }, new { @class = "btn btn-primary" })</td>
+                            <td class="text-center ws-nowrap"><a class="btn btn-success" href="@document.Path@document.Name" target="_blank">Open</a></td>
+                        </tr>
                         }
                     </tbody>
                 </table>

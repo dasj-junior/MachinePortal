@@ -55,6 +55,7 @@ namespace MachinePortal.Areas.Identity.Services
                 {
                     smtp.Credentials = new NetworkCredential(_emailSettings.UsernameEmail,_emailSettings.UsernamePassword);
                     smtp.EnableSsl = true;
+                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                     await smtp.SendMailAsync(mail);
                 }
             }

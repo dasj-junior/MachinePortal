@@ -1,0 +1,22 @@
+{
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "MachinePortalContext": "server=10.218.24.114;userid=machineportaldb;password=Vitesco1*;database=machineportaldb",
+    "IdentityContextConnection": "server=10.218.24.114;userid=machineportaldb;password=Vitesco1*;database=machineportaldb"
+  },
+  "EmailSettings": {
+    "PrimaryDomain": "smtp.vitesco-technologies.net",
+    "PrimaryPort": "2525",
+    "UsernameEmail": "sltm111a@vitesco-technologies.com",
+    "UsernamePassword": "",
+    "FromEmail": "",
+    "ToEmail": "",
+    "CcEmail": ""
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Warning",
+      "Microsoft.EntityFrameworkCore.Database.Command": "Information"
+    }
+  }
+}

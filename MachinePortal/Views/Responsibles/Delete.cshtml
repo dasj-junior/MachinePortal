@@ -1,7 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @inject IViewLocalizer Localizer
 @model MachinePortal.Models.Responsible
-
 @* Send form through AJAX *@
 <script type="text/javascript">
     $(document).ready(function () {
@@ -27,7 +26,7 @@
     });
 </script>
 
-<div class="modal-dialog">
+<div class="modal-dialog" style="max-width:650px">
     <div class="modal-content">
         <form id="form" asp-controller="Responsibles" asp-action="Delete" class="form" method="post">
             <div style="background-color: #dc3545;" class="modal-header">
@@ -35,7 +34,7 @@
                 <h3 style="color:white;text-align:center;" class="modal-title">@Localizer["Remove Responsible"].Value</h3>
                 <button style="color:white;margin-top:-8px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true" class="c-m-btn">×</span><span class="sr-only">@Localizer["Close"].Value</span></button>
             </div>
-            <div class="modal-body text-center">
+            <div class="modal-body text-center" style="padding:30px">
                 <div style="padding-left:50px" class="card-block card-padding text-center">
                     <h4>@Html.DisplayFor(model => model.FirstName) @Html.DisplayFor(model => model.LastName)</h4>
                     <hr />

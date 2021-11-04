@@ -42,11 +42,11 @@ namespace MachinePortal.Models
         public string ServerPath { get; set; }
         
         [Display(Name = "Last Preventive Maintenance Date")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime LastPreventiveMaintenance { get; set; }
         
         [Display(Name = "Manufactured Date")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime StartDate { get; set; }
 
         [Display(Name = "Area ID")]

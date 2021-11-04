@@ -24,9 +24,6 @@
 
 @* Machine Photo Button and Preview *@
 <script type="text/javascript">
-    //Mask
-    $('.money2').mask("###.###.##0,00", { reverse: true });
-
     //Remove Document
     function RemoveDocument(ID) {
         if (confirm("Do you confirm remove this document?")) {
@@ -43,6 +40,7 @@
     }
 
     $(document).ready(function () {
+
         //Button triggers the photo file input
         document.getElementById('openPhoto').addEventListener('click', () => {
             document.getElementById('photo').click()
@@ -64,7 +62,7 @@
                     var reader = new FileReader();
                     reader.onload = function (e) {
                         var img = $("<img />");
-                        img.attr("style", "height:200px; margin: 10px;");
+                        img.attr("style", "height:200px; padding: 10px;");
                         img.attr("src", e.target.result);
                         img.attr("class", "img-thumbnail");
                         dvPreview.append(img);
@@ -72,7 +70,7 @@
                     reader.readAsDataURL(file[0]);
                 });
             } else {
-                alert("This browser does not support HTML5.");
+                notify('', 'Error: This browser does not support HTML5' + e.statusText, 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight');
             }
         });
 
@@ -137,6 +135,9 @@
                 }
             });
         });
+
+        //Mask
+        $('.money2').mask("###.###.##0,00", { reverse: true });
     });
 </script>
 
@@ -151,9 +152,10 @@
                     </div>
                 </div>
                 <div class="card-block card-padding">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label class="control-label">@Localizer["Photo"].Value</label>
                         <div id="divImageMediaPreview"></div>
+                        <label class="control-label">@Localizer["Photo"].Value</label>
                         <div class="input-group">
                             <input id="photoFilePath" type="text" class="form-control" placeholder="@Localizer["No file chosen"].Value" readonly />
                             <span class="input-group-append input-group-button">

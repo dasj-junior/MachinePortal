@@ -120,9 +120,9 @@ namespace MachinePortal.Controllers
                     MFiles = JsonConvert.DeserializeObject<List<MachineFile>>(Request.Form["files"]);
                 }
 
-                machineFVM.Machine.Area = await _areaService.FindByIDAsync(machineFVM.Machine.AreaID);
-                machineFVM.Machine.Sector = await _sectorService.FindByIDAsync(machineFVM.Machine.SectorID);
-                machineFVM.Machine.Line = await _lineService.FindByIDAsync(machineFVM.Machine.LineID);
+                //machineFVM.Machine.Area = await _areaService.FindByIDAsync(machineFVM.Machine.AreaID);
+                //machineFVM.Machine.Sector = await _sectorService.FindByIDAsync(machineFVM.Machine.SectorID);
+                //machineFVM.Machine.Line = await _lineService.FindByIDAsync(machineFVM.Machine.LineID);
             }
             catch (Exception e)
             {
@@ -351,7 +351,7 @@ namespace MachinePortal.Controllers
                     foreach (int id in machineFVM.SelectedResponsibles)
                     {
                         Responsible responsible = await _responsibleService.FindByIDAsync(id);
-                        MachineResponsible machineResponsible = new MachineResponsible { Machine = machineFVM.Machine, MachineID = machineFVM.Machine.ID, Responsible = responsible, ResponsibleID = responsible.ID };
+                        MachineResponsible machineResponsible = new MachineResponsible { Machine = machineFVM.Machine, MachineID = machineFVM.Machine.ID, ResponsibleID = responsible.ID };
                         await _machineService.InsertMachineResponsibleAsync(machineResponsible);
                         machineFVM.Machine.MachineResponsibles.Add(machineResponsible);
                     }
@@ -370,7 +370,7 @@ namespace MachinePortal.Controllers
                     foreach (int id in machineFVM.SelectedDevices)
                     {
                         Device device = await _deviceService.FindByIDAsync(id);
-                        MachineDevice machineDevice = new MachineDevice { Machine = machineFVM.Machine, MachineID = machineFVM.Machine.ID, Device = device, DeviceID = device.ID };
+                        MachineDevice machineDevice = new MachineDevice { Machine = machineFVM.Machine, MachineID = machineFVM.Machine.ID, DeviceID = device.ID };
                         await _machineService.InsertMachineDeviceAsync(machineDevice);
                         machineFVM.Machine.MachineDevices.Add(machineDevice);
                     }
@@ -397,8 +397,33 @@ namespace MachinePortal.Controllers
             var allDevices = await _deviceService.FindAllAsync();
             var devices = ((from obj in machine.MachineDevices select obj).ToList()).Select(d => d.Device).ToList();
 
-            allResponsibles = allResponsibles.Where(x => !responsibles.Contains(x)).ToList();
-            allDevices = allDevices.Where(x => !devices.Contains(x)).ToList();
+            if(allResponsibles != null)
+            {
+                foreach(Responsible res01 in allResponsibles.ToList())
+                {
+                    foreach (Responsible res02 in responsibles.ToList())
+                    {
+                        if(res01.ID == res02.ID)
+                        {
+                            allResponsibles.Remove(res01);
+                        }
+                    }
+                }
+            }
+
+            if (allDevices != null)
+            {
+                foreach (Device dev01 in allDevices.ToList())
+                {
+                    foreach (Device dev02 in devices.ToList())
+                    {
+                        if (dev01.ID == dev02.ID)
+                        {
+                            allDevices.Remove(dev01);
+                        }
+                    }
+                }
+            }
 
             SelectList selectResponsibles = new SelectList(allResponsibles, "ID", "FullName");
             SelectList selectedResponsibles = new SelectList(responsibles, "ID", "FullName");
@@ -564,6 +589,10 @@ namespace MachinePortal.Controllers
                         await photo.CopyToAsync(stream);
                     }
                 }
+                else
+                {
+                    machineNEW.Machine.ImagePath = machineOLD.ImagePath;
+                }
             }
             catch (Exception e)
             {
@@ -592,15 +621,15 @@ namespace MachinePortal.Controllers
                         if (file.FileName == document.FileName && file.Type == "Document")
                         {
                             doc.Name = file.Name;
-                            doc.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
-                            doc.CategoryID = doc.Category.ID;
+                            //doc.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                            doc.CategoryID = int.Parse(file.Category);
                             doc.Location = file.Location;
                         }
                     }
                     doc.FileName = fileName;
                     doc.Path = @"/resources/Machines/Documents/";
                     doc.Extension = document.FileName.Substring(document.FileName.LastIndexOf("."), (document.FileName.Length - document.FileName.LastIndexOf(".")));
-                    doc.Machine = machineNEW.Machine;
+                    //doc.Machine = machineNEW.Machine;
                     doc.MachineID = machineNEW.Machine.ID;
 
                     await _machineService.InsertMachineDocumentAsync(doc);
@@ -632,15 +661,15 @@ namespace MachinePortal.Controllers
                         if (file.FileName == image.FileName && file.Type == "Image")
                         {
                             img.Name = file.Name;
-                            img.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
-                            img.CategoryID = img.Category.ID;
+                            //img.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                            img.CategoryID = int.Parse(file.Category);
                             img.Location = file.Location;
                         }
                     }
                     img.FileName = fileName;
                     img.Path = @"/resources/Machines/Images/";
                     img.Extension = image.FileName.Substring(image.FileName.LastIndexOf("."), (image.FileName.Length - image.FileName.LastIndexOf(".")));
-                    img.Machine = machineNEW.Machine;
+                    //img.Machine = machineNEW.Machine;
                     img.MachineID = machineNEW.Machine.ID;
 
                     await _machineService.InsertMachineImageAsync(img);
@@ -672,15 +701,15 @@ namespace MachinePortal.Controllers
                         if (file.FileName == video.FileName && file.Type == "Video")
                         {
                             vid.Name = file.Name;
-                            vid.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
-                            vid.CategoryID = vid.Category.ID;
+                            //vid.Category = await _categoryService.FindByIDAsync(int.Parse(file.Category));
+                            vid.CategoryID = int.Parse(file.Category);
                             vid.Location = file.Location;
                         }
                     }
                     vid.FileName = fileName;
                     vid.Path = @"/resources/Machines/Videos/";
                     vid.Extension = video.FileName.Substring(video.FileName.LastIndexOf("."), (video.FileName.Length - video.FileName.LastIndexOf(".")));
-                    vid.Machine = machineNEW.Machine;
+                    //vid.Machine = machineNEW.Machine;
                     vid.MachineID = machineNEW.Machine.ID;
 
                     await _machineService.InsertMachineVideoAsync(vid);
@@ -764,15 +793,19 @@ namespace MachinePortal.Controllers
                 {
                     try
                     {
-                        await _machineService.RemoveMachineDocumentAsync(document);
+                        try
+                        {
+                            await _machineService.RemoveMachineDocumentAsync(document);
+                        }
+                        catch { }
                         machineOLD.MachineDocuments.Remove(document);
+                        
                         if (document.Location == "file")
                         {
-
-                        }
-                        if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + document.Path + document.FileName))
-                        {
-                            System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + document.Path + document.FileName);
+                            if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + document.Path + document.FileName))
+                            {
+                                System.IO.File.Delete(_appEnvironment.WebRootPath + "\\" + document.Path + document.FileName);
+                            }
                         }
                     }
                     catch
@@ -785,7 +818,11 @@ namespace MachinePortal.Controllers
                 {
                     try
                     {
-                        await _machineService.RemoveMachineImageAsync(image);
+                        try
+                        {
+                            await _machineService.RemoveMachineImageAsync(image);
+                        }
+                        catch { }
                         machineOLD.MachineImages.Remove(image);
                         if (image.Location == "file")
                         {
@@ -805,7 +842,11 @@ namespace MachinePortal.Controllers
                 {
                     try
                     {
-                        await _machineService.RemoveMachineVideoAsync(video);
+                        try
+                        {
+                            await _machineService.RemoveMachineVideoAsync(video);
+                        }
+                        catch { }
                         machineOLD.MachineVideos.Remove(video);
                         if (video.Location == "file")
                         {
@@ -827,6 +868,15 @@ namespace MachinePortal.Controllers
 
             try
             {
+                await _machineService.UpdateAsync(machineOLD);
+            }
+            catch (Exception e)
+            {
+                return Content(@"notify('', '" + "Erro updating machine, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
+            }
+
+            try
+            {
                 //Add Responsibles to machine
                 if (machineNEW.SelectedResponsibles != null)
                 {
@@ -843,7 +893,7 @@ namespace MachinePortal.Controllers
                         if (found == false)
                         {
                             Responsible responsible = await _responsibleService.FindByIDAsync(res);
-                            MachineResponsible machineResponsible = new MachineResponsible { Machine = machineNEW.Machine, MachineID = machineNEW.Machine.ID, Responsible = responsible, ResponsibleID = responsible.ID };
+                            MachineResponsible machineResponsible = new MachineResponsible { MachineID = machineNEW.Machine.ID, ResponsibleID = responsible.ID };
                             await _machineService.InsertMachineResponsibleAsync(machineResponsible);
                             machineOLD.MachineResponsibles.Add(machineResponsible);
                         }
@@ -856,16 +906,23 @@ namespace MachinePortal.Controllers
                     foreach (MachineResponsible resOLD in machineOLD.MachineResponsibles.ToList())
                     {
                         bool found = false;
-                        foreach (int res in machineNEW.SelectedResponsibles)
+                        if(machineNEW.SelectedResponsibles != null)
                         {
-                            if (res == resOLD.ResponsibleID && resOLD.MachineID == machineOLD.ID)
+                            foreach (int res in machineNEW.SelectedResponsibles)
                             {
-                                found = true;
+                                if (res == resOLD.ResponsibleID && resOLD.MachineID == machineOLD.ID)
+                                {
+                                    found = true;
+                                }
                             }
                         }
                         if (found == false)
                         {
-                            await _machineService.RemoveMachineResponsibleAsync(resOLD.MachineID, resOLD.ResponsibleID);
+                            try
+                            {
+                                await _machineService.RemoveMachineResponsibleAsync(resOLD.MachineID, resOLD.ResponsibleID);
+                            }
+                            catch {}
                             machineOLD.MachineResponsibles.Remove(resOLD);
                         }
                     }
@@ -878,7 +935,7 @@ namespace MachinePortal.Controllers
 
             try
             {
-                //Add Devices to machine
+                //Add Responsibles to machine
                 if (machineNEW.SelectedDevices != null)
                 {
                     foreach (int dev in machineNEW.SelectedDevices)
@@ -894,7 +951,7 @@ namespace MachinePortal.Controllers
                         if (found == false)
                         {
                             Device device = await _deviceService.FindByIDAsync(dev);
-                            MachineDevice machineDevice = new MachineDevice { Machine = machineNEW.Machine, MachineID = machineNEW.Machine.ID, Device = device, DeviceID = device.ID };
+                            MachineDevice machineDevice = new MachineDevice { MachineID = machineNEW.Machine.ID, DeviceID = device.ID };
                             await _machineService.InsertMachineDeviceAsync(machineDevice);
                             machineOLD.MachineDevices.Add(machineDevice);
                         }
@@ -907,16 +964,23 @@ namespace MachinePortal.Controllers
                     foreach (MachineDevice devOLD in machineOLD.MachineDevices.ToList())
                     {
                         bool found = false;
-                        foreach (int res in machineNEW.SelectedDevices)
+                        if(machineNEW.SelectedDevices != null)
                         {
-                            if (res == devOLD.DeviceID && devOLD.MachineID == machineOLD.ID)
+                            foreach (int res in machineNEW.SelectedDevices)
                             {
-                                found = true;
+                                if (res == devOLD.DeviceID && devOLD.MachineID == machineOLD.ID)
+                                {
+                                    found = true;
+                                }
                             }
                         }
                         if (found == false)
                         {
-                            //await _machineService.RemoveMachineResponsibleAsync(devOLD.MachineID, devOLD.DeviceID);
+                            try
+                            {
+                                await _machineService.RemoveMachineDeviceAsync(devOLD.MachineID, devOLD.DeviceID);
+                            }
+                            catch {}
                             machineOLD.MachineDevices.Remove(devOLD);
                         }
                     }
@@ -925,15 +989,6 @@ namespace MachinePortal.Controllers
             catch (Exception e)
             {
                 return Content(@"notify('', '" + "Erro updating machine devices, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
-            }
-
-            try
-            {
-                await _machineService.UpdateAsync(machineOLD);
-            }
-            catch (Exception e)
-            {
-                return Content(@"notify('', '" + "Erro updating machine, description: " + HttpUtility.JavaScriptStringEncode(e.Message) + @"', 'top', 'right', 'bi-x-circle', 'error', 'fadeInRight', 'fadeInRight')", "application/javascript");
             }
 
             TempData["notificationMessage"] = "Machine updated successfuly";
@@ -1181,7 +1236,7 @@ namespace MachinePortal.Controllers
             try
             {
                 Machine machine = await _machineService.FindByIDAsync(MachineID);
-                MachineComment machineComment = new MachineComment { UserID = UserID, Comment = Comment, Date = DateTime.Now, Machine = machine, MachineID = machine.ID };
+                MachineComment machineComment = new MachineComment { UserID = UserID, Comment = Comment, Date = DateTime.Now, MachineID = machine.ID };
                 await _machineService.InsertMachineCommentAsync(machineComment);
                 List<MachineComment> comments = await _machineService.FindAllCommentsAsync(MachineID);
                 foreach (MachineComment mComment in comments)
@@ -1269,7 +1324,7 @@ namespace MachinePortal.Controllers
             {
                 DateTime UpdDate = DateTime.Parse(date);
                 await _machineService.UpdatePreventiveDate(UpdDate,ID);
-                updatedDate = UpdDate.ToString("dd/MM/yyyy");
+                updatedDate = UpdDate.ToString("MM/dd/yyyy");
             }
             catch
             {

@@ -427,6 +427,7 @@ namespace MachinePortal.Areas.Identity.Pages.Account
             {
                 try
                 {
+                    await _emailSender.SendEmailAsync(Input.Email, "Machine Portal - Email Confirmation", confirmPageP1  + confirmPageP2 + confirmPageP3);
                     var dpt = _context.Department.FirstOrDefault(d => d.Name == "User");
                     var user = new MachinePortalUser
                     {

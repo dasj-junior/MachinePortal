@@ -110,6 +110,8 @@ namespace MachinePortal.Controllers
         {
             try
             {
+                Area oldArea = await _AreaService.FindByIDAsync(area.ID);
+
                 if (image != null)
                 {
                     if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + area.ImagePath))
@@ -135,6 +137,10 @@ namespace MachinePortal.Controllers
                         await image.CopyToAsync(stream);
                     }
 
+                }
+                else
+                {
+                    area.ImagePath = oldArea.ImagePath;
                 }
             }
             catch (Exception e)

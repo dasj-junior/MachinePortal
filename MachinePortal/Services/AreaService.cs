@@ -60,7 +60,7 @@ namespace MachinePortal.Services
         {
             try
             {
-                return await _context.Area.Include(s => s.Sectors).FirstOrDefaultAsync(obj => obj.ID == ID);
+                return await _context.Area.Include(s => s.Sectors).AsNoTracking().FirstOrDefaultAsync(obj => obj.ID == ID);
             }
             catch (Exception e) { throw new Exception(e.Message); };
         }

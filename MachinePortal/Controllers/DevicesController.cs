@@ -199,6 +199,8 @@ namespace MachinePortal.Controllers
             
             try
             {
+                Device oldDevice = await _deviceService.FindByIDAsync(device.ID);
+
                 //Update photo
                 if (image != null)
                 {
@@ -224,6 +226,10 @@ namespace MachinePortal.Controllers
                     {
                         await image.CopyToAsync(stream);
                     }
+                }
+                else
+                {
+                    device.ImagePath = oldDevice.ImagePath;
                 }
             }
             catch (Exception e)

@@ -53,7 +53,7 @@ namespace MachinePortal.Services
         {
             try
             {
-                return await _context.DeviceDocument.FirstOrDefaultAsync(d => d.ID == ID);
+                return await _context.DeviceDocument.AsNoTracking().FirstOrDefaultAsync(d => d.ID == ID);
             }
             catch (Exception e) { throw new Exception(e.Message); };
         }

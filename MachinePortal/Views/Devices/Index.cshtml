@@ -89,7 +89,7 @@
                                     <td>@Html.DisplayFor(modelItem => item.Model)</td>
                                     <td>@Html.DisplayFor(modelItem => item.PartNumber)</td>
                                     <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Currency)  @Html.DisplayFor(modelItem => item.Price)</td>
                                     <td>@Html.DisplayFor(modelItem => item.Supplier)</td>
                                     <td class="text-center ws-nowrap">
                                         <a class="btn btn-success" asp-action="Details" asp-route-id="@item.ID">@Localizer["Open"].Value</a>

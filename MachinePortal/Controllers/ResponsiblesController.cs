@@ -118,6 +118,8 @@ namespace MachinePortal.Controllers
         {
             try
             {
+                Responsible oldResponsible = await _responsibleService.FindByIDAsync(responsible.ID);
+
                 if (image != null)
                 {
                     if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + responsible.PhotoPath))
@@ -142,6 +144,10 @@ namespace MachinePortal.Controllers
                     {
                         await image.CopyToAsync(stream);
                     }
+                }
+                else
+                {
+                    responsible.PhotoPath = oldResponsible.PhotoPath;
                 }
             }
             catch (Exception e)

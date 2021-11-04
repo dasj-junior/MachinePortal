@@ -24,7 +24,10 @@ namespace MachinePortal.Services
                 _context.Add(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (Exception e) 
+            { 
+                throw new Exception(e.InnerException.Message); 
+            }
         }
 
         public async Task UpdateAsync(Device obj)
@@ -40,7 +43,7 @@ namespace MachinePortal.Services
                 await _context.SaveChangesAsync();
             }
             catch (DbConcurrencyException e) { throw new DbConcurrencyException(e.Message); }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         public async Task RemoveAsync(int ID)
@@ -52,16 +55,16 @@ namespace MachinePortal.Services
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException e) { throw new IntegrityException(e.Message); }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         public async Task<Device> FindByIDAsync(int ID)
         {
             try
             {
-                return await _context.Device.Include(d => d.Documents).FirstOrDefaultAsync(obj => obj.ID == ID);
+                return await _context.Device.Include(d => d.Documents).AsNoTracking().FirstOrDefaultAsync(obj => obj.ID == ID);
             }
-            catch (Exception e) { throw new Exception(e.Message); };   
+            catch (Exception e) { throw new Exception(e.InnerException.Message); };   
         }
 
         public async Task<List<Device>> FindAllAsync()
@@ -70,7 +73,10 @@ namespace MachinePortal.Services
             {
                 return await _context.Device.OrderBy(x => x.ID).ToListAsync();
             }
-            catch (Exception e) { throw new Exception(e.Message); };
+            catch (Exception e) 
+            { 
+                throw new Exception(e.InnerException.Message); 
+            }
         }
      
     }

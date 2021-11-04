@@ -25,7 +25,7 @@ namespace MachinePortal.Services
                 _context.Add(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         public async Task UpdateAsync(Machine obj)
@@ -37,11 +37,12 @@ namespace MachinePortal.Services
             }
             try
             {
-                _context.Machine.Update(obj);
+                var machine = _context.Machine.First(m => m.ID == obj.ID);
+                _context.Entry(machine).CurrentValues.SetValues(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException e) { throw new IntegrityException(e.Message); }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (DbUpdateException e) { throw new IntegrityException(e.InnerException.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         public async Task RemoveAsync(int ID)
@@ -52,8 +53,8 @@ namespace MachinePortal.Services
                 _context.Machine.Remove(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException e) { throw new IntegrityException(e.Message); }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (DbUpdateException e) { throw new IntegrityException(e.InnerException.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         //Machine Search
@@ -76,9 +77,13 @@ namespace MachinePortal.Services
                                         .Include(Mres => Mres.MachineResponsibles)
                                         .ThenInclude(res => res.Responsible)
                                         .ThenInclude(dep => dep.Department)
+                                        .Include(are => are.Area)
+                                        .Include(sec => sec.Sector)
+                                        .Include(lin => lin.Line)
+                                        .AsNoTracking()
                                         .FirstOrDefaultAsync(obj => obj.ID == ID);
             }
-            catch (Exception e) { throw new Exception(e.Message); };
+            catch (Exception e) { throw new Exception(e.InnerException.Message); };
         }
 
         public async Task<List<Machine>> FindByLine(int LineID)
@@ -87,7 +92,7 @@ namespace MachinePortal.Services
             {
                 return await _context.Machine.OrderBy(x => x.Name).Where(m => m.LineID == LineID).ToListAsync();
             }
-            catch (Exception e) { throw new Exception(e.Message); };
+            catch (Exception e) { throw new Exception(e.InnerException.Message); };
         }
 
         public async Task<List<Machine>> FindAllAsync()
@@ -96,7 +101,7 @@ namespace MachinePortal.Services
             {
                 return await _context.Machine.OrderBy(x => x.Name).ToListAsync();
             }
-            catch (Exception e) { throw new Exception(e.Message); };
+            catch (Exception e) { throw new Exception(e.InnerException.Message); };
         }
 
         //Machine Documents
@@ -107,7 +112,10 @@ namespace MachinePortal.Services
                 _context.Add(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (Exception e) 
+            { 
+                throw new Exception(e.InnerException.Message); 
+            }
         }
 
         public async Task RemoveMachineDocumentAsync(MachineDocument obj)
@@ -117,8 +125,8 @@ namespace MachinePortal.Services
                 _context.Remove(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException e) { throw new IntegrityException(e.Message); }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (DbUpdateException e) { throw new IntegrityException(e.InnerException.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         public async Task InsertMachineImageAsync(MachineImage obj)
@@ -128,7 +136,7 @@ namespace MachinePortal.Services
                 _context.Add(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         public async Task RemoveMachineImageAsync(MachineImage obj)
@@ -138,8 +146,8 @@ namespace MachinePortal.Services
                 _context.Remove(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException e) { throw new IntegrityException(e.Message); }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (DbUpdateException e) { throw new IntegrityException(e.InnerException.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         public async Task InsertMachineVideoAsync(MachineVideo obj)
@@ -149,7 +157,7 @@ namespace MachinePortal.Services
                 _context.Add(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         public async Task RemoveMachineVideoAsync(MachineVideo obj)
@@ -159,8 +167,8 @@ namespace MachinePortal.Services
                 _context.Remove(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException e) { throw new IntegrityException(e.Message); }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (DbUpdateException e) { throw new IntegrityException(e.InnerException.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         //Machine Documents Search
@@ -171,57 +179,57 @@ namespace MachinePortal.Services
                 Machine machine = await _context.Machine.Include(Mdoc => Mdoc.MachineDocuments).FirstOrDefaultAsync(obj => obj.ID == ID);
                 return machine.MachineDocuments.ToList();
             }
-            catch (Exception e) { throw new Exception(e.Message); };
+            catch (Exception e) { throw new Exception(e.InnerException.Message); };
         }
 
         public async Task<MachineDocument> FindMachineDocumentsByID(int MachineID, int MachineDocumentID)
         {
             try
             {
-                Machine machine = await _context.Machine.Include(Mdoc => Mdoc.MachineDocuments).FirstOrDefaultAsync(obj => obj.ID == MachineID);
+                Machine machine = await _context.Machine.AsNoTracking().Include(Mdoc => Mdoc.MachineDocuments).FirstOrDefaultAsync(obj => obj.ID == MachineID);
                 return machine.MachineDocuments.FirstOrDefault(x => x.ID == MachineDocumentID);
             }
-            catch (Exception e) { throw new Exception(e.Message); };
+            catch (Exception e) { throw new Exception(e.InnerException.Message); };
         }
 
         public async Task<List<MachineImage>> FindAllMachineImages(int ID)
         {
             try
             {
-                Machine machine = await _context.Machine.Include(Mimg => Mimg.MachineImages).FirstOrDefaultAsync(obj => obj.ID == ID);
+                Machine machine = await _context.Machine.AsNoTracking().Include(Mimg => Mimg.MachineImages).FirstOrDefaultAsync(obj => obj.ID == ID);
                 return machine.MachineImages.ToList();
             }
-            catch (Exception e) { throw new Exception(e.Message); };
+            catch (Exception e) { throw new Exception(e.InnerException.Message); };
         }
 
         public async Task<MachineImage> FindMachineImagesByID(int MachineID, int MachineImageID)
         {
             try
             {
-                Machine machine = await _context.Machine.Include(Mimg => Mimg.MachineImages).FirstOrDefaultAsync(obj => obj.ID == MachineID);
+                Machine machine = await _context.Machine.AsNoTracking().Include(Mimg => Mimg.MachineImages).FirstOrDefaultAsync(obj => obj.ID == MachineID);
                 return machine.MachineImages.FirstOrDefault(x => x.ID == MachineImageID);
             }
-            catch (Exception e) { throw new Exception(e.Message); };
+            catch (Exception e) { throw new Exception(e.InnerException.Message); };
         }
 
         public async Task<List<MachineVideo>> FindAllMachineVideos(int ID)
         {
             try
             {
-                Machine machine = await _context.Machine.Include(Mvid => Mvid.MachineVideos).FirstOrDefaultAsync(obj => obj.ID == ID);
+                Machine machine = await _context.Machine.AsNoTracking().Include(Mvid => Mvid.MachineVideos).FirstOrDefaultAsync(obj => obj.ID == ID);
                 return machine.MachineVideos.ToList();
             }
-            catch (Exception e) { throw new Exception(e.Message); };
+            catch (Exception e) { throw new Exception(e.InnerException.Message); };
         }
 
         public async Task<MachineVideo> FindMachineVideosByID(int MachineID, int MachineVideoID)
         {
             try
             {
-                Machine machine = await _context.Machine.Include(Mvid => Mvid.MachineVideos).FirstOrDefaultAsync(obj => obj.ID == MachineID);
+                Machine machine = await _context.Machine.AsNoTracking().Include(Mvid => Mvid.MachineVideos).FirstOrDefaultAsync(obj => obj.ID == MachineID);
                 return machine.MachineVideos.FirstOrDefault(x => x.ID == MachineVideoID);
             }
-            catch (Exception e) { throw new Exception(e.Message); };
+            catch (Exception e) { throw new Exception(e.InnerException.Message); };
         }
 
         //Machine Responsibles
@@ -232,7 +240,7 @@ namespace MachinePortal.Services
                 _context.Add(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         public async Task RemoveMachineResponsibleAsync(int MachineID, int ReponsibleID)
@@ -249,8 +257,8 @@ namespace MachinePortal.Services
                 }
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException e) { throw new IntegrityException(e.Message); }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (DbUpdateException e) { throw new IntegrityException(e.InnerException.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         //Machine Devices
@@ -261,7 +269,7 @@ namespace MachinePortal.Services
                 _context.Add(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         public async Task RemoveMachineDeviceAsync(int MachineID, int DeviceID)
@@ -278,8 +286,8 @@ namespace MachinePortal.Services
                 }
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException e) { throw new IntegrityException(e.Message); }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (DbUpdateException e) { throw new IntegrityException(e.InnerException.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         //Machine Comments
@@ -290,7 +298,7 @@ namespace MachinePortal.Services
                 _context.Add(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         public async Task RemoveCommentAsync(int ID)
@@ -301,8 +309,8 @@ namespace MachinePortal.Services
                 _context.MachineComment.Remove(obj);
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException e) { throw new IntegrityException(e.Message); }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (DbUpdateException e) { throw new IntegrityException(e.InnerException.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
 
         //Machine Comments Search
@@ -314,7 +322,7 @@ namespace MachinePortal.Services
                 result = result.Include(u => u.User).Where(x => x.Machine.ID == ID);
                 return await result.ToListAsync();
             }
-            catch (Exception e) { throw new Exception(e.Message); };
+            catch (Exception e) { throw new Exception(e.InnerException.Message); };
         }
 
         //Preventive Maintenance
@@ -332,8 +340,8 @@ namespace MachinePortal.Services
                 _context.Entry(machine).Property(x => x.LastPreventiveMaintenance).IsModified = true;
                 await _context.SaveChangesAsync();
             }
-            catch (DbConcurrencyException e) { throw new DbConcurrencyException(e.Message); }
-            catch (Exception e) { throw new Exception(e.Message); }
+            catch (DbConcurrencyException e) { throw new DbConcurrencyException(e.InnerException.Message); }
+            catch (Exception e) { throw new Exception(e.InnerException.Message); }
         }
     }
 }

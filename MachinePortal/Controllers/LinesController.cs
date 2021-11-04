@@ -128,6 +128,8 @@ namespace MachinePortal.Controllers
         {
             try
             {
+                Line oldLine = await _LineService.FindByIDAsync(Line.ID);
+
                 if (image != null)
                 {
                     if (System.IO.File.Exists(_appEnvironment.WebRootPath + "\\" + Line.ImagePath))
@@ -152,6 +154,10 @@ namespace MachinePortal.Controllers
                     {
                         await image.CopyToAsync(stream);
                     }
+                }
+                else
+                {
+                    Line.ImagePath = oldLine.ImagePath;
                 }
             }
             catch (Exception e)

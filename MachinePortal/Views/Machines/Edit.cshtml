@@ -22,7 +22,7 @@
 @{
     var LoggedUserName = ViewData["UserName"];
     var LoggedUserID = ViewData["UserID"];
-    var dateFormat = "dd/MM/yyyy";
+    var dateFormat = "MM/dd/yyyy";
 }
 
 @* Validation of path *@
@@ -73,7 +73,7 @@
 $(document).ready(function () {
     const LastPreMaiDatePicker = MCDatepicker.create({
         el: '#LastPreMaiInput',
-        dateFormat: 'DD/MM/YYYY',
+        dateFormat: 'MM/DD/YYYY',
         customWeekDays: ['@Html.Raw(Localizer["Sunday"].Value)', '@Html.Raw(Localizer["Monday"].Value)', '@Html.Raw(Localizer["Tuesday"].Value)', '@Html.Raw(Localizer["Wednesday"].Value)', '@Html.Raw(Localizer["Thursday"].Value)', '@Html.Raw(Localizer["Friday"].Value)', '@Html.Raw(Localizer["Saturday"].Value)'],
         customMonths: [
             '@Html.Raw(Localizer["January"].Value)',
@@ -94,8 +94,8 @@ $(document).ready(function () {
     })
 
     const ManufDatePicker = MCDatepicker.create({
-        el: '#ManufDateInput9',
-        dateFormat: 'DD/MM/YYYY',
+        el: '#ManufDateInput',
+        dateFormat: 'MM/DD/YYYY',
         customWeekDays: ['@Html.Raw(Localizer["Sunday"].Value)', '@Html.Raw(Localizer["Monday"].Value)', '@Html.Raw(Localizer["Tuesday"].Value)', '@Html.Raw(Localizer["Wednesday"].Value)', '@Html.Raw(Localizer["Thursday"].Value)', '@Html.Raw(Localizer["Friday"].Value)', '@Html.Raw(Localizer["Saturday"].Value)'],
         customMonths: [
             '@Html.Raw(Localizer["January"].Value)',
@@ -286,10 +286,10 @@ $(document).ready(function () {
             filter("FilterSelectedResponsible", "ResponsiblesSelected");
         });
         $("#FilterSelectDevice").on("keyup", function () {
-            filter("FilterSelectDevice", "DeviceSelect");
+            filter("FilterSelectDevice", "DevicesSelect");
         });
         $("#FilterSelectedDevice").on("keyup", function () {
-            filter("FilterSelectedDevice", "DeviceSelected");
+            filter("FilterSelectedDevice", "DevicesSelected");
         });
     });
 </script>
@@ -378,7 +378,7 @@ $("#insertDocument").on("click", function () {
     let srandomid = Math.random().toString(36).substring(7);
     var doc = { Name: sName, Category: iCategory, ID: srandomid, Type: "Document", FileName: sfilename, Location: sLocation };
     Mfiles.push(doc);
-    var markup = "<tr id='" + srandomid + "'><td>" + srandomid + "</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td class='text-center ws - nowrap'><td><a href='#' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
+    var markup = "<tr id='" + srandomid + "'><td>" + srandomid + "</td><td>" + sName + "</td><td>" + sCategory + "</td><td>" + sfilename + "</td><td  class='text-center ws - nowrap'><a href='#' class='btn btn-danger' onclick='DeleteFile(\"" + srandomid + "\",\"" + sfilename +
         "\")'><span>Delete</span></a></td></tr>"; // Binding the file name
     $("#tDocuments").append(markup);
     //chkatchtbl();
@@ -647,7 +647,7 @@ $('#SectorID').on('change', function() {
                         <label asp-for="Machine.StartDate" class="control-label"></label>
                         @*<input type="datetime" asp-for="Machine.StartDate" value="@Model.Machine.StartDate.ToString("dd/MM/yyyy")" class="form-control" />*@
                         <div id="ManufDateInputGroup" class="input-group">
-                            <input id="ManufDateInput" asp-for="Machine.StartDate" style="border-right:0px" type="text" class="text-center" value="@Model.Machine.StartDate.ToString("dd/MM/yyyy")" />
+                            <input id="ManufDateInput" asp-for="Machine.StartDate" style="border-right:0px" type="text" class="text-center" value="@Model.Machine.StartDate.ToString("MM/dd/yyyy")" />
                             <div class="input-group-append">
                                 <button id="ManufDateInpBtn" style="border-radius: 0px 3px 3px 0px; border: 1px solid black" class="btn bi-calendar" type="button"></button>
                             </div>
@@ -658,7 +658,7 @@ $('#SectorID').on('change', function() {
                         <label asp-for="Machine.LastPreventiveMaintenance" class="control-label"></label>
                         @*<input type="datetime" asp-for="Machine.LastPreventiveMaintenance" value="@Model.Machine.LastPreventiveMaintenance.ToString("dd/MM/yyyy")" class="form-control" />*@
                         <div id="LastPreMaiInputGroup" class="input-group">
-                            <input id="LastPreMaiInput" asp-for="Machine.LastPreventiveMaintenance" style="border-right:0px" type="text" class="text-center" value="@Model.Machine.LastPreventiveMaintenance.ToString("dd/MM/yyyy")" />
+                            <input id="LastPreMaiInput" asp-for="Machine.LastPreventiveMaintenance" style="border-right:0px" type="text" class="text-center" value="@Model.Machine.LastPreventiveMaintenance.ToString("MM/dd/yyyy")" />
                             <div class="input-group-append">
                                 <button id="LastPreMaiInpBtn" style="border-radius: 0px 3px 3px 0px; border: 1px solid black" class="btn bi-calendar" type="button"></button>
                             </div>

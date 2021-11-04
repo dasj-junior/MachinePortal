@@ -64,7 +64,7 @@ namespace MachinePortal.Services
         {
             try
             {
-                return await _context.Password.FirstOrDefaultAsync(x => x.ID == ID);
+                return await _context.Password.AsNoTracking().FirstOrDefaultAsync(x => x.ID == ID);
             }
             catch (Exception e) { throw new Exception(e.Message); };
         }
